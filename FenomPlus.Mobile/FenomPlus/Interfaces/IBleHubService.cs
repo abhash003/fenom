@@ -20,6 +20,9 @@ namespace FenomPlus.Interfaces
         Task<bool> RequestDeviceInfo();
         Task<bool> RequestEnvironmentalInfo();
         Task<bool> SendMessage(MESSAGE message);
+        Task<bool> SendSerailNumber(string SerailNumber);
+        Task<bool> SendDateTime(DateTime dateTime);
+        Task<bool> SendCalibration(Int16 cal1, Int16 cal2, Int16 cal3);
 
         Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null);
         Task<bool> StopScan();

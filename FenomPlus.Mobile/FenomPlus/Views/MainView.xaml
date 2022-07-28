@@ -59,6 +59,18 @@
                   Route="DebugDumpView"
                   IsVisible="true"/>
 
+    <ShellContent Title="Provisioning"
+                  Icon="RecentErrorIcon"
+                  ContentTemplate="{DataTemplate pages:ProvisioningView}"
+                  Route="ProvisioningView"
+                  IsVisible="true"/>
+
+    <ShellContent Title="Calibration"
+                  Icon="RecentErrorIcon"
+                  ContentTemplate="{DataTemplate pages:CalibrationView}"
+                  Route="CalibrationView"
+                  IsVisible="true"/>
+    
     <ShellContent FlyoutItemIsVisible="False" Route="AnalysisView" ContentTemplate="{DataTemplate pages:AnalysisView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="BleDevicePairingView" ContentTemplate="{DataTemplate pages:BleDevicePairingView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="BreathManeuverFeedbackView" ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
@@ -82,7 +94,7 @@
     <ShellContent FlyoutItemIsVisible="False" Route="StartTestView" ContentTemplate="{DataTemplate pages:StartTestView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="StopExhalingView" ContentTemplate="{DataTemplate pages:StopExhalingView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="TestErrorView" ContentTemplate="{DataTemplate pages:TestErrorView}" />
-    <ShellContent FlyoutItemIsVisible="False" Route="TestFailedView" ContentTemplate="{DataTemplate pages:TestFailedView}" />
+    <ShellContent FlyoutItemIsVisible="true" Route="TestFailedView" ContentTemplate="{DataTemplate pages:TestFailedView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="TestResultsView" ContentTemplate="{DataTemplate pages:TestResultsView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="TutorialView" ContentTemplate="{DataTemplate pages:TutorialView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="TutorialSuccessView" ContentTemplate="{DataTemplate pages:TutorialSuccessView}" />

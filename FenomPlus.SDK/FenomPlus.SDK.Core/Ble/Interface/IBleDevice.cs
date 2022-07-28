@@ -32,6 +32,8 @@ namespace FenomPlus.SDK.Core.Ble.Interface
         Task<bool> DEBUGMSG();
         Task<bool> DEBUGMANUEVERTYPE();
         Task<bool> MESSAGE(MESSAGE message);
-
+        Task<bool> SERIALNUMBER(string SerailNumber);   
+        Task<bool> DATETIME(DateTime dateTime);
+        Task<bool> CALIBRATION(Int16 cal1, Int16 cal2, Int16 cal3);
     }
 }

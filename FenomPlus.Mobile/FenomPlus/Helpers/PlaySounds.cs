@@ -170,7 +170,7 @@ namespace FenomPlus.Helpers
             }
             catch(Exception ex)
             {
-
+                Console.Write(ex);
             }
         }
 

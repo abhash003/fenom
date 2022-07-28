@@ -186,6 +186,51 @@ namespace FenomPlus.Services
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SerailNumber"></param>
+        /// <returns></returns>
+        public async Task<bool> SendSerailNumber(string SerailNumber)
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.SERIALNUMBER(SerailNumber);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public async Task<bool> SendDateTime(DateTime dateTime)
+
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.DATETIME(dateTime);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cal1"></param>
+        /// <param name="cal2"></param>
+        /// <param name="cal3"></param>
+        /// <returns></returns>
+        public async Task<bool> SendCalibration(Int16 cal1, Int16 cal2, Int16 cal3)
+
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.CALIBRATION(cal1, cal2, cal3);
+            }
+            return false;
+        }
 
     }
 }

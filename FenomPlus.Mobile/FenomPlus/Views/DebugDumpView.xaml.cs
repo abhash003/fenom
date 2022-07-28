@@ -64,12 +64,10 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         public void OnSendClicked(System.Object sender, System.EventArgs e)
         {
-            MESSAGE message = new MESSAGE()
-            {
-                IDMSG = (ushort)Math.Abs(MessageId.SelectedIndex),
-                IDSUB = (ushort)Math.Abs(SubId.SelectedIndex),
-                IDVAR = (UInt64)Math.Abs(Convert.ToInt64(Var.Value))
-            };
+            MESSAGE message = new MESSAGE(
+                (ID_MESSAGE)Math.Abs(MessageId.SelectedIndex),
+                (ID_SUB)Math.Abs(SubId.SelectedIndex),
+                (UInt64)Math.Abs(Convert.ToInt64(Var.Value)));
             Services.BleHub.SendMessage(message);
         }
     }
