@@ -36,7 +36,7 @@
                             WidthRequest="100"
                            Text="{Binding SerialNumber}"
                         />
-
+                    <!--
                     <Label Text="Date (MMDDYYYY)"
                            HorizontalTextAlignment="Start"
                            Grid.Row="1"
@@ -63,7 +63,7 @@
                             WidthRequest="100"
                            Text="{Binding Time}"
                         />
-
+                    -->
 
                 </Grid>
 

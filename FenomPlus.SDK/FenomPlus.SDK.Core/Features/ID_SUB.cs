@@ -18,10 +18,14 @@ namespace FenomPlus.SDK.Core.Features
         ID_REQUEST_CALIBRATION = 10,
 
         // ID_PROVISIONING_DATA
-        ID_PROVISIONING_SERIALNUMBER = 0,   // 8 byte ascii serail unmber
-        ID_PROVISIONING_DATETIME = 1,       // HEX MMDDYYYYHHMMSS = 7 bytes hex nibble
+        ID_PROVISIONING_RESERVED = 0,       // reserved
+        ID_PROVISIONING_SERIALNUMBER = 1,   // 8 byte ascii serail unmber
+        ID_PROVISIONING_DATETIME = 2,       // HEX MMDDYYYYHHMMSS = 7 bytes hex nibble
 
         // ID_CALIBRATION_DATA
-        ID_CALIBRATION = 0,                 // 2 bytes (signed int) * 3 = 6 bytes with 2 bytes spar
+        ID_CALIBRATION_RESERVED = 0,        // reserved
+        ID_CALIBRATION1 = 1,                // double
+        ID_CALIBRATION2 = 2,                // double
+        ID_CALIBRATION3 = 3,                // double
     }
 }

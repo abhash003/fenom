@@ -49,9 +49,9 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnSendClicked(System.Object sender, System.EventArgs e)
         {
-            Services.BleHub.SendSerailNumber("1234567");
+            Services.BleHub.SendSerailNumber(model.SerialNumber);
             Services.BleHub.SendDateTime(DateTime.Now);
-            Services.BleHub.SendCalibration(1, 2, 3);
+            //;
         }
     }
 }

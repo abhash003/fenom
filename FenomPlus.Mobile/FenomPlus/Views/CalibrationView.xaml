@@ -36,7 +36,6 @@
                             WidthRequest="100"
                            Text="{Binding CalibrationValue1}" />
 
-
                     <Label Text="Calibration 2 (+-99999)"
                            HorizontalTextAlignment="Start"
                            Grid.Row="1"

@@ -31,8 +31,8 @@ namespace FenomPlus.ViewModels
             base.NewGlobalData();
         }
 
-        private string _CalibrationValue1;
-        public string CalibrationValue1
+        private double _CalibrationValue1;
+        public double CalibrationValue1
         {
             get => _CalibrationValue1;
             set
@@ -42,8 +42,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private string _CalibrationValue2;
-        public string CalibrationValue2
+        private double _CalibrationValue2;
+        public double CalibrationValue2
         {
             get => _CalibrationValue2;
             set
@@ -53,8 +53,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private string _CalibrationValue3;
-        public string CalibrationValue3
+        private double _CalibrationValue3;
+        public double CalibrationValue3
         {
             get => _CalibrationValue3;
             set

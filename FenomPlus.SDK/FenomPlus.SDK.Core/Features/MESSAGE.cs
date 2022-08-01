@@ -7,56 +7,92 @@ namespace FenomPlus.SDK.Core.Features
     {
         public ushort IDMSG { get; set; }
         public ushort IDSUB { get; set; }
-        public UInt64 IDVAR { get; set; }
+        public Int64 IDVAR { get; set; }
 
-        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, UInt64 _IDVAR = 0)
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int64 val = 0)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = _IDVAR;
+            IDVAR = val;
         }
 
-        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, double _IDVAR)
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int32 val)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = (ulong)_IDVAR;
+            IDVAR = val;
+        }
+
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val)
+        {
+            IDMSG = (ushort)_IDMSG;
+            IDSUB = (ushort)_IDSUB;
+            IDVAR = val;
+        }
+
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, double val)
+        {
+            IDMSG = (ushort)_IDMSG;
+            IDSUB = (ushort)_IDSUB;
+            IDVAR = (Int64)val;
+        }
+
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, float val)
+        {
+            IDMSG = (ushort)_IDMSG;
+            IDSUB = (ushort)_IDSUB;
+            IDVAR = (Int64)val;
+        }
+
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int32 val1, Int32 val2)
+        {
+            IDMSG  = (ushort)_IDMSG;
+            IDSUB  = (ushort)_IDSUB;
+            IDVAR  = ((Int64)val1) << (32);
+            IDVAR += ((Int64)val2);
+        }
+
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, float val1, float val2)
+        {
+            IDMSG  = (ushort)_IDMSG;
+            IDSUB  = (ushort)_IDSUB;
+            IDVAR  = ((Int64)val1) << (32);
+            IDVAR += ((Int64)val2);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2, Int16 val3, Int16 val4)
         {
-            IDMSG = (ushort)_IDMSG;
-            IDSUB = (ushort)_IDSUB;
-            IDVAR = ((ulong)val1) << (16 + 16 + 16);
-            IDVAR += ((ulong)val2) << (16 + 16);
-            IDVAR += ((ulong)val3) << (16);
-            IDVAR += ((ulong)val4);
+            IDMSG  = (ushort)_IDMSG;
+            IDSUB  = (ushort)_IDSUB;
+            IDVAR  = ((Int64)val1) << (48);
+            IDVAR += ((Int64)val2) << (32);
+            IDVAR += ((Int64)val3) << (16);
+            IDVAR += ((Int64)val4);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2, Int16 val3)
         {
-            IDMSG = (ushort)_IDMSG;
-            IDSUB = (ushort)_IDSUB;
-            IDVAR = ((ulong)val1) << (16 + 16);
-            IDVAR += ((ulong)val2) << (16);
-            IDVAR += ((ulong)val3);
+            IDMSG  = (ushort)_IDMSG;
+            IDSUB  = (ushort)_IDSUB;
+            IDVAR  = ((Int64)val1) << (32);
+            IDVAR += ((Int64)val2) << (16);
+            IDVAR += ((Int64)val3);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2)
         {
-            IDMSG = (ushort)_IDMSG;
-            IDSUB = (ushort)_IDSUB;
-            IDVAR += ((ulong)val1) << (16);
-            IDVAR += ((ulong)val1);
+            IDMSG  = (ushort)_IDMSG;
+            IDSUB  = (ushort)_IDSUB;
+            IDVAR  = ((Int64)val1) << (16);
+            IDVAR += ((Int64)val2);
         }
 
-        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1)
-        {
-            IDMSG = (ushort)_IDMSG;
-            IDSUB = (ushort)_IDSUB;
-            IDVAR += ((ulong)val1);
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_IDMSG"></param>
+        /// <param name="_IDSUB"></param>
+        /// <param name="_IDVAR"></param>
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, byte[] _IDVAR)
         {
             IDMSG = (ushort)_IDMSG;
@@ -71,11 +107,17 @@ namespace FenomPlus.SDK.Core.Features
                     // shift first
                     IDVAR <<= 8;
                     // add to lsb
-                    IDVAR += ((ulong)data[index]);
+                    IDVAR += ((Int64)data[index]);
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_IDMSG"></param>
+        /// <param name="_IDSUB"></param>
+        /// <param name="_IDVAR"></param>
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, string _IDVAR)
         {
             IDMSG = (ushort)_IDMSG;
@@ -90,11 +132,17 @@ namespace FenomPlus.SDK.Core.Features
                     // shift first
                     IDVAR <<= 8;
                     // add to lsb
-                    IDVAR += ((ulong)data[index]);
+                    IDVAR += ((Int64)data[index]);
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_IDMSG"></param>
+        /// <param name="_IDSUB"></param>
+        /// <param name="_IDVAR"></param>
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, DateTime _IDVAR)
         {
             string dateTime = _IDVAR.ToString("MMddyyyyHHmmss");
@@ -110,7 +158,7 @@ namespace FenomPlus.SDK.Core.Features
                     // shift first
                     IDVAR <<= 8;
                     // add to lsb
-                    IDVAR += ((ulong)(byte)Int32.Parse(dateTime.Substring(h, 2), System.Globalization.NumberStyles.HexNumber));
+                    IDVAR += ((Int64)(byte)Int32.Parse(dateTime.Substring(h, 2), System.Globalization.NumberStyles.HexNumber));
                 }
             }
         }

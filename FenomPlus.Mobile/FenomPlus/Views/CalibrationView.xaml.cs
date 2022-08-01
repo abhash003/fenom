@@ -1,5 +1,4 @@
 ﻿using FenomPlus.ViewModels;
-using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {
@@ -48,6 +47,10 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnSendClicked(System.Object sender, System.EventArgs e)
         {
+            Services.BleHub.SendCalibration(
+                model.CalibrationValue1,
+                model.CalibrationValue2,
+                model.CalibrationValue3);
         }
     }
 }

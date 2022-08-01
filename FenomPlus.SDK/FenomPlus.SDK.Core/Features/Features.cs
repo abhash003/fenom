@@ -110,17 +110,16 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_DATETIME, dateTime);
             return await WRITEREQUEST(message);
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cal1"></param>
-        /// <param name="cal2"></param>
-        /// <param name="cal3"></param>
+        /// <param name="iD_SUB"></param>
+        /// <param name="cal"></param>
         /// <returns></returns>
-        public async Task<bool> CALIBRATION(Int16 cal1, Int16 cal2, Int16 cal3)
+        public async Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal)
         {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_CALIBRATION, cal1, cal2, cal3);
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, iD_SUB, cal);
             return await WRITEREQUEST(message);
         }
 
