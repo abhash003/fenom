@@ -7,84 +7,114 @@ namespace FenomPlus.SDK.Core.Features
     {
         public ushort IDMSG { get; set; }
         public ushort IDSUB { get; set; }
-        public Int64 IDVAR { get; set; }
+        public byte[] IDVAR { get; set; }
 
+        /// </summary>
+        /// <param name="_IDMSG"></param>
+        /// <param name="_IDSUB"></param>
+        /// <param name="val"></param>
+        /// device info
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int64 val = 0)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = val;
+
+            IDVAR = new byte[1];            // If IDVAR is NULL App crashes
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int32 val)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = val;
+            //IDVAR = val;
         }
 
-        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val)
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Byte val)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = val;
-        }
 
-        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, double val)
+            IDVAR = new byte[1];            // If IDVAR is NULL App crashes
+
+            IDVAR[0] = val;
+        }
+ 
+        /// </summary>
+        /// <param name="_IDMSG"></param>
+        /// <param name="_IDSUB"></param>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="val3"></param>
+        /// calibration data
+        public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, double val1, double val2, double val3)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = (Int64)val;
+
+            IDVAR = new byte[24];
+
+            byte[] value1 = new byte[8];
+            byte[] value2 = new byte[8];
+            byte[] value3 = new byte[8];
+
+            value1 = BitConverter.GetBytes(val1);
+            value2 = BitConverter.GetBytes(val2);
+            value3 = BitConverter.GetBytes(val3);
+
+            Buffer.BlockCopy(value1, 0, IDVAR, 0, 8);
+            Buffer.BlockCopy(value2, 0, IDVAR, 8, 8);
+            Buffer.BlockCopy(value3, 0, IDVAR, 16, 8);
+
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, float val)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            IDVAR = (Int64)val;
+            //IDVAR = (Int64)val;
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int32 val1, Int32 val2)
         {
             IDMSG  = (ushort)_IDMSG;
             IDSUB  = (ushort)_IDSUB;
-            IDVAR  = ((Int64)val1) << (32);
-            IDVAR += ((Int64)val2);
+            //IDVAR  = ((Int64)val1) << (32);
+            //IDVAR += ((Int64)val2);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, float val1, float val2)
         {
             IDMSG  = (ushort)_IDMSG;
             IDSUB  = (ushort)_IDSUB;
-            IDVAR  = ((Int64)val1) << (32);
-            IDVAR += ((Int64)val2);
+            //IDVAR  = ((Int64)val1) << (32);
+            //IDVAR += ((Int64)val2);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2, Int16 val3, Int16 val4)
         {
             IDMSG  = (ushort)_IDMSG;
             IDSUB  = (ushort)_IDSUB;
-            IDVAR  = ((Int64)val1) << (48);
-            IDVAR += ((Int64)val2) << (32);
-            IDVAR += ((Int64)val3) << (16);
-            IDVAR += ((Int64)val4);
+            //IDVAR  = ((Int64)val1) << (48);
+            //IDVAR += ((Int64)val2) << (32);
+            //IDVAR += ((Int64)val3) << (16);
+            //IDVAR += ((Int64)val4);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2, Int16 val3)
         {
             IDMSG  = (ushort)_IDMSG;
             IDSUB  = (ushort)_IDSUB;
-            IDVAR  = ((Int64)val1) << (32);
-            IDVAR += ((Int64)val2) << (16);
-            IDVAR += ((Int64)val3);
+            //IDVAR  = ((Int64)val1) << (32);
+            //IDVAR += ((Int64)val2) << (16);
+            //IDVAR += ((Int64)val3);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int16 val1, Int16 val2)
         {
             IDMSG  = (ushort)_IDMSG;
             IDSUB  = (ushort)_IDSUB;
-            IDVAR  = ((Int64)val1) << (16);
-            IDVAR += ((Int64)val2);
+            //IDVAR  = ((Int64)val1) << (16);
+           // IDVAR += ((Int64)val2);
         }
 
         /// <summary>
@@ -105,9 +135,9 @@ namespace FenomPlus.SDK.Core.Features
                 for (int index = 0; (index < data.Length) && (index < 8); index++)
                 {
                     // shift first
-                    IDVAR <<= 8;
+                   // IDVAR <<= 8;
                     // add to lsb
-                    IDVAR += ((Int64)data[index]);
+                   // IDVAR += ((Int64)data[index]);
                 }
             }
         }
@@ -118,23 +148,13 @@ namespace FenomPlus.SDK.Core.Features
         /// <param name="_IDMSG"></param>
         /// <param name="_IDSUB"></param>
         /// <param name="_IDVAR"></param>
+        /// serial number
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, string _IDVAR)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
 
-            byte[] data = Encoding.ASCII.GetBytes(_IDVAR);
-            if ((data != null) && (data.Length > 0))
-            {
-                // copy array from lsb and shift 8 bytes to the left until max 8 bytes or less
-                for (int index = 0; (index < data.Length) && (index < 8); index++)
-                {
-                    // shift first
-                    IDVAR <<= 8;
-                    // add to lsb
-                    IDVAR += ((Int64)data[index]);
-                }
-            }
+            IDVAR = Encoding.ASCII.GetBytes(_IDVAR);
         }
 
         /// <summary>
@@ -143,24 +163,15 @@ namespace FenomPlus.SDK.Core.Features
         /// <param name="_IDMSG"></param>
         /// <param name="_IDSUB"></param>
         /// <param name="_IDVAR"></param>
+        /// date and time
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, DateTime _IDVAR)
         {
-            string dateTime = _IDVAR.ToString("MMddyyyyHHmmss");
+            //string dateTime = _IDVAR.ToString("MMddyyyyHHmmss");
+            string dateTime = _IDVAR.ToString("yyyy-MM-ddTHH:mm:ss");
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
 
-            byte[] data = new byte[dateTime.Length / 2];
-            if ((data != null) && (data.Length > 0))
-            {
-                // copy array from lsb and shift 8 bytes to the left until max 8 bytes or less
-                for (int index = 0, h =0; (index < data.Length) && (index < 8); index++, h +=2)
-                {
-                    // shift first
-                    IDVAR <<= 8;
-                    // add to lsb
-                    IDVAR += ((Int64)(byte)Int32.Parse(dateTime.Substring(h, 2), System.Globalization.NumberStyles.HexNumber));
-                }
-            }
+            IDVAR = Encoding.ASCII.GetBytes(dateTime);
         }
     }
 }

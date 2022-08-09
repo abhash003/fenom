@@ -221,11 +221,11 @@ namespace FenomPlus.Services
         /// <param name="iD_SUB"></param>
         /// <param name="cal1"></param>
         /// <returns></returns>
-        public async Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1)
+        public async Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
         {
             if (IsConnected())
             {
-                return await BleDevice.CALIBRATION(iD_SUB, cal1);
+                return await BleDevice.CALIBRATION(iD_SUB, cal1, cal2, cal3);
             }
             return false;
         }
@@ -240,12 +240,17 @@ namespace FenomPlus.Services
         public async Task<bool> SendCalibration(double cal1, double cal2, double cal3)
         {
             bool result = true;
+
+            await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
+
+            /*
             result &= await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1);
             await Task.Delay(100);
             result &= await SendCalibration(ID_SUB.ID_CALIBRATION2, cal2);
             await Task.Delay(100);
             result &= await SendCalibration(ID_SUB.ID_CALIBRATION3, cal3);
             await Task.Delay(100);
+            */
             return result;
         }
     }
