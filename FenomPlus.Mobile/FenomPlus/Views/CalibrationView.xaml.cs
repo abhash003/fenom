@@ -1,4 +1,5 @@
 ﻿using FenomPlus.ViewModels;
+using System;
 
 namespace FenomPlus.Views
 {
@@ -48,9 +49,9 @@ namespace FenomPlus.Views
         private void OnSendClicked(System.Object sender, System.EventArgs e)
         {
             Services.BleHub.SendCalibration(
-                model.CalibrationValue1,
-                model.CalibrationValue2,
-                model.CalibrationValue3);
+                Convert.ToDouble(model.CalibrationValue1),
+                Convert.ToDouble(model.CalibrationValue2),
+                Convert.ToDouble(model.CalibrationValue3));
         }
     }
 }
