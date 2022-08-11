@@ -103,6 +103,20 @@ namespace FenomPlus.Helpers
         /// <summary>
         /// 
         /// </summary>
+        public static void ResetToStart()
+        {
+            high_0_10sec.Seek(0);
+            low_0_10sec.Seek(0);
+            mid_high_05sec.Seek(0);
+            mid_low_05sec.Seek(0);
+            mid_mid_05sec.Seek(0);
+            test_failure.Seek(0);
+            test_success.Seek(0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="sound"></param>
         public static void PlaySound(SoundsEnum sound, double volume)
         {
@@ -174,18 +188,25 @@ namespace FenomPlus.Helpers
             }
         }
 
+        ///
         public static void StopLow()
         {
             if(low_0_10sec != null)
             low_0_10sec.Stop();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void StopHigh()
         {
             if(high_0_10sec != null)
             high_0_10sec.Stop();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void StopMid()
         {
             if (mid_high_05sec != null)

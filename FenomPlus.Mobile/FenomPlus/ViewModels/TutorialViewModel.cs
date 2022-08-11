@@ -81,7 +81,7 @@ namespace FenomPlus.ViewModels
             {
                 guageData = value;
                 OnPropertyChanged("GuageData");
-                if ((!Stop) && (Postion == 5 || Postion == 6 || Postion == 7))
+                if ((!Stop) && (Postion >= 4 && Postion <= 7))
                 {
                     PlaySounds.PlaySound(GuageData);
                 } else

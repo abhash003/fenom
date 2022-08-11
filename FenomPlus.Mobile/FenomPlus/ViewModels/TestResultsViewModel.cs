@@ -23,7 +23,9 @@ namespace FenomPlus.ViewModels
                 TestType = "Short";
             }
 
-            TestResult = Cache.NOScore;
+            TestResult = (Cache.NOScore) < 5 ? "< 5" :
+                        (Cache.NOScore) > 300 ? "> 300":
+                        Cache.NOScore.ToString();
         }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private int testResult;
-        public int TestResult
+        private string testResult;
+        public string TestResult
         {
             get => testResult;
             set

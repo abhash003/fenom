@@ -18,7 +18,7 @@ namespace FenomPlus.Enums
             "Error: too humid (humidity > 90% relative humidity)",
             "Error: pressure low (atmospheric pressure < 760 hPa)",
             "Error: pressure high (atmospheric pressure > 1100 hPa)",
-            "Error: Test Failed"
+            "Error: User is till breathing after test complete."
         };
     }
 }
