@@ -24,7 +24,7 @@
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
                    />
-            <Label Text="Test Results"
+            <Label Text="Test Result"
                    FontSize="36"
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
@@ -37,7 +37,7 @@
                    VerticalTextAlignment="Center"
                    />
             <Label Text="ppb"
-                   FontSize="14"
+                   FontSize="28"
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
                    Padding="0,0,0,150"

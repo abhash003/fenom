@@ -69,7 +69,7 @@ namespace FenomPlus.Views
             {
                 Title = "Step 5",
                 Illustration = "TutStep5",
-                Info = "The next three steps will help you understan how to control the needle.\n\nExhale steady and soft. This will move the needle in the direction of the white dot on the left side of the meter.",
+                Info = "The next three steps will help you understand how to control the needle.\n\nExhale steady and soft. This will move the needle in the direction of the white dot on the left side of the meter.",
                 ShowStep5 = true,
                 ShowStep6 = false,
                 ShowStep7 = false,

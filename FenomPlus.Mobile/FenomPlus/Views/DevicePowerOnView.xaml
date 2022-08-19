@@ -6,8 +6,8 @@
     x:Class="FenomPlus.Views.DevicePowerOnView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="False"
-    NavigationPage.HasBackButton="True"
+    Shell.NavBarIsVisible="true"
+    NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>
         <Image Source="TitleIcon"

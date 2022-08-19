@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
 
@@ -51,7 +52,7 @@ namespace FenomPlus.Views
         {
             Services.BleHub.SendSerailNumber(model.SerialNumber);
             Services.BleHub.SendDateTime(DateTime.Now);
-            //;
+            Services.Cache.DeviceSerialNumber = string.Format("F150-{0}", model.SerialNumber);
         }
     }
 }

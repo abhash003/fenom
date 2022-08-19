@@ -11,64 +11,74 @@
         <controls:HeaderContentView />
     </Shell.FlyoutHeader>
 
-    <ShellContent Title="Device Power On View"
+    <ShellContent x:Name="DevicePowerOn"
+                  Title="Device Power On View"
                   Icon="BluetoothIcon"
                   ContentTemplate="{DataTemplate pages:DevicePowerOnView}"
                   Route="DevicePowerOnView"
-                  IsVisible="true"/>
+                  IsVisible="false"/>
 
-    <ShellContent Title="Take A Test"
+    <ShellContent x:Name="TakeATest"
+                  Title="Take A Test"
                   Icon="BluetoothIcon"
                   ContentTemplate="{DataTemplate pages:ChooseTestView}"
                   Route="ChooseTestView"
                   IsVisible="true"/>
     
-    <ShellContent Icon="QualityControlIcon"
+    <ShellContent x:Name="QualityControl"
+                  Icon="QualityControlIcon"
                   Title="Quality Control"
                   ContentTemplate="{DataTemplate pages:QualityControlView}" 
                   Route="QualityControlView"
                   IsVisible="true"/>
 
-    <ShellContent Icon="QualityControlIcon"
+    <ShellContent x:Name="QualityControlUsers"
+                  Icon="QualityControlIcon"
                   Title="Quality Control Users"
                   ContentTemplate="{DataTemplate pages:QualityControlUsersView}" 
                   Route="QualityControlUsersView"
                   IsVisible="true"/>
 
-    <ShellContent Icon="QualityControlIcon"
+    <ShellContent x:Name="QualityControlDevices"
+                  Icon="QualityControlIcon"
                   Title="Quality Control Devices"
                   ContentTemplate="{DataTemplate pages:QualityControlDevicesView}" 
                   Route="QualityControlDevicesView"
                   IsVisible="true"/>
 
-    <ShellContent Icon="PastResultIcon"
+    <ShellContent x:Name="PastResults"
+                  Icon="PastResultIcon"
                   Title="View Past Results"
                   ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
                   Route="ViewPastResultsView"
                   IsVisible="true"/>
 
-    <ShellContent Title="View Recent Errors"
+    <ShellContent x:Name="ViewRecentErrors"
+                  Title="View Recent Errors"
                   Icon="RecentErrorIcon"
                   ContentTemplate="{DataTemplate pages:ViewRecentErrorsView}"
                   Route="ViewRecentErrorsView"
                   IsVisible="true"/>
 
-    <ShellContent Title="View Debug"
+    <ShellContent x:Name="DebugView"
+                  Title="View Debug"
                   Icon="RecentErrorIcon"
                   ContentTemplate="{DataTemplate pages:DebugDumpView}"
                   Route="DebugDumpView"
                   IsVisible="true"/>
 
-    <ShellContent Title="Provisioning"
+    <ShellContent x:Name="Provisioning"
+                  Title="Provisioning"
                   Icon="RecentErrorIcon"
                   ContentTemplate="{DataTemplate pages:ProvisioningView}"
                   Route="ProvisioningView"
                   IsVisible="true"/>
 
-    <ShellContent Title="Calibration"
+    <ShellContent x:Name="Calibration"
+                  Title="Calibration"
                   Icon="RecentErrorIcon"
                   ContentTemplate="{DataTemplate pages:CalibrationView}"
-                  Route="CalibrationView"
+                  Route="CalibrationView"       
                   IsVisible="true"/>
     
     <ShellContent FlyoutItemIsVisible="False" Route="AnalysisView" ContentTemplate="{DataTemplate pages:AnalysisView}" />

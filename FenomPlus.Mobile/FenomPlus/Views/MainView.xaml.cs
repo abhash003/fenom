@@ -13,6 +13,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new MainViewModel();
+
         }
 
         /// <summary>
