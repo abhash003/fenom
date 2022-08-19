@@ -15,8 +15,9 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Date = DateTime.Now.ToString("MMddyyyy");
-            Time = DateTime.Now.ToString("HHmmss");
+            // get GMT
+            Date = DateTime.UtcNow.ToString("MM/dd/yyyy");
+            Time = DateTime.UtcNow.ToString("HH:mm:ss");
             SerialNumber = Cache.DeviceSerialNumber.Replace("F150-","");
         }
 

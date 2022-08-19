@@ -11,13 +11,6 @@
         <controls:HeaderContentView />
     </Shell.FlyoutHeader>
 
-    <ShellContent x:Name="DevicePowerOn"
-                  Title="Device Power On View"
-                  Icon="BluetoothIcon"
-                  ContentTemplate="{DataTemplate pages:DevicePowerOnView}"
-                  Route="DevicePowerOnView"
-                  IsVisible="false"/>
-
     <ShellContent x:Name="TakeATest"
                   Title="Take A Test"
                   Icon="BluetoothIcon"
@@ -80,7 +73,8 @@
                   ContentTemplate="{DataTemplate pages:CalibrationView}"
                   Route="CalibrationView"       
                   IsVisible="true"/>
-    
+
+    <ShellContent FlyoutItemIsVisible="False" Route="DevicePowerOnView" ContentTemplate="{DataTemplate pages:DevicePowerOnView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="AnalysisView" ContentTemplate="{DataTemplate pages:AnalysisView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="BleDevicePairingView" ContentTemplate="{DataTemplate pages:BleDevicePairingView}" />
     <ShellContent FlyoutItemIsVisible="False" Route="BreathManeuverFeedbackView" ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />

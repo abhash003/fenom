@@ -48,11 +48,20 @@ namespace FenomPlus.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnSendClicked(System.Object sender, System.EventArgs e)
+        private void OnSendSerialNumberClicked(System.Object sender, System.EventArgs e)
         {
             Services.BleHub.SendSerailNumber(model.SerialNumber);
-            Services.BleHub.SendDateTime(DateTime.Now);
             Services.Cache.DeviceSerialNumber = string.Format("F150-{0}", model.SerialNumber);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSendDateTimeClicked(System.Object sender, System.EventArgs e)
+        {
+            Services.BleHub.SendDateTime(DateTime.Now);
         }
     }
 }

@@ -68,7 +68,8 @@
                         HorizontalOptions="Center"
                         VerticalOptions="End"
                         Style="{StaticResource defaultButton}"
-                        Clicked="OnSendClicked" />
+                        Clicked="OnSendClicked"
+                        IsEnabled="{Binding IsDeviceConnected}" />
             </StackLayout>
 
         </ScrollView>

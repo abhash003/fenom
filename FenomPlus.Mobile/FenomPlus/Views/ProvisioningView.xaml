@@ -36,8 +36,7 @@
                             WidthRequest="100"
                            Text="{Binding SerialNumber}"
                         />
-                    <!--
-                    <Label Text="Date (MMDDYYYY)"
+                    <Label Text="Date (MM/DD/YYYY)"
                            HorizontalTextAlignment="Start"
                            Grid.Row="1"
                            Grid.Column="0"
@@ -51,7 +50,7 @@
                         />
 
 
-                    <Label Text="Time (HHMMSS)"
+                    <Label Text="Time (HH:MM:SS)"
                            HorizontalTextAlignment="Start"
                            Grid.Row="2"
                            Grid.Column="0"
@@ -63,15 +62,28 @@
                             WidthRequest="100"
                            Text="{Binding Time}"
                         />
-                    -->
 
                 </Grid>
 
-                <Button Text="Update"
-                        HorizontalOptions="Center"
-                        VerticalOptions="End"
+                <Grid Padding="10" RowSpacing="10" HorizontalOptions="FillAndExpand" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                <Button Text="Update Serial Number"
+                        HorizontalOptions="End"
                         Style="{StaticResource defaultButton}"
-                        Clicked="OnSendClicked" />
+                        Clicked="OnSendSerialNumberClicked"
+                        Grid.Column="0"
+                        IsEnabled="{Binding IsDeviceConnected}" />
+
+                <Button Text="Update Date and Time"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource defaultButton}"
+                        Clicked="OnSendDateTimeClicked"
+                        Grid.Column="1"
+                        IsEnabled="{Binding IsDeviceConnected}" />
+                    </Grid>
             </StackLayout>
 
         </ScrollView>

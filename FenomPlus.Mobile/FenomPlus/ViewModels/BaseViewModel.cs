@@ -50,6 +50,13 @@ namespace FenomPlus.ViewModels
             set { SetProperty(ref firmware, value); }
         }
 
+        private bool isDeviceConnected;
+        public bool IsDeviceConnected
+        {
+            get { return isDeviceConnected; }
+            set { SetProperty(ref isDeviceConnected, value); }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -101,6 +108,7 @@ namespace FenomPlus.ViewModels
         {
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
             Firmware = Services.Cache.Firmware;
+            IsDeviceConnected = Services.BleHub.IsConnected();
         }
 
         /// <summary>
