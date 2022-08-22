@@ -53,7 +53,7 @@ namespace FenomPlus.ViewModels
         private bool isDeviceConnected;
         public bool IsDeviceConnected
         {
-            get { return isDeviceConnected; }
+            get { return true; }// isDeviceConnected; }
             set { SetProperty(ref isDeviceConnected, value); }
         }
 
