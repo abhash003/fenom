@@ -61,7 +61,10 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnSendDateTimeClicked(System.Object sender, System.EventArgs e)
         {
-            Services.BleHub.SendDateTime(DateTime.Now);
+            Services.BleHub.SendDateTime(model.Date, model.Time);
+
+            //Services.BleHub.SendDateTime(DateTime.Now);
+            
         }
     }
 }

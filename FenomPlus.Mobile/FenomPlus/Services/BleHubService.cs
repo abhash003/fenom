@@ -205,12 +205,11 @@ namespace FenomPlus.Services
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public async Task<bool> SendDateTime(DateTime dateTime)
-
+        public async Task<bool> SendDateTime(string date, string time)
         {
             if (IsConnected())
             {
-                return await BleDevice.DATETIME(dateTime);
+                return await BleDevice.DATETIME(date, time);
             }
             return false;
         }

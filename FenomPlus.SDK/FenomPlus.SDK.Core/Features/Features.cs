@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FenomPlus.Helpers;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
@@ -105,9 +106,12 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public async Task<bool> DATETIME(DateTime dateTime)
+        public async Task<bool> DATETIME(string date, string time)
         {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_DATETIME, dateTime);
+            DateTime? dateTime = (date + " " + time).ToDate();
+            if (dateTime == null) dateTime = DateTime.Now;
+            string strDateTime = ((DateTime)dateTime).ToString("MM/dd/yyyy HH:mm:ss");
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_DATETIME, strDateTime);
             return await WRITEREQUEST(message,19);
         }
         

@@ -21,7 +21,7 @@ namespace FenomPlus.Interfaces
         Task<bool> RequestEnvironmentalInfo();
         Task<bool> SendMessage(MESSAGE message);
         Task<bool> SendSerailNumber(string SerailNumber);
-        Task<bool> SendDateTime(DateTime dateTime);
+        Task<bool> SendDateTime(string date, string time);
         Task<bool> SendCalibration(double cal1, double cal2, double cal3);
         Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
 
