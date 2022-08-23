@@ -108,12 +108,12 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// <returns></returns>
         public async Task<bool> DATETIME(string date, string time)
         {
-            string dateFormat = "MM/dd/yyyy HH:mm:ss";
-            DateTime? dateTime = (date + " " + time).ToDate(dateFormat);
-            if (dateTime == null) dateTime = DateTime.Now;
-            string strDateTime = ((DateTime)dateTime).ToString(dateFormat);
+            string strDateTime;
+
+            strDateTime = (date + "T" + time);
+
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_DATETIME, strDateTime);
-            return await WRITEREQUEST(message,19);
+            return await WRITEREQUEST(message, (short)strDateTime.Length);
         }
         
         /// <summary>

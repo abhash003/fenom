@@ -16,7 +16,8 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             // get GMT
-            Date = DateTime.UtcNow.ToString("MM/dd/yyyy");
+            //Date = DateTime.UtcNow.ToString("MM/dd/yyyy");
+            Date = DateTime.UtcNow.ToString("yyyy-MM-dd");
             Time = DateTime.UtcNow.ToString("HH:mm:ss");
             SerialNumber = Cache.DeviceSerialNumber.Replace("F150-","");
         }
