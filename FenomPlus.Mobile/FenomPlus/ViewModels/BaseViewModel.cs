@@ -108,7 +108,7 @@ namespace FenomPlus.ViewModels
         {
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
             Firmware = Services.Cache.Firmware;
-            IsDeviceConnected = Services.BleHub.IsConnected();
+            //IsDeviceConnected = Services.BleHub.IsConnected();
         }
 
         /// <summary>

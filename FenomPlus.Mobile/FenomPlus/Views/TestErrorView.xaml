@@ -6,7 +6,7 @@
     x:Class="FenomPlus.Views.TestErrorView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>

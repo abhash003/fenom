@@ -331,15 +331,15 @@ namespace FenomPlus.Controls
             float startangle = -180;
             float angle = 0f;
 
-            if (value >= 0 && value < 1) angle = angle = startangle + 22.5f;
-            else if (value >= 1 && value < 2.6) angle = startangle + 22.5f + ((value - 1) * (67.5f - 0) / (2.6f - 1)) + 0;
+                 if (value >= 0.0 && value < 1.0) angle = startangle + 22.5f;
+            else if (value >= 1.0 && value < 2.6) angle = startangle + 22.5f + ((value - 1) * (67.5f - 0) / (2.6f - 1)) + 0;
             else if (value >= 2.6 && value < 2.7) angle = startangle + 90 + ((value - 2.6f) * (22.5f - 0) / (2.7f - 2.6f)) + 0;
             else if (value >= 2.7 && value < 2.8) angle = startangle + 112.5f + ((value - 2.7f) * (22.5f - 0) / (2.8f - 2.7f)) + 0;
             else if (value >= 2.8 && value < 3.2) angle = startangle + 135 + ((value - 2.8f) * (90 - 0) / (3.2f - 2.8f)) + 0;
             else if (value >= 3.2 && value < 3.3) angle = startangle + 225 + ((value - 3.2f) * (22.5f - 0) / (3.3f - 3.2f)) + 0;
             else if (value >= 3.3 && value < 3.4) angle = startangle + 247.5f + ((value - 3.3f) * (22.5f - 0) / (3.4f - 3.3f)) + 0;
-            else if (value >= 3.4 && value < 5) angle = startangle + 270 + ((value - 3.4f) * (67.5f - 0) / (5 - 3.4f)) + 0;
-            else if (value >= 5 && value <= 6) angle = startangle + 337.5f;
+            else if (value >= 3.4 && value < 5.0) angle = startangle + 270 + ((value - 3.4f) * (67.5f - 0) / (5 - 3.4f)) + 0;
+            else if (value >= 5.0 && value <= 6.0) angle = startangle + 337.5f;
 
             canvas.Save();
             canvas.RotateDegrees(angle);
