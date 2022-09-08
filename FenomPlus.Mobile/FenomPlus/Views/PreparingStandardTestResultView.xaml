@@ -34,6 +34,7 @@
                    TextColor="#333"
                    HorizontalTextAlignment="Center"
                    VerticalTextAlignment="Center"
+                   IsVisible="false"
                    />
             <Label Text="seconds"
                    FontSize="24"

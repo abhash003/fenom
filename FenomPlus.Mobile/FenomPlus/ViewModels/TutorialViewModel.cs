@@ -48,7 +48,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             BleHub.StartTest(BreathTestEnum.Training);
-            Services.BleHub.IsConnected();
+            //Services.BleHub.IsConnected();
             Stop = false;
 
             // start timer to read measure constally

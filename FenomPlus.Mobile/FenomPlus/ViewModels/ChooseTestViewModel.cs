@@ -14,6 +14,7 @@ namespace FenomPlus.ViewModels
 
         public ChooseTestViewModel()
         {
+            BarColor = "#dddd";
             DeviceStatus = new DeviceStatus();
 
             ErrorList = new RangeObservableCollection<Alert>();
@@ -58,6 +59,9 @@ namespace FenomPlus.ViewModels
             ErrorList.Clear();
 
             int BatteryLevel = Cache.BatteryLevel;
+            DeviceStatus.ResetBarColor();
+            //BatteryLevel = 100;
+
             SensorStatus _BatterySensor = DeviceStatus.UpdateBatteryDevice(BatteryLevel);
 
             if (Cache.BatteryStatus == false)
@@ -79,6 +83,7 @@ namespace FenomPlus.ViewModels
                 Cache.BatteryStatus = false;
             }
 
+            /*
             int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
 
             DeviceStatus.UpdateDeviceExpiration(daysRemaining);
@@ -115,7 +120,7 @@ namespace FenomPlus.ViewModels
 
             // calucalte quaility contro lexpiration here
             DeviceStatus.UpdateQualityControlExpiration(0);
-
+            */
             UpdateErrorList();
         }
 
@@ -125,7 +130,7 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsConnected();
+            //Services.BleHub.IsConnected();
             RefreshErrorList();
         }
 
@@ -176,6 +181,17 @@ namespace FenomPlus.ViewModels
             {
                 errorHeight = value;
                 OnPropertyChanged("ErrorHeight");
+            }
+        }
+
+        private string barColor;
+        public string BarColor
+        {
+            get => barColor;
+            set
+            {
+                barColor = value;
+                OnPropertyChanged("BarColor");
             }
         }
 

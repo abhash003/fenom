@@ -37,12 +37,12 @@
                    VerticalTextAlignment="Center"
                    />
             <Label Text="ppb"
-                   FontSize="28"
+                   FontSize="36"
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
                    Padding="0,0,0,150"
                    />
-            <Button Text="Finish"
+            <Button Text="Done"
                     CornerRadius="32"
                     HorizontalOptions="CenterAndExpand"
                     WidthRequest="200"

@@ -17,31 +17,38 @@
                   ContentTemplate="{DataTemplate pages:ChooseTestView}"
                   Route="ChooseTestView"
                   IsVisible="true"/>
+
+    <ShellContent x:Name="Tutorial"
+                  Title="Tutorial"
+                  Icon="BluetoothIcon"
+                  ContentTemplate="{DataTemplate pages:TutorialView}"
+                  Route="TutorialView"
+                  IsVisible="true"/>
     
     <ShellContent x:Name="QualityControl"
-                  Icon="QualityControlIcon"
                   Title="Quality Control"
+                  Icon="QualityControlIcon"
                   ContentTemplate="{DataTemplate pages:QualityControlView}" 
                   Route="QualityControlView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="QualityControlUsers"
-                  Icon="QualityControlIcon"
                   Title="Quality Control Users"
+                  Icon="QualityControlIcon"
                   ContentTemplate="{DataTemplate pages:QualityControlUsersView}" 
                   Route="QualityControlUsersView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="QualityControlDevices"
-                  Icon="QualityControlIcon"
                   Title="Quality Control Devices"
+                  Icon="QualityControlIcon"
                   ContentTemplate="{DataTemplate pages:QualityControlDevicesView}" 
                   Route="QualityControlDevicesView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="PastResults"
-                  Icon="PastResultIcon"
                   Title="View Past Results"
+                  Icon="PastResultIcon"
                   ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
                   Route="ViewPastResultsView"
                   IsVisible="true"/>
@@ -100,7 +107,6 @@
     <ShellContent FlyoutItemIsVisible="true" Title="TestErrorView" Route="TestErrorView" ContentTemplate="{DataTemplate pages:TestErrorView}" />
     <ShellContent FlyoutItemIsVisible="true" Title="TestFailedView" Route="TestFailedView" ContentTemplate="{DataTemplate pages:TestFailedView}" />
     <ShellContent FlyoutItemIsVisible="true" Title="TestResultsView" Route="TestResultsView" ContentTemplate="{DataTemplate pages:TestResultsView}" />
-    <ShellContent FlyoutItemIsVisible="true" Title="TutorialView" Route="TutorialView" ContentTemplate="{DataTemplate pages:TutorialView}" />
     <ShellContent FlyoutItemIsVisible="true" Title="TutorialSuccessView" Route="TutorialSuccessView" ContentTemplate="{DataTemplate pages:TutorialSuccessView}" />
     <ShellContent FlyoutItemIsVisible="true" Title="UnPairView" Route="UnPairView" ContentTemplate="{DataTemplate pages:UnPairView}" />
     

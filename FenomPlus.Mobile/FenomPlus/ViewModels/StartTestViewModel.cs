@@ -61,15 +61,15 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsConnected();
+            //Services.BleHub.IsConnected();
             if (Cache.TestType == TestTypeEnum.Standard) {
-                TestType = "Standard Test";
-                TestButton = "Take Standard Test";
+                TestType = "10-second Test";
+                TestButton = "Take 10-second";
                 TestSeconds = "10 seconds";
                 TestImageSource = "StandardBreathe";
             } else {
-                TestType = "Short Test";
-                TestButton = "Take Short Test";
+                TestType = "6-second Test";
+                TestButton = "Take 6 seconds";
                 TestSeconds = "6 seconds";
                 TestImageSource = "ShortBreathe";
             }

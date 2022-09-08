@@ -30,7 +30,7 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsConnected();
+            //Services.BleHub.IsConnected();
             Message = "Your Device is Connected";
             Stop = false;
             Seconds = 5;

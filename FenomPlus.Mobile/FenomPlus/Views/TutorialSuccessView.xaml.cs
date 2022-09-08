@@ -14,7 +14,7 @@ namespace FenomPlus.Views
         private string _Source;
         public string Source
         {
-            get { return _Source; }
+            get { return string.IsNullOrEmpty(_Source) ? nameof(ChooseTestView) : _Source; }
             set { _Source = value; }
         }
 

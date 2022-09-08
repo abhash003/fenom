@@ -15,7 +15,7 @@ namespace FenomPlus.Views
         private string _Source;
         public string Source
         {
-            get { return _Source; }
+            get { return string.IsNullOrEmpty(_Source) ? nameof(ChooseTestView) : _Source; }
             set { _Source = value; }
         }
 
@@ -79,7 +79,7 @@ namespace FenomPlus.Views
             {
                 Title = "Step 6",
                 Illustration = "TutStep6",
-                Info = "Exhale steady and hard. This will move the needle in the direction of the white dot on the right side of the meter.",
+                Info = "Exhaling too strongly moves the needle towards the white dot on the right side of the meter.",
                 ShowStep5 = false,
                 ShowStep6 = true,
                 ShowStep7 = false,
@@ -89,7 +89,7 @@ namespace FenomPlus.Views
             {
                 Title = "Step 7",
                 Illustration = "TutStep7",
-                Info = "Exhale steady. This will move the needle in the direction of the white star on the top of the meter.\n\nExhaling to reach the white star is your goal.",
+                Info = "Exhaling steadily moves the needle towards the white dot at the center of the meter.\n\nYour goal is to keep the needle pointing at the star during the test.",
                 ShowStep5 = false,
                 ShowStep6 = false,
                 ShowStep7 = true,

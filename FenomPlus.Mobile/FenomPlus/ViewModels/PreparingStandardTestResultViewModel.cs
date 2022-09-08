@@ -23,11 +23,11 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             if (Cache.TestType == TestTypeEnum.Standard)
             {
-                TestType = "Standard Test Result";
+                TestType = "10-second Test Result";
             }
             else
             {
-                TestType = "Short Test Result";
+                TestType = "6-second Test Result";
             }
             Seconds = Config.TestResultReadyWait;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);

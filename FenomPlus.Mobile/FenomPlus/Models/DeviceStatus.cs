@@ -5,6 +5,17 @@ namespace FenomPlus.Models
 {
     public class DeviceStatus : BaseModel
     {
+        private Color barColor;
+        public Color BarColor
+        {
+            get => barColor;
+            set
+            {
+                barColor = value;
+                OnPropertyChanged("BarColor");
+            }
+        }
+
         public const int BatteryDeviceLow = 3;
         public const int BatteryDeviceWarning = 20;
         public const int BatteryDeviceFull = 100;
@@ -65,6 +76,7 @@ namespace FenomPlus.Models
         /// </summary>
         public DeviceStatus()
         {
+            BarColor = Color.White;
             BatteryDevice = new SensorStatus();
             DeviceExpiration = new SensorStatus();
             SensoryExpiration = new SensorStatus();
@@ -74,6 +86,32 @@ namespace FenomPlus.Models
             UpdateDeviceExpiration(DeviceExpiration.RawValue);
             UpdateSensoryExpiration(SensoryExpiration.RawValue);
             UpdateQualityControlExpiration(QualityControlExpiration.RawValue);
+        }
+
+        public void ResetBarColor()
+        {
+            BarColor = Color.White;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="color"></param>
+        public void UpdateBarColor(Color color)
+        {
+            if(color == Color.Green)
+            {
+                return;
+            }
+            if (color == Color.Orange)
+            {
+                if (BarColor == Color.Red) return;
+                BarColor = color;
+            }
+            if (color == Color.Red)
+            {
+                BarColor = color;
+            }
         }
 
         /// <summary>
@@ -100,6 +138,7 @@ namespace FenomPlus.Models
                 BatteryDevice.ImageName = "BatteryFull";
                 BatteryDevice.Color = Color.Green;
             }
+            UpdateBarColor(BatteryDevice.Color);
             BatteryDevice.Image = BatteryDevice.ImageName;
             OnPropertyChanged("BatteryDevice");
             return BatteryDevice;
@@ -126,6 +165,7 @@ namespace FenomPlus.Models
                 DeviceExpiration.ImageName = "DeviceFull";
                 DeviceExpiration.Color = Color.Green;
             }
+            UpdateBarColor(DeviceExpiration.Color);
             DeviceExpiration.Image = DeviceExpiration.ImageName;
             DeviceExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
             DeviceExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
@@ -154,6 +194,7 @@ namespace FenomPlus.Models
                 SensoryExpiration.ImageName = "SensorFull";
                 SensoryExpiration.Color = Color.Green;
             }
+            UpdateBarColor(SensoryExpiration.Color);
             SensoryExpiration.Image = SensoryExpiration.ImageName;
             SensoryExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
             SensoryExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
@@ -183,6 +224,7 @@ namespace FenomPlus.Models
                 QualityControlExpiration.ImageName = "QualityControlFull";
                 QualityControlExpiration.Color = Color.Green;
             }
+            UpdateBarColor(QualityControlExpiration.Color);
             QualityControlExpiration.Image = QualityControlExpiration.ImageName;
             QualityControlExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
             QualityControlExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));

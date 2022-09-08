@@ -43,10 +43,7 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Label Text="Ready for test"
-                           Grid.ColumnSpan="2"
-                           FontAttributes="Bold"
-                           Style="{StaticResource Header}" />
+
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
                         <Frame HeightRequest="140"
                                 Padding="20"
@@ -59,8 +56,9 @@
                             </Frame.GestureRecognizers>
                             <StackLayout VerticalOptions="CenterAndExpand">
                                 <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
-                                <Label Text="Standard" FontSize="18" HorizontalTextAlignment="Center" />
-                                <Label Text="10 seconds" FontSize="14" HorizontalTextAlignment="Center" />
+                                <Label Text="10-second" FontSize="18" HorizontalTextAlignment="Center" />
+                                <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                                <Label Text="(Adult)" FontSize="14" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                         <Frame WidthRequest="5" BorderColor="Transparent" ></Frame>
@@ -75,8 +73,9 @@
                             </Frame.GestureRecognizers>
                             <StackLayout VerticalOptions="CenterAndExpand">
                                 <Image Aspect="AspectFit" Source="ShortBreathe" HeightRequest="50" />
-                                <Label Text="Short" FontSize="18" HorizontalTextAlignment="Center" />
-                                <Label Text="6 seconds" FontSize="14" HorizontalTextAlignment="Center" />
+                                <Label Text="6-second" FontSize="18" HorizontalTextAlignment="Center" />
+                                <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                                <Label Text="(Child)" FontSize="14" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                     </StackLayout>
@@ -87,24 +86,32 @@
                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnBackdropTapped" />
                 </BoxView.GestureRecognizers>
             </BoxView>
-            <Frame HeightRequest="230" x:Name="Drawer" CornerRadius="20" TranslationY="200" BackgroundColor="White" VerticalOptions="End" Padding="15, 6, 15, 20">
+            <Frame HeightRequest="230" x:Name="Drawer" CornerRadius="20" TranslationY="200" BackgroundColor="{Binding DeviceStatus.BarColor}" VerticalOptions="End" Padding="15, 6, 15, 20">
                 <Frame.GestureRecognizers>
                     <SwipeGestureRecognizer Direction="Up" Swiped="OnSwipeUp" />
                     <SwipeGestureRecognizer Direction="Down" Swiped="OnSwipeDown" />
                 </Frame.GestureRecognizers>
-                <Grid RowDefinitions="4, 32, *">
+                <Grid RowDefinitions="4, 32, *" >
                     <BoxView Grid.Row="0" BackgroundColor="#eee" HorizontalOptions="Center" WidthRequest="32" CornerRadius="2" />
-                    <StackLayout Orientation="Horizontal" Padding="4" BackgroundColor="#ddd" Grid.Row="1">
-                        <Label Text="Device connected" FontSize="16" VerticalTextAlignment="Center" />
-                        <Label Text="|" FontSize="16" VerticalTextAlignment="Center" />
-                        <BoxView BackgroundColor="#eee" VerticalOptions="Center" HeightRequest="8" WidthRequest="2" />
-                        <Label Text="Serial number" FontSize="12" VerticalTextAlignment="Center"/>
-                        <Label Text="{Binding DeviceSerialNumber}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <Label Text="{Binding Firmware}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End" />
-                    </StackLayout>
 
-                    <Grid Grid.Row="2"
-                          ColumnDefinitions="*, *, *, *" Padding="10">
+                    <Grid ColumnDefinitions="*, *, *" Padding="4" BackgroundColor="{Binding BarColor}" Grid.Row="1" HorizontalOptions="FillAndExpand">
+                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="0" HorizontalOptions="Start" >
+                            <Label Text="Device connected" FontSize="16" VerticalTextAlignment="Center" />
+                            <Label Text="|" FontSize="16" VerticalTextAlignment="Center"  />
+                            <Label Text="Serial number" FontSize="12" VerticalTextAlignment="Center" />
+                            <Label Text="{Binding DeviceSerialNumber}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
+                        </StackLayout>
+
+                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center" >
+                            <Label Text="SWIPE-UP" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
+                        </StackLayout>
+
+                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">
+                            <Label Text="{Binding Firmware}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End" />
+                        </StackLayout>
+                    </Grid>
+                    
+                    <Grid Grid.Row="2" ColumnDefinitions="*, *, *, *" Padding="10" BackgroundColor="white" >
                         <StackLayout Spacing="5">
                             <Label Text="{Binding DeviceStatus.BatteryDevice.Title}" HorizontalTextAlignment="Center" FontSize="14" />
                             <Image Source="{Binding DeviceStatus.BatteryDevice.Image}" Aspect="AspectFit" HeightRequest="40" />

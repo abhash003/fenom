@@ -14,7 +14,7 @@ namespace FenomPlus.Views
     {
         private ChooseTestViewModel model;
         private bool isBackdropTapEnabled;
-        private double offsetY = 20;
+        private double offsetY = 10;
         private uint duration = 100;
 
         public ChooseTestView()
