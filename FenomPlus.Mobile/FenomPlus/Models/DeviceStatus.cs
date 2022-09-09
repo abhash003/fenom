@@ -76,7 +76,7 @@ namespace FenomPlus.Models
         /// </summary>
         public DeviceStatus()
         {
-            BarColor = Color.White;
+            BarColor = Color.FromRgb(0xBB,0xFF,0xBB);
             BatteryDevice = new SensorStatus();
             DeviceExpiration = new SensorStatus();
             SensoryExpiration = new SensorStatus();
@@ -90,7 +90,7 @@ namespace FenomPlus.Models
 
         public void ResetBarColor()
         {
-            BarColor = Color.White;
+            BarColor = Color.FromRgb(0xBB, 0xFF, 0xBB);
         }
 
         /// <summary>
@@ -101,16 +101,16 @@ namespace FenomPlus.Models
         {
             if(color == Color.Green)
             {
-                return;
+                BarColor = Color.FromRgb(0xBB, 0xFF, 0xBB);
             }
             if (color == Color.Orange)
             {
                 if (BarColor == Color.Red) return;
-                BarColor = color;
+                BarColor = Color.FromRgb(0xFF, 0xFF, 0xBB);
             }
             if (color == Color.Red)
             {
-                BarColor = color;
+                BarColor = Color.FromRgb(0xFF, 0x66, 0x44);
             }
         }
 

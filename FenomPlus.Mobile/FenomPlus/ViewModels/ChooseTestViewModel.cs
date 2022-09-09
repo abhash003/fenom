@@ -14,7 +14,6 @@ namespace FenomPlus.ViewModels
 
         public ChooseTestViewModel()
         {
-            BarColor = "#dddd";
             DeviceStatus = new DeviceStatus();
 
             ErrorList = new RangeObservableCollection<Alert>();
@@ -60,7 +59,7 @@ namespace FenomPlus.ViewModels
 
             int BatteryLevel = Cache.BatteryLevel;
             DeviceStatus.ResetBarColor();
-            //BatteryLevel = 100;
+            BatteryLevel = 12;
 
             SensorStatus _BatterySensor = DeviceStatus.UpdateBatteryDevice(BatteryLevel);
 
@@ -181,17 +180,6 @@ namespace FenomPlus.ViewModels
             {
                 errorHeight = value;
                 OnPropertyChanged("ErrorHeight");
-            }
-        }
-
-        private string barColor;
-        public string BarColor
-        {
-            get => barColor;
-            set
-            {
-                barColor = value;
-                OnPropertyChanged("BarColor");
             }
         }
 
