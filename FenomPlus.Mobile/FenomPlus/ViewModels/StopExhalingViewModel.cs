@@ -1,4 +1,5 @@
 ﻿using System;
+using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.Views;
 using Xamarin.Forms;
@@ -49,6 +50,7 @@ namespace FenomPlus.ViewModels
                     var model = BreathManeuverErrorDBModel.Create(Cache._BreathManeuver);
                     ErrorsRepo.Insert(model);
 
+                    PlaySounds.PlayFailedSound();
                     Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestErrorView)}"), false);
                 }
                 else

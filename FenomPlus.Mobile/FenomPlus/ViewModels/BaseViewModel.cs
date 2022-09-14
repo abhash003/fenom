@@ -50,12 +50,28 @@ namespace FenomPlus.ViewModels
             set { SetProperty(ref firmware, value); }
         }
 
+        private string deviceConnectedStatus;
+        public string DeviceConnectedStatus
+        {
+            get { return deviceConnectedStatus; }
+            set { SetProperty(ref deviceConnectedStatus, value); }
+        }
+        
+
         private bool isDeviceConnected;
         public bool IsDeviceConnected
         {
-            get { return true; }// isDeviceConnected; }
+            get { return isDeviceConnected; }
             set { SetProperty(ref isDeviceConnected, value); }
         }
+
+        private bool showAllMenus;
+        public bool ShowAllMenus
+        {
+            get { return showAllMenus; }
+            set { SetProperty(ref showAllMenus, value); }
+        }
+        
 
         /// <summary>
         /// 
@@ -96,9 +112,8 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public BaseViewModel()
         {
-            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-            Firmware = Services.Cache.Firmware;
-
+            ShowAllMenus = true;
+            NewGlobalData();
         }
 
         /// <summary>
@@ -106,8 +121,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         virtual public void OnAppearing()
         {
-            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-            Firmware = Services.Cache.Firmware;
+            NewGlobalData();
             //IsDeviceConnected = Services.BleHub.IsConnected();
         }
 
@@ -123,6 +137,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         virtual public void NewGlobalData()
         {
+            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
+            Firmware = Services.Cache.Firmware;
+            DeviceConnectedStatus = Services.Cache.DeviceConnectedStatus;
         }
     }
 }

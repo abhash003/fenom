@@ -17,6 +17,7 @@ namespace FenomPlus.Interfaces
 
         int BatteryLevel { get; set; }
         DateTime SensorExpireDate { get; set; }
+        string DeviceConnectedStatus { get; set; }
         string DeviceSerialNumber { get; set; }
         string Firmware { get; set; }
         TestTypeEnum TestType { get; set; }
@@ -36,5 +37,9 @@ namespace FenomPlus.Interfaces
         BreathManeuver DecodeBreathManeuver(byte[] data);
         DeviceInfo DecodeDeviceInfo(byte[] data);
         DebugMsg DecodeDebugMsg(byte[] data);
+
+        bool ReadyForTest { get; set; }
+        bool FenomReady { get; set; }
+        float FenomValue { get; set; }
     }
 }

@@ -16,16 +16,16 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             if (Cache.TestType == TestTypeEnum.Standard)
             {
-                TestType = "Standard";
+                TestType = "10-second";
             }
             else
             {
-                TestType = "Short";
+                TestType = "6-second";
             }
 
-            TestResult = (Cache.NOScore) < 5 ? "< 5" :
-                        (Cache.NOScore) > 300 ? "> 300":
-                        Cache.NOScore.ToString();
+            TestResult = (Cache.FenomValue) < 5 ? "< 5" :
+                        (Cache.FenomValue) > 300 ? "> 300":
+                        Cache.FenomValue.ToString();
         }
 
         /// <summary>

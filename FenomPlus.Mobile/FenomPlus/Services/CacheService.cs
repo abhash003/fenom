@@ -21,6 +21,7 @@ namespace FenomPlus.Services
             BreathFlowTimer = Services.Config.BreathFlowTimeout;
             DeviceSerialNumber = "F150-??????";
             Firmware = "Firmware ?.?.?";
+            ReadyForTest = true;
 
             Logger = LoggerFactory.Create(builder =>
             {
@@ -43,14 +44,12 @@ namespace FenomPlus.Services
         public ILoggerFactory Logger { get; set; }
 
         public int BatteryLevel { get; set; }
-        public string Firmware { get; set; }
-        public string DeviceSerialNumber { get; set; }
+        
         public DateTime SensorExpireDate { get; set; }
         public TestTypeEnum TestType { get; set; }
         public int BreathFlowTimer { get; set; }
         public int NOScore { get; set; }
         public float HumanControlResult { get; set; }
-
         private float _BreathFlow { get; set; }
         public float BreathFlow { get { return _BreathFlow / 1000; } set { _BreathFlow = value; } }
 
@@ -58,6 +57,39 @@ namespace FenomPlus.Services
         public BreathManeuver _BreathManeuver { get; set; }
         public DeviceInfo _DeviceInfo { get; set; }
         public DebugMsg _DebugMsg { get; set; }
+
+        public string deviceConnectedStatus;
+        public string DeviceConnectedStatus
+        {
+            get { return deviceConnectedStatus; }
+            set {
+                deviceConnectedStatus = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
+
+        public string firmware;
+        public string Firmware
+        {
+            get { return firmware; }
+            set {
+                firmware = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
+
+        public string deviceSerialNumber;
+        public string DeviceSerialNumber
+        {
+            get { return deviceSerialNumber; }
+            set {
+                deviceSerialNumber = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
 
         /// <summary>
         /// 
@@ -85,6 +117,9 @@ namespace FenomPlus.Services
             set { AppSettings.AddOrUpdateValue("DeviceExpiringConfirmed_key", value); }
         }
 
+        public bool ReadyForTest { get; set; }
+        public bool FenomReady { get; set; }
+        public float FenomValue { get; set; }
 
         /// <summary>
         /// 
@@ -130,12 +165,24 @@ namespace FenomPlus.Services
 
                 _BreathManeuver.Decode(data);
 
-                // add new value and average it
-                BreathFlow = BreathBuffer.Add(_BreathManeuver.BreathFlow);
+                if (_BreathManeuver.TimeRemaining == 0xff)
+                {
+                    ReadyForTest = true;
+                } else if (_BreathManeuver.TimeRemaining == 0xfe) {
+                    FenomReady = true;
+                    FenomValue = _BreathManeuver.NOScore;
+                } else if (_BreathManeuver.TimeRemaining == 0xf0) {
+                    // log ??
+                } else {
+                    FenomReady = false;
+                    ReadyForTest = false;
 
-                // get the noscores
-                NOScore = _BreathManeuver.NOScore;
+                    // add new value and average it
+                    BreathFlow = BreathBuffer.Add(_BreathManeuver.BreathFlow);
 
+                    // get the noscores
+                    NOScore = _BreathManeuver.NOScore;
+                }
                 NotifyViews();
                 NotifyViewModels();
             } finally { }
@@ -161,14 +208,14 @@ namespace FenomPlus.Services
                 // setup serial number
                 if ((_DeviceInfo.SerialNumber != null) && (_DeviceInfo.SerialNumber.Length > 0))
                 {
-                    DeviceSerialNumber = string.Format("F150-{0}", Encoding.Default.GetString(_DeviceInfo.SerialNumber));
+                    DeviceSerialNumber = string.Format("{0}", Encoding.Default.GetString(_DeviceInfo.SerialNumber));
 
                     // update the database
                     Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
                 }
 
                 // setup firmware version
-                Firmware = string.Format("Firmware {0}.{1}.{2}", _DeviceInfo.MajorVersion, _DeviceInfo.MinorVersion, _DeviceInfo.BuildVersion);
+                Firmware = string.Format("{0}.{1}.{2}", _DeviceInfo.MajorVersion, _DeviceInfo.MinorVersion, _DeviceInfo.BuildVersion);
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(_DeviceInfo.SensorExpDateYear, _DeviceInfo.SensorExpDateMonth, _DeviceInfo.SensorExpDateDay);
@@ -210,6 +257,7 @@ namespace FenomPlus.Services
         /// </summary>
         private void NotifyViews()
         {
+            App.NotifyViews();
         }
 
         /// <summary>
@@ -217,8 +265,8 @@ namespace FenomPlus.Services
         /// </summary>
         private void NotifyViewModels()
         {
+            App.NotifyViewModels();
         }
-
     }
 }
 

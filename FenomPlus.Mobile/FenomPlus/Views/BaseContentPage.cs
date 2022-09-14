@@ -49,7 +49,7 @@ namespace FenomPlus.Views
         /// <summary>
         /// 
         /// </summary>
-        protected virtual void NewGlobalData()
+        public virtual void NewGlobalData()
         {
         }
     }

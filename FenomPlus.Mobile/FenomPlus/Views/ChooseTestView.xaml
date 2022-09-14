@@ -58,7 +58,6 @@
                                 <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
                                 <Label Text="10-second" FontSize="18" HorizontalTextAlignment="Center" />
                                 <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
-                                <Label Text="(Adult)" FontSize="14" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                         <Frame WidthRequest="5" BorderColor="Transparent" ></Frame>
@@ -75,7 +74,6 @@
                                 <Image Aspect="AspectFit" Source="ShortBreathe" HeightRequest="50" />
                                 <Label Text="6-second" FontSize="18" HorizontalTextAlignment="Center" />
                                 <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
-                                <Label Text="(Child)" FontSize="14" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                     </StackLayout>
@@ -96,9 +94,9 @@
 
                     <Grid ColumnDefinitions="*, *, *" Padding="4" BackgroundColor="{Binding BarColor}" Grid.Row="1" HorizontalOptions="FillAndExpand">
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="0" HorizontalOptions="Start" >
-                            <Label Text="Device connected" FontSize="16" VerticalTextAlignment="Center" />
+                            <Label Text="{Binding DeviceConnectedStatus}" FontSize="16" VerticalTextAlignment="Center" />
                             <Label Text="|" FontSize="16" VerticalTextAlignment="Center"  />
-                            <Label Text="Serial number" FontSize="12" VerticalTextAlignment="Center" />
+                            <Label Text="Serial Number " FontSize="12" VerticalTextAlignment="Center" />
                             <Label Text="{Binding DeviceSerialNumber}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
                         </StackLayout>
 
@@ -107,7 +105,8 @@
                         </StackLayout>
 
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">
-                            <Label Text="{Binding Firmware}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End" />
+                            <Label Text="Firmware " FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End"  />
+                            <Label Text="{Binding Firmware}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End"  />
                         </StackLayout>
                     </Grid>
                     

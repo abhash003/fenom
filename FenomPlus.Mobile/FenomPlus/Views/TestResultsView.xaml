@@ -6,7 +6,7 @@
     x:Class="FenomPlus.Views.TestResultsView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="true"
+    Shell.NavBarIsVisible="{Binding ShowAllMenus}"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>
@@ -24,7 +24,7 @@
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
                    />
-            <Label Text="Test Result"
+            <Label Text="Result"
                    FontSize="36"
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"

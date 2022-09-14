@@ -39,7 +39,7 @@ namespace FenomPlus.ViewModels
                     };
 
                     // depending on result
-                    if ((Cache.HumanControlResult >= BreathGuage.LowGreen) && (Cache.HumanControlResult <= BreathGuage.HighGreen))
+                    if ((Cache.HumanControlResult >= BreathGuage.Green1) && (Cache.HumanControlResult <= BreathGuage.Green1Top))
                     {
                         model.QCStatus = "Qualified";
                         QCRepo.Insert(model);

@@ -7,7 +7,7 @@
     x:Class="FenomPlus.Views.DevicePowerOnView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="true"
+    Shell.NavBarIsVisible="{Binding ShowAllMenus}"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
 using FenomPlus.SDK.Abstractions;
@@ -7,15 +8,18 @@ using FenomPlus.SDK.Core;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
-using FenomPlus.Views;
 using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
     public class BleHubService : BaseService, IBleHubService
     {
+        private Thread ScanBleDeviceThread;
+
         public BleHubService(IAppServices services) : base(services)
         {
+            ScanBleDeviceThread = new Thread(new ThreadStart(ScanBleDevices));
+            ScanBleDeviceThread.Start();
         }
 
         /// <summary>
@@ -37,6 +41,54 @@ namespace FenomPlus.Services
                     fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
                 }
                 return fenomHubSystemDiscovery;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsScanning { get; set; }
+
+        public void ScanBleDevices()
+        {
+            IsScanning = false;
+            while (1 == 1)
+            {
+                if(((BleDevice == null) || (BleDevice.Connected == false)) && (IsScanning == false))
+                {
+                    IsScanning = true;
+                    Services.Cache.DeviceConnectedStatus = "Scanning...";
+                    Services.Cache.DeviceSerialNumber = "";
+                    Services.Cache.Firmware = "";
+                    _ = Scan(new TimeSpan(0, 0, 0, 30), false, true, async (IBleDevice bleDevice) =>
+                    {
+                        if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
+                        await StopScan();
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            if (await Connect(bleDevice) != false)
+                            {
+                                Services.Cache.DeviceConnectedStatus = "Initializing...";
+                                Services.Cache._DeviceInfo = null;
+                                await RequestDeviceInfo();
+                                Thread.Sleep(200);
+
+                                Services.Cache._EnvironmentalInfo = null;
+                                await RequestEnvironmentalInfo();
+                                Thread.Sleep(200);
+                                Services.Cache.DeviceConnectedStatus = "Device Connected";
+                            }
+                            // need to restart the scanning
+                            IsScanning = false;
+                        });
+                    }, (IEnumerable<IBleDevice> bleDevices) =>
+                    {
+                        Services.Cache.DeviceConnectedStatus = "Device Not Found";
+                        Thread.Sleep(1000);
+                        IsScanning = false;
+                    });
+                }
+                Thread.Sleep(100);
             }
         }
 
@@ -115,7 +167,7 @@ namespace FenomPlus.Services
                     return BleDevice.Connected;
                 }
             }
-            Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
+            //Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
             return false;
         }
 
@@ -239,17 +291,7 @@ namespace FenomPlus.Services
         public async Task<bool> SendCalibration(double cal1, double cal2, double cal3)
         {
             bool result = true;
-
             await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
-
-            /*
-            result &= await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1);
-            await Task.Delay(100);
-            result &= await SendCalibration(ID_SUB.ID_CALIBRATION2, cal2);
-            await Task.Delay(100);
-            result &= await SendCalibration(ID_SUB.ID_CALIBRATION3, cal3);
-            await Task.Delay(100);
-            */
             return result;
         }
     }

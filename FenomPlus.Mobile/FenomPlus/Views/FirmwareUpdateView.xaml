@@ -6,7 +6,7 @@
     x:Class="FenomPlus.Views.FirmwareUpdateView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="true"
+    Shell.NavBarIsVisible="{Binding ShowAllMenus}"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>

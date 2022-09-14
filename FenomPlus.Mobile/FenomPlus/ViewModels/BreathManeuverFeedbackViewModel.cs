@@ -77,7 +77,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    TestGuageSeconds--;
+                    TestGuageSeconds = Cache._BreathManeuver.TimeRemaining;
                     GuageSeconds = TestGuageSeconds / (1000 / Cache.BreathFlowTimer);
                     StartMeasure = true;
                     if (GuageData < Config.GaugeDataLow)

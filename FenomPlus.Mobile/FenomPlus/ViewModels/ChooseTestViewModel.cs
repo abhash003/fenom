@@ -59,7 +59,7 @@ namespace FenomPlus.ViewModels
 
             int BatteryLevel = Cache.BatteryLevel;
             DeviceStatus.ResetBarColor();
-            BatteryLevel = 12;
+            BatteryLevel = 75;
 
             SensorStatus _BatterySensor = DeviceStatus.UpdateBatteryDevice(BatteryLevel);
 

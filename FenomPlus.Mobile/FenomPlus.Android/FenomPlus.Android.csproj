@@ -234,6 +234,14 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\fenompluslogo.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\splash_background.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FenomPlus\FenomPlus.csproj">
@@ -242,13 +250,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\high_0_10sec.wav" />
-    <AndroidAsset Include="Assets\low_0_10sec.wav" />
-    <AndroidAsset Include="Assets\mid_high_05sec.wav" />
-    <AndroidAsset Include="Assets\mid_low_05sec.wav" />
-    <AndroidAsset Include="Assets\mid_mid_05sec.wav" />
     <AndroidAsset Include="Assets\test_failure.wav" />
     <AndroidAsset Include="Assets\test_success.wav" />
+    <AndroidAsset Include="Assets\mid_mid_60sec.wav" />
+    <AndroidAsset Include="Assets\mid_low_60sec.wav" />
+    <AndroidAsset Include="Assets\mid_high_60sec.wav" />
+    <AndroidAsset Include="Assets\low_0_60sec.wav" />
+    <AndroidAsset Include="Assets\high_0_60sec.wav" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

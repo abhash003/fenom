@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using FenomPlus.Models;
 
 namespace FenomPlus.Views
@@ -21,6 +17,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new ChooseTestViewModel();
+            bool scanning = Services.BleHub.IsScanning;
             //Shell.Current.IsVisible = false;
         }
 
@@ -69,8 +66,12 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnStandartTest(object sender, EventArgs e)
         {
-            Cache.TestType = TestTypeEnum.Standard;
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=Standard"), false);
+            if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
+            {
+                Cache.TestType = TestTypeEnum.Standard;
+                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
+//                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=Standard"), false);
+            }
         }
 
         /// <summary>
@@ -80,8 +81,12 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnShortTest(object sender, EventArgs e)
         {
-            Cache.TestType = TestTypeEnum.Short;
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=short"), false);
+            if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
+            {
+                Cache.TestType = TestTypeEnum.Short;
+                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
+//                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=short"), false);
+            }
         }
 
         /// <summary>
@@ -115,7 +120,7 @@ namespace FenomPlus.Views
         /// <summary>
         /// 
         /// </summary>
-        protected override void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
             model.NewGlobalData();

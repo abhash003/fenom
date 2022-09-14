@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FenomPlus.Services;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
 
@@ -13,7 +14,6 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new MainViewModel();
-
         }
 
         /// <summary>
@@ -34,6 +34,27 @@ namespace FenomPlus.Views
             model.OnDisappearing();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void NotifyViews()
+        {
+            if ((Current == null) || (Current.CurrentPage == null)) return;
+            try
+            {
+                Page page = Current.CurrentPage;
+                ((BaseContentPage)page).NewGlobalData();
+            } catch(Exception ex) {
+                IOC.Services.LogCat.Print(ex);
+            }
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void NotifyViewModels()
+        {
+
+        }
     }
 }

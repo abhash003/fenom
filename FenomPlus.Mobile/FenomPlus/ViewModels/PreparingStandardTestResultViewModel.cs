@@ -1,4 +1,5 @@
 ﻿using System;
+using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.Views;
 using Xamarin.Forms;
@@ -49,7 +50,7 @@ namespace FenomPlus.ViewModels
         private bool TimerCallback()
         {
             if (Seconds > 0) Seconds--;
-            if (Seconds <= 0)
+            if (Cache.FenomReady == true)
             {
                 var model = BreathManeuverResultDBModel.Create(Cache._BreathManeuver);
 
@@ -60,14 +61,16 @@ namespace FenomPlus.ViewModels
                     var errorModel = BreathManeuverErrorDBModel.Create(Cache._BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
+                    PlaySounds.PlayFailedSound();
                     Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestFailedView)}"), false);
                 }
                 else
                 {
+                    PlaySounds.PlaySuccessSound();
                     Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestResultsView)}"), false);
                 }
             }
-            return (Seconds > 0);
+            return (Cache.FenomReady == false);
         }
 
         /// <summary>

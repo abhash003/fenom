@@ -1,37 +1,31 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Xamarin.Forms;
 
 namespace FenomPlus.Controls
 {
-
-    // ------------------------------------------------------------------------------------------------------------------------
-    // Breath Flow(lpm)     On the Gauge(degree)    Colour on the UI        Comments	
-    // 0 to 1	            0 to 22.5	            White(Blank)
-    // 1 to 2.6	            22.5 to 90	            Red zone                16 parts of 4.21875 degree each Far Below Range<2.4
-    // 2.6 to 2.7	        90 to 112.5	            Red zone                1 part of 22.5 degree Below Range (<2.7)
-    // 2.7 to 2.8	        112.5 to 135.0	        Yellow Zone             1 part of 22.5 degree within Range(low)
-    // 2.8 to 3.2	        135.0 to 225.0	        Green Zone              4 parts of 22.5 degree each within range(Optimal)
-    // 3.2 to 3.3	        225 to 247.5	        Yellow Zone             1 part of 22.5 degree within range(high)
-    // 3.3 to 3.4	        247.5 to 270	        Red zone                1 part of 22.5 degree Above Range(>3.3)
-    // 3.4 to 5	            270 to 337.5	        Red zone                16 parts of 4.21875 degree each Far Above Range(>3.6)
-    // 5 to 6	            337.5 to 360	        White(Blank)
-    // ------------------------------------------------------------------------------------------------------------------------
-
     public class BreathGuage : SKCanvasView
     {
-        public static double LowWhite = 0.0d;
-        public static double LowRed = 1.0d;
-        public static double LowYellow = 2.7d;
-        public static double LowGreen = 2.8d;
-        public static double HighGreen = 3.2d;
-        public static double HighYellow = 3.3d;
-        public static double HighRed = 5.0d;
-        public static double HighWhite = 6.00;
+        public static float White1     = BreathGuageValues.White1;
+        public static float White1Top  = BreathGuageValues.White1Top;
+        public static float Red1       = BreathGuageValues.Red1;
+        public static float Red1Top    = BreathGuageValues.Red1Top;
+        public static float Red2       = BreathGuageValues.Red2;
+        public static float Red2Top    = BreathGuageValues.Red2Top;
+        public static float Yellow1    = BreathGuageValues.Yellow1;
+        public static float Yellow1Top = BreathGuageValues.Yellow1Top;
+        public static float Green1     = BreathGuageValues.Green1;
+        public static float Green1Top  = BreathGuageValues.Green1Top;
+        public static float Yellow2    = BreathGuageValues.Yellow2;
+        public static float Yellow2Top = BreathGuageValues.Yellow2Top;
+        public static float Red3       = BreathGuageValues.Red3;
+        public static float Red3Top    = BreathGuageValues.Red3Top;
+        public static float Red4       = BreathGuageValues.Red4;
+        public static float Red4Top    = BreathGuageValues.Red4Top;
+        public static float White2     = BreathGuageValues.White2;
+        public static float White2Top  = BreathGuageValues.White2Top;
 
 
         public static readonly BindableProperty SizeProperty =
@@ -318,7 +312,7 @@ namespace FenomPlus.Controls
             textPaint.MeasureText(valueText, ref textBounds);
 
             xText = -1 * textBounds.MidX;
-            yText = 50 - textBounds.Height;
+            yText = 75 - textBounds.Height;
 
             // And draw the text
             canvas.DrawText(valueText, xText, yText, textPaint);
@@ -331,15 +325,15 @@ namespace FenomPlus.Controls
             float startangle = -180;
             float angle = 0f;
 
-                 if (value >= 0.0 && value < 1.0) angle = startangle + 22.5f;
-            else if (value >= 1.0 && value < 2.6) angle = startangle + 22.5f + ((value - 1) * (67.5f - 0) / (2.6f - 1)) + 0;
-            else if (value >= 2.6 && value < 2.7) angle = startangle + 90 + ((value - 2.6f) * (22.5f - 0) / (2.7f - 2.6f)) + 0;
-            else if (value >= 2.7 && value < 2.8) angle = startangle + 112.5f + ((value - 2.7f) * (22.5f - 0) / (2.8f - 2.7f)) + 0;
-            else if (value >= 2.8 && value < 3.2) angle = startangle + 135 + ((value - 2.8f) * (90 - 0) / (3.2f - 2.8f)) + 0;
-            else if (value >= 3.2 && value < 3.3) angle = startangle + 225 + ((value - 3.2f) * (22.5f - 0) / (3.3f - 3.2f)) + 0;
-            else if (value >= 3.3 && value < 3.4) angle = startangle + 247.5f + ((value - 3.3f) * (22.5f - 0) / (3.4f - 3.3f)) + 0;
-            else if (value >= 3.4 && value < 5.0) angle = startangle + 270 + ((value - 3.4f) * (67.5f - 0) / (5 - 3.4f)) + 0;
-            else if (value >= 5.0 && value <= 6.0) angle = startangle + 337.5f;
+                 if (value >= 0.0        && value < White1Top)  angle = startangle + 22.5f;
+            else if (value >= White1Top  && value < Red1Top)    angle = startangle + 22.5f  + ((value - White1Top)  * (67.5f - 0) / (Red1Top    - White1Top))  + 0;
+            else if (value >= Red1Top    && value < Red2Top)    angle = startangle + 90f    + ((value - Red1Top)    * (22.5f - 0) / (Red2Top    - Red1Top))    + 0;
+            else if (value >= Red2Top    && value < Yellow1Top) angle = startangle + 112.5f + ((value - Red2Top)    * (22.5f - 0) / (Yellow1Top - Red2Top))    + 0;
+            else if (value >= Yellow1Top && value < Green1Top)  angle = startangle + 135f   + ((value - Yellow1Top) * (90f - 0)   / (Green1Top  - Yellow1Top)) + 0;
+            else if (value >= Green1Top  && value < Yellow2Top) angle = startangle + 225f   + ((value - Green1Top)  * (22.5f - 0) / (Yellow2Top - Green1Top))  + 0;
+            else if (value >= Yellow2Top && value < Red3Top)    angle = startangle + 247.5f + ((value - Yellow2Top) * (22.5f - 0) / (Red3Top    - Yellow2Top)) + 0;
+            else if (value >= Red3Top    && value < Red4Top)    angle = startangle + 270f   + ((value - Red3Top)    * (67.5f - 0) / (Red4Top    - Red3Top))    + 0;
+            else if (value >= Red4Top    && value <= White2Top) angle = startangle + 337.5f;
 
             canvas.Save();
             canvas.RotateDegrees(angle);

@@ -15,11 +15,14 @@ namespace FenomPlus
 {
     public partial class App : Application
     {
+        public static MainView mainView { get; set; }
+
         public App()
         {
             InitializeComponent();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjQwNDYxQDMyMzAyZTMxMmUzMGlPTklYM3hoQmpKc2F2bVlEUFBBS29YU1FGQTBWSTZyY2RJbkJBVm1pbEU9");
-            MainPage = new MainView();
+            mainView = new MainView();
+            MainPage = mainView;
         }
 
         protected override void OnStart()
@@ -32,6 +35,22 @@ namespace FenomPlus
 
         protected override void OnResume()
         {
+        }
+
+        public static void NotifyViews()
+        {
+            if (mainView != null)
+            {
+                mainView.NotifyViews();
+            }
+        }
+
+        public static void NotifyViewModels()
+        {
+            if (mainView != null)
+            {
+                mainView.NotifyViewModels();
+            }
         }
     }
 }
