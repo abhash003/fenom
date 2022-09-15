@@ -169,6 +169,7 @@ namespace FenomPlus.Services
                 {
                     FenomReady = false;
                     ReadyForTest = true;
+                    DeviceConnectedStatus = "Ready For Test";
                 } else if (_BreathManeuver.TimeRemaining == 0xfe) {
                     ReadyForTest = false;
                     FenomReady = true;
@@ -176,6 +177,7 @@ namespace FenomPlus.Services
                 } else if (_BreathManeuver.TimeRemaining == 0xf0) {
                     // log ??
                 } else {
+                    DeviceConnectedStatus = "Processing Test";
                     FenomReady = false;
 
                     // add new value and average it
