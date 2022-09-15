@@ -48,9 +48,11 @@ namespace FenomPlus.Services
         /// 
         /// </summary>
         public bool IsScanning { get; set; }
+        public bool Connecting { get; set; }
 
         public void ScanBleDevices()
         {
+            Connecting = false;
             IsScanning = false;
             while (1 == 1)
             {
@@ -62,29 +64,35 @@ namespace FenomPlus.Services
                     Services.Cache.Firmware = "";
                     _ = Scan(new TimeSpan(0, 0, 0, 30), false, true, async (IBleDevice bleDevice) =>
                     {
-                        if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                        await StopScan();
+                        if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name) || (Connecting == true)) return;
+                        Connecting = true;
                         Device.BeginInvokeOnMainThread(async () =>
                         {
                             if (await Connect(bleDevice) != false)
                             {
+                                Thread.Sleep(1000);
+
                                 Services.Cache.DeviceConnectedStatus = "Initializing...";
                                 Services.Cache._DeviceInfo = null;
                                 await RequestDeviceInfo();
-                                Thread.Sleep(200);
+                                Thread.Sleep(1000);
 
                                 Services.Cache._EnvironmentalInfo = null;
                                 await RequestEnvironmentalInfo();
-                                Thread.Sleep(200);
+                                Thread.Sleep(1000);
                                 Services.Cache.DeviceConnectedStatus = "Device Connected";
+
+                                await StopScan();
                             }
                             // need to restart the scanning
                             IsScanning = false;
+                            Connecting = false;
                         });
                     }, (IEnumerable<IBleDevice> bleDevices) =>
                     {
-                        Services.Cache.DeviceConnectedStatus = "Device Not Found";
+                        //Services.Cache.DeviceConnectedStatus = "Device Not Found";
                         Thread.Sleep(1000);
+                        Connecting = false;
                         IsScanning = false;
                     });
                 }

@@ -10,7 +10,7 @@ namespace FenomPlus.SDK.Core.Models
         public static int Min = 14;
 
         public short TestNumber;
-        public byte  TimeRemaining;     // 0-done (??) FE-FenomReady FF-ready
+        public byte  TimeRemaining;     // 0-done (??) F0 - | FE-FenomReady | FF-ready
         public byte  Temperature;
         public byte  Pressure;
         public short BreathFlow;

@@ -167,15 +167,16 @@ namespace FenomPlus.Services
 
                 if (_BreathManeuver.TimeRemaining == 0xff)
                 {
+                    FenomReady = false;
                     ReadyForTest = true;
                 } else if (_BreathManeuver.TimeRemaining == 0xfe) {
+                    ReadyForTest = false;
                     FenomReady = true;
                     FenomValue = _BreathManeuver.NOScore;
                 } else if (_BreathManeuver.TimeRemaining == 0xf0) {
                     // log ??
                 } else {
                     FenomReady = false;
-                    ReadyForTest = false;
 
                     // add new value and average it
                     BreathFlow = BreathBuffer.Add(_BreathManeuver.BreathFlow);

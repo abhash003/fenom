@@ -50,7 +50,7 @@
                                 WidthRequest="200"
                                 HorizontalOptions="Start"
                                 VerticalOptions="StartAndExpand"
-                                IsEnabled="{Binding IsDeviceConnected}">
+                                IsEnabled="true">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
                             </Frame.GestureRecognizers>
@@ -66,7 +66,7 @@
                                WidthRequest="200"
                                HorizontalOptions="Start"
                                VerticalOptions="StartAndExpand"
-                               IsEnabled="{Binding IsDeviceConnected}">
+                               IsEnabled="true">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
                             </Frame.GestureRecognizers>
