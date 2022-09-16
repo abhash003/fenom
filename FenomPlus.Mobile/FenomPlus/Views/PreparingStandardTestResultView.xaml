@@ -40,6 +40,7 @@
                    FontSize="24"
                    TextColor="#333"
                    HorizontalTextAlignment="Center"
+                   IsVisible="false"
                    />
         </StackLayout>   
     </ContentPage.Content>

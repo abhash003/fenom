@@ -62,7 +62,10 @@ namespace FenomPlus.ViewModels
             GuageData = 0;
             Cache.BreathFlow = 0;
             TestGuageSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
-            GuageSeconds = TestGuageSeconds / (1000 / Cache.BreathFlowTimer);
+
+            // setup our count down
+            GuageSecondsCountdown = TestGuageSeconds;
+            GuageSeconds = GuageSecondsCountdown / (1000 / Cache.BreathFlowTimer);
             GuageStatus = "Start Blowing";
 
             // start timer
@@ -78,7 +81,9 @@ namespace FenomPlus.ViewModels
                 else
                 {
                     TestGuageSeconds = Cache._BreathManeuver.TimeRemaining;
-                    GuageSeconds = TestGuageSeconds / (1000 / Cache.BreathFlowTimer);
+
+                    if (GuageSecondsCountdown > 0) GuageSecondsCountdown--;
+                    GuageSeconds = GuageSecondsCountdown / (1000 / Cache.BreathFlowTimer);
                     StartMeasure = true;
                     if (GuageData < Config.GaugeDataLow)
                     {
@@ -133,6 +138,8 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged("GuageSeconds");
             }
         }
+
+        public int GuageSecondsCountdown;
 
         /// <summary>
         /// 
