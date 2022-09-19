@@ -20,7 +20,8 @@
 
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand"
-                     HorizontalOptions="CenterAndExpand">
+                     HorizontalOptions="FillAndExpand"
+                     Margin="100,0,100,0">
 
             <Label Text="{Binding TestType}"
                        FontSize="30"
@@ -42,11 +43,9 @@
                        HorizontalTextAlignment="Center" />
 
             <Button Text="Cancel"
-                    Padding="4"
-                    TextColor="LightBlue    "
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Center"
-                    Margin="5"
+                    Margin="0,-50,0,0"
+                    Style="{StaticResource defaultButton}"
+                    HorizontalOptions="Start"
                     Clicked="Cancel_Clicked"
                         />
         </StackLayout>

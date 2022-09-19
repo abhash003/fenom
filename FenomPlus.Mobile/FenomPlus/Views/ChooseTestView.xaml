@@ -50,7 +50,7 @@
                                 WidthRequest="200"
                                 HorizontalOptions="Start"
                                 VerticalOptions="StartAndExpand"
-                                IsEnabled="true">
+                                IsEnabled="{Binding IsDeviceConnected}">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
                             </Frame.GestureRecognizers>
@@ -66,7 +66,7 @@
                                WidthRequest="200"
                                HorizontalOptions="Start"
                                VerticalOptions="StartAndExpand"
-                               IsEnabled="true">
+                               IsEnabled="{Binding IsDeviceConnected}">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
                             </Frame.GestureRecognizers>
@@ -101,7 +101,7 @@
                         </StackLayout>
 
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center" >
-                            <Label Text="SWIPE-UP" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
+                            <Label Text="^" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
                         </StackLayout>
 
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">

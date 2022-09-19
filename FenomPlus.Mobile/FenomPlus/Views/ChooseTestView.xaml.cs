@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
 using FenomPlus.Models;
+using FenomPlus.SDK.Core.Models;
 
 namespace FenomPlus.Views
 {
@@ -69,6 +70,7 @@ namespace FenomPlus.Views
             if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
             {
                 Cache.TestType = TestTypeEnum.Standard;
+                await BleHub.StartTest(BreathTestEnum.Start10Second);
                 await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
 //                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=Standard"), false);
             }
@@ -84,6 +86,7 @@ namespace FenomPlus.Views
             if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
             {
                 Cache.TestType = TestTypeEnum.Short;
+                await BleHub.StartTest(BreathTestEnum.Start6Second);
                 await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
 //                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=short"), false);
             }

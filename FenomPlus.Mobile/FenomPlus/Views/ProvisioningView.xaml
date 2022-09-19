@@ -70,19 +70,20 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+
                 <Button Text="Update Serial Number"
                         HorizontalOptions="End"
                         Style="{StaticResource defaultButton}"
                         Clicked="OnSendSerialNumberClicked"
                         Grid.Column="0"
-                        IsEnabled="{Binding IsDeviceConnected}" />
+                        IsEnabled="true" />
 
                 <Button Text="Update Date and Time"
                         HorizontalOptions="Start"
                         Style="{StaticResource defaultButton}"
                         Clicked="OnSendDateTimeClicked"
                         Grid.Column="1"
-                        IsEnabled="{Binding IsDeviceConnected}" />
+                        IsEnabled="true" />
                     </Grid>
             </StackLayout>
 

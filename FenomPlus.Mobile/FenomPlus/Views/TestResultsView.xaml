@@ -40,7 +40,7 @@
                    FontSize="36"
                    TextColor="#333333"
                    HorizontalTextAlignment="Center"
-                   Padding="0,0,0,150"
+                   Padding="0,0,0,15"
                    />
             <Button Text="Done"
                     CornerRadius="32"

@@ -51,7 +51,7 @@ namespace FenomPlus.Views
         private void OnSendSerialNumberClicked(System.Object sender, System.EventArgs e)
         {
             Services.BleHub.SendSerailNumber(model.SerialNumber);
-            Services.Cache.DeviceSerialNumber = string.Format("F150-{0}", model.SerialNumber);
+            Services.Cache.DeviceSerialNumber = string.Format("{0}", model.SerialNumber);
         }
 
         /// <summary>

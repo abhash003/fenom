@@ -69,7 +69,7 @@
                         VerticalOptions="End"
                         Style="{StaticResource defaultButton}"
                         Clicked="OnSendClicked"
-                        IsEnabled="{Binding IsDeviceConnected}" />
+                        IsEnabled="true" />
             </StackLayout>
 
         </ScrollView>
