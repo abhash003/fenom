@@ -4,11 +4,13 @@ namespace FenomPlus.Helpers
 {
     public enum SoundsEnum
     {
-        high_0_60sec,
-        low_0_60sec,
-        mid_high_60sec,
-        mid_low_60sec,
-        mid_mid_60sec,
+        red_low,
+        red_high,
+        yellow_low,
+        yellow_high,
+        green_low,
+        green_mid,
+        green_high,
         test_failure,
         test_success
     }

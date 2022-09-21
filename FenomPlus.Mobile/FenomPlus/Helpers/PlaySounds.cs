@@ -6,11 +6,13 @@ namespace FenomPlus.Helpers
 {
     public class PlaySounds
     {
-        private static ISimpleAudioPlayer low_0_60sec;              // red low
-        private static ISimpleAudioPlayer mid_low_60sec;            // yellow low
-        private static ISimpleAudioPlayer mid_mid_60sec;            // green
-        private static ISimpleAudioPlayer mid_high_60sec;           // yellow high
-        private static ISimpleAudioPlayer high_0_60sec;             // red high
+        private static ISimpleAudioPlayer red_low;                  // red low
+        private static ISimpleAudioPlayer red_high;                 // red high
+        private static ISimpleAudioPlayer yellow_low;               // yellow low
+        private static ISimpleAudioPlayer yellow_high;              // yellow high
+        private static ISimpleAudioPlayer green_low;                // green low
+        private static ISimpleAudioPlayer green_mid;                // green mid
+        private static ISimpleAudioPlayer green_high;               // green high
         private static ISimpleAudioPlayer test_failure;
         private static ISimpleAudioPlayer test_success;
 
@@ -19,22 +21,43 @@ namespace FenomPlus.Helpers
         /// </summary>
         public static void InitSound()
         {
-            if (high_0_60sec == null)
+            if (green_high == null)
             {
-                high_0_60sec = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                high_0_60sec.Load("high_0_60sec.wav");
-                low_0_60sec = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                low_0_60sec.Load("low_0_60sec.wav");
-                mid_high_60sec = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                mid_high_60sec.Load("mid_high_60sec.wav");
-                mid_low_60sec = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                mid_low_60sec.Load("mid_low_60sec.wav");
-                mid_mid_60sec = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                mid_mid_60sec.Load("mid_mid_60sec.wav");
+                red_low = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                red_low.Load("red_low.wav");
+                red_low.Loop = false;
+
+                red_high = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                red_high.Load("red_high.wav");
+                red_high.Loop = false;
+
+                yellow_low = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                yellow_low.Load("yellow_low.wav");
+                yellow_low.Loop = false;
+
+                yellow_high = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                yellow_high.Load("yellow_high.wav");
+                yellow_high.Loop = false;
+
+                green_low = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                green_low.Load("green_low.wav");
+                green_low.Loop = false;
+
+                green_mid = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                green_mid.Load("green_mid.wav");
+                green_mid.Loop = false;
+
+                green_high = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                green_high.Load("green_high.wav");
+                green_high.Loop = false;
+
                 test_failure = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 test_failure.Load("test_failure.wav");
+                test_failure.Loop = false;
+
                 test_success = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 test_success.Load("test_success.wav");
+                test_success.Loop = false;
             }
         }
 
@@ -46,37 +69,44 @@ namespace FenomPlus.Helpers
             InitSound();
 
             // play none
-            if ((guageData <= BreathGuageValues.White1Top) || (guageData >= BreathGuageValues.White2))
+            if ((guageData <= BreathGuageValues.White1Top) || (guageData >= BreathGuageValues.Red4Top))
             {
                 StopAll();
             }
-            // play low red low
+            // play red_low
             else if (guageData <= BreathGuageValues.Red2Top)
             {
-                PlaySound(SoundsEnum.low_0_60sec, 100);
+                PlaySound(SoundsEnum.red_low, 100);
             }
-            // play high red high
-            else if (guageData >= BreathGuageValues.Red3)
-            {
-                PlaySound(SoundsEnum.high_0_60sec, 100);
-            }
-            // play low yellow mid_low
+            // play yellow_low
             else if (guageData <= BreathGuageValues.Yellow1Top)
             {
-                PlaySound(SoundsEnum.mid_low_60sec, 100);
+                PlaySound(SoundsEnum.yellow_low, 100);
             }
-            // play high yellow mid_high
-            else if (guageData >= BreathGuageValues.Yellow2)
+            // play green_low
+            else if (guageData <= BreathGuageValues.Green1Top)
             {
-                PlaySound(SoundsEnum.mid_high_60sec, 100);
+                PlaySound(SoundsEnum.green_low, 100);
             }
-            // play green mid_mid
+            // play red_high
+            else if (guageData >= BreathGuageValues.Yellow2Top)
+            {
+                PlaySound(SoundsEnum.red_high, 100);
+            }            
+            // play yellow_high
+            else if (guageData >= BreathGuageValues.Green3Top)
+            {
+                PlaySound(SoundsEnum.yellow_high, 100);
+            }
+            // play green_high
+            else if (guageData >= BreathGuageValues.Green2Top)
+            {
+                PlaySound(SoundsEnum.green_high, 100);
+            }
+            // play green_mid
             else
             {
-                if (!mid_mid_60sec.IsPlaying)
-                {
-                    PlaySound(SoundsEnum.mid_mid_60sec, 100);
-                }
+                PlaySound(SoundsEnum.green_mid, 100);
             }
         }
 
@@ -85,11 +115,13 @@ namespace FenomPlus.Helpers
         /// </summary>
         public static void ResetToStart()
         {
-            low_0_60sec.Seek(0);
-            mid_low_60sec.Seek(0);
-            mid_mid_60sec.Seek(0);
-            mid_high_60sec.Seek(0);
-            high_0_60sec.Seek(0);
+            red_low.Seek(0);
+            red_high.Seek(0);
+            yellow_low.Seek(0);
+            yellow_high.Seek(0);
+            green_low.Seek(0);
+            green_mid.Seek(0);
+            green_high.Seek(0);
             test_failure.Seek(0);
             test_success.Seek(0);
         }
@@ -117,70 +149,105 @@ namespace FenomPlus.Helpers
             InitSound();
             switch (sound)
             {
-                case SoundsEnum.low_0_60sec:
-                    if (!low_0_60sec.IsPlaying) { 
-                        StopMidLow();
-                        StopMidMid();
-                        StopMidHigh();
-                        StopHigh();
-                        low_0_60sec.Volume = volume;
-                        low_0_60sec.Play();
+                case SoundsEnum.red_low:
+                    if (!red_low.IsPlaying)
+                    {
+                        StopRedHigh();
+                        StopYellowLow();
+                        StopYellowHigh();
+                        StopGreenLow();
+                        StopGreenMid();
+                        StopGreenHigh();
+                        red_low.Volume = volume;
+                        red_low.Play();
                     }
                     break;
-                case SoundsEnum.mid_low_60sec:
-                    if (!mid_low_60sec.IsPlaying)
+                case SoundsEnum.red_high:
+                    if (!red_high.IsPlaying)
                     {
-                        StopLow();
-                        StopMidMid();
-                        StopMidHigh();
-                        StopHigh();
-                        mid_low_60sec.Volume = volume;
-                        mid_low_60sec.Play();
+                        StopRedLow();
+                        StopYellowLow();
+                        StopYellowHigh();
+                        StopGreenLow();
+                        StopGreenMid();
+                        StopGreenHigh();
+                        red_high.Volume = volume;
+                        red_high.Play();
                     }
                     break;
-                case SoundsEnum.mid_mid_60sec:
-                    if (!mid_mid_60sec.IsPlaying)
+                case SoundsEnum.yellow_low:
+                    if (!yellow_low.IsPlaying)
                     {
-                        StopLow();
-                        StopMidLow();
-                        StopMidHigh();
-                        StopHigh();
-                        mid_mid_60sec.Volume = volume;
-                        mid_mid_60sec.Play();
+                        StopRedLow();
+                        StopRedHigh();
+                        StopYellowHigh();
+                        StopGreenLow();
+                        StopGreenMid();
+                        StopGreenHigh();
+                        yellow_low.Volume = volume;
+                        yellow_low.Play();
                     }
                     break;
-                case SoundsEnum.mid_high_60sec:
-                    if (!mid_high_60sec.IsPlaying)
+                case SoundsEnum.yellow_high:
+                    if (!yellow_low.IsPlaying)
                     {
-                        StopLow();
-                        StopMidLow();
-                        StopMidMid();
-                        StopHigh();
-                        mid_high_60sec.Volume = volume;
-                        mid_high_60sec.Play();
+                        StopRedLow();
+                        StopRedHigh();
+                        StopYellowLow();
+                        StopGreenLow();
+                        StopGreenMid();
+                        StopGreenHigh();
+                        yellow_high.Volume = volume;
+                        yellow_high.Play();
                     }
                     break;
-                case SoundsEnum.high_0_60sec:
-                    if (!high_0_60sec.IsPlaying)
+                case SoundsEnum.green_low:
+                    if (!green_low.IsPlaying)
                     {
-                        StopLow();
-                        StopMidLow();
-                        StopMidMid();
-                        StopMidHigh();
-                        high_0_60sec.Volume = volume;
-                        high_0_60sec.Play();
+                        StopRedLow();
+                        StopRedHigh();
+                        StopYellowLow();
+                        StopYellowHigh();
+                        StopGreenMid();
+                        StopGreenHigh();
+                        green_low.Volume = volume;
+                        green_low.Play();
+                    }
+                    break;
+                case SoundsEnum.green_mid:
+                    if (!green_mid.IsPlaying)
+                    {
+                        StopRedLow();
+                        StopRedHigh();
+                        StopYellowLow();
+                        StopYellowHigh();
+                        StopGreenLow();
+                        StopGreenHigh();
+                        green_mid.Volume = volume;
+                        green_mid.Play();
+                    }
+                    break;
+                case SoundsEnum.green_high:
+                    if (!green_high.IsPlaying)
+                    {
+                        StopRedLow();
+                        StopRedHigh();
+                        StopYellowLow();
+                        StopYellowHigh();
+                        StopGreenLow();
+                        StopGreenMid();
+                        green_high.Volume = volume;
+                        green_high.Play();
                     }
                     break;
                 case SoundsEnum.test_failure:
                     StopAll();
                     test_failure.Volume = volume;
-                    test_failure.Loop = false;
                     test_failure.Play();
                     break;
                 case SoundsEnum.test_success:
                     StopAll();
                     test_success.Volume = volume;
-                    test_success.Loop = false;
                     test_success.Play();
                     break;
             }
@@ -193,11 +260,13 @@ namespace FenomPlus.Helpers
         {
             try
             {
-                StopLow();
-                StopMidLow();
-                StopMidMid();
-                StopMidHigh();
-                StopHigh();
+                StopRedLow();
+                StopRedHigh();
+                StopYellowLow();
+                StopYellowHigh();
+                StopGreenLow();
+                StopGreenMid();
+                StopGreenHigh();
             }
             catch (Exception ex)
             {
@@ -208,56 +277,80 @@ namespace FenomPlus.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static void StopLow()
+        public static void StopRedLow()
         {
-            if (low_0_60sec != null)
+            if ((red_low != null) && (red_low.IsPlaying))
             {
-                low_0_60sec.Stop();
+                red_low.Stop();
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static void StopMidLow()
+        public static void StopRedHigh()
         {
-            if (mid_low_60sec != null)
+            if ((red_high != null) && (red_high.IsPlaying))
             {
-                mid_low_60sec.Stop();
+                red_high.Stop();
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static void StopMidMid()
+        public static void StopYellowLow()
         {
-            if (mid_mid_60sec != null)
+            if ((yellow_low != null) && (yellow_low.IsPlaying))
             {
-                mid_mid_60sec.Stop();
+                yellow_low.Stop();
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static void StopMidHigh()
+        public static void StopYellowHigh()
         {
-            if (mid_high_60sec != null)
+            if ((yellow_high != null) && (yellow_high.IsPlaying))
             {
-                mid_high_60sec.Stop();
+                yellow_high.Stop();
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static void StopHigh()
+        public static void StopGreenLow()
         {
-            if (high_0_60sec != null)
+            if ((green_low != null) && (green_low.IsPlaying))
             {
-                high_0_60sec.Stop();
+                green_low.Stop();
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void StopGreenMid()
+        {
+            if ((green_mid != null) && (green_mid.IsPlaying))
+            {
+                green_mid.Stop();
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void StopGreenHigh()
+        {
+            if ((green_high != null) && (green_high.IsPlaying))
+            {
+                green_high.Stop();
+            }
+        }
+
     }
 }

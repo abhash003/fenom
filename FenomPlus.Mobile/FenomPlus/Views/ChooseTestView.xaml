@@ -49,8 +49,7 @@
                                 Padding="20"
                                 WidthRequest="200"
                                 HorizontalOptions="Start"
-                                VerticalOptions="StartAndExpand"
-                                IsEnabled="true">
+                                VerticalOptions="StartAndExpand">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
                             </Frame.GestureRecognizers>
@@ -65,8 +64,7 @@
                                Padding="20"
                                WidthRequest="200"
                                HorizontalOptions="Start"
-                               VerticalOptions="StartAndExpand"
-                               IsEnabled="true">
+                               VerticalOptions="StartAndExpand">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
                             </Frame.GestureRecognizers>
@@ -101,7 +99,8 @@
                         </StackLayout>
 
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center" >
-                            <Label Text="^" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
+                            <Image Aspect="AspectFit" Source="SwipeUp" HeightRequest="30" />
+                            <!--<Label Text="^" FontSize="30" VerticalTextAlignment="Center" HorizontalOptions="Center" /> -->
                         </StackLayout>
 
                         <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">

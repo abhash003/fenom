@@ -30,23 +30,27 @@ namespace FenomPlus.Controls
 
     public static class BreathGuageValues
     {
-        public static float White1 = 0.0f;
-        public static float White1Top = 1.0f;
-        public static float Red1 = White1Top;
-        public static float Red1Top = 2.3f;
-        public static float Red2 = Red1Top;
-        public static float Red2Top = 2.4f;
-        public static float Yellow1 = Red2Top;
-        public static float Yellow1Top = 2.7f;
-        public static float Green1 = Yellow1Top;
-        public static float Green1Top = 3.3f;
-        public static float Yellow2 = Green1Top;
-        public static float Yellow2Top = 3.6f;
-        public static float Red3 = Yellow2Top;
-        public static float Red3Top = 3.7f;
-        public static float Red4 = Red3Top;
-        public static float Red4Top = 5.0f;
-        public static float White2 = Red4Top;
-        public static float White2Top = 6.0f;
+        public static float White1      = 0.0f;
+        public static float White1Top   = 1.0f;
+        public static float Red1        = White1Top;
+        public static float Red1Top     = 2.3f;
+        public static float Red2        = Red1Top;
+        public static float Red2Top     = 2.4f;
+        public static float Yellow1     = Red2Top;
+        public static float Yellow1Top  = 2.7f;
+        public static float Green1      = Yellow1Top;
+        public static float Green1Top   = 2.8f;
+        public static float Green2      = Green1Top;
+        public static float Green2Top   = 3.2f;
+        public static float Green3      = Green2Top;
+        public static float Green3Top   = 3.3f;
+        public static float Yellow2     = Green3Top;
+        public static float Yellow2Top  = 3.6f;
+        public static float Red3        = Yellow2Top;
+        public static float Red3Top     = 3.7f;
+        public static float Red4        = Red3Top;
+        public static float Red4Top     = 5.0f;
+        public static float White2      = Red4Top;
+        public static float White2Top   = 6.0f;
     }
 }

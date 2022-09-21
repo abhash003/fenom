@@ -17,7 +17,7 @@ namespace FenomPlus.Controls
         public static float Yellow1    = BreathGuageValues.Yellow1;
         public static float Yellow1Top = BreathGuageValues.Yellow1Top;
         public static float Green1     = BreathGuageValues.Green1;
-        public static float Green1Top  = BreathGuageValues.Green1Top;
+        public static float Green1Top  = BreathGuageValues.Green3Top;
         public static float Yellow2    = BreathGuageValues.Yellow2;
         public static float Yellow2Top = BreathGuageValues.Yellow2Top;
         public static float Red3       = BreathGuageValues.Red3;
