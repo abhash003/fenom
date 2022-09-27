@@ -72,7 +72,6 @@ namespace FenomPlus.Views
                 Cache.TestType = TestTypeEnum.Standard;
                 await BleHub.StartTest(BreathTestEnum.Start10Second);
                 await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
-//                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=Standard"), false);
             }
         }
 
@@ -88,7 +87,6 @@ namespace FenomPlus.Views
                 Cache.TestType = TestTypeEnum.Short;
                 await BleHub.StartTest(BreathTestEnum.Start6Second);
                 await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
-//                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StartTestView)}?test=short"), false);
             }
         }
 

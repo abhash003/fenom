@@ -189,7 +189,7 @@ namespace FenomPlus.Helpers
                     }
                     break;
                 case SoundsEnum.yellow_high:
-                    if (!yellow_low.IsPlaying)
+                    if (!yellow_high.IsPlaying)
                     {
                         StopRedLow();
                         StopRedHigh();
