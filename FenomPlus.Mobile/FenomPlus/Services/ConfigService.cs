@@ -25,7 +25,7 @@ namespace FenomPlus.Services
             BatteryLevelLow = 10;           // %
             DaysRemaining = 60;             // days
             TestResultReadyWait = 22;       // seconds
-            StopExhalingReadyWait = 3;      // seconds
+            StopExhalingReadyWait = 7;      // seconds
         }
 
     }
