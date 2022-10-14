@@ -1,9 +1,8 @@
-﻿
-namespace FenomPlus.ViewModels
+﻿namespace FenomPlus.ViewModels
 {
-    public class ChooseAgeViewModel : BaseViewModel
+    public class StatusDeviceInfoViewModel : BaseViewModel
     {
-        public ChooseAgeViewModel()
+        public StatusDeviceInfoViewModel()
         {
         }
 
@@ -14,7 +13,6 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             Services.BleHub.IsNotConnectedRedirect();
-
         }
 
         /// <summary>

@@ -1,9 +1,10 @@
-﻿
+﻿using System;
+
 namespace FenomPlus.ViewModels
 {
-    public class ChooseAgeViewModel : BaseViewModel
+    public class TitleContentViewModel : BaseViewModel
     {
-        public ChooseAgeViewModel()
+        public TitleContentViewModel()
         {
         }
 
@@ -13,7 +14,6 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
 
         }
 

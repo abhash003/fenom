@@ -3,6 +3,7 @@
     xmlns:views="clr-namespace:FenomPlus.Views"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.ChooseTestView"
     x:Name="ChooseTestsView"
     Title="{Binding Title}"
@@ -11,11 +12,7 @@
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">    
     <Shell.TitleView>
-        <Image Source="TitleIcon"
-               Aspect="AspectFit"
-               Margin="0, 16"
-               HorizontalOptions="StartAndExpand"
-        />
+        <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Resources>
         <Style TargetType="Label">
@@ -75,14 +72,30 @@
                             </StackLayout>
                         </Frame>
                     </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
+                        <Frame HeightRequest="140"
+                                Padding="20"
+                                WidthRequest="200"
+                                HorizontalOptions="Start"
+                                VerticalOptions="StartAndExpand">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnTutorial"/>
+                            </Frame.GestureRecognizers>
+                            <StackLayout VerticalOptions="CenterAndExpand">
+                                <Image Aspect="AspectFit" Source="Tutorial" HeightRequest="50" />
+                                <Label Text="Tutorial" FontSize="14" HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
                 </StackLayout>
             </ScrollView>
-            <BoxView x:Name="Backdrop" BackgroundColor="#4B000000" Opacity="0" InputTransparent="True">
+            <BoxView IsVisible="False" x:Name="Backdrop" BackgroundColor="#4B000000" Opacity="0" InputTransparent="True">
                 <BoxView.GestureRecognizers>
                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnBackdropTapped" />
                 </BoxView.GestureRecognizers>
             </BoxView>
-            <Frame HeightRequest="230" x:Name="Drawer" CornerRadius="20" TranslationY="200" BackgroundColor="{Binding DeviceStatus.BarColor}" VerticalOptions="End" Padding="15, 6, 15, 20">
+            <Frame IsVisible="False" HeightRequest="230" x:Name="Drawer" CornerRadius="20" TranslationY="200" BackgroundColor="{Binding DeviceStatus.BarColor}" VerticalOptions="End" Padding="15, 6, 15, 20">
                 <Frame.GestureRecognizers>
                     <SwipeGestureRecognizer Direction="Up" Swiped="OnSwipeUp" />
                     <SwipeGestureRecognizer Direction="Down" Swiped="OnSwipeDown" />

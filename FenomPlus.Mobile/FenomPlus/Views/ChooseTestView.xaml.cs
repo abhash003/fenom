@@ -19,7 +19,6 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = model = new ChooseTestViewModel();
             bool scanning = Services.BleHub.IsScanning;
-            //Shell.Current.IsVisible = false;
         }
 
         private async Task OpenDrawer()
@@ -67,7 +66,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnStandartTest(object sender, EventArgs e)
         {
-            if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
+            if (Services.BleHub.IsNotConnectedRedirect() && Cache.ReadyForTest)
             {
                 Cache.TestType = TestTypeEnum.Standard;
                 await BleHub.StartTest(BreathTestEnum.Start10Second);
@@ -82,13 +81,24 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnShortTest(object sender, EventArgs e)
         {
-            if (Services.BleHub.IsConnected() && Cache.ReadyForTest)
+            if (Services.BleHub.IsNotConnectedRedirect() && Cache.ReadyForTest)
             {
                 Cache.TestType = TestTypeEnum.Short;
                 await BleHub.StartTest(BreathTestEnum.Start6Second);
                 await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void OnTutorial(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialView)}"), false);
+        }
+        
 
         /// <summary>
         /// 

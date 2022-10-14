@@ -61,7 +61,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            //Services.BleHub.IsConnected();
+            Services.BleHub.IsNotConnectedRedirect();
             if (Cache.TestType == TestTypeEnum.Standard) {
                 TestType = "10-second Test";
                 TestButton = "Take 10-second";

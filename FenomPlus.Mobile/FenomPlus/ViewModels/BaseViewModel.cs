@@ -1,10 +1,15 @@
 ﻿using FenomPlus.Database.Repository.Interfaces;
+using FenomPlus.Enums;
+using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
+using FenomPlus.Models;
 using FenomPlus.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -107,13 +112,158 @@ namespace FenomPlus.ViewModels
         }
         #endregion
 
+        public ICommand DismissCommand { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         public BaseViewModel()
         {
+            DeviceStatus = new DeviceStatus();
+
+            ErrorList = new RangeObservableCollection<Alert>();
+            RefreshErrorList();
+            DismissCommand = new Command<Alert>((model) => {
+                foreach (Alert alert in ErrorList)
+                {
+                    if (model.Id != alert.Id) continue;
+
+                    if (model.Id == (int)AlertEnum.Battery)
+                    {
+                        Cache.BatteryStatus = true;
+                    }
+
+                    if (model.Id == (int)AlertEnum.DeviceSensor)
+                    {
+                        Cache.DeviceSensorExpiring = true;
+                    }
+
+                    if (model.Id == (int)AlertEnum.Device)
+                    {
+                        Cache.DeviceExpiring = true;
+                    }
+
+                    ErrorList.Remove(alert);
+                    break;
+                }
+                UpdateErrorList();
+            });
             ShowAllMenus = true;
             NewGlobalData();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void RefreshErrorList()
+        {
+            ErrorList.Clear();
+
+            int BatteryLevel = Cache.BatteryLevel;
+            DeviceStatus.ResetBarColor();
+            BatteryLevel = 75;
+
+            SensorStatus _BatterySensor = DeviceStatus.UpdateBatteryDevice(BatteryLevel);
+
+            if (Cache.BatteryStatus == false)
+            {
+                if (BatteryLevel <= Config.BatteryLevelLow)
+                {
+                    int TestsRemaining = BatteryLevel / 3;
+                    ErrorList.Add(new Alert()
+                    {
+                        Id = (int)AlertEnum.Battery,
+                        Description = string.Format("Fenom Plus has {0}% charge with {1} tests remaining. Please connect your device to the charging port.", BatteryLevel, TestsRemaining),
+                        Image = _BatterySensor.ImageName,
+                        Title = "Device Battery Low"
+                    });
+                }
+            }
+            else if (BatteryLevel > Config.BatteryLevelLow)
+            {
+                Cache.BatteryStatus = false;
+            }
+
+            /*
+            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
+
+            DeviceStatus.UpdateDeviceExpiration(daysRemaining);
+            DeviceStatus.UpdateSensoryExpiration(daysRemaining);
+            if (daysRemaining <= Config.DaysRemaining)
+            {
+                if (Cache.DeviceSensorExpiring == false)
+                {
+                    ErrorList.Add(new Alert()
+                    {
+                        Id = (int)AlertEnum.DeviceSensor,
+                        Description = string.Format("Fenom Plus sensor will expire in {0} days. For information on ordering a replacement sensor and how to replace your sensor, please view online FAQ.", daysRemaining),
+                        Image = "SensorWarning",
+                        Title = "Device Sensor Expiring Soon"
+                    });
+                }
+
+                if (Cache.DeviceExpiring == false)
+                {
+                    ErrorList.Add(new Alert()
+                    {
+                        Id = (int)AlertEnum.Device,
+                        Description = string.Format("Fenom Plus Device will expire in {0} days. For information on ordering a replacement device, please view online FAQ.", daysRemaining),
+                        Image = "DeviceWarning",
+                        Title = "Device Expiring Soon"
+                    });
+                }
+            }
+            else if (daysRemaining > Config.DaysRemaining)
+            {
+                Cache.DeviceSensorExpiring = false;
+                Cache.DeviceExpiring = false;
+            }
+
+            // calucalte quaility contro lexpiration here
+            DeviceStatus.UpdateQualityControlExpiration(0);
+            */
+            UpdateErrorList();
+        }
+
+        public DeviceStatus DeviceStatus { get; set; }
+
+        public RangeObservableCollection<Alert> ErrorList { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdateErrorList()
+        {
+            ErrorHeight = ErrorList.Count * 74;
+            ErrorVisable = ErrorHeight > 0;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool errorVisable;
+        public bool ErrorVisable
+        {
+            get => errorVisable;
+            set
+            {
+                errorVisable = value;
+                OnPropertyChanged("ErrorVisable");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private int errorHeight;
+        public int ErrorHeight
+        {
+            get => errorHeight;
+            set
+            {
+                errorHeight = value;
+                OnPropertyChanged("ErrorHeight");
+            }
         }
 
         /// <summary>
@@ -122,7 +272,7 @@ namespace FenomPlus.ViewModels
         virtual public void OnAppearing()
         {
             NewGlobalData();
-            //IsDeviceConnected = Services.BleHub.IsConnected();
+            //IsDeviceConnected = Services.BleHub.IsNotConnectedRedirect();
         }
 
         /// <summary>
@@ -137,6 +287,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         virtual public void NewGlobalData()
         {
+            RefreshErrorList();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
             Firmware = Services.Cache.Firmware;
             DeviceConnectedStatus = Services.Cache.DeviceConnectedStatus;

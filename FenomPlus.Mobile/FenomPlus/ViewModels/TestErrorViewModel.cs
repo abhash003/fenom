@@ -39,12 +39,12 @@ namespace FenomPlus.ViewModels
         /// </summary>
         private void UpdateError()
         {
-            int statusCode = (Cache._BreathManeuver.StatusCode >= ErrorCodesEnum.codes.Length) ?
-                ErrorCodesEnum.codes.Length :
+            int statusCode = (Cache._BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
+                ErrorCodesEnum.code.Length :
                 Cache._BreathManeuver.StatusCode;
 
-            ErrorCode = string.Format("E-{0}", statusCode.ToString("000"));
-            ErrorMessage = ErrorCodesEnum.codes[statusCode];
+            ErrorCode = ErrorCodesEnum.code[statusCode];
+            ErrorMessage = ErrorCodesEnum.title[statusCode];
         }
 
         /// <summary>

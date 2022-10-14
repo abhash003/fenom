@@ -52,5 +52,18 @@ namespace FenomPlus.Views
         public virtual void NewGlobalData()
         {
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public async void OnExistToDashboard(object sender, EventArgs e)
+        {
+            if(Services.BleHub.IsNotConnectedRedirect())
+            {
+                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
+            }
+        }
     }
 }

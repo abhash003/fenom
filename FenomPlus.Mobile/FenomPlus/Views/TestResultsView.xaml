@@ -3,18 +3,15 @@
     xmlns:views="clr-namespace:FenomPlus.Views"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.TestResultsView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="{Binding ShowAllMenus}"
+    Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>
-        <Image Source="TitleIcon"
-               Aspect="AspectFit"
-               Margin="0, 16"
-               HorizontalOptions="StartAndExpand"
-        />
+        <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Content>
         <StackLayout HorizontalOptions="CenterAndExpand"
@@ -42,7 +39,7 @@
                    HorizontalTextAlignment="Center"
                    Padding="0,0,0,15"
                    />
-            <Button Text="Done"
+            <Button Text="Exit"
                     CornerRadius="32"
                     VerticalOptions="EndAndExpand"
                     WidthRequest="200"

@@ -18,7 +18,7 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            //Services.BleHub.IsConnected();
+            Services.BleHub.IsNotConnectedRedirect();
             TestTime = 10;
             TestSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
             Stop = false;

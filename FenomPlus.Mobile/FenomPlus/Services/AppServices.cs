@@ -15,7 +15,7 @@ namespace FenomPlus.Services
                 Container.Register<ICacheService, CacheService>().AsSingleton();
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
                 Container.Register<IDebugLogFileService, DebugLogFileService>().AsSingleton();
-                Container.Register<ILogCatService, LogCatService>().AsSingleton();                
+                Container.Register<ILogCatService, LogCatService>().AsSingleton();
             }
             catch (Exception ex)
             {
@@ -93,5 +93,13 @@ namespace FenomPlus.Services
             get { return _LogCat ?? (_LogCat = Container.Resolve<ILogCatService>()); }
             set { _LogCat = value; }
         }
+
+        protected INavigationService _Navigation;
+        public INavigationService Navigation
+        {
+            get { return _Navigation ?? (_Navigation = Container.Resolve<INavigationService>()); }
+            set { _Navigation = value; }
+        }
+
     }
 }

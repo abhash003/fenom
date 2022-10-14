@@ -16,6 +16,7 @@ namespace FenomPlus.Interfaces
         Task<bool> Disconnect();
 
         bool IsConnected(bool devicePowerOn=false);
+        bool IsNotConnectedRedirect(bool devicePowerOn = false);
 
         Task<bool> StartTest(BreathTestEnum breathTestEnum);
         Task<bool> StopTest();

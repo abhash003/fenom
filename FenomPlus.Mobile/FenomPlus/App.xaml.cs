@@ -20,7 +20,8 @@ namespace FenomPlus
         public App()
         {
             InitializeComponent();
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjQwNDYxQDMyMzAyZTMxMmUzMGlPTklYM3hoQmpKc2F2bVlEUFBBS29YU1FGQTBWSTZyY2RJbkJBVm1pbEU9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjQwNDYxQDMyMzAyZTMxMmUzMGlPTklYM3hoQmpKc2F2bVlEUFBBS29YU1FGQTBWSTZyY2RJbkJBVm1pbEU9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzMxNjc0QDMyMzAyZTMzMmUzMGNPR1AvcXFJQUtROGhzTDFic05UQ1FtTkFEZDY2eHJxTHZDOTd0ZUx1UlU9");
             mainView = new MainView();
             MainPage = mainView;
         }
@@ -45,12 +46,36 @@ namespace FenomPlus
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void NotifyViewModels()
         {
             if (mainView != null)
             {
                 mainView.NotifyViewModels();
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static Page GetCurrentPage()
+        {
+            Page page = null;
+            if ((Current != null) && (mainView.CurrentPage != null))
+            {
+                try
+                {
+                    page = mainView.CurrentPage;
+                }
+                catch (Exception ex)
+                {
+                    IOC.Services.LogCat.Print(ex);
+                }
+            }
+            return page;
         }
     }
 }

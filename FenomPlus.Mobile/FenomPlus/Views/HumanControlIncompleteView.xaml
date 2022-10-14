@@ -3,18 +3,15 @@
     xmlns:views="clr-namespace:FenomPlus.Views"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.HumanControlIncompleteView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="{Binding ShowAllMenus}"
+    Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>
-        <Image Source="TitleIcon"
-               Aspect="AspectFit"
-               Margin="0, 16"
-               HorizontalOptions="StartAndExpand"
-        />
+        <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Content>
         <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -36,7 +33,7 @@
                 <Label Text="- Exhaling too hard or too soft" Style="{StaticResource Description}"/>
                 <Label Text="- Failing to make a proper seal with your mouth around the mouthpiece" Style="{StaticResource Description}" />
                 <Button Text="Take New Test" Style="{StaticResource defaultButton}" Clicked="OnTakeNewTest" />
-                <Button Text="Cancel" Style="{StaticResource transparentButton}" Clicked="OnCancel" />
+                <Button Text="Exit" Style="{StaticResource transparentButton}" Clicked="OnCancel" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

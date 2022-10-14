@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView HorizontalOptions="CenterAndExpand"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="FenomPlus.Controls.TitleContentView">
+    <ContentView.Content>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+            <Image Source="TitleIcon"
+                   Aspect="AspectFit"
+                   Margin="0, 0, 20, 0"
+                   HorizontalOptions="Center"
+            />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
+                <Image Source="{Binding DeviceStatus.BatteryDevice.Image}" Aspect="AspectFit" />
+                <Image Source="{Binding DeviceStatus.DeviceExpiration.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.SensoryExpiration.Image}" Aspect="AspectFit" />
+                <Image Source="{Binding DeviceStatus.QualityControlExpiration.Image}" Aspect="AspectFit"  />
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

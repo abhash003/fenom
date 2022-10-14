@@ -1,9 +1,10 @@
-﻿
+﻿using Xamarin.Forms.PlatformConfiguration;
+
 namespace FenomPlus.ViewModels
 {
-    public class ChooseAgeViewModel : BaseViewModel
+    public class PairingViewModel : BaseViewModel
     {
-        public ChooseAgeViewModel()
+        public PairingViewModel()
         {
         }
 
@@ -13,8 +14,7 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
-
+            Services.Navigation.GotoBluetoothSettings();
         }
 
         /// <summary>

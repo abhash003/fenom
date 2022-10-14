@@ -8,6 +8,7 @@ using FenomPlus.SDK.Core;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
+using FenomPlus.Views;
 using Xamarin.Forms;
 
 namespace FenomPlus.Services
@@ -175,7 +176,21 @@ namespace FenomPlus.Services
                     return BleDevice.Connected;
                 }
             }
-            //Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="devicePowerOn"></param>
+        /// <returns></returns>
+        public bool IsNotConnectedRedirect(bool devicePowerOn = false)
+        {
+            //return true;
+            if(IsConnected(devicePowerOn)) {
+                return true;
+            }
+            Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
             return false;
         }
 

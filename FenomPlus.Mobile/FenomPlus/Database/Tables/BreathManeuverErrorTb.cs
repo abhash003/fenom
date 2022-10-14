@@ -5,6 +5,7 @@ namespace FenomPlus.Database.Tables
 {
     public class BreathManeuverErrorTb : BaseTb<BreathManeuverErrorTb>
     {
+        public string ErrorCode { get; set; }
         public string Description { get; set; }
         public string Humidity { get; set; }
         public string DateError { get; set; }

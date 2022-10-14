@@ -6,6 +6,9 @@ using Android.Runtime;
 using Android.OS;
 using Xamarin.Essentials;
 using FenomPlus.Services;
+using FenomPlus.Droid.Services;
+using FenomPlus.Interfaces;
+using System.ComponentModel;
 
 namespace FenomPlus.Droid
 {
@@ -18,6 +21,10 @@ namespace FenomPlus.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+            // register the navigation here
+            AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
+
             LoadApplication(new App());
         }
 

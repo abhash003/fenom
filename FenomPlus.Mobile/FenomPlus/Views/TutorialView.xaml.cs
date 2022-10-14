@@ -37,25 +37,27 @@ namespace FenomPlus.Views
 
             Tutorials = new ObservableCollection<Tutorial>();
 
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 1",
-                Illustration = "TutStep1",
-                Info = "Make sure patient is seated,\nSitting in an upright position.",
-            });;
+            
 
             Tutorials.Add(new Tutorial()
             {
-                Title = "Step 2",
+                Title = "Step 1",
                 Illustration = "TutStep2",
                 Info = "Insert new mouthpiece.",
             });
 
             Tutorials.Add(new Tutorial()
             {
-                Title = "Step 3",
+                Title = "Step 2",
                 Illustration = "TutStep3",
                 Info = "Hold the device with your hand firmly grasping the grip area.",
+            });
+
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 3",
+                Illustration = "TutStep1",
+                Info = "Make sure patient is seated,\nSitting in an upright position.",
             });
 
             Tutorials.Add(new Tutorial()
@@ -64,32 +66,12 @@ namespace FenomPlus.Views
                 Illustration = "TutStep4",
                 Info = "Breathe in deeply and tightly seal your mouth around the mouthpiece.",
             });
-
+            
             Tutorials.Add(new Tutorial()
             {
                 Title = "Step 5",
                 Illustration = "TutStep5",
-                Info = "The next three steps will help you understand how to control the needle.\n\nExhale steady and soft. This will move the needle in the direction of the white dot on the left side of the meter.",
-                ShowStep5 = true,
-                ShowStep6 = false,
-                ShowStep7 = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 6",
-                Illustration = "TutStep6",
-                Info = "Exhaling too strongly moves the needle towards the white dot on the right side of the meter.",
-                ShowStep5 = false,
-                ShowStep6 = true,
-                ShowStep7 = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 7",
-                Illustration = "TutStep7",
-                Info = "Exhaling steadily moves the needle towards the white dot at the center of the meter.\n\nYour goal is to keep the needle pointing at the star during the test.",
+                Info = "Exhale steadily. This moves the needle in the direction of the white dot at the center of the meter.\n\nExhaling to reach the white star is your goal.",
                 ShowStep5 = false,
                 ShowStep6 = false,
                 ShowStep7 = true,
@@ -110,6 +92,8 @@ namespace FenomPlus.Views
                 GotoPostion(carousel.Position+1);
                 header.Text = $"Step {carousel.Position + 1}";
             } else {
+                //carousel.Position = Tutorials.Count - 1;
+                //GotoPostion(carousel.Position + 1);
                 Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialSuccessView)}?source={Source}"), false);
             }
         }

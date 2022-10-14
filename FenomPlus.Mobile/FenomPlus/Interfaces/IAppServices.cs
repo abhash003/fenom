@@ -9,5 +9,6 @@ namespace FenomPlus.Interfaces
         IDatabaseService Database { get; }
         IDebugLogFileService DebugLogFile { get; }
         ILogCatService LogCat { get; }
+        INavigationService Navigation { get; }
     }
 }
