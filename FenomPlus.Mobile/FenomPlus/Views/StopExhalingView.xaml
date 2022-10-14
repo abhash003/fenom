@@ -16,16 +16,13 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand"
                      HorizontalOptions="CenterAndExpand">
-            <Label Text="Stop"
-                   FontSize="80"
-                   TextColor="#333"
-                   VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center" />
-            <Label Text="Exhaling"
-                   FontSize="18"
-                   TextColor="#333"
-                   VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center" />
+            <Image Source="StopSign"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   WidthRequest="400"
+                   HeightRequest="400"
+            />
         </StackLayout>
     </ContentPage.Content>
 </views:BaseContentPage>

@@ -7,7 +7,7 @@
     x:Class="FenomPlus.Views.PreparingStandardTestResultView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
     <Shell.TitleView>
