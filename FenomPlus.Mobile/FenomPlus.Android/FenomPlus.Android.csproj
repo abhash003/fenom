@@ -176,7 +176,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\QualityControlAlert.png">
+    <AndroidResource Include="Resources\drawable\QualityControlLow.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -249,6 +249,34 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\StopSign.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\DeviceStateLow.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\DeviceStateFull.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\DeviceStateWarning.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\RelativeHumidityWarning.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\RelativeHumidityFull.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\RelativeHumidityLow.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\QualityControlAlert.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

@@ -48,13 +48,22 @@
                 </CarouselView.ItemTemplate>
             </CarouselView>
             <Grid Grid.Row="2"
-                  RowSpacing="0">
+                  RowSpacing="0" Padding="10">
+                <Button Text="Back"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="End"
+                        Style="{StaticResource defaultButton}"
+                        Clicked="OnBack" />
                 <Button Text="Next"
                         Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalOptions="Start"
                         Style="{StaticResource defaultButton}"
                         Clicked="OnNext" />
                 <Button Text="Exit Tutorial"
                         Grid.Row="1"
+                        Grid.ColumnSpan="2"
                         Style="{StaticResource transparentButton}"
                         Clicked="OnCancelled" />
             </Grid>

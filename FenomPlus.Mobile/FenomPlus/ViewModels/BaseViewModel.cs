@@ -222,6 +222,19 @@ namespace FenomPlus.ViewModels
             // calucalte quaility contro lexpiration here
             DeviceStatus.UpdateQualityControlExpiration(0);
             */
+
+            if(Services.BleHub.IsConnected())
+            {
+                if (Cache.FenomReady)
+                {
+                    DeviceStatus.UpdateDeviceState(2); // green
+                } else {
+                    DeviceStatus.UpdateDeviceState(1); // yellow
+                }
+            } else {
+                DeviceStatus.UpdateDeviceState(0); // red
+            }
+
             UpdateErrorList();
         }
 
