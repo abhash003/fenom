@@ -2,13 +2,17 @@
   "version": 3,
   "targets": {
     ".NETStandard,Version=v2.0": {
-      "LiteDB/5.0.11": {
+      "LiteDB/5.0.12": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/LiteDB.dll": {}
+          "lib/netstandard2.0/LiteDB.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/LiteDB.dll": {}
+          "lib/netstandard2.0/LiteDB.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
@@ -17,10 +21,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll": {}
+          "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll": {}
+          "lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.DependencyInjection/6.0.0": {
@@ -32,10 +40,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
@@ -45,10 +57,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.Logging/6.0.0": {
@@ -62,10 +78,14 @@
           "System.Diagnostics.DiagnosticSource": "6.0.0"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.Logging.Abstractions/6.0.0": {
@@ -75,10 +95,14 @@
           "System.Memory": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "build/_._": {}
@@ -92,10 +116,14 @@
           "System.ComponentModel.Annotations": "5.0.0"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.Primitives/6.0.0": {
@@ -105,10 +133,14 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {}
+          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {
@@ -135,41 +167,57 @@
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
       },
-      "Plugin.BLE/2.2.0-pre2": {
+      "Plugin.BLE/2.2.0-pre5": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Plugin.BLE.Abstractions.dll": {},
-          "lib/netstandard2.0/Plugin.BLE.dll": {}
+          "lib/netstandard2.0/Plugin.BLE.Abstractions.dll": {
+            "related": ".deps.json;.pdb"
+          },
+          "lib/netstandard2.0/Plugin.BLE.dll": {
+            "related": ".Abstractions.deps.json;.Abstractions.pdb;.deps.json;.pdb"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Plugin.BLE.Abstractions.dll": {},
-          "lib/netstandard2.0/Plugin.BLE.dll": {}
+          "lib/netstandard2.0/Plugin.BLE.Abstractions.dll": {
+            "related": ".deps.json;.pdb"
+          },
+          "lib/netstandard2.0/Plugin.BLE.dll": {
+            "related": ".Abstractions.deps.json;.Abstractions.pdb;.deps.json;.pdb"
+          }
         }
       },
       "Polly/7.2.3": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Polly.dll": {}
+          "lib/netstandard2.0/Polly.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Polly.dll": {}
+          "lib/netstandard2.0/Polly.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
-      "SkiaSharp/2.88.0-preview.232": {
+      "SkiaSharp/2.88.3": {
         "type": "package",
         "dependencies": {
-          "SkiaSharp.NativeAssets.Win32": "2.88.0-preview.232",
-          "SkiaSharp.NativeAssets.macOS": "2.88.0-preview.232",
+          "SkiaSharp.NativeAssets.Win32": "2.88.3",
+          "SkiaSharp.NativeAssets.macOS": "2.88.3",
           "System.Memory": "4.5.3"
         },
         "compile": {
-          "lib/netstandard2.0/SkiaSharp.dll": {}
+          "lib/netstandard2.0/SkiaSharp.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/SkiaSharp.dll": {}
+          "lib/netstandard2.0/SkiaSharp.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
-      "SkiaSharp.NativeAssets.macOS/2.88.0-preview.232": {
+      "SkiaSharp.NativeAssets.macOS/2.88.3": {
         "type": "package",
         "compile": {
           "lib/netstandard1.3/_._": {}
@@ -184,7 +232,7 @@
           }
         }
       },
-      "SkiaSharp.NativeAssets.Win32/2.88.0-preview.232": {
+      "SkiaSharp.NativeAssets.Win32/2.88.3": {
         "type": "package",
         "compile": {
           "lib/netstandard1.3/_._": {}
@@ -207,17 +255,19 @@
           }
         }
       },
-      "SkiaSharp.Views.Forms/2.88.0-preview.232": {
+      "SkiaSharp.Views.Forms/2.88.3": {
         "type": "package",
         "dependencies": {
-          "SkiaSharp": "2.88.0-preview.232",
+          "SkiaSharp": "2.88.3",
           "Xamarin.Forms": "4.8.0.1821"
         },
         "compile": {
-          "ref/netstandard2.0/SkiaSharp.Views.Forms.dll": {}
+          "ref/netstandard2.0/SkiaSharp.Views.Forms.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
-      "Syncfusion.Licensing/20.1.0.55": {
+      "Syncfusion.Licensing/20.3.0.47": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Syncfusion.Licensing.dll": {}
@@ -226,85 +276,132 @@
           "lib/netstandard2.0/Syncfusion.Licensing.dll": {}
         }
       },
-      "Syncfusion.Xamarin.Core/20.1.0.55": {
+      "Syncfusion.Xamarin.Core/20.3.0.47": {
         "type": "package",
         "dependencies": {
-          "Syncfusion.Licensing": "20.1.0.55",
+          "Syncfusion.Licensing": "20.3.0.47",
           "Xamarin.Forms": "5.0.0.2012"
         },
         "compile": {
-          "lib/netstandard2.0/Syncfusion.Core.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.Core.XForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Syncfusion.Core.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.Core.XForms.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "Syncfusion.Xamarin.GridCommon/20.1.0.55": {
+      "Syncfusion.Xamarin.GridCommon/20.3.0.47": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Syncfusion.GridCommon.Portable.dll": {}
+          "lib/netstandard2.0/Syncfusion.GridCommon.Portable.dll": {
+            "related": ".XML"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Syncfusion.GridCommon.Portable.dll": {}
+          "lib/netstandard2.0/Syncfusion.GridCommon.Portable.dll": {
+            "related": ".XML"
+          }
         }
       },
-      "Syncfusion.Xamarin.SfComboBox/20.1.0.55": {
+      "Syncfusion.Xamarin.SfBusyIndicator/20.3.0.47": {
         "type": "package",
         "dependencies": {
-          "Syncfusion.Xamarin.Core": "20.1.0.55",
+          "Syncfusion.Xamarin.Core": "20.3.0.47",
           "Xamarin.Forms": "5.0.0.2012"
         },
         "compile": {
-          "lib/netstandard2.0/Syncfusion.SfComboBox.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.SfBusyIndicator.XForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Syncfusion.SfComboBox.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.SfBusyIndicator.XForms.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "Syncfusion.Xamarin.SfDataGrid/20.1.0.55": {
+      "Syncfusion.Xamarin.SfComboBox/20.3.0.47": {
         "type": "package",
         "dependencies": {
-          "Syncfusion.Xamarin.Core": "20.1.0.55",
-          "Syncfusion.Xamarin.GridCommon": "20.1.0.55",
-          "Syncfusion.Xamarin.SfComboBox": "20.1.0.55",
-          "Syncfusion.Xamarin.SfNumericTextBox": "20.1.0.55",
+          "Syncfusion.Xamarin.Core": "20.3.0.47",
           "Xamarin.Forms": "5.0.0.2012"
         },
         "compile": {
-          "lib/netstandard2.0/Syncfusion.Data.Portable.dll": {},
-          "lib/netstandard2.0/Syncfusion.SfDataGrid.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.SfComboBox.XForms.dll": {
+            "related": ".XML"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Syncfusion.Data.Portable.dll": {},
-          "lib/netstandard2.0/Syncfusion.SfDataGrid.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.SfComboBox.XForms.dll": {
+            "related": ".XML"
+          }
         }
       },
-      "Syncfusion.Xamarin.SfNumericTextBox/20.1.0.55": {
+      "Syncfusion.Xamarin.SfDataGrid/20.3.0.47": {
         "type": "package",
         "dependencies": {
-          "Syncfusion.Xamarin.Core": "20.1.0.55",
+          "Syncfusion.Xamarin.Core": "20.3.0.47",
+          "Syncfusion.Xamarin.GridCommon": "20.3.0.47",
+          "Syncfusion.Xamarin.SfComboBox": "20.3.0.47",
+          "Syncfusion.Xamarin.SfNumericTextBox": "20.3.0.47",
           "Xamarin.Forms": "5.0.0.2012"
         },
         "compile": {
-          "lib/netstandard2.0/Syncfusion.SfNumericTextBox.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.Data.Portable.dll": {
+            "related": ".xml"
+          },
+          "lib/netstandard2.0/Syncfusion.SfDataGrid.XForms.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Syncfusion.SfNumericTextBox.XForms.dll": {}
+          "lib/netstandard2.0/Syncfusion.Data.Portable.dll": {
+            "related": ".xml"
+          },
+          "lib/netstandard2.0/Syncfusion.SfDataGrid.XForms.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Xamarin.SfNumericTextBox/20.3.0.47": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Xamarin.Core": "20.3.0.47",
+          "Xamarin.Forms": "5.0.0.2012"
+        },
+        "compile": {
+          "lib/netstandard2.0/Syncfusion.SfNumericTextBox.XForms.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Syncfusion.SfNumericTextBox.XForms.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Buffers/4.5.1": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.Buffers.dll": {}
+          "ref/netstandard2.0/System.Buffers.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Buffers.dll": {}
+          "lib/netstandard2.0/System.Buffers.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.ComponentModel.Annotations/5.0.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.ComponentModel.Annotations.dll": {}
+          "ref/netstandard2.0/System.ComponentModel.Annotations.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard2.0/System.ComponentModel.Annotations.dll": {}
@@ -317,10 +414,14 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll": {}
+          "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll": {}
+          "lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Memory/4.5.4": {
@@ -331,28 +432,40 @@
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
         "compile": {
-          "lib/netstandard2.0/System.Memory.dll": {}
+          "lib/netstandard2.0/System.Memory.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Memory.dll": {}
+          "lib/netstandard2.0/System.Memory.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Numerics.Vectors/4.5.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.Numerics.Vectors.dll": {}
+          "ref/netstandard2.0/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Numerics.Vectors.dll": {}
+          "lib/netstandard2.0/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Threading.Tasks.Extensions/4.5.4": {
@@ -361,58 +474,86 @@
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         },
         "compile": {
-          "lib/netstandard2.0/System.Threading.Tasks.Extensions.dll": {}
+          "lib/netstandard2.0/System.Threading.Tasks.Extensions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Threading.Tasks.Extensions.dll": {}
+          "lib/netstandard2.0/System.Threading.Tasks.Extensions.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "Xam.Plugin.SimpleAudioPlayer/1.5.0": {
+      "Xam.Plugin.SimpleAudioPlayer/1.6.0": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         },
         "compile": {
-          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.Abstractions.dll": {},
-          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.dll": {}
+          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.Abstractions.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.dll": {
+            "related": ".Abstractions.pdb;.deps.json;.pdb"
+          }
         },
         "runtime": {
-          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.Abstractions.dll": {},
-          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.dll": {}
+          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.Abstractions.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard1.0/Plugin.SimpleAudioPlayer.dll": {
+            "related": ".Abstractions.pdb;.deps.json;.pdb"
+          }
         }
       },
-      "Xam.Plugins.Settings/4.1.0-beta": {
+      "Xam.Plugins.Settings/5.0.0-beta": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Plugin.Settings.dll": {}
+          "lib/netstandard2.0/Plugin.Settings.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Plugin.Settings.dll": {}
+          "lib/netstandard2.0/Plugin.Settings.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
-      "Xamarin.Essentials/1.7.1": {
+      "Xamarin.Essentials/1.7.3": {
         "type": "package",
         "dependencies": {
           "System.Numerics.Vectors": "4.5.0"
         },
         "compile": {
-          "lib/netstandard2.0/Xamarin.Essentials.dll": {}
+          "lib/netstandard2.0/Xamarin.Essentials.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Xamarin.Essentials.dll": {}
+          "lib/netstandard2.0/Xamarin.Essentials.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
-      "Xamarin.Forms/5.0.0.2337": {
+      "Xamarin.Forms/5.0.0.2515": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {
+            "related": ".pdb;.xml"
+          },
           "lib/netstandard2.0/Xamarin.Forms.Platform.dll": {},
-          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {}
+          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {
+            "related": ".pdb;.xml"
+          },
           "lib/netstandard2.0/Xamarin.Forms.Platform.dll": {},
-          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {}
+          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "build": {
           "buildTransitive/Xamarin.Forms.props": {},
@@ -422,10 +563,10 @@
     }
   },
   "libraries": {
-    "LiteDB/5.0.11": {
-      "sha512": "6cL4bOmVCUB0gIK+6qIr68HeqjjHZicPDGQjvJ87mIOvkFsEsJWkIps3yoKNeLpHhJQur++yoQ9Q8gxsdos0xQ==",
+    "LiteDB/5.0.12": {
+      "sha512": "HaOjSIGS9BRm7dw42qcHd5NGYl5wdjsFB31pImt3QQNLKUNEmRAr7ADos5VsujwBc9c4otJgb+G6NA4MlzKyAw==",
       "type": "package",
-      "path": "litedb/5.0.11",
+      "path": "litedb/5.0.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -438,7 +579,7 @@
         "lib/netstandard1.3/LiteDB.xml",
         "lib/netstandard2.0/LiteDB.dll",
         "lib/netstandard2.0/LiteDB.xml",
-        "litedb.5.0.11.nupkg.sha512",
+        "litedb.5.0.12.nupkg.sha512",
         "litedb.nuspec"
       ]
     },
@@ -776,13 +917,14 @@
         "netstandard.library.nuspec"
       ]
     },
-    "Plugin.BLE/2.2.0-pre2": {
-      "sha512": "zrwTcbi6fEqFCnCNVRPDygOOJxbt0tzI4kYAiHbr9XUCP66a3KxVyy+a1zCtXn2h5b2MFdrQN9Pj4s13CBuzYg==",
+    "Plugin.BLE/2.2.0-pre5": {
+      "sha512": "rR0TCc29f6j+WhGMRvow8tWnS++yBPCjoTrC3FQzAYmdAKXRf6o3qkUBvwmkUMreYyPs4A1SLU028q+XT18ixA==",
       "type": "package",
-      "path": "plugin.ble/2.2.0-pre2",
+      "path": "plugin.ble/2.2.0-pre5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "icon_small.png",
         "lib/MonoAndroid/Plugin.BLE.Abstractions.deps.json",
         "lib/MonoAndroid/Plugin.BLE.Abstractions.dll",
         "lib/MonoAndroid/Plugin.BLE.Abstractions.pdb",
@@ -795,7 +937,6 @@
         "lib/Xamarin.iOS10/Plugin.BLE.Abstractions.pdb",
         "lib/Xamarin.iOS10/Plugin.BLE.XML",
         "lib/Xamarin.iOS10/Plugin.BLE.dll",
-        "lib/Xamarin.iOS10/Plugin.BLE.dll.mdb",
         "lib/Xamarin.iOS10/Plugin.BLE.pdb",
         "lib/netstandard2.0/Plugin.BLE.Abstractions.deps.json",
         "lib/netstandard2.0/Plugin.BLE.Abstractions.dll",
@@ -811,9 +952,9 @@
         "lib/xamarinmac20/Plugin.BLE.Abstractions.deps.json",
         "lib/xamarinmac20/Plugin.BLE.Abstractions.dll",
         "lib/xamarinmac20/Plugin.BLE.Abstractions.pdb",
-        "lib/xamarinmac20/Plugin.BLE.macOS.dll",
+        "lib/xamarinmac20/Plugin.BLE.dll",
         "lib/xamarinmac20/Plugin.BLE.macOS.xml",
-        "plugin.ble.2.2.0-pre2.nupkg.sha512",
+        "plugin.ble.2.2.0-pre5.nupkg.sha512",
         "plugin.ble.nuspec"
       ]
     },
@@ -841,10 +982,10 @@
         "polly.nuspec"
       ]
     },
-    "SkiaSharp/2.88.0-preview.232": {
-      "sha512": "/Z7+fXhAfEs6Md8wCbhbX77O7YH8fx+N0FfFRtU0hacKf0xKeMaM5tJ3soZn70+sGTySeRIPLqogBVTC8MTmtg==",
+    "SkiaSharp/2.88.3": {
+      "sha512": "GG8X3EdfwyBfwjl639UIiOVOKEdeoqDgYrz0P1MUCnefXt9cofN+AK8YB/v1+5cLMr03ieWCQdDmPqnFIzSxZw==",
       "type": "package",
-      "path": "skiasharp/2.88.0-preview.232",
+      "path": "skiasharp/2.88.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -857,6 +998,9 @@
         "lib/net462/SkiaSharp.dll",
         "lib/net462/SkiaSharp.pdb",
         "lib/net462/SkiaSharp.xml",
+        "lib/net5.0/SkiaSharp.dll",
+        "lib/net5.0/SkiaSharp.pdb",
+        "lib/net5.0/SkiaSharp.xml",
         "lib/net6.0-android30.0/SkiaSharp.dll",
         "lib/net6.0-android30.0/SkiaSharp.pdb",
         "lib/net6.0-android30.0/SkiaSharp.xml",
@@ -869,15 +1013,27 @@
         "lib/net6.0-macos10.15/SkiaSharp.dll",
         "lib/net6.0-macos10.15/SkiaSharp.pdb",
         "lib/net6.0-macos10.15/SkiaSharp.xml",
+        "lib/net6.0-tizen7.0/SkiaSharp.dll",
+        "lib/net6.0-tizen7.0/SkiaSharp.pdb",
+        "lib/net6.0-tizen7.0/SkiaSharp.xml",
         "lib/net6.0-tvos13.4/SkiaSharp.dll",
         "lib/net6.0-tvos13.4/SkiaSharp.pdb",
         "lib/net6.0-tvos13.4/SkiaSharp.xml",
+        "lib/net6.0/SkiaSharp.dll",
+        "lib/net6.0/SkiaSharp.pdb",
+        "lib/net6.0/SkiaSharp.xml",
+        "lib/netcoreapp3.1/SkiaSharp.dll",
+        "lib/netcoreapp3.1/SkiaSharp.pdb",
+        "lib/netcoreapp3.1/SkiaSharp.xml",
         "lib/netstandard1.3/SkiaSharp.dll",
         "lib/netstandard1.3/SkiaSharp.pdb",
         "lib/netstandard1.3/SkiaSharp.xml",
         "lib/netstandard2.0/SkiaSharp.dll",
         "lib/netstandard2.0/SkiaSharp.pdb",
         "lib/netstandard2.0/SkiaSharp.xml",
+        "lib/netstandard2.1/SkiaSharp.dll",
+        "lib/netstandard2.1/SkiaSharp.pdb",
+        "lib/netstandard2.1/SkiaSharp.xml",
         "lib/tizen40/SkiaSharp.dll",
         "lib/tizen40/SkiaSharp.pdb",
         "lib/tizen40/SkiaSharp.xml",
@@ -899,14 +1055,14 @@
         "lib/xamarinwatchos1.0/SkiaSharp.dll",
         "lib/xamarinwatchos1.0/SkiaSharp.pdb",
         "lib/xamarinwatchos1.0/SkiaSharp.xml",
-        "skiasharp.2.88.0-preview.232.nupkg.sha512",
+        "skiasharp.2.88.3.nupkg.sha512",
         "skiasharp.nuspec"
       ]
     },
-    "SkiaSharp.NativeAssets.macOS/2.88.0-preview.232": {
-      "sha512": "TVRuvDnZMfS7bR75cS2iTvZfPqvRy3p4V1fAfa2ZerU3P4YAck+QoVlIYVQFIXLtYp4Qv6gdbzEMBlS+nxhGKg==",
+    "SkiaSharp.NativeAssets.macOS/2.88.3": {
+      "sha512": "CEbWAXMGFkPV3S1snBKK7jEG3+xud/9kmSAhu0BEUKKtlMdxx+Qal0U9bntQREM9QpqP5xLWZooodi8IlV8MEg==",
       "type": "package",
-      "path": "skiasharp.nativeassets.macos/2.88.0-preview.232",
+      "path": "skiasharp.nativeassets.macos/2.88.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -919,18 +1075,20 @@
         "buildTransitive/net6.0-macos10.15/SkiaSharp.NativeAssets.macOS.targets",
         "buildTransitive/xamarinmac2.0/SkiaSharp.NativeAssets.macOS.targets",
         "lib/net462/_._",
+        "lib/net5.0/_._",
         "lib/net6.0-macos10.15/_._",
+        "lib/netcoreapp3.1/_._",
         "lib/netstandard1.3/_._",
         "lib/xamarinmac2.0/_._",
         "runtimes/osx/native/libSkiaSharp.dylib",
-        "skiasharp.nativeassets.macos.2.88.0-preview.232.nupkg.sha512",
+        "skiasharp.nativeassets.macos.2.88.3.nupkg.sha512",
         "skiasharp.nativeassets.macos.nuspec"
       ]
     },
-    "SkiaSharp.NativeAssets.Win32/2.88.0-preview.232": {
-      "sha512": "fTyok80w6LzN0ucV53HMULvnXcrD8l9e8+VRkxbqCKI6McoWDT0+bivANAkmorIROQNeW6OoYxq4s7K08yDKUw==",
+    "SkiaSharp.NativeAssets.Win32/2.88.3": {
+      "sha512": "MU4ASL8VAbTv5vSw1PoiWjjjpjtGhWtFYuJnrN4sNHFCePb2ohQij9JhSdqLLxk7RpRtWPdV93fbA53Pt+J0yw==",
       "type": "package",
-      "path": "skiasharp.nativeassets.win32/2.88.0-preview.232",
+      "path": "skiasharp.nativeassets.win32/2.88.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -939,18 +1097,20 @@
         "build/net462/SkiaSharp.NativeAssets.Win32.targets",
         "buildTransitive/net462/SkiaSharp.NativeAssets.Win32.targets",
         "lib/net462/_._",
+        "lib/net5.0/_._",
+        "lib/netcoreapp3.1/_._",
         "lib/netstandard1.3/_._",
         "runtimes/win-arm64/native/libSkiaSharp.dll",
         "runtimes/win-x64/native/libSkiaSharp.dll",
         "runtimes/win-x86/native/libSkiaSharp.dll",
-        "skiasharp.nativeassets.win32.2.88.0-preview.232.nupkg.sha512",
+        "skiasharp.nativeassets.win32.2.88.3.nupkg.sha512",
         "skiasharp.nativeassets.win32.nuspec"
       ]
     },
-    "SkiaSharp.Views.Forms/2.88.0-preview.232": {
-      "sha512": "7mHL5iVcsFHIKsK0RWiU1gIUtnEROQozluBVjX5vv0uYy3Y9GIuUEzGVGKXaUYL9JKg3LRwYXCnTf0taIvtLTw==",
+    "SkiaSharp.Views.Forms/2.88.3": {
+      "sha512": "zLCojq2yZhm/ZdUUevT1/e84XPp+Sr/lT51TrQ/KRiw01Q05xzfESDFJ7CTFgl/wG0M4dqyv5IkexZMyUWhulg==",
       "type": "package",
-      "path": "skiasharp.views.forms/2.88.0-preview.232",
+      "path": "skiasharp.views.forms/2.88.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -997,14 +1157,14 @@
         "ref/xamarinmac2.0/SkiaSharp.Views.Forms.dll",
         "ref/xamarinmac2.0/SkiaSharp.Views.Forms.pdb",
         "ref/xamarinmac2.0/SkiaSharp.Views.Forms.xml",
-        "skiasharp.views.forms.2.88.0-preview.232.nupkg.sha512",
+        "skiasharp.views.forms.2.88.3.nupkg.sha512",
         "skiasharp.views.forms.nuspec"
       ]
     },
-    "Syncfusion.Licensing/20.1.0.55": {
-      "sha512": "99kMT+jzFB66J9km+75Awzpqnua6kF4oCP5+Eezw34nZSjT55ldN5iniyOsT0hDxX24JUjbrpXS/a4vEX7SIpg==",
+    "Syncfusion.Licensing/20.3.0.47": {
+      "sha512": "ZiRKdTzARG3yB9cNW4K1fKf7yRjG9LalULpou5p9JcNNWXC6bKpTbIFK9BxSpVUpQSN/ak+72boll1CFQPo3Tg==",
       "type": "package",
-      "path": "syncfusion.licensing/20.1.0.55",
+      "path": "syncfusion.licensing/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1019,7 +1179,6 @@
         "lib/net45/Syncfusion.Licensing.dll",
         "lib/net451/Syncfusion.Licensing.dll",
         "lib/net46/Syncfusion.Licensing.dll",
-        "lib/net5.0-windows10.0/Syncfusion.Licensing.dll",
         "lib/net5.0/Syncfusion.Licensing.dll",
         "lib/net6.0/Syncfusion.Licensing.dll",
         "lib/netcoreapp3.1/Syncfusion.Licensing.dll",
@@ -1029,15 +1188,15 @@
         "lib/netstandard2.0/Syncfusion.Licensing.dll",
         "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.Licensing.dll",
         "lib/uap10.0/Syncfusion.Licensing.dll",
-        "syncfusion.licensing.20.1.0.55.nupkg.sha512",
+        "syncfusion.licensing.20.3.0.47.nupkg.sha512",
         "syncfusion.licensing.nuspec",
         "syncfusion_logo.png"
       ]
     },
-    "Syncfusion.Xamarin.Core/20.1.0.55": {
-      "sha512": "DNePSLPWAdjs1rBaZaGTC5PO8CPLz7g+yZ7d7APd28E25BnfHWbNRo2Y1xSrPECoELA3sMI7eSlV+gEHXILZCg==",
+    "Syncfusion.Xamarin.Core/20.3.0.47": {
+      "sha512": "l5pFR3coeyJlOTJNVeE2ocbMwrcsFA36U0AsorJQyVRQzbuZifdAO1oJwYhQVGyN3BitJLNbggSwAcMTMLY+pQ==",
       "type": "package",
-      "path": "syncfusion.xamarin.core/20.1.0.55",
+      "path": "syncfusion.xamarin.core/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1064,15 +1223,15 @@
         "lib/uap10.0/Syncfusion.Core.XForms.UWP/TILRenderer/ToggleIcons/ToggleVisibleIcon.xaml",
         "lib/uap10.0/Syncfusion.Core.XForms.dll",
         "lib/uap10.0/Syncfusion.Core.XForms.xml",
-        "syncfusion.xamarin.core.20.1.0.55.nupkg.sha512",
+        "syncfusion.xamarin.core.20.3.0.47.nupkg.sha512",
         "syncfusion.xamarin.core.nuspec",
         "syncfusion_logo.png"
       ]
     },
-    "Syncfusion.Xamarin.GridCommon/20.1.0.55": {
-      "sha512": "Shv9WtPyEp6KiWAcscB0owghZ1cqB1bYLvkeA79fpFYR9YC/MjX+M9X5k9SneLSrpd9ycxppapXNx1freK7qbg==",
+    "Syncfusion.Xamarin.GridCommon/20.3.0.47": {
+      "sha512": "yslr9O2R2tUSAVPS5yvUKxAeNVy41jgBT3kLd2Aj02nf2kz6uhjkvjCtFUjkc5hQtzZ8lJcQmbRm0niNsBrk/A==",
       "type": "package",
-      "path": "syncfusion.xamarin.gridcommon/20.1.0.55",
+      "path": "syncfusion.xamarin.gridcommon/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1090,15 +1249,47 @@
         "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.GridCommon.Portable.dll",
         "lib/uap10.0/Syncfusion.GridCommon.Portable.XML",
         "lib/uap10.0/Syncfusion.GridCommon.Portable.dll",
-        "syncfusion.xamarin.gridcommon.20.1.0.55.nupkg.sha512",
+        "syncfusion.xamarin.gridcommon.20.3.0.47.nupkg.sha512",
         "syncfusion.xamarin.gridcommon.nuspec",
         "syncfusion_logo.png"
       ]
     },
-    "Syncfusion.Xamarin.SfComboBox/20.1.0.55": {
-      "sha512": "TPyrfqM+dImxN2slp2/kuDc3CookHtIsl2Tza41nska5YpUD/2fTPpKcJ7JV+wbbZbVSLX4Gg5npxycUsJukYw==",
+    "Syncfusion.Xamarin.SfBusyIndicator/20.3.0.47": {
+      "sha512": "dThesElYd7JgIREz33xCrX9560c/6+UlkwGsjqAmnEFnBuM/0GkWH2ApZJ8uFGjVUy4LejeXmIRGTLGQA+iz7Q==",
       "type": "package",
-      "path": "syncfusion.xamarin.sfcombobox/20.1.0.55",
+      "path": "syncfusion.xamarin.sfbusyindicator/20.3.0.47",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/MonoAndroid10.0/Syncfusion.SfBusyIndicator.Android.dll",
+        "lib/MonoAndroid10.0/Syncfusion.SfBusyIndicator.Android.xml",
+        "lib/MonoAndroid10.0/Syncfusion.SfBusyIndicator.XForms.Android.dll",
+        "lib/MonoAndroid10.0/Syncfusion.SfBusyIndicator.XForms.dll",
+        "lib/MonoAndroid10.0/Syncfusion.SfBusyIndicator.XForms.xml",
+        "lib/Xamarin.iOS10/Syncfusion.SfBusyIndicator.XForms.dll",
+        "lib/Xamarin.iOS10/Syncfusion.SfBusyIndicator.XForms.iOS.dll",
+        "lib/Xamarin.iOS10/Syncfusion.SfBusyIndicator.XForms.xml",
+        "lib/Xamarin.iOS10/Syncfusion.SfBusyIndicator.iOS.dll",
+        "lib/Xamarin.iOS10/Syncfusion.SfBusyIndicator.iOS.xml",
+        "lib/netstandard2.0/Syncfusion.SfBusyIndicator.XForms.dll",
+        "lib/netstandard2.0/Syncfusion.SfBusyIndicator.XForms.xml",
+        "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.SfBusyIndicator.XForms.dll",
+        "lib/portable-win+net45+wp80+win81+wpa81/Syncfusion.SfBusyIndicator.XForms.xml",
+        "lib/uap10.0/Syncfusion.SfBusyIndicator.XForms.UWP.XML",
+        "lib/uap10.0/Syncfusion.SfBusyIndicator.XForms.UWP.dll",
+        "lib/uap10.0/Syncfusion.SfBusyIndicator.XForms.dll",
+        "lib/uap10.0/Syncfusion.SfBusyIndicator.XForms.xml",
+        "syncfusion.xamarin.sfbusyindicator.20.3.0.47.nupkg.sha512",
+        "syncfusion.xamarin.sfbusyindicator.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
+    "Syncfusion.Xamarin.SfComboBox/20.3.0.47": {
+      "sha512": "IaTBsMJAiwZiBzJsr+BKraI1UHQMO2n1sxyE1xFAesHBaO3kZpwqmG663VvXyreoHR8BbtCtcK+LAYf5eQakSg==",
+      "type": "package",
+      "path": "syncfusion.xamarin.sfcombobox/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1124,15 +1315,15 @@
         "lib/uap10.0/Syncfusion.SfComboBox.XForms.UWP/dropdownbuttonimage.png",
         "lib/uap10.0/Syncfusion.SfComboBox.XForms.XML",
         "lib/uap10.0/Syncfusion.SfComboBox.XForms.dll",
-        "syncfusion.xamarin.sfcombobox.20.1.0.55.nupkg.sha512",
+        "syncfusion.xamarin.sfcombobox.20.3.0.47.nupkg.sha512",
         "syncfusion.xamarin.sfcombobox.nuspec",
         "syncfusion_logo.png"
       ]
     },
-    "Syncfusion.Xamarin.SfDataGrid/20.1.0.55": {
-      "sha512": "rWLGRPt0dOMCqK1HOoL+eaHnhzz3etH2PZfxRnJ+692nhoHGEMNTi0Ohvcgje2kv6Eag6xUeTzAngKlRpRotQw==",
+    "Syncfusion.Xamarin.SfDataGrid/20.3.0.47": {
+      "sha512": "h2nFTx3mZEX3I96gnO1iSlc07uOOBF2zVVDglUfn0CnvxGVLEplSNsaRW525LmfRJwg33eDNGlAGCu3+zgZcfA==",
       "type": "package",
-      "path": "syncfusion.xamarin.sfdatagrid/20.1.0.55",
+      "path": "syncfusion.xamarin.sfdatagrid/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1172,15 +1363,15 @@
         "lib/uap10.0/Syncfusion.SfDataGrid.XForms.UWP/Themes/Generic.xaml",
         "lib/uap10.0/Syncfusion.SfDataGrid.XForms.dll",
         "lib/uap10.0/Syncfusion.SfDataGrid.XForms.xml",
-        "syncfusion.xamarin.sfdatagrid.20.1.0.55.nupkg.sha512",
+        "syncfusion.xamarin.sfdatagrid.20.3.0.47.nupkg.sha512",
         "syncfusion.xamarin.sfdatagrid.nuspec",
         "syncfusion_logo.png"
       ]
     },
-    "Syncfusion.Xamarin.SfNumericTextBox/20.1.0.55": {
-      "sha512": "DbpNPMjC5UyUkJae1qR6DUwAyrfGjZ0T56cGao/zZMR5dK6I1UNxXPhkOc3SWUzxfMANwDPtdwBjt2h2RRf2YQ==",
+    "Syncfusion.Xamarin.SfNumericTextBox/20.3.0.47": {
+      "sha512": "2+FMBUTphfwDqcJN1d/OoacHluB8SHn9m8aydhlFD58Taos7vwRNB0c25MDygS8gw14HqQc2Yelw4+qrmtTrgQ==",
       "type": "package",
-      "path": "syncfusion.xamarin.sfnumerictextbox/20.1.0.55",
+      "path": "syncfusion.xamarin.sfnumerictextbox/20.3.0.47",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1204,7 +1395,7 @@
         "lib/uap10.0/Syncfusion.SfNumericTextBox.XForms.UWP.dll",
         "lib/uap10.0/Syncfusion.SfNumericTextBox.XForms.dll",
         "lib/uap10.0/Syncfusion.SfNumericTextBox.XForms.xml",
-        "syncfusion.xamarin.sfnumerictextbox.20.1.0.55.nupkg.sha512",
+        "syncfusion.xamarin.sfnumerictextbox.20.3.0.47.nupkg.sha512",
         "syncfusion.xamarin.sfnumerictextbox.nuspec",
         "syncfusion_logo.png"
       ]
@@ -1487,10 +1678,10 @@
         "version.txt"
       ]
     },
-    "Xam.Plugin.SimpleAudioPlayer/1.5.0": {
-      "sha512": "fECdfFduj128mdi7NKIMzHGjAlNoRSqS0RG8tmrrKJzaYKFoou7dZok20hhjWOCXcJRt/izDHJE1nANIJJOF0A==",
+    "Xam.Plugin.SimpleAudioPlayer/1.6.0": {
+      "sha512": "y+ARGxKc+ABuLuzyuWPH3gXxJQJWwXSYMF+fAh8KlwvT7xGc0b/7uAb8kgPW5Yi+VaAHsdFhccAsy0qrQgupsQ==",
       "type": "package",
-      "path": "xam.plugin.simpleaudioplayer/1.5.0",
+      "path": "xam.plugin.simpleaudioplayer/1.6.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1498,6 +1689,7 @@
         "lib/MonoAndroid10/Plugin.SimpleAudioPlayer.Abstractions.pdb",
         "lib/MonoAndroid10/Plugin.SimpleAudioPlayer.XML",
         "lib/MonoAndroid10/Plugin.SimpleAudioPlayer.dll",
+        "lib/MonoAndroid10/Plugin.SimpleAudioPlayer.dll.mdb",
         "lib/MonoAndroid10/Plugin.SimpleAudioPlayer.pdb",
         "lib/UAP10/Plugin.SimpleAudioPlayer.Abstractions.dll",
         "lib/UAP10/Plugin.SimpleAudioPlayer.Abstractions.pdb",
@@ -1530,42 +1722,56 @@
         "lib/tizen4/Plugin.SimpleAudioPlayer.Abstractions.pdb",
         "lib/tizen4/Plugin.SimpleAudioPlayer.deps.json",
         "lib/tizen4/Plugin.SimpleAudioPlayer.dll",
-        "xam.plugin.simpleaudioplayer.1.5.0.nupkg.sha512",
+        "xam.plugin.simpleaudioplayer.1.6.0.nupkg.sha512",
         "xam.plugin.simpleaudioplayer.nuspec"
       ]
     },
-    "Xam.Plugins.Settings/4.1.0-beta": {
-      "sha512": "BpKTyb2kGs8bu0MXThk7GL74df5qToztrDL2jdm6YnkblxVESZEJMbxDqOdVRvfJycujg2cuyqnqjT9DPknU2Q==",
+    "Xam.Plugins.Settings/5.0.0-beta": {
+      "sha512": "KIQGgHm2QSWUigSANC/F43xedR9Jk/uns5yRo/1GAM7YlYQoo0GGg3dpr3Kx03NXyHrKJxD5n/AP5sz3ZaMK/Q==",
       "type": "package",
-      "path": "xam.plugins.settings/4.1.0-beta",
+      "path": "xam.plugins.settings/5.0.0-beta",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/monoandroid44/Plugin.Settings.dll",
-        "lib/monoandroid44/Plugin.Settings.dll.mdb",
-        "lib/monoandroid44/Plugin.Settings.pdb",
-        "lib/monoandroid44/Plugin.Settings.xml",
+        "lib/monoandroid10.0/Plugin.Settings.dll",
+        "lib/monoandroid10.0/Plugin.Settings.dll.mdb",
+        "lib/monoandroid10.0/Plugin.Settings.pdb",
+        "lib/monoandroid10.0/Plugin.Settings.xml",
         "lib/net45/Plugin.Settings.dll",
         "lib/net45/Plugin.Settings.pdb",
         "lib/net45/Plugin.Settings.xml",
-        "lib/netcoreapp2.0/Plugin.Settings.dll",
-        "lib/netcoreapp2.0/Plugin.Settings.pdb",
-        "lib/netcoreapp2.0/Plugin.Settings.xml",
-        "lib/netstandard1.0/Plugin.Settings.dll",
-        "lib/netstandard1.0/Plugin.Settings.pdb",
-        "lib/netstandard1.0/Plugin.Settings.xml",
+        "lib/net6.0-android31.0/Plugin.Settings.dll",
+        "lib/net6.0-android31.0/Plugin.Settings.pdb",
+        "lib/net6.0-android31.0/Plugin.Settings.xml",
+        "lib/net6.0-ios15.4/Plugin.Settings.dll",
+        "lib/net6.0-ios15.4/Plugin.Settings.pdb",
+        "lib/net6.0-ios15.4/Plugin.Settings.xml",
+        "lib/net6.0-maccatalyst15.4/Plugin.Settings.dll",
+        "lib/net6.0-maccatalyst15.4/Plugin.Settings.pdb",
+        "lib/net6.0-maccatalyst15.4/Plugin.Settings.xml",
+        "lib/net6.0-macos12.3/Plugin.Settings.dll",
+        "lib/net6.0-macos12.3/Plugin.Settings.pdb",
+        "lib/net6.0-macos12.3/Plugin.Settings.xml",
+        "lib/net6.0-tvos15.4/Plugin.Settings.dll",
+        "lib/net6.0-tvos15.4/Plugin.Settings.pdb",
+        "lib/net6.0-tvos15.4/Plugin.Settings.xml",
+        "lib/net6.0-windows10.0.19041/Plugin.Settings.dll",
+        "lib/net6.0-windows10.0.19041/Plugin.Settings.pdb",
+        "lib/net6.0-windows10.0.19041/Plugin.Settings.xml",
+        "lib/net6.0/Plugin.Settings.dll",
+        "lib/net6.0/Plugin.Settings.pdb",
+        "lib/net6.0/Plugin.Settings.xml",
         "lib/netstandard2.0/Plugin.Settings.dll",
         "lib/netstandard2.0/Plugin.Settings.pdb",
         "lib/netstandard2.0/Plugin.Settings.xml",
         "lib/tizen40/Plugin.Settings.dll",
         "lib/tizen40/Plugin.Settings.pdb",
         "lib/tizen40/Plugin.Settings.xml",
-        "lib/uap10.0.15063/Plugin.Settings.dll",
-        "lib/uap10.0.15063/Plugin.Settings.pdb",
-        "lib/uap10.0.15063/Plugin.Settings.pri",
-        "lib/uap10.0.15063/Plugin.Settings.xml",
+        "lib/uap10.0.17763/Plugin.Settings.dll",
+        "lib/uap10.0.17763/Plugin.Settings.pdb",
+        "lib/uap10.0.17763/Plugin.Settings.pri",
+        "lib/uap10.0.17763/Plugin.Settings.xml",
         "lib/xamarinios10/Plugin.Settings.dll",
-        "lib/xamarinios10/Plugin.Settings.dll.mdb",
         "lib/xamarinios10/Plugin.Settings.pdb",
         "lib/xamarinios10/Plugin.Settings.xml",
         "lib/xamarinmac20/Plugin.Settings.dll",
@@ -1574,18 +1780,15 @@
         "lib/xamarintvos10/Plugin.Settings.dll",
         "lib/xamarintvos10/Plugin.Settings.pdb",
         "lib/xamarintvos10/Plugin.Settings.xml",
-        "lib/xamarinwatchos10/Plugin.Settings.dll",
-        "lib/xamarinwatchos10/Plugin.Settings.pdb",
-        "lib/xamarinwatchos10/Plugin.Settings.xml",
         "readme.txt",
-        "xam.plugins.settings.4.1.0-beta.nupkg.sha512",
+        "xam.plugins.settings.5.0.0-beta.nupkg.sha512",
         "xam.plugins.settings.nuspec"
       ]
     },
-    "Xamarin.Essentials/1.7.1": {
-      "sha512": "u7pUgvHJKTYo5ATiwRZvYviq2O0AQXIqxdna+sMxqidfWpbD7FBgFOLNAZzWKSll/AQBPeDrqLAWZNLq+ztpmQ==",
+    "Xamarin.Essentials/1.7.3": {
+      "sha512": "b6NfxOfkmMGN54a4OcV/D7KXclWWqFwgixMPzlAku3kfKgUBGW4vBdNaujIBmk57NbGpWB2IS78ek0gDHNKwoQ==",
       "type": "package",
-      "path": "xamarin.essentials/1.7.1",
+      "path": "xamarin.essentials/1.7.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1620,14 +1823,14 @@
         "lib/xamarinwatchos10/Xamarin.Essentials.pdb",
         "lib/xamarinwatchos10/Xamarin.Essentials.xml",
         "readme.txt",
-        "xamarin.essentials.1.7.1.nupkg.sha512",
+        "xamarin.essentials.1.7.3.nupkg.sha512",
         "xamarin.essentials.nuspec"
       ]
     },
-    "Xamarin.Forms/5.0.0.2337": {
-      "sha512": "2AYl2V1YHjEDEmA5d+aP382ielCKr8d/jo3zCgPSvLE/4Pw/em7pHBGmN3yZ/WzxIMV16f7wBfoFCHesMud0AA==",
+    "Xamarin.Forms/5.0.0.2515": {
+      "sha512": "n/Y/xk1idWRkxk7xItwvNwwda7CHpIk7JxD6tXkGXmTqiVGV1xRkepf5aKXFkQLM9KIQhXXYBxPsdyJysPpktw==",
       "type": "package",
-      "path": "xamarin.forms/5.0.0.2337",
+      "path": "xamarin.forms/5.0.0.2515",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1836,59 +2039,58 @@
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.dll",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.pdb",
         "lib/uap10.0.16299/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.5.0.0.2337.nupkg.sha512",
+        "xamarin.forms.5.0.0.2515.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
-      "LiteDB >= 5.0.11",
+      "LiteDB >= 5.0.12",
       "Microsoft.Extensions.Logging >= 6.0.0",
       "NETStandard.Library >= 2.0.3",
-      "Plugin.BLE >= 2.2.0-pre2",
+      "Plugin.BLE >= 2.2.0-pre5",
       "Polly >= 7.2.3",
-      "SkiaSharp >= 2.88.0-preview.232",
-      "SkiaSharp.Views.Forms >= 2.88.0-preview.232",
-      "Syncfusion.Licensing >= 20.1.0.55",
-      "Syncfusion.Xamarin.SfComboBox >= 20.1.0.55",
-      "Syncfusion.Xamarin.SfDataGrid >= 20.1.0.55",
-      "Syncfusion.Xamarin.SfNumericTextBox >= 20.1.0.55",
-      "Xam.Plugin.SimpleAudioPlayer >= 1.5.0",
-      "Xam.Plugins.Settings >= 4.1.0-beta",
-      "Xamarin.Essentials >= 1.7.1",
-      "Xamarin.Forms >= 5.0.0.2337"
+      "SkiaSharp >= 2.88.3",
+      "SkiaSharp.Views.Forms >= 2.88.3",
+      "Syncfusion.Licensing >= 20.3.0.47",
+      "Syncfusion.Xamarin.SfBusyIndicator >= 20.3.0.47",
+      "Syncfusion.Xamarin.SfComboBox >= 20.3.0.47",
+      "Syncfusion.Xamarin.SfDataGrid >= 20.3.0.47",
+      "Syncfusion.Xamarin.SfNumericTextBox >= 20.3.0.47",
+      "Xam.Plugin.SimpleAudioPlayer >= 1.6.0",
+      "Xam.Plugins.Settings >= 5.0.0-beta",
+      "Xamarin.Essentials >= 1.7.3",
+      "Xamarin.Forms >= 5.0.0.2515"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tester\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\James.Rafferty\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
+      "projectUniqueName": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
       "projectName": "FenomPlus",
-      "projectPath": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
-      "packagesPath": "C:\\Users\\tester\\.nuget\\packages\\",
-      "outputPath": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\obj\\",
+      "projectPath": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
+      "packagesPath": "C:\\Users\\James.Rafferty\\.nuget\\packages\\",
+      "outputPath": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\tester\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\James.Rafferty\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1909,7 +2111,7 @@
         "dependencies": {
           "LiteDB": {
             "target": "Package",
-            "version": "[5.0.11, )"
+            "version": "[5.0.12, )"
           },
           "Microsoft.Extensions.Logging": {
             "target": "Package",
@@ -1923,7 +2125,7 @@
           },
           "Plugin.BLE": {
             "target": "Package",
-            "version": "[2.2.0-pre2, )"
+            "version": "[2.2.0-pre5, )"
           },
           "Polly": {
             "target": "Package",
@@ -1931,43 +2133,47 @@
           },
           "SkiaSharp": {
             "target": "Package",
-            "version": "[2.88.0-preview.232, )"
+            "version": "[2.88.3, )"
           },
           "SkiaSharp.Views.Forms": {
             "target": "Package",
-            "version": "[2.88.0-preview.232, )"
+            "version": "[2.88.3, )"
           },
           "Syncfusion.Licensing": {
             "target": "Package",
-            "version": "[20.1.0.55, )"
+            "version": "[20.3.0.47, )"
+          },
+          "Syncfusion.Xamarin.SfBusyIndicator": {
+            "target": "Package",
+            "version": "[20.3.0.47, )"
           },
           "Syncfusion.Xamarin.SfComboBox": {
             "target": "Package",
-            "version": "[20.1.0.55, )"
+            "version": "[20.3.0.47, )"
           },
           "Syncfusion.Xamarin.SfDataGrid": {
             "target": "Package",
-            "version": "[20.1.0.55, )"
+            "version": "[20.3.0.47, )"
           },
           "Syncfusion.Xamarin.SfNumericTextBox": {
             "target": "Package",
-            "version": "[20.1.0.55, )"
+            "version": "[20.3.0.47, )"
           },
           "Xam.Plugin.SimpleAudioPlayer": {
             "target": "Package",
-            "version": "[1.5.0, )"
+            "version": "[1.6.0, )"
           },
           "Xam.Plugins.Settings": {
             "target": "Package",
-            "version": "[4.1.0-beta, )"
+            "version": "[5.0.0-beta, )"
           },
           "Xamarin.Essentials": {
             "target": "Package",
-            "version": "[1.7.1, )"
+            "version": "[1.7.3, )"
           },
           "Xamarin.Forms": {
             "target": "Package",
-            "version": "[5.0.0.2337, )"
+            "version": "[5.0.0.2515, )"
           }
         },
         "imports": [
@@ -1976,11 +2182,12 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

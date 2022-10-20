@@ -1,33 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj": {}
+    "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj": {}
   },
   "projects": {
-    "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj": {
+    "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
+        "projectUniqueName": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
         "projectName": "FenomPlus",
-        "projectPath": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
-        "packagesPath": "C:\\Users\\tester\\.nuget\\packages\\",
-        "outputPath": "D:\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\obj\\",
+        "projectPath": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\FenomPlus.csproj",
+        "packagesPath": "C:\\Users\\James.Rafferty\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\FenomPlus.Mobile\\FenomPlus.Mobile\\FenomPlus\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tester\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\James.Rafferty\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -48,7 +47,7 @@
           "dependencies": {
             "LiteDB": {
               "target": "Package",
-              "version": "[5.0.11, )"
+              "version": "[5.0.12, )"
             },
             "Microsoft.Extensions.Logging": {
               "target": "Package",
@@ -62,7 +61,7 @@
             },
             "Plugin.BLE": {
               "target": "Package",
-              "version": "[2.2.0-pre2, )"
+              "version": "[2.2.0-pre5, )"
             },
             "Polly": {
               "target": "Package",
@@ -70,43 +69,47 @@
             },
             "SkiaSharp": {
               "target": "Package",
-              "version": "[2.88.0-preview.232, )"
+              "version": "[2.88.3, )"
             },
             "SkiaSharp.Views.Forms": {
               "target": "Package",
-              "version": "[2.88.0-preview.232, )"
+              "version": "[2.88.3, )"
             },
             "Syncfusion.Licensing": {
               "target": "Package",
-              "version": "[20.1.0.55, )"
+              "version": "[20.3.0.47, )"
+            },
+            "Syncfusion.Xamarin.SfBusyIndicator": {
+              "target": "Package",
+              "version": "[20.3.0.47, )"
             },
             "Syncfusion.Xamarin.SfComboBox": {
               "target": "Package",
-              "version": "[20.1.0.55, )"
+              "version": "[20.3.0.47, )"
             },
             "Syncfusion.Xamarin.SfDataGrid": {
               "target": "Package",
-              "version": "[20.1.0.55, )"
+              "version": "[20.3.0.47, )"
             },
             "Syncfusion.Xamarin.SfNumericTextBox": {
               "target": "Package",
-              "version": "[20.1.0.55, )"
+              "version": "[20.3.0.47, )"
             },
             "Xam.Plugin.SimpleAudioPlayer": {
               "target": "Package",
-              "version": "[1.5.0, )"
+              "version": "[1.6.0, )"
             },
             "Xam.Plugins.Settings": {
               "target": "Package",
-              "version": "[4.1.0-beta, )"
+              "version": "[5.0.0-beta, )"
             },
             "Xamarin.Essentials": {
               "target": "Package",
-              "version": "[1.7.1, )"
+              "version": "[1.7.3, )"
             },
             "Xamarin.Forms": {
               "target": "Package",
-              "version": "[5.0.0.2337, )"
+              "version": "[5.0.0.2515, )"
             }
           },
           "imports": [
@@ -115,11 +118,12 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
