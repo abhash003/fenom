@@ -3,7 +3,7 @@
     xmlns:views="clr-namespace:FenomPlus.Views"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:FenomPlus.Controls"
+    xmlns:controls="clr-namespace:FenomPlus.Controls" xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
     x:Class="FenomPlus.Views.PreparingStandardTestResultView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
@@ -18,32 +18,21 @@
         />
     </Shell.TitleView>
     <ContentPage.Content>
-        <StackLayout VerticalOptions="CenterAndExpand">
-            <Label Text="Preparing"
-                   FontSize="32"
-                   TextColor="#333"
-                   HorizontalTextAlignment="Center"
-                   />
-            <Label Text="{Binding TestType}"
-                   FontSize="32"
-                   TextColor="#333"
-                   HorizontalTextAlignment="Center"
-                   />
-            <Label Text="{Binding Seconds}"
-                   FontSize="100"
-                   FontAttributes="Bold"
-                   TextColor="#333"
-                   HorizontalTextAlignment="Center"
-                   VerticalTextAlignment="Center"
-                   IsVisible="false"
-                   />
-            <Label Text="seconds"
-                   FontSize="24"
-                   TextColor="#333"
-                   HorizontalTextAlignment="Center"
-                   IsVisible="false"
-                   />
-        </StackLayout>   
+        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout VerticalOptions="Center">
+                <busyindicator:SfBusyIndicator
+                    x:Name="busyindicator"
+                    IsVisible="true"
+                    AnimationType="SingleCircle" 
+                    ViewBoxWidth = "150" 
+                    ViewBoxHeight="150"
+                    EnableAnimation="True"
+                />
+                <Label Text="Preparing results, please wait."
+                   Style="{StaticResource Header}"
+                   VerticalTextAlignment="Center"/>
+            </StackLayout>
+        </ScrollView> 
     </ContentPage.Content>
 </views:BaseContentPage>
 

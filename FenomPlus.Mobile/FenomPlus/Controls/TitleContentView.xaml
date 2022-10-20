@@ -1,21 +1,29 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView HorizontalOptions="CenterAndExpand"
+<ContentView HorizontalOptions="FillAndExpand"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="FenomPlus.Controls.TitleContentView">
     <ContentView.Content>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
-            <Image Source="TitleIcon"
-                   Aspect="AspectFit"
-                   Margin="0, 0, 20, 0"
-                   HorizontalOptions="Center"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image  Grid.Column="1"
+                    Source="TitleIcon"
+                    Aspect="AspectFit"
+                    Margin="0, 0, 20, 0"
+                    HorizontalOptions="CenterAndExpand"
             />
-            <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
+            <StackLayout Grid.Column="2" Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10" Margin="5,0,5,0">
                 <Image Source="{Binding DeviceStatus.BatteryDevice.Image}" Aspect="AspectFit" />
                 <Image Source="{Binding DeviceStatus.DeviceExpiration.Image}" Aspect="AspectFit"  />
                 <Image Source="{Binding DeviceStatus.SensoryExpiration.Image}" Aspect="AspectFit" />
                 <Image Source="{Binding DeviceStatus.QualityControlExpiration.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.DeviceState.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.RelativeHumidity.Image}" Aspect="AspectFit"  />
             </StackLayout>
-        </StackLayout>
+        </Grid>
     </ContentView.Content>
 </ContentView>

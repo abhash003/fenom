@@ -90,11 +90,22 @@ namespace FenomPlus.Views
             if (carousel.Position + 1 < Tutorials.Count)
             {
                 GotoPostion(carousel.Position+1);
-                header.Text = $"Step {carousel.Position + 1}";
             } else {
-                //carousel.Position = Tutorials.Count - 1;
-                //GotoPostion(carousel.Position + 1);
+                GotoPostion(Tutorials.Count - 1);
                 Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialSuccessView)}?source={Source}"), false);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnBack(object sender, EventArgs e)
+        {
+            if (carousel.Position > 0)
+            {
+                GotoPostion(carousel.Position - 1);
             }
         }
 
@@ -105,7 +116,7 @@ namespace FenomPlus.Views
         public void GotoPostion(int postion)
         {
             carousel.Position = postion;
-            model.Postion = carousel.Position;
+            model.Position = carousel.Position;
             header.Text = $"Step {carousel.Position + 1}";
         }
 

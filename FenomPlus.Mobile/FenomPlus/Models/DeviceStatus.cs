@@ -71,6 +71,35 @@ namespace FenomPlus.Models
             }
         }
 
+        public const int DeviceStateLow = 0;
+        public const int DeviceStateWarning = 1;
+        public const int DeviceStateFull = 2;
+        private SensorStatus deviceState;
+        public SensorStatus DeviceState
+        {
+            get => deviceState;
+            set
+            {
+                deviceState = value;
+                OnPropertyChanged("v");
+            }
+        }
+
+        public const int RelativeHumidityLow = 0;
+        public const int RelativeHumidityWarning = 1;
+        public const int RelativeHumidityFull = 2;
+        private SensorStatus relativeHumidity;
+        public SensorStatus RelativeHumidity
+        {
+            get => relativeHumidity;
+            set
+            {
+                relativeHumidity = value;
+                OnPropertyChanged("RelativeHumidity");
+            }
+        }
+        
+
         /// <summary>
         /// 
         /// </summary>
@@ -81,11 +110,15 @@ namespace FenomPlus.Models
             DeviceExpiration = new SensorStatus();
             SensoryExpiration = new SensorStatus();
             QualityControlExpiration = new SensorStatus();
+            DeviceState = new SensorStatus();
+            RelativeHumidity = new SensorStatus();
 
             UpdateBatteryDevice(BatteryDevice.RawValue);
             UpdateDeviceExpiration(DeviceExpiration.RawValue);
             UpdateSensoryExpiration(SensoryExpiration.RawValue);
             UpdateQualityControlExpiration(QualityControlExpiration.RawValue);
+            UpdateDeviceState(DeviceState.RawValue);
+            UpdateRelativeHumidity(RelativeHumidity.RawValue);
         }
 
         public void ResetBarColor()
@@ -230,6 +263,80 @@ namespace FenomPlus.Models
             QualityControlExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
             OnPropertyChanged("QualityControlExpiration");
             return qualityControlExpiration;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public SensorStatus UpdateDeviceState(int value)
+        {
+            DeviceState.Title = "Device State";
+            DeviceState.Value = string.Format("{0}%", value);
+            DeviceState.Type = "CHARGE";
+            DeviceState.Description = string.Format("{0} tests remaining", value);
+
+            if (value <= DeviceStateLow)
+            {
+                // low
+                DeviceState.ImageName = "DeviceStateLow";
+                DeviceState.Description = "No tests remaining";
+                DeviceState.Color = Color.Red;
+            }
+            else if (value <= DeviceStateWarning)
+            {
+                // Warning
+                DeviceState.ImageName = "DeviceStateWarning";
+                DeviceState.Color = Color.Orange;
+            }
+            else
+            {
+                // full
+                DeviceState.ImageName = "DeviceStateFull";
+                DeviceState.Color = Color.Green;
+            }
+            UpdateBarColor(DeviceState.Color);
+            DeviceState.Image = DeviceState.ImageName;
+            OnPropertyChanged("DeviceState");
+            return DeviceState;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public SensorStatus UpdateRelativeHumidity(int value)
+        {
+            RelativeHumidity.Title = "Relative Humidity";
+            RelativeHumidity.Value = string.Format("{0}%", value);
+            RelativeHumidity.Type = "CHARGE";
+            RelativeHumidity.Description = string.Format("{0} tests remaining", value);
+
+            if (value <= RelativeHumidityLow)
+            {
+                // low
+                RelativeHumidity.ImageName = "RelativeHumidityLow";
+                RelativeHumidity.Description = "No tests remaining";
+                RelativeHumidity.Color = Color.Red;
+            }
+            else if (value <= RelativeHumidityWarning)
+            {
+                // Warning
+                RelativeHumidity.ImageName = "RelativeHumidityWarning";
+                RelativeHumidity.Color = Color.Orange;
+            }
+            else
+            {
+                // full
+                RelativeHumidity.ImageName = "RelativeHumidityFull";
+                RelativeHumidity.Color = Color.Green;
+            }
+            UpdateBarColor(RelativeHumidity.Color);
+            RelativeHumidity.Image = RelativeHumidity.ImageName;
+            OnPropertyChanged("RelativeHumidity");
+            return RelativeHumidity;
         }
     }
 }
