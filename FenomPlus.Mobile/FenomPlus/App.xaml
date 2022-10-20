@@ -46,6 +46,9 @@
         <Style x:Key="MainView" TargetType="ContentPage">
             <Setter Property="BackgroundImageSource" Value="Background.png" />
         </Style>
+        <Style x:Key="MainContentView" TargetType="ContentView">
+            <!--<Setter Property="BackgroundImageSource" Value="Background.png" />-->
+        </Style>
         <Style x:Key="TableHeader" TargetType="Label">
             <Setter Property="FontAttributes" Value="Bold" />
             <Setter Property="VerticalTextAlignment" Value="Center" />

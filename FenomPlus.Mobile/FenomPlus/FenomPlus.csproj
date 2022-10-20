@@ -49,7 +49,6 @@
     <None Remove="Syncfusion.Xamarin.SfBusyIndicator" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
     <Folder Include="Database\" />
     <Folder Include="Interfaces\" />
     <Folder Include="TinyIoC\" />
@@ -68,6 +67,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\QCTabView.xaml.cs">
+      <DependentUpon>QCTabView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\QCTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems')" />
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Abstractions\FenomPlus.SDK.Abstractions.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Abstractions\FenomPlus.SDK.Abstractions.projitems')" />

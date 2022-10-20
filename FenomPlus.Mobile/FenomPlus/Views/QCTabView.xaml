@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="FenomPlus.Views.QCTabView"
+              Shell.PresentationMode="ModalAnimated"
+              Title="Quality Control"
+              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+              xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+              ios:Page.UseSafeArea="true">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="TabButtons" TargetType="Button">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="HeightRequest" Value="35" />
+            </Style>
+
+            <Style x:Key="TabButtonUnderline" TargetType="BoxView">
+                <Setter Property="HeightRequest" Value="3" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="Color" Value="DeepSkyBlue" />
+            </Style>
+
+
+            </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid HorizontalOptions="StartAndExpand" Grid.Row="0" Margin="10,0,10,0" ColumnSpacing="5">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="0">
+
+                <Button Text="Perform QC"
+                        Style="{StaticResource TabButtons}"
+                        Clicked="Tab1ButtonClicked"/>
+
+                <BoxView x:Name="Tab1ButtonBorder" 
+                         Style="{StaticResource TabButtonUnderline}"
+                         IsVisible="True"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
+
+                    <Button Text="User Management"
+                            Style="{StaticResource TabButtons}"
+                            Clicked="Tab2ButtonClicked"/>
+
+                    <BoxView x:Name="Tab2ButtonBorder" 
+                             Style="{StaticResource TabButtonUnderline}"
+                             IsVisible="False"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="2">
+
+                    <Button Text="Device Management"
+                            Style="{StaticResource TabButtons}"
+                            Clicked="Tab3ButtonClicked"/>
+
+                    <BoxView x:Name="Tab3ButtonBorder" 
+                             Style="{StaticResource TabButtonUnderline}"
+                             IsVisible="False"/>
+
+                </StackLayout>
+
+            </Grid>
+
+            <Grid Grid.Row="1" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill">
+
+                <!--Temporary Placeholders-->
+
+                <ContentView x:Name="Tab1Content" IsVisible="True">
+                    <Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </ContentView>
+
+                <ContentView x:Name="Tab2Content" IsVisible="False">
+                    <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </ContentView>
+
+                <ContentView x:Name="Tab3Content" IsVisible="False">
+                    <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </ContentView>
+
+            </Grid>
+
+        </Grid> 
+
+    </ContentPage.Content>
+
+</ContentPage>
