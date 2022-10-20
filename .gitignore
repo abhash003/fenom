@@ -30,3 +30,17 @@
 *.exe
 *.out
 *.app
+/.vs/FenomPlus.Mobile/DesignTimeBuild/.dtbcache.v2
+/.vs/FenomPlus.Mobile/FileContentIndex/6ddb2203-14f1-43f2-aaa1-627777e2761c.vsidx
+/.vs/FenomPlus.Mobile/FileContentIndex/read.lock
+/.vs/FenomPlus.Mobile/v17/HierarchyCache.v1.txt
+/.vs/FenomPlus.Mobile/v17/.suo
+/.vs/FenomPlus.Mobile/v17/.futdcache.v2
+/.vs/ProjectEvaluation/fenomplus.mobile.metadata.v5.1
+/.vs/ProjectEvaluation/fenomplus.mobile.projects.v5.1
+/.vs/VSWorkspaceState.json
+/FenomPlus.Mobile/FenomPlus.Android/bin/Debug
+/FenomPlus.Mobile/FenomPlus.Android/obj
+/obj/Debug/110/designtime
+/FenomPlus.Mobile/FenomPlus/obj/Debug/netstandard2.0
+/FenomPlus.Mobile/FenomPlus.Android/FenomPlus.Android.csproj.user
