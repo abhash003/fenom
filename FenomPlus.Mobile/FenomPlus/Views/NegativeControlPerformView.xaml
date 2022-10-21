@@ -29,7 +29,7 @@
                 </Label>
                 <Label Text="Please leave your device undisturbed on a stationary surface" Style="{StaticResource Notice}"/>
                 <Label Text="If your device is plugged into the charging cable, please do not unplug your device." Style="{StaticResource Notice}" />
-                <Button Text="Exit" Style="{StaticResource transparentButton}" Clicked="OnCancel" />
+                <Button Text="Exit" Style="{StaticResource defaultButton}" Clicked="OnCancel" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

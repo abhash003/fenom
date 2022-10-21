@@ -18,7 +18,7 @@
 
                 <Button Text="Exit"
                         Grid.Row="1"
-                        Style="{StaticResource transparentButton}"
+                        Style="{StaticResource defaultButton}"
                         Clicked="OnExistToDashboard"
                         VerticalOptions="End"
                         HorizontalOptions="Center"

@@ -38,7 +38,7 @@
                     Clicked="GoToTutorial"/>
 
                 <Button Text="Exit"
-                    Style="{StaticResource transparentButton}"
+                    Style="{StaticResource defaultButton}"
                     Clicked="OnCancel"/>
             </StackLayout>
         </ScrollView>

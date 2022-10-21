@@ -33,7 +33,7 @@
                 <Label Text="- Exhaling too hard or too soft" Style="{StaticResource Description}"/>
                 <Label Text="- Failing to make a proper seal with your mouth around the mouthpiece" Style="{StaticResource Description}" />
                 <Button Text="Take New Test" Style="{StaticResource defaultButton}" Clicked="OnTakeNewTest" />
-                <Button Text="Exit" Style="{StaticResource transparentButton}" Clicked="OnCancel" />
+                <Button Text="Exit" Style="{StaticResource defaultButton}" Clicked="OnCancel" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

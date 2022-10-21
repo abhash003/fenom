@@ -27,7 +27,7 @@
                     </Label.FormattedText>
                 </Label>
                 <Button Text="Next" Style="{StaticResource defaultButton}" Clicked="OnNext" />
-                <Button Text="Exit" Style="{StaticResource transparentButton}" Clicked="OnCancel" />
+                <Button Text="Exit" Style="{StaticResource defaultButton}" Clicked="OnCancel" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -37,7 +37,7 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button Text="Finish" Style="{StaticResource defaultButton}" Clicked="OnFinish" />
+                <Button Text="EXIT" Style="{StaticResource defaultButton}" Clicked="OnFinish" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
