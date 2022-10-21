@@ -52,7 +52,7 @@ namespace FenomPlus.Services
         public float HumanControlResult { get; set; }
         private float _BreathFlow { get; set; }
         public float BreathFlow { get { return _BreathFlow / 1000; } set { _BreathFlow = value; } }
-
+        
         public EnvironmentalInfo _EnvironmentalInfo { get; set; }
         public BreathManeuver _BreathManeuver { get; set; }
         public DeviceInfo _DeviceInfo { get; set; }

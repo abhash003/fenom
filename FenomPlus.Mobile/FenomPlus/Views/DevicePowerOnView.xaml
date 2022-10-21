@@ -25,7 +25,7 @@
                     ViewBoxHeight="150"
                     EnableAnimation="True"
                 />
-                <Label Text="{Binding Message}"
+                <Label Text="Scanning for Device Please Wait..."
                    Style="{StaticResource Header}"
                    VerticalTextAlignment="Center"/>
             </StackLayout>

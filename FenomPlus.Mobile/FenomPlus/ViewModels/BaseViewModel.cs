@@ -163,7 +163,7 @@ namespace FenomPlus.ViewModels
             DeviceStatus.ResetBarColor();
             BatteryLevel = 75;
 
-            SensorStatus _BatterySensor = DeviceStatus.UpdateBatteryDevice(BatteryLevel);
+            SensorStatus _BatterySensor = DeviceStatus.UpdateBattery(BatteryLevel);
 
             if (Cache.BatteryStatus == false)
             {
@@ -223,17 +223,9 @@ namespace FenomPlus.ViewModels
             DeviceStatus.UpdateQualityControlExpiration(0);
             */
 
-            if(Services.BleHub.IsConnected())
-            {
-                if (Cache.FenomReady)
-                {
-                    DeviceStatus.UpdateDeviceState(2); // green
-                } else {
-                    DeviceStatus.UpdateDeviceState(1); // yellow
-                }
-            } else {
-                DeviceStatus.UpdateDeviceState(0); // red
-            }
+            int deviceState = (!Services.BleHub.IsConnected()) ? 0 :
+                                ((!Cache.ReadyForTest) ? 1 : 2);
+            DeviceStatus.UpdateDevice(deviceState);
 
             UpdateErrorList();
         }

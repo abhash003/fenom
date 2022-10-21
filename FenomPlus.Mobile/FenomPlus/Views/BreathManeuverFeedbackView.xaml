@@ -41,7 +41,7 @@
             <Button Text="Exit"
                     Margin="0,-50,0,0"
                     Style="{StaticResource defaultButton}"
-                    HorizontalOptions="Start"
+                    HorizontalOptions="End"
                     Clicked="Cancel_Clicked"
                         />
         </StackLayout>

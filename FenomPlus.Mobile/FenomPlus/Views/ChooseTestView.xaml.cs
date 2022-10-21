@@ -18,7 +18,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new ChooseTestViewModel();
-            bool scanning = Services.BleHub.IsScanning;
+            //bool scanning = Services.BleHub.IsScanning;
         }
 
         private async Task OpenDrawer()
