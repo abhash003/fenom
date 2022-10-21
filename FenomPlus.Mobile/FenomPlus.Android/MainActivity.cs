@@ -9,6 +9,8 @@ using FenomPlus.Services;
 using FenomPlus.Droid.Services;
 using FenomPlus.Interfaces;
 using System.ComponentModel;
+using System.Linq;
+using Android;
 
 namespace FenomPlus.Droid
 {
@@ -26,13 +28,57 @@ namespace FenomPlus.Droid
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
 
             LoadApplication(new App());
+            //CheckPermissions();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="permissions"></param>
+        /// <param name="grantResults"></param>
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+            var permissionsList = permissions.ToList();
+            if (permissionsList.Any(p => p.Contains("BLUETOOTH")))
+            {
+                var permission = Android.OS.Build.VERSION.SdkInt >= ((Android.OS.BuildVersionCodes)0x1F) ? "android.permission.BLUETOOTH_SCAN" : "android.permission.BLUETOOTH";
+
+                var blePermission = permissionsList.FirstOrDefault(p => p == permission);
+                
+            }
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }   
+        }
+
+        private void CheckPermissions()
+        {
+            string[] Permissions =
+            {
+                Manifest.Permission.Bluetooth,
+                Manifest.Permission.BluetoothAdmin,
+                "android.permission.BLUETOOTH_SCAN",
+                "android.permission.BLUETOOTH_CONNECT",
+                "android.permission.BLUETOOTH_ADVERTISE",
+                Manifest.Permission.AccessCoarseLocation,
+                Manifest.Permission.AccessFineLocation
+            };
+
+            bool minimumPermissionsGranted = true;
+
+            foreach (string permission in Permissions)
+            {
+                if (CheckSelfPermission(permission) != Permission.Granted)
+                {
+                    minimumPermissionsGranted = false;
+                }
+            }
+
+            if (!minimumPermissionsGranted)
+            {
+                RequestPermissions(Permissions, 0);
+            }
+        }
     }
 }
