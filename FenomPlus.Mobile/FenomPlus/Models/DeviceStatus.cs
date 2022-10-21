@@ -16,47 +16,25 @@ namespace FenomPlus.Models
             }
         }
 
-        public const int BatteryDeviceLow = 3;
-        public const int BatteryDeviceWarning = 20;
-        public const int BatteryDeviceFull = 100;
-        private SensorStatus batteryDevice;
-        public SensorStatus BatteryDevice {
-            get => batteryDevice;
+        /// <summary>
+        /// BatteryDevice
+        /// </summary>
+        public const int BatteryLow = 3;
+        public const int BatteryWarning = 20;
+        public const int BatteryFull = 100;
+        private SensorStatus battery;
+        public SensorStatus Battery {
+            get => battery;
             set
             {
-                batteryDevice = value;
-                OnPropertyChanged("BatteryDevice");
+                battery = value;
+                OnPropertyChanged("Battery");
             }
         }
 
-        public const int DeviceExpirationLow = 0;
-        public const int DeviceExpirationWarning = 60;
-        public const int DeviceExpirationFull = 5 * 365 + 10;
-        private SensorStatus deviceExpiration;
-        public SensorStatus DeviceExpiration
-        {
-            get => deviceExpiration;
-            set
-            {
-                deviceExpiration = value;
-                OnPropertyChanged("DeviceExpiration");
-            }
-        }
-
-        public const int SensoryExpirationLow = 0;
-        public const int SensoryExpirationWarning = 60;
-        public const int SensoryExpirationFull = 1 * 365 + 10;
-        private SensorStatus sensoryExpiration;
-        public SensorStatus SensoryExpiration
-        {
-            get => sensoryExpiration;
-            set
-            {
-                sensoryExpiration = value;
-                OnPropertyChanged("SensoryExpiration");
-            }
-        }
-
+        /// <summary>
+        /// QualityControlExpiration
+        /// </summary>
         public const int QualityControlExpirationLow = 0;
         public const int QualityControlExpirationWarning = 1;
         public const int QualityControlExpirationFull = 7;
@@ -71,20 +49,43 @@ namespace FenomPlus.Models
             }
         }
 
-        public const int DeviceStateLow = 0;
-        public const int DeviceStateWarning = 1;
-        public const int DeviceStateFull = 2;
-        private SensorStatus deviceState;
-        public SensorStatus DeviceState
+        /// <summary>
+        /// Sensor
+        /// </summary>
+        public const int SensorLow = 0;
+        public const int SensorWarning = 60;
+        public const int SensorFull = 1 * 365 + 10;
+        private SensorStatus sensor;
+        public SensorStatus Sensor
         {
-            get => deviceState;
+            get => sensor;
             set
             {
-                deviceState = value;
-                OnPropertyChanged("v");
+                sensor = value;
+                OnPropertyChanged("Sensor");
             }
         }
 
+        /// <summary>
+        /// DeviceState
+        /// </summary>
+        public const int DeviceLow = 0;
+        public const int DeviceWarning = 1;
+        public const int DeviceFull = 2;
+        private SensorStatus device;
+        public SensorStatus Device
+        {
+            get => device;
+            set
+            {
+                device = value;
+                OnPropertyChanged("Device");
+            }
+        }
+
+        /// <summary>
+        /// RelativeHumidity
+        /// </summary>
         public const int RelativeHumidityLow = 0;
         public const int RelativeHumidityWarning = 1;
         public const int RelativeHumidityFull = 2;
@@ -98,7 +99,40 @@ namespace FenomPlus.Models
                 OnPropertyChanged("RelativeHumidity");
             }
         }
-        
+
+        /// <summary>
+        /// Temperature
+        /// </summary>
+        public const int TemperatureLow = 0;
+        public const int TemperatureWarning = 60;
+        public const int TemperatureFull = 5 * 365 + 10;
+        private SensorStatus temperature;
+        public SensorStatus Temperature
+        {
+            get => temperature;
+            set
+            {
+                temperature = value;
+                OnPropertyChanged("Temperature");
+            }
+        }
+
+        /// <summary>
+        /// Pressure
+        /// </summary>
+        public const int PressureLow = 0;
+        public const int PressureWarning = 60;
+        public const int PressureFull = 5 * 365 + 10;
+        private SensorStatus pressure;
+        public SensorStatus Pressure
+        {
+            get => pressure;
+            set
+            {
+                pressure = value;
+                OnPropertyChanged("Pressure");
+            }
+        }
 
         /// <summary>
         /// 
@@ -106,21 +140,26 @@ namespace FenomPlus.Models
         public DeviceStatus()
         {
             BarColor = Color.FromRgb(0xBB,0xFF,0xBB);
-            BatteryDevice = new SensorStatus();
-            DeviceExpiration = new SensorStatus();
-            SensoryExpiration = new SensorStatus();
+            Battery = new SensorStatus();
+            Sensor = new SensorStatus();
             QualityControlExpiration = new SensorStatus();
-            DeviceState = new SensorStatus();
+            Device = new SensorStatus();
             RelativeHumidity = new SensorStatus();
+            Temperature = new SensorStatus();
+            Pressure = new SensorStatus();
 
-            UpdateBatteryDevice(BatteryDevice.RawValue);
-            UpdateDeviceExpiration(DeviceExpiration.RawValue);
-            UpdateSensoryExpiration(SensoryExpiration.RawValue);
+            UpdateBattery(Battery.RawValue);
+            UpdateSensor(Sensor.RawValue);
             UpdateQualityControlExpiration(QualityControlExpiration.RawValue);
-            UpdateDeviceState(DeviceState.RawValue);
+            UpdateDevice(Device.RawValue);
             UpdateRelativeHumidity(RelativeHumidity.RawValue);
+            UpdateTemperature(Temperature.RawValue);
+            UpdatePressure(Pressure.RawValue);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ResetBarColor()
         {
             BarColor = Color.FromRgb(0xBB, 0xFF, 0xBB);
@@ -148,93 +187,65 @@ namespace FenomPlus.Models
         }
 
         /// <summary>
-        /// 
+        /// UpdateBatteryDevice
         /// </summary>
-        public SensorStatus UpdateBatteryDevice(int value)
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public SensorStatus UpdateBattery(int value)
         {
-            BatteryDevice.Title = "Battery Device";
-            BatteryDevice.Value = string.Format("{0}%", value);
-            BatteryDevice.Type = "CHARGE";
-            BatteryDevice.Description = string.Format("{0} tests remaining", value);
+            Battery.Title = "Battery";
+            Battery.Value = string.Format("{0}%", value);
+            Battery.Type = "CHARGE";
+            Battery.Description = string.Format("{0} tests remaining", value);
             
-            if (value <= BatteryDeviceLow) {
+            if (value <= BatteryLow) {
                 // low
-                BatteryDevice.ImageName = "BatteryLow";
-                BatteryDevice.Description = "No tests remaining";
-                BatteryDevice.Color = Color.Red;
-            } else if (value <= BatteryDeviceWarning) {
+                Battery.ImageName = "BatteryLow";
+                Battery.Description = "No tests remaining";
+                Battery.Color = Color.Red;
+            } else if (value <= BatteryWarning) {
                 // Warning
-                BatteryDevice.ImageName = "BatteryWarning";
-                BatteryDevice.Color = Color.Orange;
+                Battery.ImageName = "BatteryWarning";
+                Battery.Color = Color.Orange;
             } else {
                 // full
-                BatteryDevice.ImageName = "BatteryFull";
-                BatteryDevice.Color = Color.Green;
+                Battery.ImageName = "BatteryFull";
+                Battery.Color = Color.Green;
             }
-            UpdateBarColor(BatteryDevice.Color);
-            BatteryDevice.Image = BatteryDevice.ImageName;
-            OnPropertyChanged("BatteryDevice");
-            return BatteryDevice;
+            UpdateBarColor(Battery.Color);
+            Battery.Image = Battery.ImageName;
+            OnPropertyChanged("Battery");
+            return Battery;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public SensorStatus UpdateDeviceExpiration(int value)
+        public SensorStatus UpdateSensor(int value)
         {
-            DeviceExpiration.Title = "Device Expiration";
-            DeviceExpiration.Description = "Remaining";
-            if (value <= DeviceExpirationLow) {
+            Sensor.Title = "Sensor";
+            Sensor.Description = "Remaining";
+            if (value <= SensorLow) {
                 // low
-                DeviceExpiration.ImageName = "DeviceLow";
-                DeviceExpiration.Color = Color.Red;
-            } else if (value <= DeviceExpirationWarning) {
+                Sensor.ImageName = "SensorLow";
+                Sensor.Color = Color.Red;
+            } else if (value <= SensorWarning) {
                 // Warning
-                DeviceExpiration.ImageName = "DeviceWarning";
-                DeviceExpiration.Color = Color.Orange;
+                Sensor.ImageName = "SensorWarning";
+                Sensor.Color = Color.Orange;
             } else {
                 // full
-                DeviceExpiration.ImageName = "DeviceFull";
-                DeviceExpiration.Color = Color.Green;
+                Sensor.ImageName = "SensorFull";
+                Sensor.Color = Color.Green;
             }
-            UpdateBarColor(DeviceExpiration.Color);
-            DeviceExpiration.Image = DeviceExpiration.ImageName;
-            DeviceExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
-            DeviceExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
-            OnPropertyChanged("DeviceExpiration");
-            return deviceExpiration;
+            UpdateBarColor(Sensor.Color);
+            Sensor.Image = Sensor.ImageName;
+            Sensor.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
+            Sensor.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
+            OnPropertyChanged("Sensor");
+            return Sensor;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        public SensorStatus UpdateSensoryExpiration(int value)
-        {
-            SensoryExpiration.Title = "Sensory Expiration";
-            SensoryExpiration.Description = "Remaining";
-            if (value <= SensoryExpirationLow) {
-                // low
-                SensoryExpiration.ImageName = "SensorLow";
-                SensoryExpiration.Color = Color.Red;
-            } else if (value <= SensoryExpirationWarning) {
-                // Warning
-                SensoryExpiration.ImageName = "SensorWarning";
-                SensoryExpiration.Color = Color.Orange;
-            } else {
-                // full
-                SensoryExpiration.ImageName = "SensorFull";
-                SensoryExpiration.Color = Color.Green;
-            }
-            UpdateBarColor(SensoryExpiration.Color);
-            SensoryExpiration.Image = SensoryExpiration.ImageName;
-            SensoryExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
-            SensoryExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
-            OnPropertyChanged("SensoryExpiration");
-            return SensoryExpiration;
-        }
-
 
         /// <summary>
         /// 
@@ -262,7 +273,7 @@ namespace FenomPlus.Models
             QualityControlExpiration.Type = (value < 365) ? ((value != 1) ? "DAYS" : "DAY") : "YEARS";
             QualityControlExpiration.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
             OnPropertyChanged("QualityControlExpiration");
-            return qualityControlExpiration;
+            return QualityControlExpiration;
         }
 
         /// <summary>
@@ -270,36 +281,37 @@ namespace FenomPlus.Models
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public SensorStatus UpdateDeviceState(int value)
+        public SensorStatus UpdateDevice(int value)
         {
-            DeviceState.Title = "Device State";
-            DeviceState.Value = string.Format("{0}%", value);
-            DeviceState.Type = "CHARGE";
-            DeviceState.Description = string.Format("{0} tests remaining", value);
+            Device.Title = "Device";
+            Device.Value = string.Format("{0}", value);
+            Device.Type = "";
 
-            if (value <= DeviceStateLow)
+            if (value <= DeviceLow)
             {
                 // low
-                DeviceState.ImageName = "DeviceStateLow";
-                DeviceState.Description = "No tests remaining";
-                DeviceState.Color = Color.Red;
+                Device.ImageName = "DeviceLow";
+                Device.Description = "Device Disconnected";
+                Device.Color = Color.Red;
             }
-            else if (value <= DeviceStateWarning)
+            else if (value <= DeviceWarning)
             {
                 // Warning
-                DeviceState.ImageName = "DeviceStateWarning";
-                DeviceState.Color = Color.Orange;
+                Device.ImageName = "DeviceWarning";
+                Device.Description = "Device Not Ready";
+                Device.Color = Color.Orange;
             }
             else
             {
                 // full
-                DeviceState.ImageName = "DeviceStateFull";
-                DeviceState.Color = Color.Green;
+                Device.ImageName = "DeviceFull";
+                Device.Description = "Device Ready";
+                Device.Color = Color.Green;
             }
-            UpdateBarColor(DeviceState.Color);
-            DeviceState.Image = DeviceState.ImageName;
-            OnPropertyChanged("DeviceState");
-            return DeviceState;
+            UpdateBarColor(Device.Color);
+            Device.Image = Device.ImageName;
+            OnPropertyChanged("Device");
+            return Device;
         }
 
         /// <summary>
@@ -310,15 +322,14 @@ namespace FenomPlus.Models
         public SensorStatus UpdateRelativeHumidity(int value)
         {
             RelativeHumidity.Title = "Relative Humidity";
-            RelativeHumidity.Value = string.Format("{0}%", value);
-            RelativeHumidity.Type = "CHARGE";
-            RelativeHumidity.Description = string.Format("{0} tests remaining", value);
+            RelativeHumidity.Value = string.Format("{0}", value);
+            RelativeHumidity.Type = "";
+            RelativeHumidity.Description = "";
 
             if (value <= RelativeHumidityLow)
             {
                 // low
                 RelativeHumidity.ImageName = "RelativeHumidityLow";
-                RelativeHumidity.Description = "No tests remaining";
                 RelativeHumidity.Color = Color.Red;
             }
             else if (value <= RelativeHumidityWarning)
@@ -337,6 +348,76 @@ namespace FenomPlus.Models
             RelativeHumidity.Image = RelativeHumidity.ImageName;
             OnPropertyChanged("RelativeHumidity");
             return RelativeHumidity;
+        }
+
+        /// <summary>
+        /// Temperature
+        /// </summary>
+        /// <param name="value"></param>
+        public SensorStatus UpdateTemperature(int value)
+        {
+            Temperature.Title = "Temperature";
+            Temperature.Value = string.Format("{0}", value);
+            Temperature.Type = "";
+            Temperature.Description = "";
+
+            if (value <= TemperatureLow)
+            {
+                // low
+                Temperature.ImageName = "TemperatureLow";
+                Temperature.Color = Color.Red;
+            }
+            else if (value <= TemperatureWarning)
+            {
+                // Warning
+                Temperature.ImageName = "TemperatureWarning";
+                Temperature.Color = Color.Orange;
+            }
+            else
+            {
+                // full
+                Temperature.ImageName = "TemperatureFull";
+                Temperature.Color = Color.Green;
+            }
+            UpdateBarColor(Temperature.Color);
+            Temperature.Image = Temperature.ImageName;
+            OnPropertyChanged("Temperature");
+            return Temperature;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public SensorStatus UpdatePressure(int value)
+        {
+            Pressure.Title = "Pressure";
+            Pressure.Value = string.Format("{0}", value);
+            Pressure.Type = "";
+            Pressure.Description = "";
+
+            if (value <= RelativeHumidityLow)
+            {
+                // low
+                Pressure.ImageName = "PressureLow";
+                Pressure.Color = Color.Red;
+            }
+            else if (value <= RelativeHumidityWarning)
+            {
+                // Warning
+                Pressure.ImageName = "PressureWarning";
+                Pressure.Color = Color.Orange;
+            }
+            else
+            {
+                // full
+                Pressure.ImageName = "PressureFull";
+                Pressure.Color = Color.Green;
+            }
+            UpdateBarColor(Pressure.Color);
+            Pressure.Image = Pressure.ImageName;
+            OnPropertyChanged("Pressure");
+            return Pressure;
         }
     }
 }

@@ -17,12 +17,13 @@
                     HorizontalOptions="CenterAndExpand"
             />
             <StackLayout Grid.Column="2" Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10" Margin="5,0,5,0">
-                <Image Source="{Binding DeviceStatus.BatteryDevice.Image}" Aspect="AspectFit" />
-                <Image Source="{Binding DeviceStatus.DeviceExpiration.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.SensoryExpiration.Image}" Aspect="AspectFit" />
+                <Image Source="{Binding DeviceStatus.Battery.Image}" Aspect="AspectFit" />
                 <Image Source="{Binding DeviceStatus.QualityControlExpiration.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.DeviceState.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.Sensor.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.Device.Image}" Aspect="AspectFit"  />
                 <Image Source="{Binding DeviceStatus.RelativeHumidity.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.Temperature.Image}" Aspect="AspectFit"  />
+                <Image Source="{Binding DeviceStatus.Pressure.Image}" Aspect="AspectFit"  />
             </StackLayout>
         </Grid>
     </ContentView.Content>
