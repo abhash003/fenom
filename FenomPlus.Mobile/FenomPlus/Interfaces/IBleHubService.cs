@@ -10,7 +10,7 @@ namespace FenomPlus.Interfaces
 {
     public interface IBleHubService
     {
-        bool IsScanning { get; set; }
+        //bool IsScanning { get; set; }
 
         Task<bool> Connect(IBleDevice bleDevice);
         Task<bool> Disconnect();

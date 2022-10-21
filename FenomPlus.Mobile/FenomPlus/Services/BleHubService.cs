@@ -15,12 +15,15 @@ namespace FenomPlus.Services
 {
     public class BleHubService : BaseService, IBleHubService
     {
-        private Thread ScanBleDeviceThread;
+        private static Thread ScanBleDeviceThread = null;
 
         public BleHubService(IAppServices services) : base(services)
         {
-            ScanBleDeviceThread = new Thread(new ThreadStart(ScanBleDevices));
-            ScanBleDeviceThread.Start();
+            if (ScanBleDeviceThread == null)
+            {
+                ScanBleDeviceThread = new Thread(new ThreadStart(ScanBleDevices));
+                ScanBleDeviceThread.Start();
+            }
         }
 
         /// <summary>
@@ -48,18 +51,16 @@ namespace FenomPlus.Services
         /// <summary>
         /// 
         /// </summary>
-        public bool IsScanning { get; set; }
         public bool Connecting { get; set; }
 
         public void ScanBleDevices()
         {
             Connecting = false;
-            IsScanning = false;
+            //IsScanning = false;
             while (1 == 1)
             {
-                if(((BleDevice == null) || (BleDevice.Connected == false)) && (IsScanning == false))
+                if (((BleDevice == null) || (BleDevice.Connected == false)) && (FenomHubSystemDiscovery.IsScanning == false))
                 {
-                    IsScanning = true;
                     Services.Cache.DeviceConnectedStatus = "Scanning...";
                     Services.Cache.DeviceSerialNumber = "";
                     Services.Cache.Firmware = "";
@@ -84,9 +85,9 @@ namespace FenomPlus.Services
                                 Services.Cache.DeviceConnectedStatus = "Device Connected";
 
                                 await StopScan();
+
                             }
                             // need to restart the scanning
-                            IsScanning = false;
                             Connecting = false;
                         });
                     }, (IEnumerable<IBleDevice> bleDevices) =>
@@ -94,12 +95,14 @@ namespace FenomPlus.Services
                         //Services.Cache.DeviceConnectedStatus = "Device Not Found";
                         Thread.Sleep(1000);
                         Connecting = false;
-                        IsScanning = false;
                     });
+                    Thread.Sleep(1000);
+                } else {
+                    Thread.Sleep(100);
                 }
-                Thread.Sleep(100);
             }
         }
+
 
         /// <summary>
         /// 
@@ -164,17 +167,13 @@ namespace FenomPlus.Services
             if(BleDevice != null)
             {
                 // if disconnected try to re-conenct
-                if(BleDevice.Connected == false)
+                if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     // try to connect
                     BleDevice.ConnectAsync();
                 }
 
-                // if still disconnect go back to power on screen
-                if(BleDevice.Connected == true)
-                {
-                    return BleDevice.Connected;
-                }
+                return BleDevice.Connected;
             }
             return false;
         }
