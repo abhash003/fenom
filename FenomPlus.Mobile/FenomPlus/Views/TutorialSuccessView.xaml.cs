@@ -37,6 +37,16 @@ namespace FenomPlus.Views
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public async void OnBack(System.Object sender, System.EventArgs e)
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialView)}?source={Source}"), false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();

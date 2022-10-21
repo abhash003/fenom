@@ -15,58 +15,70 @@
         <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Content>
-        <Grid RowDefinitions="auto, *, auto" Padding="0, 16">
-            <Label Style="{StaticResource Header}" Grid.Row="0" x:Name="header" />
-            <CarouselView x:Name="carousel" Loop="False" IsSwipeEnabled="False" Grid.Row="1">
-                <CarouselView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="*, *"
-                              Padding="16, 0">
-                            <Label FontSize="32"
-                                   Grid.Column="0"
-                                   Text="{Binding Info}"
-                                   VerticalTextAlignment="top"
-                                   x:Name="info" />
-                            <Image x:Name="image"
-                                   Grid.Column="1"
-                                   Source="{Binding Illustration}"
-                                   Aspect="AspectFit"
-                                   IsVisible="{Binding ShowImage}"/>
-                            <controls:BreathGuage
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" x:Name="Success" IsVisible="{Binding ShowSuccess}">
+                <Label Text="Success!"  Style="{StaticResource Header}"/>
+                <Label Text="You are ready to take a text" Style="{StaticResource Subheader}" />
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" x:Name="Tutorial" IsVisible="{Binding ShowTutorial}">
+                <Grid RowDefinitions="auto, *" Padding="0, 16">
+                    <Label Style="{StaticResource Header}" Grid.Row="0" Text="{Binding Header}" />
+                    <CarouselView x:Name="carousel" Loop="False" IsSwipeEnabled="False" Grid.Row="1" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*, *"
+                                      Padding="16, 0">
+                                    <Label FontSize="32"
+                                           Grid.Column="0"
+                                           Text="{Binding Info}"
+                                           VerticalTextAlignment="top"
+                                           x:Name="info" />
+                                    <Image x:Name="image"
+                                           Grid.Column="1"
+                                           Source="{Binding Illustration}"
+                                           Aspect="AspectFit"
+                                           IsVisible="{Binding ShowImage}"/>
+                                    <controls:BreathGuage
+                                        Grid.Column="1"
+                                        GuageSize="350"
+                                        GuageData="{Binding BindingContext.GuageData , Source={x:Reference TutorialPage}}"
+                                        Text=""
+                                        IsStepfive="{Binding ShowStep5}"
+                                        IsStepsix="{Binding ShowStep6}"
+                                        IsStepseven="{Binding ShowStep7}"
+                                        Value=""
+                                        IsVisible="{Binding ShowGuage}"
+                                      />
+                                </Grid>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+                </Grid>
+            </StackLayout>
+            <StackLayout VerticalOptions="End" HorizontalOptions="Center" HeightRequest="100" MinimumHeightRequest="100">
+                <Grid Padding="10">
+                        <Button Text="BACK"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                HorizontalOptions="End"
+                                Style="{StaticResource defaultButton}"
+                                IsVisible="{Binding ShowBack}"
+                                Clicked="OnBack" />
+                        <Button Text="NEXT"
+                                Grid.Row="0"
                                 Grid.Column="1"
-                                GuageSize="350"
-                                GuageData="{Binding BindingContext.GuageData , Source={x:Reference TutorialPage}}"
-                                Text=""
-                                IsStepfive="{Binding ShowStep5}"
-                                IsStepsix="{Binding ShowStep6}"
-                                IsStepseven="{Binding ShowStep7}"
-                                Value=""
-                                IsVisible="{Binding ShowGuage}"
-                              />
-                        </Grid>
-                    </DataTemplate>
-                </CarouselView.ItemTemplate>
-            </CarouselView>
-            <Grid Grid.Row="2"
-                  RowSpacing="0" Padding="10">
-                <Button Text="Back"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        HorizontalOptions="End"
-                        Style="{StaticResource defaultButton}"
-                        Clicked="OnBack" />
-                <Button Text="Next"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        HorizontalOptions="Start"
-                        Style="{StaticResource defaultButton}"
-                        Clicked="OnNext" />
-                <Button Text="Exit Tutorial"
-                        Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        Style="{StaticResource transparentButton}"
-                        Clicked="OnCancelled" />
-            </Grid>
-        </Grid>
+                                HorizontalOptions="Start"
+                                Style="{StaticResource defaultButton}"
+                                IsVisible="{Binding ShowNext}"
+                                Clicked="OnNext" />
+                        <Button Text="EXIT"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                HorizontalOptions="End"
+                                Style="{StaticResource defaultButton}"
+                                Clicked="OnCancelled" />
+                </Grid>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </views:BaseContentPage>

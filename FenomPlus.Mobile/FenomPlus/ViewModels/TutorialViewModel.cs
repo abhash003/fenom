@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using FenomPlus.Helpers;
+using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using Xamarin.Forms;
 
@@ -7,8 +9,84 @@ namespace FenomPlus.ViewModels
 {
     public class TutorialViewModel : BaseViewModel
     {
+        public ObservableCollection<Tutorial> Tutorials { get; set; }
+
         public TutorialViewModel()
         {
+            InitializeCollection();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void InitializeCollection()
+        {
+            Tutorials = new ObservableCollection<Tutorial>();
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 1",
+                Illustration = "TutStep2",
+                Info = "Insert new mouthpiece.",
+            });
+
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 2",
+                Illustration = "TutStep3",
+                Info = "Hold the device with your hand firmly grasping the grip area.",
+            });
+
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 3",
+                Illustration = "TutStep1",
+                Info = "Make sure patient is seated,\nSitting in an upright position.",
+            });
+
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 4",
+                Illustration = "TutStep4",
+                Info = "Breathe in deeply and tightly seal your mouth around the mouthpiece.",
+            });
+
+            Tutorials.Add(new Tutorial()
+            {
+                Title = "Step 5",
+                Illustration = "TutStep5",
+                Info = "Exhale steadily. This moves the needle in the direction of the white dot at the center of the meter.\n\nExhaling to reach the white star is your goal.",
+                ShowStep5 = false,
+                ShowStep6 = false,
+                ShowStep7 = true,
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdateViews()
+        {
+            if (TutorialPosition <= 0)
+            {
+                ShowBack = false;
+                ShowNext = true;
+                ShowTutorial = true;
+                ShowSuccess = false;
+            }
+            else if (TutorialPosition < Tutorials.Count)
+            {
+                ShowBack = true;
+                ShowNext = true;
+                ShowTutorial = true;
+                ShowSuccess = false;
+            }
+            else
+            {
+                ShowBack = true;
+                ShowNext = false;
+                ShowTutorial = false;
+                ShowSuccess = true;
+            }
         }
 
         private bool Stop;
@@ -65,8 +143,8 @@ namespace FenomPlus.ViewModels
         override public void OnDisappearing()
         {
             base.OnDisappearing();
-            BleHub.StartTest(BreathTestEnum.Stop);
             Stop = true;
+            BleHub.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
         }
 
@@ -81,11 +159,10 @@ namespace FenomPlus.ViewModels
             {
                 guageData = value;
                 OnPropertyChanged("GuageData");
-                if ((!Stop) && (Position >= 4 && Position <= 7))
+                if ((Stop == false) && (TutorialPosition == 4))
                 {
                     PlaySounds.PlaySound(GuageData);
-                } else
-                {
+                } else {
                     PlaySounds.StopAll();
                 }
             }
@@ -104,15 +181,85 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged("GuageStatus");
             }
         }
-
-        protected int position;
-        public int Position
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        protected bool showBack;
+        public bool ShowBack
         {
-            get => position;
+            get => showBack;
             set
             {
-                position = value;
-                OnPropertyChanged("Position");
+                showBack = value;
+                OnPropertyChanged("ShowBack");
+            }
+        }
+
+        protected bool showNext;
+        public bool ShowNext
+        {
+            get => showNext;
+            set
+            {
+                showNext = value;
+                OnPropertyChanged("ShowNext");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected bool showTutorial;
+        public bool ShowTutorial
+        {
+            get => showTutorial;
+            set
+            {
+                showTutorial = value;
+                OnPropertyChanged("ShowTutorial");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected bool showSuccess;
+        public bool ShowSuccess
+        {
+            get => showSuccess;
+            set
+            {
+                showSuccess = value;
+                OnPropertyChanged("ShowSuccess");
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string header;
+        public string Header
+        {
+            get => header;
+            set
+            {
+                header = value;
+                OnPropertyChanged("Header");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected int tutorialPosition;
+        public int TutorialPosition
+        {
+            get => tutorialPosition;
+            set
+            {
+                tutorialPosition = value;
+                OnPropertyChanged("TutorialPosition");
+                UpdateViews();
             }
         }
 
@@ -122,6 +269,7 @@ namespace FenomPlus.ViewModels
         override public void NewGlobalData()
         {
             base.NewGlobalData();
+            GuageData = Cache.BreathFlow;
         }
     }
 }

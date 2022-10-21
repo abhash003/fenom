@@ -18,7 +18,18 @@
             <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
                 <Label Text="Success!"  Style="{StaticResource Header}"/>
                 <Label Text="You are ready to take a text" Style="{StaticResource Subheader}" />
-                <Button Text="Finish" Margin="0, 16, 0, 0" Style="{StaticResource defaultButton}" Clicked="OnFinish" />
+                <Grid Grid.Row="2" RowSpacing="0" Padding="10">
+                    <Button Text="BACK"
+                        Grid.Row="0"
+                        HorizontalOptions="Center"
+                        Style="{StaticResource defaultButton}"
+                        Clicked="OnBack" />
+                    <Button Text="EXIT"
+                        Grid.Row="0"
+                        HorizontalOptions="End"
+                        Style="{StaticResource defaultButton}"
+                        Clicked="OnFinish" />
+                </Grid>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -19,65 +19,11 @@ namespace FenomPlus.Views
             set { _Source = value; }
         }
 
-        ObservableCollection<Tutorial> Tutorials { get; set; }
-
         public TutorialView()
         {
             InitializeComponent();
             BindingContext = model = new TutorialViewModel();
-            InitializeCollection();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void InitializeCollection()
-        {
-            header.Text = $"Step {carousel.Position + 1}";
-
-            Tutorials = new ObservableCollection<Tutorial>();
-
-            
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 1",
-                Illustration = "TutStep2",
-                Info = "Insert new mouthpiece.",
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 2",
-                Illustration = "TutStep3",
-                Info = "Hold the device with your hand firmly grasping the grip area.",
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 3",
-                Illustration = "TutStep1",
-                Info = "Make sure patient is seated,\nSitting in an upright position.",
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 4",
-                Illustration = "TutStep4",
-                Info = "Breathe in deeply and tightly seal your mouth around the mouthpiece.",
-            });
-            
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 5",
-                Illustration = "TutStep5",
-                Info = "Exhale steadily. This moves the needle in the direction of the white dot at the center of the meter.\n\nExhaling to reach the white star is your goal.",
-                ShowStep5 = false,
-                ShowStep6 = false,
-                ShowStep7 = true,
-            });
-
-            carousel.ItemsSource = Tutorials;
+            carousel.ItemsSource = model.Tutorials;
         }
 
         /// <summary>
@@ -87,13 +33,14 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnNext(object sender, EventArgs e)
         {
-            if (carousel.Position + 1 < Tutorials.Count)
+            if (model.TutorialPosition + 1 < model.Tutorials.Count)
             {
-                GotoPostion(carousel.Position+1);
-            } else {
-                GotoPostion(Tutorials.Count - 1);
-                Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialSuccessView)}?source={Source}"), false);
+                GotoPostion(model.TutorialPosition + 1);
+            } else
+            {
+                model.TutorialPosition = model.Tutorials.Count;
             }
+            model.UpdateViews();
         }
 
         /// <summary>
@@ -103,10 +50,15 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnBack(object sender, EventArgs e)
         {
-            if (carousel.Position > 0)
+            if(model.TutorialPosition >= model.Tutorials.Count)
             {
-                GotoPostion(carousel.Position - 1);
+                model.TutorialPosition = model.Tutorials.Count;
             }
+            if (model.TutorialPosition > 0)
+            {
+                GotoPostion(model.TutorialPosition - 1);
+            }
+            model.UpdateViews();
         }
 
         /// <summary>
@@ -115,9 +67,9 @@ namespace FenomPlus.Views
         /// <param name="postion"></param>
         public void GotoPostion(int postion)
         {
+            model.TutorialPosition = postion;
             carousel.Position = postion;
-            model.Position = carousel.Position;
-            header.Text = $"Step {carousel.Position + 1}";
+            model.Header = $"Step {carousel.Position + 1}";
         }
 
         /// <summary>
@@ -138,6 +90,7 @@ namespace FenomPlus.Views
             base.OnAppearing();
             model.OnAppearing();
             GotoPostion(0);
+            model.UpdateViews();
         }
 
         /// <summary>
@@ -147,7 +100,9 @@ namespace FenomPlus.Views
         {
             base.OnDisappearing();
             model.OnDisappearing();
+            // force refresh here to zero
             GotoPostion(0);
+            model.UpdateViews();
         }
 
         /// <summary>
