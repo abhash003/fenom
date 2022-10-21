@@ -14,8 +14,9 @@
         <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="100,0,100,0">
             <Label Text="{Binding TestType}"
                    FontSize="45"
                    TextColor="#333333"
@@ -39,17 +40,12 @@
                    HorizontalTextAlignment="Center"
                    Padding="0,0,0,15"
                    />
+
             <Button Text="Exit"
-                    CornerRadius="32"
-                    VerticalOptions="EndAndExpand"
-                    WidthRequest="200"
-                    HeightRequest="40"
-                    TextColor="Black"
-                    FontSize="16"
-                    BackgroundColor="#eee"
-                    Pressed="Finish_Pressed"
-                    Margin="15"
-                    />
+                    Style="{StaticResource defaultButton}"
+                    HorizontalOptions="End"
+                    Clicked="Finish_Pressed"
+                        />
         </StackLayout>
     </ContentPage.Content>
 </views:BaseContentPage>
