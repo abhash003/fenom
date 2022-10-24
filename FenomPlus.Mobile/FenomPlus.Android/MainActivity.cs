@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.OS;
 using Xamarin.Essentials;
 using FenomPlus.Services;
+using FenomPlus.Droid.Services;
 using FenomPlus.Interfaces;
 using System.ComponentModel;
 using System.Linq;
