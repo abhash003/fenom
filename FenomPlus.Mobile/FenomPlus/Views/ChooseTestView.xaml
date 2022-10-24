@@ -24,23 +24,6 @@
         <Grid>
             <ScrollView>
                 <StackLayout Padding="32, 16">
-                    <CollectionView x:Name="ErrorListControl" HeightRequest="{Binding ErrorHeight}" ItemsSource="{Binding ErrorList}" IsVisible="{Binding ErrorVisable}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Padding="6" HeightRequest="60" BorderColor="#eeeeee">
-                                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" >
-                                        <Image Source="{Binding Image}" Aspect="AspectFit" WidthRequest="32" Margin="4" HorizontalOptions="Start"/>
-                                        <StackLayout VerticalOptions="Start" HorizontalOptions="StartAndExpand">
-                                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold"/>
-                                            <Label Text="{Binding Description}"/>
-                                        </StackLayout>
-                                        <Button Text="Dismiss" Padding="4" VerticalOptions="Center" HorizontalOptions="End" Style="{StaticResource defaultButton}" Command="{Binding Path=BindingContext.DismissCommand, Source={x:Reference ChooseTestsView}}" CommandParameter="{Binding .}"  />
-                                    </StackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
                         <Frame HeightRequest="140"
                                 Padding="20"
@@ -90,74 +73,7 @@
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
-            <BoxView IsVisible="False" x:Name="Backdrop" BackgroundColor="#4B000000" Opacity="0" InputTransparent="True">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnBackdropTapped" />
-                </BoxView.GestureRecognizers>
-            </BoxView>
-            <Frame IsVisible="False" HeightRequest="230" x:Name="Drawer" CornerRadius="20" TranslationY="200" BackgroundColor="{Binding DeviceStatus.BarColor}" VerticalOptions="End" Padding="15, 6, 15, 20">
-                <Frame.GestureRecognizers>
-                    <SwipeGestureRecognizer Direction="Up" Swiped="OnSwipeUp" />
-                    <SwipeGestureRecognizer Direction="Down" Swiped="OnSwipeDown" />
-                </Frame.GestureRecognizers>
-                <Grid RowDefinitions="4, 32, *" >
-                    <BoxView Grid.Row="0" BackgroundColor="#eee" HorizontalOptions="Center" WidthRequest="32" CornerRadius="2" />
 
-                    <Grid ColumnDefinitions="*, *, *" Padding="4" BackgroundColor="{Binding BarColor}" Grid.Row="1" HorizontalOptions="FillAndExpand">
-                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="0" HorizontalOptions="Start" >
-                            <Label Text="{Binding DeviceConnectedStatus}" FontSize="16" VerticalTextAlignment="Center" />
-                            <Label Text="|" FontSize="16" VerticalTextAlignment="Center"  />
-                            <Label Text="Serial Number " FontSize="12" VerticalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceSerialNumber}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="Center" />
-                        </StackLayout>
-
-                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center" >
-                            <Image Aspect="AspectFit" Source="SwipeUp" HeightRequest="30" />
-                            <!--<Label Text="^" FontSize="30" VerticalTextAlignment="Center" HorizontalOptions="Center" /> -->
-                        </StackLayout>
-
-                        <StackLayout Spacing="2" Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">
-                            <Label Text="Firmware " FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End"  />
-                            <Label Text="{Binding Firmware}" FontSize="12" VerticalTextAlignment="Center" HorizontalOptions="End"  />
-                        </StackLayout>
-                    </Grid>
-                    
-                    <Grid Grid.Row="2" ColumnDefinitions="*, *, *, *" Padding="10" BackgroundColor="white" >
-                        <StackLayout Spacing="5">
-                            <Label Text="{Binding DeviceStatus.BatteryDevice.Title}" HorizontalTextAlignment="Center" FontSize="14" />
-                            <Image Source="{Binding DeviceStatus.BatteryDevice.Image}" Aspect="AspectFit" HeightRequest="40" />
-                            <Label Text="{Binding DeviceStatus.BatteryDevice.Value}" TextColor="{Binding DeviceStatus.BatteryDevice.Color}" FontSize="24" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.BatteryDevice.Type}" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.BatteryDevice.Description}" HorizontalTextAlignment="Center" />
-                        </StackLayout>
-
-                        <StackLayout Spacing="5" Grid.Column="1">
-                            <Label Text="{Binding DeviceStatus.DeviceExpiration.Title}" HorizontalTextAlignment="Center" FontSize="14" />
-                            <Image Source="{Binding DeviceStatus.DeviceExpiration.Image}" Aspect="AspectFit" HeightRequest="40" />
-                            <Label Text="{Binding DeviceStatus.DeviceExpiration.Value}" TextColor="{Binding DeviceStatus.DeviceExpiration.Color}" FontSize="24" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.DeviceExpiration.Type}" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.DeviceExpiration.Description}" HorizontalTextAlignment="Center" />
-                        </StackLayout>
-
-                        <StackLayout Spacing="5" Grid.Column="2">
-                            <Label Text="{Binding DeviceStatus.SensoryExpiration.Title}" HorizontalTextAlignment="Center" FontSize="14" />
-                            <Image Source="{Binding DeviceStatus.SensoryExpiration.Image}" Aspect="AspectFit" HeightRequest="40" />
-                            <Label Text="{Binding DeviceStatus.SensoryExpiration.Value}" TextColor="{Binding DeviceStatus.SensoryExpiration.Color}" FontSize="24" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.SensoryExpiration.Type}" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.SensoryExpiration.Description}" HorizontalTextAlignment="Center" />
-                        </StackLayout>
-
-                        <StackLayout Spacing="5" Grid.Column="3">
-                            <Label Text="{Binding DeviceStatus.QualityControlExpiration.Title}" HorizontalTextAlignment="Center" FontSize="14" />
-                            <Image Source="{Binding DeviceStatus.QualityControlExpiration.Image}" Aspect="AspectFit" HeightRequest="40" />
-                            <Label Text="{Binding DeviceStatus.QualityControlExpiration.Value}" TextColor="{Binding DeviceStatus.QualityControlExpiration.Color}" FontSize="24" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.QualityControlExpiration.Type}" HorizontalTextAlignment="Center" />
-                            <Label Text="{Binding DeviceStatus.QualityControlExpiration.Description}" HorizontalTextAlignment="Center" />
-                        </StackLayout>
-
-                    </Grid>
-                </Grid>
-            </Frame>
         </Grid>
     </ContentPage.Content>
 </views:BaseContentPage>

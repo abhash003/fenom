@@ -43,29 +43,13 @@ namespace FenomPlus.Controls
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(BreathGuage), "");
 
-        public static readonly BindableProperty IsStepfiveProperty =
-            BindableProperty.Create(nameof(IsStepfive), typeof(bool), typeof(BreathGuage));
+        public static readonly BindableProperty IsShowStepProperty =
+            BindableProperty.Create(nameof(IsShowStep), typeof(bool), typeof(BreathGuage));
 
-        public static readonly BindableProperty IsStepsixProperty =
-            BindableProperty.Create(nameof(IsStepsix), typeof(bool), typeof(BreathGuage));
-
-        public static readonly BindableProperty IsStepsevenProperty =
-            BindableProperty.Create(nameof(IsStepseven), typeof(bool), typeof(BreathGuage));
-
-        public bool IsStepfive
+        public bool IsShowStep
         {
-            get => (bool)GetValue(IsStepfiveProperty);
-            set => SetValue(IsStepfiveProperty, value);
-        }
-        public bool IsStepsix
-        {
-            get => (bool)GetValue(IsStepsixProperty);
-            set => SetValue(IsStepsixProperty, value);
-        }
-        public bool IsStepseven
-        {
-            get => (bool)GetValue(IsStepsevenProperty);
-            set => SetValue(IsStepsevenProperty, value);
+            get => (bool)GetValue(IsShowStepProperty);
+            set => SetValue(IsShowStepProperty, value);
         }
 
         public float Size
@@ -210,47 +194,7 @@ namespace FenomPlus.Controls
 
             var arrow = new SKPath();
 
-            if (IsStepfive)
-            {
-                var arrowheadPaint = new SKPaint
-                {
-                    Style = SKPaintStyle.Fill,
-                    Color = SKColor.Parse("#FFFFFF").WithAlpha(100),
-                    IsAntialias = true
-                };
-                arrow.AddArc(bounds, 112.5f, 50);
-                //Arrow headpath
-                SKPath arrowhead = new SKPath();
-                arrowhead.RMoveTo(arrow.LastPoint + new SKPoint(3, 8));
-                arrowhead.RLineTo(-3, 12);
-                arrowhead.RLineTo(13, -6);
-                arrowhead.Close();
-                canvas.DrawPath(arrow, arrowPaint);
-                canvas.DrawCircle(arrow.LastPoint, 8, backgroundCirclePaint);
-                canvas.DrawPath(arrowhead, arrowheadPaint);
-            }
-            else if (IsStepsix)
-            {
-                var arrowheadPaint = new SKPaint
-                {
-                    Style = SKPaintStyle.Fill,
-                    Color = SKColor.Parse("#FFFFFF").WithAlpha(100),
-                    IsAntialias = true
-                };
-                arrow.AddArc(bounds, 112.5f, 280);
-
-                //Arrow headpath
-                SKPath arrowhead = new SKPath();
-                arrowhead.RMoveTo(arrow.LastPoint + new SKPoint(3, 8));
-                arrowhead.RLineTo(-3, -12);
-                arrowhead.RLineTo(13, -6);
-                arrowhead.Close();
-
-                canvas.DrawPath(arrow, arrowPaint);
-                canvas.DrawCircle(arrow.LastPoint, 8, backgroundCirclePaint);
-                canvas.DrawPath(arrowhead, arrowheadPaint);
-            }
-            else if (IsStepseven)
+            if (IsShowStep)
             {
                 var arrowheadPaint = new SKPaint
                 {
@@ -272,8 +216,6 @@ namespace FenomPlus.Controls
             canvas.Save();
             canvas.Scale(0.5f);
             canvas.Translate(0, -180);
-            if (!IsStepfive && !IsStepsix)
-            {
                 SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
                 canvas.DrawPath(starPath, new SKPaint()
                 {
@@ -282,7 +224,6 @@ namespace FenomPlus.Controls
                     IsAntialias = true
                 });
 
-            }
             canvas.Restore();
 
             DrawNeedle(canvas, GuageData);

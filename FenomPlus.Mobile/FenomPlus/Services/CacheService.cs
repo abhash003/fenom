@@ -99,24 +99,6 @@ namespace FenomPlus.Services
             get { return CrossSettings.Current; }
         }
 
-        public bool BatteryStatus
-        {
-            get { return AppSettings.GetValueOrDefault("DeviceBatteryConfirmed_key", false); }
-            set { AppSettings.AddOrUpdateValue("DeviceBatteryConfirmed_key", value); }
-        }
-
-        public bool DeviceSensorExpiring
-        {
-            get { return AppSettings.GetValueOrDefault("DeviceSensorExpiringConfirmed_key", false); }
-            set { AppSettings.AddOrUpdateValue("DeviceSensorExpiringConfirmed_key", value); }
-        }
-
-        public bool DeviceExpiring
-        {
-            get { return AppSettings.GetValueOrDefault("DeviceExpiringConfirmed_key", false); }
-            set { AppSettings.AddOrUpdateValue("DeviceExpiringConfirmed_key", value); }
-        }
-
         public bool ReadyForTest { get; set; }
         public bool FenomReady { get; set; }
         public float FenomValue { get; set; }

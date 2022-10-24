@@ -13,9 +13,6 @@ namespace FenomPlus.ViewModels
 
         public ChooseTestViewModel()
         {
-            Cache.BatteryStatus = false;
-            Cache.DeviceSensorExpiring = false;
-            Cache.DeviceExpiring = false;
         }
 
         /// <summary>
@@ -24,7 +21,7 @@ namespace FenomPlus.ViewModels
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
+            Services.BleHub.IsConnected();
         }
 
         /// <summary>

@@ -11,10 +11,6 @@ namespace FenomPlus.Interfaces
         ILoggerFactory Logger { get; set; }
         string QCUsername { get; set; }
 
-        bool DeviceExpiring { get; set; }
-        bool DeviceSensorExpiring { get; set; }
-        bool BatteryStatus { get; set; }
-
         int BatteryLevel { get; set; }
         DateTime SensorExpireDate { get; set; }
         string DeviceConnectedStatus { get; set; }

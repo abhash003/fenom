@@ -5,17 +5,6 @@ namespace FenomPlus.Models
 {
     public class SensorStatus : BaseModel
     {
-        private string title;
-        public string Title
-        {
-            get => title;
-            set
-            {
-                title = value;
-                OnPropertyChanged("Title");
-            }
-        }
-
         private ImageSource image;
         public ImageSource Image
         {
@@ -24,17 +13,6 @@ namespace FenomPlus.Models
             {
                 image = value;
                 OnPropertyChanged("Image");
-            }
-        }
-
-        private string imageName;
-        public string ImageName
-        {
-            get => imageName;
-            set
-            {
-                imageName = value;
-                OnPropertyChanged("ImageName");
             }
         }
 
@@ -49,28 +27,6 @@ namespace FenomPlus.Models
             }
         }
 
-        private string type;
-        public string Type
-        {
-            get => type;
-            set
-            {
-                type = value;
-                OnPropertyChanged("Type");
-            }
-        }
-
-        private string description;
-        public string Description
-        {
-            get => description;
-            set
-            {
-                description = value;
-                OnPropertyChanged("Description");
-            }
-        }
-
         private Color color;
         public Color Color
         {
@@ -82,15 +38,5 @@ namespace FenomPlus.Models
             }
         }
 
-        private int rawValue;
-        public int RawValue
-        {
-            get => rawValue;
-            set
-            {
-                rawValue = value;
-                OnPropertyChanged("RawValue");
-            }
-        }
     }
 }
