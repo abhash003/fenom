@@ -121,33 +121,7 @@ namespace FenomPlus.ViewModels
         {
             DeviceStatus = new DeviceStatus();
 
-            ErrorList = new RangeObservableCollection<Alert>();
-            RefreshErrorList();
-            DismissCommand = new Command<Alert>((model) => {
-                foreach (Alert alert in ErrorList)
-                {
-                    if (model.Id != alert.Id) continue;
-
-                    if (model.Id == (int)AlertEnum.Battery)
-                    {
-                        Cache.BatteryStatus = true;
-                    }
-
-                    if (model.Id == (int)AlertEnum.DeviceSensor)
-                    {
-                        Cache.DeviceSensorExpiring = true;
-                    }
-
-                    if (model.Id == (int)AlertEnum.Device)
-                    {
-                        Cache.DeviceExpiring = true;
-                    }
-
-                    ErrorList.Remove(alert);
-                    break;
-                }
-                UpdateErrorList();
-            });
+            RefreshIconStatus();
             ShowAllMenus = true;
             NewGlobalData();
         }
@@ -155,93 +129,21 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public void RefreshErrorList()
+        public void RefreshIconStatus()
         {
-            ErrorList.Clear();
-
             int BatteryLevel = Cache.BatteryLevel;
-            DeviceStatus.ResetBarColor();
-            BatteryLevel = 75;
-
-            SensorStatus _BatterySensor = DeviceStatus.UpdateBattery(BatteryLevel);
-
-            if (Cache.BatteryStatus == false)
-            {
-                if (BatteryLevel <= Config.BatteryLevelLow)
-                {
-                    int TestsRemaining = BatteryLevel / 3;
-                    ErrorList.Add(new Alert()
-                    {
-                        Id = (int)AlertEnum.Battery,
-                        Description = string.Format("Fenom Plus has {0}% charge with {1} tests remaining. Please connect your device to the charging port.", BatteryLevel, TestsRemaining),
-                        Image = _BatterySensor.ImageName,
-                        Title = "Device Battery Low"
-                    });
-                }
-            }
-            else if (BatteryLevel > Config.BatteryLevelLow)
-            {
-                Cache.BatteryStatus = false;
-            }
-
-            /*
             int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
 
-            DeviceStatus.UpdateDeviceExpiration(daysRemaining);
-            DeviceStatus.UpdateSensoryExpiration(daysRemaining);
-            if (daysRemaining <= Config.DaysRemaining)
-            {
-                if (Cache.DeviceSensorExpiring == false)
-                {
-                    ErrorList.Add(new Alert()
-                    {
-                        Id = (int)AlertEnum.DeviceSensor,
-                        Description = string.Format("Fenom Plus sensor will expire in {0} days. For information on ordering a replacement sensor and how to replace your sensor, please view online FAQ.", daysRemaining),
-                        Image = "SensorWarning",
-                        Title = "Device Sensor Expiring Soon"
-                    });
-                }
-
-                if (Cache.DeviceExpiring == false)
-                {
-                    ErrorList.Add(new Alert()
-                    {
-                        Id = (int)AlertEnum.Device,
-                        Description = string.Format("Fenom Plus Device will expire in {0} days. For information on ordering a replacement device, please view online FAQ.", daysRemaining),
-                        Image = "DeviceWarning",
-                        Title = "Device Expiring Soon"
-                    });
-                }
-            }
-            else if (daysRemaining > Config.DaysRemaining)
-            {
-                Cache.DeviceSensorExpiring = false;
-                Cache.DeviceExpiring = false;
-            }
-
-            // calucalte quaility contro lexpiration here
+            DeviceStatus.UpdateBattery(BatteryLevel);
+            DeviceStatus.UpdateDevice(daysRemaining);
+            DeviceStatus.UpdateSensor(daysRemaining);
             DeviceStatus.UpdateQualityControlExpiration(0);
-            */
-
-            int deviceState = (!Services.BleHub.IsConnected()) ? 0 :
-                                ((!Cache.ReadyForTest) ? 1 : 2);
-            DeviceStatus.UpdateDevice(deviceState);
-
-            UpdateErrorList();
+            DeviceStatus.UpdatePressure(0);
+            DeviceStatus.UpdateRelativeHumidity(0);
+            DeviceStatus.UpdateTemperature(0);
         }
 
         public DeviceStatus DeviceStatus { get; set; }
-
-        public RangeObservableCollection<Alert> ErrorList { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void UpdateErrorList()
-        {
-            ErrorHeight = ErrorList.Count * 74;
-            ErrorVisable = ErrorHeight > 0;
-        }
 
         /// <summary>
         /// 
@@ -277,7 +179,6 @@ namespace FenomPlus.ViewModels
         virtual public void OnAppearing()
         {
             NewGlobalData();
-            //IsDeviceConnected = Services.BleHub.IsNotConnectedRedirect();
         }
 
         /// <summary>
@@ -292,7 +193,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         virtual public void NewGlobalData()
         {
-            RefreshErrorList();
+            RefreshIconStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
             Firmware = Services.Cache.Firmware;
             DeviceConnectedStatus = Services.Cache.DeviceConnectedStatus;
