@@ -22,8 +22,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         public void Cancel_Clicked(System.Object sender, System.EventArgs e)
         {
-            //BleHub.Disconnect();
-            Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
+            Services.Navigation.ChooseTestView();
         }
 
         /// <summary>

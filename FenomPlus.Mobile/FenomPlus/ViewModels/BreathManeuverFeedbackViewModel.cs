@@ -105,7 +105,7 @@ namespace FenomPlus.ViewModels
                     if ((TestGuageSeconds <= 0) && (Stop == false))
                     {
                         BleHub.StopTest();
-                        Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StopExhalingView)}"), false);
+                        Services.Navigation.StopExhalingView();
                     }
                 }
 

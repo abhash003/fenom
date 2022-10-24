@@ -22,7 +22,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnCancel(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlView)}"), false);
+            await Services.Navigation.QualityControlView();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnNext(System.Object sender, System.EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPerformingView)}"), false);
+            await Services.Navigation.HumanControlPerformingView();
         }
 
         /// <summary>

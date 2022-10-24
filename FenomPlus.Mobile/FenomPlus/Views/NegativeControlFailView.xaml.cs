@@ -22,7 +22,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         public async void OnClose(System.Object sender, System.EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlView)}"), false);
+            await Services.Navigation.QualityControlView();
         }
 
         /// <summary>

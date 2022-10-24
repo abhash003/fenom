@@ -38,7 +38,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         void Finish_Pressed(System.Object sender, System.EventArgs e)
         {
-            Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
+            Services.Navigation.ChooseTestView();
         }
 
         /// <summary>

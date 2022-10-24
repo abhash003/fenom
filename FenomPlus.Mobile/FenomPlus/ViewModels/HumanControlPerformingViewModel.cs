@@ -52,7 +52,7 @@ namespace FenomPlus.ViewModels
                     BleHub.StopTest();
 
                     Cache.HumanControlResult = GuageData;
-                    Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPreparingView)}"), false);
+                    Services.Navigation.HumanControlPreparingView();
                 }
                 return (TestSeconds > 0) && (Stop == false);
             });

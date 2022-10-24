@@ -44,14 +44,14 @@ namespace FenomPlus.ViewModels
                         model.QCStatus = "Qualified";
                         QCRepo.Insert(model);
                         // log passed here
-                        Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPassedView)}"), false);
+                        Services.Navigation.HumanControlPassedView();
                     }
                     else
                     {
                         model.QCStatus = "Disqualified";
                         QCRepo.Insert(model);
                         // log failed here
-                        Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlDisqualifiedView)}"), false);
+                        Services.Navigation.HumanControlDisqualifiedView();
                     }
 
                 }

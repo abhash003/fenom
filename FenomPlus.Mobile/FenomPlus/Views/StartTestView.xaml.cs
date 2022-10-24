@@ -48,7 +48,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void GoToTutorial(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TutorialView)}?source=StartTestView"), false);
+            await Services.Navigation.TutorialView();
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnCancel(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
+            await Services.Navigation.ChooseTestView();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace FenomPlus.Views
             // ok send test type here
             // wait until breath here
 
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(BreathManeuverFeedbackView)}"), false);
+            await Services.Navigation.BreathManeuverFeedbackView();
         }
 
         /// <summary>

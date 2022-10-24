@@ -62,7 +62,7 @@ namespace FenomPlus.Views
         {
             if(Services.BleHub.IsNotConnectedRedirect())
             {
-                await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
+                await Services.Navigation.ChooseTestView();
             }
         }
     }

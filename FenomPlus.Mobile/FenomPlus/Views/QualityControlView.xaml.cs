@@ -67,7 +67,7 @@ namespace FenomPlus.Views
             await BleHub.StartTest(BreathTestEnum.QuailtyControl);
 
             //ok goto test now.
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlPerformView)}"), false);
+            await Services.Navigation.NegativeControlPerformView();
 
             model.UpdateGrid();
         }

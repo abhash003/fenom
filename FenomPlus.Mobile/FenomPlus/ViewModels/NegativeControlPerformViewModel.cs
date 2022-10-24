@@ -30,11 +30,11 @@ namespace FenomPlus.ViewModels
                     BleHub.StopTest();
                     if (Cache.BreathFlow <= 0)
                     {
-                        Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlPassView)}"), false);
+                        Services.Navigation.NegativeControlPassView();
                     }
                     else
                     {
-                        Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlFailView)}"), false);
+                        Services.Navigation.NegativeControlFailView();
                     }
                 }
 

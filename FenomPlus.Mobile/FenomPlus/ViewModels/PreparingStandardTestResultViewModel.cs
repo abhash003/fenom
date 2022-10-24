@@ -62,12 +62,12 @@ namespace FenomPlus.ViewModels
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
-                    Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestFailedView)}"), false);
+                    Services.Navigation.TestFailedView();
                 }
                 else
                 {
                     PlaySounds.PlaySuccessSound();
-                    Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestResultsView)}"), false);
+                    Services.Navigation.TestResultsView();
                 }
             }
             return (Cache.FenomReady == false);

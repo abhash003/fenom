@@ -31,27 +31,6 @@
                   IsEnabled="False"
                   IsVisible="true"/>
 
-    <!--<ShellContent x:Name="PerformQC"
-                  Icon="QualityControlIcon"
-                  Title="     Perform QC"
-                  ContentTemplate="{DataTemplate pages:QualityControlView}" 
-                  Route="QualityControlView"
-                  IsVisible="true"/>-->
-
-    <!--<ShellContent x:Name="QualityControlUsers"
-                  Icon="QualityControlIcon"
-                  Title="     User Management"
-                  ContentTemplate="{DataTemplate pages:QualityControlUsersView}" 
-                  Route="QualityControlUsersView"
-                  IsVisible="true"/>-->
-
-    <!--<ShellContent x:Name="QualityControlDevices"
-                  Icon="QualityControlIcon"
-                  Title="     Device Management"
-                  ContentTemplate="{DataTemplate pages:QualityControlDevicesView}" 
-                  Route="QualityControlDevicesView"
-                  IsVisible="true"/>-->
-
     <ShellContent x:Name="PastResults"
                   Icon="PastResultIcon"
                   Title="View Past Results"

@@ -51,11 +51,11 @@ namespace FenomPlus.ViewModels
                     ErrorsRepo.Insert(model);
 
                     PlaySounds.PlayFailedSound();
-                    Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(TestErrorView)}"), false);
+                    Services.Navigation.TestErrorView();
                 }
                 else
                 {
-                    Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(PreparingStandardTestResultView)}"), false);
+                    Services.Navigation.PreparingStandardTestResultView();
                 }
             }
             return Seconds > 0;
