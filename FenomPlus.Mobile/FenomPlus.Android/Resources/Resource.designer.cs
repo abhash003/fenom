@@ -23373,97 +23373,88 @@ namespace FenomPlus.Droid
 			public const int QualityControl = 2131165412;
 			
 			// aapt resource value: 0x7F0700E5
-			public const int QualityControlAlert = 2131165413;
+			public const int QualityControlFull = 2131165413;
 			
 			// aapt resource value: 0x7F0700E6
-			public const int QualityControlFull = 2131165414;
+			public const int QualityControlIcon = 2131165414;
 			
 			// aapt resource value: 0x7F0700E7
-			public const int QualityControlIcon = 2131165415;
+			public const int QualityControlLow = 2131165415;
 			
 			// aapt resource value: 0x7F0700E8
-			public const int QualityControlLow = 2131165416;
+			public const int QualityControlWarning = 2131165416;
 			
 			// aapt resource value: 0x7F0700E9
-			public const int QualityControlWarning = 2131165417;
+			public const int RecentErrorIcon = 2131165417;
 			
 			// aapt resource value: 0x7F0700EA
-			public const int RecentErrorIcon = 2131165418;
+			public const int RelativeHumidityFull = 2131165418;
 			
 			// aapt resource value: 0x7F0700EB
-			public const int RelativeHumidityFull = 2131165419;
+			public const int RelativeHumidityLow = 2131165419;
 			
 			// aapt resource value: 0x7F0700EC
-			public const int RelativeHumidityLow = 2131165420;
+			public const int RelativeHumidityWarning = 2131165420;
 			
 			// aapt resource value: 0x7F0700ED
-			public const int RelativeHumidityWarning = 2131165421;
+			public const int SensorFull = 2131165421;
 			
 			// aapt resource value: 0x7F0700EE
-			public const int SensorFull = 2131165422;
+			public const int SensorLow = 2131165422;
 			
 			// aapt resource value: 0x7F0700EF
-			public const int SensorLow = 2131165423;
+			public const int SensorWarning = 2131165423;
 			
 			// aapt resource value: 0x7F0700F0
-			public const int SensorWarning = 2131165424;
+			public const int ShortBreathe = 2131165424;
 			
 			// aapt resource value: 0x7F0700F1
-			public const int ShortBreathe = 2131165425;
+			public const int splash_background = 2131165425;
 			
 			// aapt resource value: 0x7F0700F2
-			public const int splash_background = 2131165426;
+			public const int StandardBreathe = 2131165426;
 			
 			// aapt resource value: 0x7F0700F3
-			public const int StandardBreathe = 2131165427;
+			public const int StopSign = 2131165427;
 			
 			// aapt resource value: 0x7F0700F4
-			public const int StopSign = 2131165428;
+			public const int SwipeUp = 2131165428;
 			
 			// aapt resource value: 0x7F0700F5
-			public const int SwipeUp = 2131165429;
+			public const int TemperatureFull = 2131165429;
 			
 			// aapt resource value: 0x7F0700F6
-			public const int TemperatureFull = 2131165430;
+			public const int TemperatureLow = 2131165430;
 			
 			// aapt resource value: 0x7F0700F7
-			public const int TemperatureLow = 2131165431;
+			public const int TemperatureWarning = 2131165431;
 			
 			// aapt resource value: 0x7F0700F8
-			public const int TemperatureWarning = 2131165432;
+			public const int test_custom_background = 2131165432;
 			
 			// aapt resource value: 0x7F0700F9
-			public const int test_custom_background = 2131165433;
+			public const int TitleIcon = 2131165433;
 			
 			// aapt resource value: 0x7F0700FA
-			public const int TitleIcon = 2131165434;
+			public const int tooltip_frame_dark = 2131165434;
 			
 			// aapt resource value: 0x7F0700FB
-			public const int tooltip_frame_dark = 2131165435;
+			public const int tooltip_frame_light = 2131165435;
 			
 			// aapt resource value: 0x7F0700FC
-			public const int tooltip_frame_light = 2131165436;
+			public const int TutStep1 = 2131165436;
 			
 			// aapt resource value: 0x7F0700FD
-			public const int TutStep1 = 2131165437;
+			public const int TutStep2 = 2131165437;
 			
 			// aapt resource value: 0x7F0700FE
-			public const int TutStep2 = 2131165438;
+			public const int TutStep3 = 2131165438;
 			
 			// aapt resource value: 0x7F0700FF
-			public const int TutStep3 = 2131165439;
+			public const int TutStep4 = 2131165439;
 			
 			// aapt resource value: 0x7F070100
-			public const int TutStep4 = 2131165440;
-			
-			// aapt resource value: 0x7F070101
-			public const int TutStep5 = 2131165441;
-			
-			// aapt resource value: 0x7F070102
-			public const int TutStep6 = 2131165442;
-			
-			// aapt resource value: 0x7F070103
-			public const int TutStep7 = 2131165443;
+			public const int TutStep5 = 2131165440;
 			
 			static Drawable()
 			{
@@ -25670,7 +25661,10 @@ namespace FenomPlus.Droid
 			public const int icon_round = 2131492865;
 			
 			// aapt resource value: 0x7F0C0002
-			public const int launcher_foreground = 2131492866;
+			public const int launcher_background = 2131492866;
+			
+			// aapt resource value: 0x7F0C0003
+			public const int launcher_foreground = 2131492867;
 			
 			static Mipmap()
 			{

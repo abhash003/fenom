@@ -57,6 +57,8 @@ C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Fe
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\FenomPlus.GeneratedMSBuildEditorConfig.editorconfig
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\App.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Controls\HeaderContentView.xaml.g.cs
+C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Controls\MarigoldActivityWheel.xaml.g.cs
+C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Controls\MarigoldProgressWheel.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Controls\TitleContentView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\AnalysisView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\BleDevicePairingView.xaml.g.cs
@@ -83,6 +85,7 @@ C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Vi
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\PairingView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\PreparingStandardTestResultView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\ProvisioningView.xaml.g.cs
+C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\QCTabView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\QualityControlDevicesView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\QualityControlUsersView.xaml.g.cs
 C:\Repos\FenomPlus.Mobile\FenomPlus.Mobile\FenomPlus\obj\Debug\netstandard2.0\Views\QualityControlView.xaml.g.cs
