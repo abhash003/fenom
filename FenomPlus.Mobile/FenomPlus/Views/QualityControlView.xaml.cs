@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
 using FenomPlus.Models;

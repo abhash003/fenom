@@ -1,5 +1,6 @@
 ﻿using System;
 using FenomPlus.Controls;
+using FenomPlus.Enums;
 using Plugin.SimpleAudioPlayer;
 
 namespace FenomPlus.Helpers

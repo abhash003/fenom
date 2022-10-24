@@ -1,4 +1,4 @@
-﻿using Xamarin.Forms.PlatformConfiguration;
+﻿
 
 namespace FenomPlus.ViewModels
 {

@@ -1,4 +1,4 @@
-﻿using FenomPlus.Models;
+﻿using FenomPlus.Enums;
 using FenomPlus.SDK.Core.Models;
 using Xamarin.Forms;
 

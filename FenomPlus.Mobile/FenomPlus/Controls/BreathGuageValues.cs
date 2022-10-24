@@ -2,19 +2,6 @@
 
 namespace FenomPlus.Controls
 {
-
-    // ------------------------------------------------------------------------------------------------------------------------
-    // Breath Flow(lpm)     On the Gauge(degree)    Colour on the UI        Comments	
-    // 0 to 1	            0 to 22.5	            White(Blank)
-    // 1 to 2.6	            22.5 to 90	            Red zone                16 parts of 4.21875 degree each Far Below Range<2.4
-    // 2.6 to 2.7	        90 to 112.5	            Red zone                1 part of 22.5 degree Below Range (<2.7)
-    // 2.7 to 2.8	        112.5 to 135.0	        Yellow Zone             1 part of 22.5 degree within Range(low)
-    // 2.8 to 3.2	        135.0 to 225.0	        Green Zone              4 parts of 22.5 degree each within range(Optimal)
-    // 3.2 to 3.3	        225 to 247.5	        Yellow Zone             1 part of 22.5 degree within range(high)
-    // 3.3 to 3.4	        247.5 to 270	        Red zone                1 part of 22.5 degree Above Range(>3.3)
-    // 3.4 to 5	            270 to 337.5	        Red zone                16 parts of 4.21875 degree each Far Above Range(>3.6)
-    // 5 to 6	            337.5 to 360	        White(Blank)
-    // ------------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------------------------------------
     // Breath Flow(lpm)     On the Gauge(degree)    Colour on the UI        Comments	
     // 0 to 1	            0 to 22.5	            White(Blank)

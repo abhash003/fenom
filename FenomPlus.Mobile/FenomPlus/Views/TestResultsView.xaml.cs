@@ -1,5 +1,4 @@
 ﻿using FenomPlus.ViewModels;
-using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {

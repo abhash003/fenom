@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using FenomPlus.Models;
 using FenomPlus.ViewModels;
-using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {
-    [QueryProperty(nameof(Source), "source")]
     public partial class TutorialView : BaseContentPage
     {
         private TutorialViewModel model;
-
-        // ShortTestView, StartTestView, TestErrorView, TestFailedView,
-        private string _Source;
-        public string Source
-        {
-            get { return string.IsNullOrEmpty(_Source) ? nameof(ChooseTestView) : _Source; }
-            set { _Source = value; }
-        }
 
         public TutorialView()
         {

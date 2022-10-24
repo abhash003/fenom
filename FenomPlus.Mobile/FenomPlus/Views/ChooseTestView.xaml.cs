@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using FenomPlus.ViewModels;
-using Xamarin.Forms;
-using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
+using FenomPlus.Enums;
 
 namespace FenomPlus.Views
 {
@@ -15,7 +13,6 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new ChooseTestViewModel();
-            //bool scanning = Services.BleHub.IsScanning;
         }
 
         /// <summary>

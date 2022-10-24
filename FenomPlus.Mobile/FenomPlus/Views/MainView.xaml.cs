@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using FenomPlus.Services;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;

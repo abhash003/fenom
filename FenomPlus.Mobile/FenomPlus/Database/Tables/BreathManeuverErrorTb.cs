@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace FenomPlus.Database.Tables
 {
     public class BreathManeuverErrorTb : BaseTb<BreathManeuverErrorTb>

@@ -69,6 +69,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Enums\AlertEnums.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Views\QCTabView.xaml.cs">
       <DependentUpon>QCTabView.xaml</DependentUpon>
     </Compile>

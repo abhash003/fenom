@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using FenomPlus.Models;
 using FenomPlus.ViewModels;
-using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {

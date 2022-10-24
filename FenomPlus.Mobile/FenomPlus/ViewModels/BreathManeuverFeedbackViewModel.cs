@@ -1,6 +1,5 @@
-﻿using FenomPlus.Helpers;
-using FenomPlus.Models;
-using FenomPlus.Views;
+﻿using FenomPlus.Enums;
+using FenomPlus.Helpers;
 using System;
 using Xamarin.Forms;
 

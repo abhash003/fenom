@@ -1,11 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using FenomPlus.Enums;
-using FenomPlus.Helpers;
-using FenomPlus.Models;
-using FenomPlus.SDK.Core.Models;
-using Xamarin.Forms;
-
+﻿
 namespace FenomPlus.ViewModels
 {
     public class ChooseTestViewModel : BaseViewModel

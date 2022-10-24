@@ -1,5 +1,4 @@
-﻿
-using FenomPlus.Enums;
+﻿using FenomPlus.Enums;
 
 namespace FenomPlus.ViewModels
 {

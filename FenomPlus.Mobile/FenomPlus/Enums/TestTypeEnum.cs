@@ -1,8 +1,5 @@
-﻿using System;
-
-using Xamarin.Forms;
-
-namespace FenomPlus.Models
+﻿
+namespace FenomPlus.Enums
 {
     public enum TestTypeEnum
     {

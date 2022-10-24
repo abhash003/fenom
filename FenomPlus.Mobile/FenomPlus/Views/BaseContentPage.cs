@@ -1,8 +1,6 @@
 ﻿using System;
 using FenomPlus.Database.Repository.Interfaces;
 using FenomPlus.Interfaces;
-using FenomPlus.SDK.Abstractions;
-using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Services;
 using Xamarin.Forms;
 

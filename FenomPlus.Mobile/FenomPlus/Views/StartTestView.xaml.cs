@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using FenomPlus.ViewModels;
-using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {
-    [QueryProperty(nameof(Test), "test")]
     public partial class StartTestView : BaseContentPage
     {
         private StartTestViewModel model;
-
-        private string _Test;
-        public string Test
-        {
-            get { return _Test; }
-            set { _Test = value; }
-        }
 
         public StartTestView()
         {

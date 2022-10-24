@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
 using FenomPlus.Models;

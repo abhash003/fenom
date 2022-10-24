@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FenomPlus.Helpers
+namespace FenomPlus.Enums
 {
     public enum SoundsEnum
     {
