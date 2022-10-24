@@ -49,6 +49,7 @@
     <None Remove="Syncfusion.Xamarin.SfBusyIndicator" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\" />
     <Folder Include="Database\" />
     <Folder Include="Interfaces\" />
     <Folder Include="TinyIoC\" />

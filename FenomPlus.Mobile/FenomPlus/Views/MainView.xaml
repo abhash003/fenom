@@ -72,37 +72,22 @@
                   Route="PairingView"
                   IsVisible="true"/>
 
-    <ShellContent FlyoutItemIsVisible="False" Title="View Debug" Route="DebugDumpView" ContentTemplate="{DataTemplate pages:DebugDumpView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="Provisioning" Route="ProvisioningView" ContentTemplate="{DataTemplate pages:ProvisioningView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="Calibration" Route="CalibrationView" ContentTemplate="{DataTemplate pages:CalibrationView}" />
-    <ShellContent FlyoutItemIsVisible="True" Title="Tutorial" Route="TutorialView" ContentTemplate="{DataTemplate pages:TutorialView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test" Route="ChooseTestView" ContentTemplate="{DataTemplate pages:ChooseTestView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="AnalysisView" Route="AnalysisView" ContentTemplate="{DataTemplate pages:AnalysisView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="BleDevicePairingView" Route="BleDevicePairingView" ContentTemplate="{DataTemplate pages:BleDevicePairingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView" Route="BreathManeuverFeedbackView" ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="DeviceReadyView" Route="DeviceReadyView" ContentTemplate="{DataTemplate pages:DeviceReadyView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="EndOfBreathManeuverFeedbackView" Route="EndOfBreathManeuverFeedbackView" ContentTemplate="{DataTemplate pages:EndOfBreathManeuverFeedbackView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="FirmwareUpdateView" Route="FirmwareUpdateView" ContentTemplate="{DataTemplate pages:FirmwareUpdateView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView" Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlFailedView"       Route="HumanControlFailedView"       ContentTemplate="{DataTemplate pages:HumanControlFailedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlIncompleteView"   Route="HumanControlIncompleteView"   ContentTemplate="{DataTemplate pages:HumanControlIncompleteView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"       Route="HumanControlPassedView"       ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPerformingView"   Route="HumanControlPerformingView"   ContentTemplate="{DataTemplate pages:HumanControlPerformingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPreparingView"    Route="HumanControlPreparingView"    ContentTemplate="{DataTemplate pages:HumanControlPreparingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="InstructionsView" Route="InstructionsView" ContentTemplate="{DataTemplate pages:InstructionsView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="MainView" Route="MainView" ContentTemplate="{DataTemplate pages:MainView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPerformView" Route="NegativeControlPerformView" ContentTemplate="{DataTemplate pages:NegativeControlPerformView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlFailView" Route="NegativeControlFailView" ContentTemplate="{DataTemplate pages:NegativeControlFailView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView" Route="NegativeControlPassView" ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />
-    <ShellContent FlyoutItemIsVisible="True" Title="PreparingStandardTestResultView" Route="PreparingStandardTestResultView" ContentTemplate="{DataTemplate pages:PreparingStandardTestResultView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="SettingsView" Route="SettingsView" ContentTemplate="{DataTemplate pages:SettingsView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="StartScreenView" Route="StartScreenView" ContentTemplate="{DataTemplate pages:StartScreenView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="StartTestView" Route="StartTestView" ContentTemplate="{DataTemplate pages:StartTestView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="StopExhalingView" Route="StopExhalingView" ContentTemplate="{DataTemplate pages:StopExhalingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="TestErrorView" Route="TestErrorView" ContentTemplate="{DataTemplate pages:TestErrorView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="TestFailedView" Route="TestFailedView" ContentTemplate="{DataTemplate pages:TestFailedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="TestResultsView" Route="TestResultsView" ContentTemplate="{DataTemplate pages:TestResultsView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="TutorialSuccessView" Route="TutorialSuccessView" ContentTemplate="{DataTemplate pages:TutorialSuccessView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="UnPairView" Route="UnPairView" ContentTemplate="{DataTemplate pages:UnPairView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="ChooseTestView"              ContentTemplate="{DataTemplate pages:ChooseTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPerformingView"    Route="HumanControlPerformingView"  ContentTemplate="{DataTemplate pages:HumanControlPerformingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPreparingView"     Route="HumanControlPreparingView"   ContentTemplate="{DataTemplate pages:HumanControlPreparingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="MainView"                      Route="MainView"                    ContentTemplate="{DataTemplate pages:MainView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPerformView"    Route="NegativeControlPerformView"  ContentTemplate="{DataTemplate pages:NegativeControlPerformView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlFailView"       Route="NegativeControlFailView"     ContentTemplate="{DataTemplate pages:NegativeControlFailView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView"       Route="NegativeControlPassView"     ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="PreparingStandardTestResultView" Route="PreparingStandardTestResultView" ContentTemplate="{DataTemplate pages:PreparingStandardTestResultView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="StartTestView"                 Route="StartTestView"               ContentTemplate="{DataTemplate pages:StartTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="StopExhalingView"              Route="StopExhalingView"            ContentTemplate="{DataTemplate pages:StopExhalingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestErrorView"                 Route="TestErrorView"               ContentTemplate="{DataTemplate pages:TestErrorView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestFailedView"                Route="TestFailedView"              ContentTemplate="{DataTemplate pages:TestFailedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestResultsView"               Route="TestResultsView"             ContentTemplate="{DataTemplate pages:TestResultsView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:TutorialView}" />
     
 </Shell>
