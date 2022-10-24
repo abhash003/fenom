@@ -15,15 +15,9 @@ namespace FenomPlus.Services
 {
     public class BleHubService : BaseService, IBleHubService
     {
-        private static Thread ScanBleDeviceThread = null;
-
+        
         public BleHubService(IAppServices services) : base(services)
         {
-            if (ScanBleDeviceThread == null)
-            {
-                ScanBleDeviceThread = new Thread(new ThreadStart(ScanBleDevices));
-                ScanBleDeviceThread.Start();
-            }
         }
 
         /// <summary>
@@ -52,57 +46,6 @@ namespace FenomPlus.Services
         /// 
         /// </summary>
         public bool Connecting { get; set; }
-
-        public void ScanBleDevices()
-        {
-            Connecting = false;
-            //IsScanning = false;
-            while (1 == 1)
-            {
-                if (((BleDevice == null) || (BleDevice.Connected == false)) && (FenomHubSystemDiscovery.IsScanning == false))
-                {
-                    Services.Cache.DeviceConnectedStatus = "Scanning...";
-                    Services.Cache.DeviceSerialNumber = "";
-                    Services.Cache.Firmware = "";
-                    _ = Scan(new TimeSpan(0, 0, 0, 30), false, true, async (IBleDevice bleDevice) =>
-                    {
-                        if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name) || (Connecting == true)) return;
-                        Connecting = true;
-                        Device.BeginInvokeOnMainThread(async () =>
-                        {
-                            if (await Connect(bleDevice) != false)
-                            {
-                                Thread.Sleep(1000);
-
-                                Services.Cache.DeviceConnectedStatus = "Initializing...";
-                                Services.Cache._DeviceInfo = null;
-                                await RequestDeviceInfo();
-                                Thread.Sleep(1000);
-
-                                Services.Cache._EnvironmentalInfo = null;
-                                await RequestEnvironmentalInfo();
-                                Thread.Sleep(1000);
-                                Services.Cache.DeviceConnectedStatus = "Device Connected";
-
-                                await StopScan();
-
-                            }
-                            // need to restart the scanning
-                            Connecting = false;
-                        });
-                    }, (IEnumerable<IBleDevice> bleDevices) =>
-                    {
-                        //Services.Cache.DeviceConnectedStatus = "Device Not Found";
-                        Thread.Sleep(1000);
-                        Connecting = false;
-                    });
-                    Thread.Sleep(1000);
-                } else {
-                    Thread.Sleep(100);
-                }
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -189,7 +132,7 @@ namespace FenomPlus.Services
             if(IsConnected(devicePowerOn)) {
                 return true;
             }
-            Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
+            Services.Navigation.DevicePowerOnView();
             return false;
         }
 
