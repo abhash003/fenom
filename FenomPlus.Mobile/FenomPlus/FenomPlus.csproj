@@ -53,7 +53,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="TinyIoC\" />
     <Folder Include="Models\" />
-    <Folder Include="Controls\" />
     <Folder Include="Helpers\" />
     <Folder Include="Models\DBModel\" />
     <Folder Include="Models\GridDataModel\" />
@@ -74,6 +73,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Controls\MarigoldActivityWheel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\MarigoldProgressWheel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\QCTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
