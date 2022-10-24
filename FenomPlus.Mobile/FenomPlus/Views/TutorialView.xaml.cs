@@ -79,7 +79,7 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private async void OnCancelled(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{Source}"), false);
+            await Services.Navigation.ChooseTestView();
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
             GotoPostion(0);
+            model.OnAppearing();
             model.UpdateViews();
         }
 
@@ -101,7 +101,7 @@ namespace FenomPlus.Views
             base.OnDisappearing();
             model.OnDisappearing();
             // force refresh here to zero
-            GotoPostion(0);
+            //GotoPostion(0);
             model.UpdateViews();
         }
 

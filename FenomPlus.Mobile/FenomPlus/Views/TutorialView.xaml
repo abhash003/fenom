@@ -43,9 +43,7 @@
                                         GuageSize="350"
                                         GuageData="{Binding BindingContext.GuageData , Source={x:Reference TutorialPage}}"
                                         Text=""
-                                        IsStepfive="{Binding ShowStep5}"
-                                        IsStepsix="{Binding ShowStep6}"
-                                        IsStepseven="{Binding ShowStep7}"
+                                        IsShowStep="{Binding ShowStep}"
                                         Value=""
                                         IsVisible="{Binding ShowGuage}"
                                       />
