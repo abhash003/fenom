@@ -17,8 +17,12 @@ namespace FenomPlus.Views {
     public partial class PreparingStandardTestResultView : global::FenomPlus.Views.BaseContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
+        private global::FenomPlus.Controls.MarigoldProgressWheel MarigoldProgressWheel;
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
             global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(PreparingStandardTestResultView));
+            MarigoldProgressWheel = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::FenomPlus.Controls.MarigoldProgressWheel>(this, "MarigoldProgressWheel");
         }
     }
 }
