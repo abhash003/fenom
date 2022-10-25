@@ -7,22 +7,31 @@
     x:Class="FenomPlus.Views.StatusDeviceInfoView"
     Title="{Binding Title}"
     Style="{StaticResource MainView}"
-    Shell.NavBarIsVisible="True"
+    Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
-    <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-                <Button Text="Exit"
-                        Grid.Row="1"
-                        Style="{StaticResource defaultButton}"
-                        Clicked="OnExistToDashboard"
-                        VerticalOptions="End"
-                        HorizontalOptions="Center"
-                        />
-        </ScrollView>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <Grid>
+
+            <Button Text="Exit"
+                    Style="{StaticResource defaultButton}"
+                    Clicked="OnExitToDashboard"
+                    VerticalOptions="End"
+                    HorizontalOptions="Center"/>
+
+        </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

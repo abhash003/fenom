@@ -19,7 +19,7 @@ namespace FenomPlus.Views
         {
             base.OnAppearing();
             model.OnAppearing();
-            OnExistToDashboard(this, null);
+            OnExitToDashboard(this, null);
         }
 
         /// <summary>

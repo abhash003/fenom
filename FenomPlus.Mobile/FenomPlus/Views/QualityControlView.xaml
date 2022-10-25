@@ -79,7 +79,7 @@
                 <Button Text="Exit"
                         Grid.Row="2"
                         Style="{StaticResource defaultButton}"
-                        Clicked="OnExistToDashboard"
+                        Clicked="OnExitToDashboard"
                         VerticalOptions="End"
                         HorizontalOptions="End"
                         />

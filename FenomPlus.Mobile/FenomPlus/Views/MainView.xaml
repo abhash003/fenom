@@ -14,8 +14,7 @@
     <ShellContent FlyoutItemIsVisible="False"
                   Title="DevicePowerOnView"
                   Route="DevicePowerOnView"
-                  ContentTemplate="{DataTemplate pages:DevicePowerOnView}"
-                  />
+                  ContentTemplate="{DataTemplate pages:DevicePowerOnView}"/>
 
     <ShellContent x:Name="StatusDeviceInfo"
                   Icon="icon_feed"
@@ -28,7 +27,7 @@
                   Icon="QualityControlIcon"
                   Title="Quality Control"
                   ContentTemplate="{DataTemplate pages:QCTabView}" 
-                  IsEnabled="False"
+                  Route="QCTabView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="PastResults"

@@ -84,6 +84,11 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(PreparingStandardTestResultView)}"), false);
         }
 
+        public async Task QCTabView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCTabView)}"), false);
+        }
+
         public async Task QualityControlView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlView)}"), false);

@@ -1,12 +1,19 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
-              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-              x:Class="FenomPlus.Views.QCTabView"
-              Shell.PresentationMode="ModalAnimated"
-              Title="Quality Control"
-              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
-              xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
-              ios:Page.UseSafeArea="true">
+<views:BaseContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+                  xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                  x:Class="FenomPlus.Views.QCTabView"
+                  Shell.PresentationMode="ModalAnimated"
+                  Title="Quality Control"
+                  Style="{StaticResource MainView}"
+                  Shell.NavBarIsVisible="True"
+                  NavigationPage.HasBackButton="False"
+                  NavigationPage.HasNavigationBar="False">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -25,7 +32,6 @@
                 <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="Color" Value="DeepSkyBlue" />
             </Style>
-
 
             </ResourceDictionary>
     </ContentPage.Resources>
@@ -107,4 +113,4 @@
 
     </ContentPage.Content>
 
-</ContentPage>
+</views:BaseContentPage>

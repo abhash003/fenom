@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {
-    public partial class QCTabView : ContentPage
+    public partial class QCTabView : BaseContentPage
     {
         public QCTabView()
         {
