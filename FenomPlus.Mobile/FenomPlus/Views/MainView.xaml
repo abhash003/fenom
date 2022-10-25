@@ -32,7 +32,7 @@
 
     <ShellContent x:Name="PastResults"
                   Icon="PastResultIcon"
-                  Title="View Past Results"
+                  Title="Past Results"
                   ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
                   Route="ViewPastResultsView"
                   IsVisible="true"/>

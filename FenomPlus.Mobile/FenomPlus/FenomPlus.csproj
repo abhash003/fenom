@@ -49,7 +49,6 @@
     <None Remove="Syncfusion.Xamarin.SfBusyIndicator" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
     <Folder Include="Database\" />
     <Folder Include="Interfaces\" />
     <Folder Include="TinyIoC\" />
@@ -72,6 +71,9 @@
     <Compile Remove="Enums\AlertEnums.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\StatusDeviceInfoView.xaml.cs">
+      <DependentUpon>StatusDeviceInfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\QCTabView.xaml.cs">
       <DependentUpon>QCTabView.xaml</DependentUpon>
     </Compile>
@@ -82,6 +84,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\MarigoldProgressWheel.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StatusDeviceInfoView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\QCTabView.xaml">
       <Generator>MSBuild:Compile</Generator>

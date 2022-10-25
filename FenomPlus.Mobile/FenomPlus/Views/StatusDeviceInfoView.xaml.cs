@@ -1,7 +1,16 @@
 ﻿using FenomPlus.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StatusDeviceInfoView : BaseContentPage
     {
         private StatusDeviceInfoViewModel model;
@@ -12,31 +21,24 @@ namespace FenomPlus.Views
             BindingContext = model = new StatusDeviceInfoViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
             model.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             model.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+
+            // This line was causing problems with Status from menu showing page
+            //model.NewGlobalData();
         }
     }
 }
