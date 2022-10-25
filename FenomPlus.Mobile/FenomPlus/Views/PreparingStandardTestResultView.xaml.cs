@@ -19,6 +19,9 @@ namespace FenomPlus.Views
         {
             base.OnAppearing();
             model.OnAppearing();
+
+            // Because view is not created for each use we need to reset the animation.
+            MarigoldProgressWheel.StartAnimation();
         }
 
         /// <summary>
