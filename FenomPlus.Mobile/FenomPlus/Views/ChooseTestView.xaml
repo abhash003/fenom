@@ -22,57 +22,65 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <ScrollView>
-                <StackLayout Padding="32, 16">
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
-                        <Frame HeightRequest="140"
-                                Padding="20"
-                                WidthRequest="200"
-                                HorizontalOptions="Start"
-                                VerticalOptions="StartAndExpand">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
-                            </Frame.GestureRecognizers>
-                            <StackLayout VerticalOptions="CenterAndExpand">
-                                <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
-                                <Label Text="10-second" FontSize="18" HorizontalTextAlignment="Center" />
-                                <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                        </Frame>
-                        <Frame WidthRequest="5" BorderColor="Transparent" ></Frame>
-                        <Frame HeightRequest="140"
-                               Padding="20"
-                               WidthRequest="200"
-                               HorizontalOptions="Start"
-                               VerticalOptions="StartAndExpand">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
-                            </Frame.GestureRecognizers>
-                            <StackLayout VerticalOptions="CenterAndExpand">
-                                <Image Aspect="AspectFit" Source="ShortBreathe" HeightRequest="50" />
-                                <Label Text="6-second" FontSize="18" HorizontalTextAlignment="Center" />
-                                <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                        </Frame>
-                    </StackLayout>
 
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
-                        <Frame HeightRequest="140"
-                                Padding="20"
-                                WidthRequest="200"
-                                HorizontalOptions="Start"
-                                VerticalOptions="StartAndExpand">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnTutorial"/>
-                            </Frame.GestureRecognizers>
-                            <StackLayout VerticalOptions="CenterAndExpand">
-                                <Image Aspect="AspectFit" Source="Tutorial" HeightRequest="50" />
-                                <Label Text="Tutorial" FontSize="14" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                        </Frame>
-                    </StackLayout>
+            <StackLayout Padding="32, 16">
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
+
+                    <!--Standard 10s Test-->
+                    <Frame HeightRequest="140"
+                           Padding="20"
+                           WidthRequest="200"
+                           HorizontalOptions="Start"
+                           VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
+                            <Label Text="10-second" FontSize="18" HorizontalTextAlignment="Center" />
+                            <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!--Spacer-->
+                    <Frame WidthRequest="5" BorderColor="Transparent" />
+
+                    <!--Quick 6s Test-->
+                    <Frame HeightRequest="140"
+                           Padding="20"
+                           WidthRequest="200"
+                           HorizontalOptions="Start"
+                           VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="ShortBreathe" HeightRequest="50" />
+                            <Label Text="6-second" FontSize="18" HorizontalTextAlignment="Center" />
+                            <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+
                 </StackLayout>
-            </ScrollView>
+
+                <!--Tutorial Button-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
+                    <Frame HeightRequest="140"
+                            Padding="20"
+                            WidthRequest="200"
+                            HorizontalOptions="Start"
+                            VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnTutorial"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="Tutorial" HeightRequest="50" />
+                            <Label Text="Tutorial" FontSize="14" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
 
         </Grid>
     </ContentPage.Content>
