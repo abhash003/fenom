@@ -4,6 +4,9 @@
     {
         public StatusDeviceInfoViewModel()
         {
+            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
+            Firmware = Services.Cache.Firmware;
+            DeviceConnectedStatus = Services.Cache.DeviceConnectedStatus;
         }
 
         /// <summary>
@@ -12,7 +15,7 @@
         override public void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
+            //Services.BleHub.IsNotConnectedRedirect();
         }
 
         /// <summary>

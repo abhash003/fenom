@@ -59,7 +59,7 @@ namespace FenomPlus.Services
         public DeviceInfo _DeviceInfo { get; set; }
         public DebugMsg _DebugMsg { get; set; }
 
-        public string deviceConnectedStatus;
+        public string deviceConnectedStatus = "Unknown";
         public string DeviceConnectedStatus
         {
             get { return deviceConnectedStatus; }

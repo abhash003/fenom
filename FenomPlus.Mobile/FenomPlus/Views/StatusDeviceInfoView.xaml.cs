@@ -36,9 +36,7 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-
-            // This line was causing problems with Status from menu showing page
-            //model.NewGlobalData();
+            model.NewGlobalData();
         }
     }
 }

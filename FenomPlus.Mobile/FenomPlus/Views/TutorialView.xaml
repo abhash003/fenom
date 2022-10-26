@@ -15,14 +15,20 @@
         <controls:TitleContentView />
     </Shell.TitleView>
     <ContentPage.Content>
+
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" x:Name="Success" IsVisible="{Binding ShowSuccess}">
                 <Label Text="Success!"  Style="{StaticResource Header}"/>
                 <Label Text="You are ready to take a text" Style="{StaticResource Subheader}" />
             </StackLayout>
+
             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" x:Name="Tutorial" IsVisible="{Binding ShowTutorial}">
-                <Grid RowDefinitions="auto, *" Padding="0, 16">
+
+                <Grid RowDefinitions="auto, *" Padding="20, 16">
+
                     <Label Style="{StaticResource Header}" Grid.Row="0" Text="{Binding Header}" />
+
                     <CarouselView x:Name="carousel" Loop="False" IsSwipeEnabled="False" Grid.Row="1" >
                         <CarouselView.ItemTemplate>
                             <DataTemplate>
@@ -51,17 +57,28 @@
                             </DataTemplate>
                         </CarouselView.ItemTemplate>
                     </CarouselView>
+
                 </Grid>
+
             </StackLayout>
+
             <StackLayout VerticalOptions="End" HorizontalOptions="Center" HeightRequest="100" MinimumHeightRequest="100">
-                <Grid Padding="10">
-                        <Button Text="BACK"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                HorizontalOptions="End"
-                                Style="{StaticResource defaultButton}"
-                                IsVisible="{Binding ShowBack}"
-                                Clicked="OnBack" />
+
+                <Grid Padding="60, 20">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Text="BACK"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="End"
+                            Style="{StaticResource defaultButton}"
+                            IsVisible="{Binding ShowBack}"
+                            Clicked="OnBack" />
+
                         <Button Text="NEXT"
                                 Grid.Row="0"
                                 Grid.Column="1"
@@ -69,13 +86,16 @@
                                 Style="{StaticResource defaultButton}"
                                 IsVisible="{Binding ShowNext}"
                                 Clicked="OnNext" />
+
                         <Button Text="EXIT"
                                 Grid.Row="0"
-                                Grid.ColumnSpan="2"
+                                Grid.Column="1"
                                 HorizontalOptions="End"
                                 Style="{StaticResource defaultButton}"
                                 Clicked="OnCancelled" />
+
                 </Grid>
+
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

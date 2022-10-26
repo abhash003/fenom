@@ -8,16 +8,52 @@
 
         <StackLayout>
 
-            <Label Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand" 
-                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="Future Status Page"
+                   Style="{StaticResource Header}"
+                   HorizontalOptions="CenterAndExpand" 
+                   Margin="0,20,0,60"/>
 
-            <Button Text="Exit"
-                    Style="{StaticResource defaultButton}"
-                    Clicked="OnExitToDashboard"
-                    VerticalOptions="End"
-                    Margin="0,0,0,40"
-                    HorizontalOptions="Center"/>
+            <StackLayout HorizontalOptions="Center">
+
+                <StackLayout Orientation="Horizontal">
+
+                    <Label Text="Device Serial Number: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding DeviceSerialNumber }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+
+                <StackLayout Orientation="Horizontal">
+
+                    <Label Text="Firmware: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding Firmware }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+
+                    <Label Text="Connection Status: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding DeviceConnectedStatus }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <Button Text="Exit"
+                        Style="{StaticResource defaultButton}"
+                        Clicked="OnExitToDashboard"
+                        VerticalOptions="End"
+                        Margin="0,60,0,0"
+                        HorizontalOptions="Center"/>
+
+            </StackLayout>
 
         </StackLayout>
 

@@ -23,7 +23,7 @@ namespace FenomPlus.Views
         {
             if (model.TutorialPosition + 1 < model.Tutorials.Count)
             {
-                GotoPostion(model.TutorialPosition + 1);
+                GotoPosition(model.TutorialPosition + 1);
             } else
             {
                 model.TutorialPosition = model.Tutorials.Count;
@@ -44,7 +44,7 @@ namespace FenomPlus.Views
             }
             if (model.TutorialPosition > 0)
             {
-                GotoPostion(model.TutorialPosition - 1);
+                GotoPosition(model.TutorialPosition - 1);
             }
             model.UpdateViews();
         }
@@ -52,11 +52,11 @@ namespace FenomPlus.Views
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="postion"></param>
-        public void GotoPostion(int postion)
+        /// <param name="position"></param>
+        public void GotoPosition(int position)
         {
-            model.TutorialPosition = postion;
-            carousel.Position = postion;
+            model.TutorialPosition = position;
+            carousel.Position = position;
             model.Header = $"Step {carousel.Position + 1}";
         }
 
@@ -76,7 +76,7 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            GotoPostion(0);
+            GotoPosition(0);
             model.OnAppearing();
             model.UpdateViews();
         }
@@ -89,7 +89,7 @@ namespace FenomPlus.Views
             base.OnDisappearing();
             model.OnDisappearing();
             // force refresh here to zero
-            //GotoPostion(0);
+            //GotoPosition(0);
             model.UpdateViews();
         }
 
