@@ -76,7 +76,7 @@
                         </Frame.GestureRecognizers>
                         <StackLayout VerticalOptions="CenterAndExpand">
                             <Image Aspect="AspectFit" Source="Tutorial" HeightRequest="50" />
-                            <Label Text="Tutorial" FontSize="14" HorizontalTextAlignment="Center" />
+                            <Label Text="Tutorial" FontSize="18" HorizontalTextAlignment="Center" />
                         </StackLayout>
                     </Frame>
                 </StackLayout>
