@@ -69,6 +69,7 @@
     <Compile Include="BLEPermission.cs" />
     <Compile Include="PlaySounds.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
     <Compile Include="Services\NavigationService.cs" />
+    <Compile Include="Services\UsbDeviceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

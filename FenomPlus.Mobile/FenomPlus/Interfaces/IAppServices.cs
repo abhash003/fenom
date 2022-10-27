@@ -10,5 +10,6 @@ namespace FenomPlus.Interfaces
         IDebugLogFileService DebugLogFile { get; }
         ILogCatService LogCat { get; }
         INavigationService Navigation { get; }
+        IUsbDeviceService Usb { get; }
     }
 }
