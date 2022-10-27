@@ -37,7 +37,7 @@
                                     <Label FontSize="32"
                                            Grid.Column="0"
                                            Text="{Binding Info}"
-                                           VerticalTextAlignment="top"
+                                           VerticalTextAlignment="Start"
                                            x:Name="info" />
                                     <Image x:Name="image"
                                            Grid.Column="1"

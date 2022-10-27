@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using FenomPlus.Helpers;
+﻿using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
+using System;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -117,14 +117,14 @@ namespace FenomPlus.ViewModels
             set
             {
                 _TestTime = value;
-                OnPropertyChanged("TestTime");
+                OnPropertyChanged("TestTime"); 
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
             BleHub.StartTest(BreathTestEnum.Training);
@@ -142,7 +142,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
             Stop = true;
@@ -268,7 +268,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
             GuageData = Cache.BreathFlow;

@@ -73,7 +73,7 @@ namespace FenomPlus.ViewModels
                 GuageData = Cache.BreathFlow;
                 if ((GuageData <= 0.0f) && (StartMeasure == false))
                 {
-                    // return contiune of below the time
+                    // return continue of below the time
                     
                     GuageStatus = "Start Blowing";
                 }
@@ -172,7 +172,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }
