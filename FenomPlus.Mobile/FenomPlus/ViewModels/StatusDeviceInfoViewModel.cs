@@ -106,8 +106,6 @@ namespace FenomPlus.ViewModels
                 DeviceName = device.Name;
                 Manufacturer = device.Manufacturer;
                 FirmwareVersion = Services.Cache.Firmware;
-                HardwareVersion = device.HardwareVersion;
-                SoftwareVersion = device.SoftwareVersion;
 
                 DeviceIsBondedStatus = device.IsBonded ? "Paired" : "Not Paired";
             }
