@@ -23,7 +23,7 @@ namespace FenomPlus.Services
         /// <summary>
         /// 
         /// </summary>
-        private IBleDevice BleDevice { get; set; }
+        public IBleDevice BleDevice { get; set; }
 
         /// <summary>
         /// 
@@ -109,7 +109,7 @@ namespace FenomPlus.Services
             // do we have a device
             if(BleDevice != null)
             {
-                // if disconnected try to re-conenct
+                // if disconnected try to re-connect
                 if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     // try to connect
@@ -206,13 +206,13 @@ namespace FenomPlus.Services
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="SerailNumber"></param>
+        /// <param name="serialNumber"></param>
         /// <returns></returns>
-        public async Task<bool> SendSerailNumber(string SerailNumber)
+        public async Task<bool> SendSerialNumber(string serialNumber)
         {
             if (IsConnected())
             {
-                return await BleDevice.SERIALNUMBER(SerailNumber);
+                return await BleDevice.SERIALNUMBER(serialNumber);
             }
             return false;
         }

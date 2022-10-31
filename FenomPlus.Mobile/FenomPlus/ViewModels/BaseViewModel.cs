@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -54,6 +55,7 @@ namespace FenomPlus.ViewModels
             get { return firmware; }
             set { SetProperty(ref firmware, value); }
         }
+
 
         private string deviceConnectedStatus;
         public string DeviceConnectedStatus
@@ -176,7 +178,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        virtual public void OnAppearing()
+        public virtual void OnAppearing()
         {
             NewGlobalData();
         }
@@ -184,19 +186,18 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        virtual public void OnDisappearing()
+        public virtual void OnDisappearing()
         {
         }
 
         /// <summary>
         /// 
         /// </summary>
-        virtual public void NewGlobalData()
+        public virtual void NewGlobalData()
         {
             RefreshIconStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
             Firmware = Services.Cache.Firmware;
-            DeviceConnectedStatus = Services.Cache.DeviceConnectedStatus;
         }
     }
 }

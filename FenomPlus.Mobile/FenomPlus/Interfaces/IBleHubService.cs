@@ -11,6 +11,7 @@ namespace FenomPlus.Interfaces
     public interface IBleHubService
     {
         //bool IsScanning { get; set; }
+        IBleDevice BleDevice { get; set; }
 
         Task<bool> Connect(IBleDevice bleDevice);
         Task<bool> Disconnect();
@@ -23,7 +24,7 @@ namespace FenomPlus.Interfaces
         Task<bool> RequestDeviceInfo();
         Task<bool> RequestEnvironmentalInfo();
         Task<bool> SendMessage(MESSAGE message);
-        Task<bool> SendSerailNumber(string SerailNumber);
+        Task<bool> SendSerialNumber(string SerailNumber);
         Task<bool> SendDateTime(string date, string time);
         Task<bool> SendCalibration(double cal1, double cal2, double cal3);
         Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3);

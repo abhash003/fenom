@@ -100,6 +100,7 @@ namespace FenomPlus.ViewModels
                 StartScan();
                 return false;
             }
+
             return ((Seconds >= 0) && (Stop == false));
         }
 

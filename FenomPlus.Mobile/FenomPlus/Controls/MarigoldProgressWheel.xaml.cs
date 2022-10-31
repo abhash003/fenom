@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
+using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,8 @@ namespace FenomPlus.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MarigoldProgressWheel
     {
-        public static readonly BindableProperty SecondsDurationProperty = BindableProperty.Create("SecondsDuration", typeof(int), typeof(MarigoldProgressWheel), 25);
+        public static readonly BindableProperty SecondsDurationProperty =
+            BindableProperty.Create("SecondsDuration", typeof(int), typeof(MarigoldProgressWheel), 23);
 
         public int SecondsDuration
         {
@@ -19,7 +21,8 @@ namespace FenomPlus.Controls
             set => SetValue(SecondsDurationProperty, value);
         }
 
-        public static readonly BindableProperty AutoPlayProperty = BindableProperty.Create("AutoPlay", typeof(bool), typeof(MarigoldProgressWheel), true);
+        public static readonly BindableProperty AutoPlayProperty =
+            BindableProperty.Create("AutoPlay", typeof(bool), typeof(MarigoldProgressWheel), true);
 
         public bool AutoPlay
         {
@@ -27,7 +30,8 @@ namespace FenomPlus.Controls
             set => SetValue(AutoPlayProperty, value);
         }
 
-        public static readonly BindableProperty AutoHideProperty = BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
+        public static readonly BindableProperty AutoHideProperty =
+            BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
 
         public bool AutoHide
         {
@@ -38,15 +42,11 @@ namespace FenomPlus.Controls
 
         private readonly List<string> SegmentImages = new List<string>();
 
-        private readonly double TotalTimeMilliseconds;
-
         private int SegmentIndex;
 
         public MarigoldProgressWheel()
         {
             InitializeComponent();
-
-            TotalTimeMilliseconds = SecondsDuration * 1000;
 
             SegmentImages.Add("petals_01.png");
             SegmentImages.Add("petals_02.png");
@@ -79,58 +79,46 @@ namespace FenomPlus.Controls
             }
         }
 
+        private Timer AnimationTimer;
+
         public void StartAnimation()
         {
             SegmentIndex = 0;
+            ProgressStepLabel.Text = SegmentIndex.ToString();
+
             MarigoldProgressImage.Source = ImageSource.FromFile(SegmentImages[SegmentIndex]);
 
-            int milliseconds = Convert.ToInt32(TotalTimeMilliseconds / SegmentImages.Count);
+            int milliseconds = Convert.ToInt32((SecondsDuration * 1000) / SegmentImages.Count);
 
-            Device.StartTimer(new TimeSpan(0, 0, 0, 0, milliseconds), () =>
+            // Use System.Timer - Device.Timer not working properly
+            AnimationTimer = new Timer(TickTimer, 0, milliseconds, milliseconds);
+        }
+
+        private void TickTimer(object state)
+        {
+            Device.BeginInvokeOnMainThread(() =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                SegmentIndex += 1;
+                Debug.WriteLine($"Tick #{SegmentIndex}");
+
+                if (SegmentIndex <= SegmentImages.Count - 1)
                 {
-                    SegmentIndex += 1;
-
-                    if (SegmentIndex <= SegmentImages.Count - 1)
-                    {
-                        MarigoldProgressImage.Source = ImageSource.FromFile(SegmentImages[SegmentIndex]);
-                    }
-                });
-
-                bool result = SegmentIndex < SegmentImages.Count - 1;
-
-                if (result == false && AutoHide)
-                    IsVisible = false;
-
-                return result; // runs again, or false to stop
-
+                    MarigoldProgressImage.Source = ImageSource.FromFile(SegmentImages[SegmentIndex]);
+                    ProgressStepLabel.Text = SegmentIndex.ToString(); ;
+                }
+                else
+                {
+                    AnimationTimer.Dispose();
+                }
             });
-
         }
 
         public void StopAnimation()
         {
             SegmentIndex = 0;
             MarigoldProgressImage.Source = string.Empty;
-        }
-
-        protected override void OnPropertyChanged(string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName == nameof(IsVisible))
-            {
-                if (IsVisible)
-                {
-                    StartAnimation();
-                }
-                else
-                {
-                   StopAnimation();
-                }
-            }
+            AnimationTimer?.Dispose();
         }
     }
-
 }
+

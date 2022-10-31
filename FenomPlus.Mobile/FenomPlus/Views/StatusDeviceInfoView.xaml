@@ -8,16 +8,73 @@
 
         <StackLayout>
 
-            <Label Text="Future Status Page"
+            <Label Text="Status Page"
                    Style="{StaticResource Header}"
                    HorizontalOptions="CenterAndExpand" 
-                   Margin="0,20,0,60"/>
+                   Margin="0,20,0,0"/>
+
 
             <StackLayout HorizontalOptions="Center">
 
+                <Label Text="Software Info..." Style="{StaticResource Description24}" Margin="0,30,0,0"/>
+
                 <StackLayout Orientation="Horizontal">
 
-                    <Label Text="Device Serial Number: "
+                    <Label Text="Software Version: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding SoftwareVersion }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+
+                    <Label Text="Software Build: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding SoftwareBuild }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <Label Text="Device Info..." Style="{StaticResource Description24}" Margin="0,30,0,0"/>
+
+                <StackLayout Orientation="Horizontal" >
+
+                    <Label Text="Connection Status: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding DeviceConnectionStatus }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <!--Displayable Properties if device is connected-->
+
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                    <Label Text="Name: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="{Binding DeviceName }"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                    <Label Text="Manufacturer: "
+                           Style="{StaticResource Description}"/>
+
+                    <Label Text="Caire Diagnostics"
+                           Style="{StaticResource Description}"/>
+
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                    <Label Text="Serial Number: "
                            Style="{StaticResource Description}"/>
 
                     <Label Text="{Binding DeviceSerialNumber }"
@@ -25,10 +82,9 @@
 
                 </StackLayout>
 
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
 
-                <StackLayout Orientation="Horizontal">
-
-                    <Label Text="Firmware: "
+                    <Label Text="Firmware Version: "
                            Style="{StaticResource Description}"/>
 
                     <Label Text="{Binding Firmware }"
@@ -36,15 +92,21 @@
 
                 </StackLayout>
 
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
 
-                    <Label Text="Connection Status: "
+                    <Label Text="Pairing: "
                            Style="{StaticResource Description}"/>
 
-                    <Label Text="{Binding DeviceConnectedStatus }"
+                    <Label Text="{Binding DeviceIsBondedStatus }"
                            Style="{StaticResource Description}"/>
 
                 </StackLayout>
+
+
+
+
+
+
 
                 <Button Text="Exit"
                         Style="{StaticResource defaultButton}"
