@@ -25,6 +25,7 @@ namespace FenomPlus.Droid
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
+            AppServices.Container.Register<IUsbDeviceService, UsbDeviceService>().AsSingleton();
 
             LoadApplication(new App());
             //CheckPermissions();

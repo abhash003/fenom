@@ -101,5 +101,11 @@ namespace FenomPlus.Services
             set { _Navigation = value; }
         }
 
+        protected IUsbDeviceService _Usb;
+        public IUsbDeviceService Usb
+        {
+            get { return _Usb ?? (_Usb = Container.Resolve<IUsbDeviceService>()); }
+            set { _Usb = value; }
+        }
     }
 }
