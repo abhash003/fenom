@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,8 +13,7 @@ namespace FenomPlus.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MarigoldProgressWheel
     {
-        public static readonly BindableProperty SecondsDurationProperty =
-            BindableProperty.Create("SecondsDuration", typeof(int), typeof(MarigoldProgressWheel), 23);
+        public static readonly BindableProperty SecondsDurationProperty = BindableProperty.Create("SecondsDuration", typeof(int), typeof(MarigoldProgressWheel), 24);
 
         public int SecondsDuration
         {
@@ -21,8 +21,7 @@ namespace FenomPlus.Controls
             set => SetValue(SecondsDurationProperty, value);
         }
 
-        public static readonly BindableProperty AutoPlayProperty =
-            BindableProperty.Create("AutoPlay", typeof(bool), typeof(MarigoldProgressWheel), true);
+        public static readonly BindableProperty AutoPlayProperty = BindableProperty.Create("AutoPlay", typeof(bool), typeof(MarigoldProgressWheel), true);
 
         public bool AutoPlay
         {
@@ -30,8 +29,7 @@ namespace FenomPlus.Controls
             set => SetValue(AutoPlayProperty, value);
         }
 
-        public static readonly BindableProperty AutoHideProperty =
-            BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
+        public static readonly BindableProperty AutoHideProperty = BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
 
         public bool AutoHide
         {
@@ -39,39 +37,59 @@ namespace FenomPlus.Controls
             set => SetValue(AutoHideProperty, value);
         }
 
+        public static readonly BindableProperty ShowTimeProperty = BindableProperty.Create("ShowTime", typeof(bool), typeof(MarigoldProgressWheel), false);
 
-        private readonly List<string> SegmentImages = new List<string>();
+        public bool ShowTime
+        {
+            get => (bool)GetValue(ShowTimeProperty);
+            set => SetValue(ShowTimeProperty, value);
+        }
 
-        private int SegmentIndex;
+
+        private readonly List<string> PetalImageFileNames = new List<string>();
+
+        private int PetalIndex;
+        private readonly Timer AnimationTimer;
+        private readonly Stopwatch Stopwatch;
 
         public MarigoldProgressWheel()
         {
             InitializeComponent();
 
-            SegmentImages.Add("petals_01.png");
-            SegmentImages.Add("petals_02.png");
-            SegmentImages.Add("petals_03.png");
-            SegmentImages.Add("petals_04.png");
-            SegmentImages.Add("petals_05.png");
-            SegmentImages.Add("petals_06.png");
-            SegmentImages.Add("petals_07.png");
-            SegmentImages.Add("petals_08.png");
-            SegmentImages.Add("petals_09.png");
-            SegmentImages.Add("petals_10.png");
-            SegmentImages.Add("petals_11.png");
-            SegmentImages.Add("petals_12.png");
-            SegmentImages.Add("petals_13.png");
-            SegmentImages.Add("petals_14.png");
-            SegmentImages.Add("petals_15.png");
-            SegmentImages.Add("petals_16.png");
-            SegmentImages.Add("petals_17.png");
-            SegmentImages.Add("petals_18.png");
-            SegmentImages.Add("petals_19.png");
-            SegmentImages.Add("petals_20.png");
-            SegmentImages.Add("petals_21.png");
-            SegmentImages.Add("petals_22.png");
-            SegmentImages.Add("petals_23.png");
-            SegmentImages.Add("petals_24.png");
+            PetalImageFileNames.Add("petals_01.png");
+            PetalImageFileNames.Add("petals_02.png");
+            PetalImageFileNames.Add("petals_03.png");
+            PetalImageFileNames.Add("petals_04.png");
+            PetalImageFileNames.Add("petals_05.png");
+            PetalImageFileNames.Add("petals_06.png");
+            PetalImageFileNames.Add("petals_07.png");
+            PetalImageFileNames.Add("petals_08.png");
+            PetalImageFileNames.Add("petals_09.png");
+            PetalImageFileNames.Add("petals_10.png");
+            PetalImageFileNames.Add("petals_11.png");
+            PetalImageFileNames.Add("petals_12.png");
+            PetalImageFileNames.Add("petals_13.png");
+            PetalImageFileNames.Add("petals_14.png");
+            PetalImageFileNames.Add("petals_15.png");
+            PetalImageFileNames.Add("petals_16.png");
+            PetalImageFileNames.Add("petals_17.png");
+            PetalImageFileNames.Add("petals_18.png");
+            PetalImageFileNames.Add("petals_19.png");
+            PetalImageFileNames.Add("petals_20.png");
+            PetalImageFileNames.Add("petals_21.png");
+            PetalImageFileNames.Add("petals_22.png");
+            PetalImageFileNames.Add("petals_23.png");
+            PetalImageFileNames.Add("petals_24.png");
+
+            MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[0]);
+
+            AnimationTimer = new Timer(Convert.ToInt32((SecondsDuration * 1000) / PetalImageFileNames.Count));
+            AnimationTimer.Elapsed += async (sender, e) => await IncrementMarigoldPetals();
+
+            Stopwatch = new Stopwatch();
+
+            PetalIndex = 0;
+            MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
 
             if (AutoPlay)
             {
@@ -79,46 +97,56 @@ namespace FenomPlus.Controls
             }
         }
 
-        private Timer AnimationTimer;
+
 
         public void StartAnimation()
         {
-            SegmentIndex = 0;
-            ProgressStepLabel.Text = SegmentIndex.ToString();
+            PetalIndex = 0;
 
-            MarigoldProgressImage.Source = ImageSource.FromFile(SegmentImages[SegmentIndex]);
-
-            int milliseconds = Convert.ToInt32((SecondsDuration * 1000) / SegmentImages.Count);
-
-            // Use System.Timer - Device.Timer not working properly
-            AnimationTimer = new Timer(TickTimer, 0, milliseconds, milliseconds);
-        }
-
-        private void TickTimer(object state)
-        {
             Device.BeginInvokeOnMainThread(() =>
             {
-                SegmentIndex += 1;
-                Debug.WriteLine($"Tick #{SegmentIndex}");
-
-                if (SegmentIndex <= SegmentImages.Count - 1)
-                {
-                    MarigoldProgressImage.Source = ImageSource.FromFile(SegmentImages[SegmentIndex]);
-                    ProgressStepLabel.Text = SegmentIndex.ToString(); ;
-                }
-                else
-                {
-                    AnimationTimer.Dispose();
-                }
+                ActualTimeLabel.Text = string.Empty;
+                MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
             });
+
+            Stopwatch.Restart();
+            Stopwatch.Start();
+
+            AnimationTimer.Start();
         }
 
         public void StopAnimation()
         {
-            SegmentIndex = 0;
-            MarigoldProgressImage.Source = string.Empty;
-            AnimationTimer?.Dispose();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Stopwatch.Stop();
+            });
+
+            AnimationTimer.Stop();
+        }
+
+        private Task IncrementMarigoldPetals()
+        {
+            PetalIndex += 1;
+
+            if (PetalIndex <= PetalImageFileNames.Count - 1)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
+
+                    if (ShowTime)
+                    {
+                        ActualTimeLabel.Text = (Stopwatch.ElapsedMilliseconds / 1000).ToString("N1");
+                    }
+                });
+            }
+            else
+            {
+                StopAnimation();
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
-

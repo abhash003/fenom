@@ -7,9 +7,8 @@
 
         <Grid>
 
-            <Image x:Name="MarigoldProgressImage" Margin="20" Source="petals_24.png" VerticalOptions="Center"  HorizontalOptions="Center"/>
-
-            <Label x:Name="ProgressStepLabel" Text="0" FontSize="12" TextColor="Black" VerticalOptions="Center"  HorizontalOptions="Center"/>
+            <Image x:Name="MarigoldProgressImage" Margin="20" Source="petals_24.png" VerticalOptions="Center" HorizontalOptions="Center"/>
+            <Label x:Name="ActualTimeLabel" Text ="" FontSize ="12" VerticalOptions="Center" HorizontalOptions="Center"/>
 
         </Grid>
 

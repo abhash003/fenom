@@ -6,17 +6,31 @@
 
     <ContentPage.Content>
 
-        <StackLayout>
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
 
             <Label Text="Status Page"
                    Style="{StaticResource Header}"
                    HorizontalOptions="CenterAndExpand" 
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
                    Margin="0,20,0,0"/>
 
 
-            <StackLayout HorizontalOptions="Center">
+            <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
 
-                <Label Text="Software Info..." Style="{StaticResource Description24}" Margin="0,30,0,0"/>
+                <Label Text="Software Info..." Style="{StaticResource Description24}" Margin="0,0,0,20"/>
 
                 <StackLayout Orientation="Horizontal">
 
@@ -38,8 +52,6 @@
 
                 </StackLayout>
 
-                <Label Text="Device Info..." Style="{StaticResource Description24}" Margin="0,30,0,0"/>
-
                 <StackLayout Orientation="Horizontal" >
 
                     <Label Text="Connection Status: "
@@ -50,7 +62,11 @@
 
                 </StackLayout>
 
-                <!--Displayable Properties if device is connected-->
+            </StackLayout>
+
+            <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
+
+                <Label Text="Device Info..." Style="{StaticResource Description24}"  IsVisible="{Binding DeviceIsConnected}" Margin="0,0,0,20"/>
 
                 <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
 
@@ -101,23 +117,21 @@
                            Style="{StaticResource Description}"/>
 
                 </StackLayout>
-
-
-
-
-
+            </StackLayout>
 
 
                 <Button Text="Exit"
+                        Grid.Row="2" 
+                        Grid.Column="0" 
+                        Grid.ColumnSpan="2"
                         Style="{StaticResource defaultButton}"
                         Clicked="OnExitToDashboard"
-                        VerticalOptions="End"
-                        Margin="0,60,0,0"
+                        VerticalOptions="Center"
                         HorizontalOptions="Center"/>
 
-            </StackLayout>
 
-        </StackLayout>
+
+        </Grid>
 
     </ContentPage.Content>
 
