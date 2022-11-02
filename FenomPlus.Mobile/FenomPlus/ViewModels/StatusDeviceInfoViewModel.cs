@@ -74,26 +74,12 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private string _deviceIsBondedStatus = string.Empty;
-        public string DeviceIsBondedStatus
-        {
-            get => _deviceIsBondedStatus;
-            set
-            {
-                _deviceIsBondedStatus = value;
-                OnPropertyChanged(nameof(DeviceIsBondedStatus));
-            }
-        }
-
 
 
         public bool DeviceIsConnected => Services.BleHub.IsConnected();
 
         public StatusDeviceInfoViewModel()
         {
-            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-            Firmware = Services.Cache.Firmware;
-
             VersionTracking.Track();
             SoftwareVersion = VersionTracking.CurrentVersion;
             SoftwareBuild = VersionTracking.CurrentBuild;
@@ -103,11 +89,18 @@ namespace FenomPlus.ViewModels
             if (device.Connected)
             {
                 DeviceConnectionStatus = "Connected";
+                DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
+                Firmware = Services.Cache.Firmware;
                 DeviceName = device.Name;
                 Manufacturer = device.Manufacturer;
                 FirmwareVersion = Services.Cache.Firmware;
 
-                DeviceIsBondedStatus = device.IsBonded ? "Paired" : "Not Paired";
+                //DeviceConnectionStatus = "Connected";
+                //DeviceSerialNumber = device.SerialNumber;
+                //Firmware = device.SoftwareVersion;
+                //DeviceName = device.Name;
+                //Manufacturer = device.Manufacturer;
+                //FirmwareVersion = Services.Cache.Firmware;
             }
             else
             {

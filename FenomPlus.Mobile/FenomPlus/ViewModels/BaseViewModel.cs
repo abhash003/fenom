@@ -7,6 +7,7 @@ using FenomPlus.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -197,6 +198,7 @@ namespace FenomPlus.ViewModels
         {
             RefreshIconStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
+
             Firmware = Services.Cache.Firmware;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
@@ -194,14 +195,15 @@ namespace FenomPlus.Services
                 // setup serial number
                 if ((_DeviceInfo.SerialNumber != null) && (_DeviceInfo.SerialNumber.Length > 0))
                 {
-                    DeviceSerialNumber = string.Format("{0}", Encoding.Default.GetString(_DeviceInfo.SerialNumber));
+                    DeviceSerialNumber = $"{Encoding.Default.GetString(_DeviceInfo.SerialNumber)}";
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
 
                     // update the database
                     Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
                 }
 
                 // setup firmware version
-                Firmware = string.Format("{0}.{1}.{2}", _DeviceInfo.MajorVersion, _DeviceInfo.MinorVersion, _DeviceInfo.BuildVersion);
+                Firmware = $"{_DeviceInfo.MajorVersion}.{_DeviceInfo.MinorVersion}.{_DeviceInfo.BuildVersion}";
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(_DeviceInfo.SensorExpDateYear, _DeviceInfo.SensorExpDateMonth, _DeviceInfo.SensorExpDateDay);

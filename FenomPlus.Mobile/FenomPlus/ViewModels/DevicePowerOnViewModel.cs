@@ -34,7 +34,7 @@ namespace FenomPlus.ViewModels
             Seconds = 30;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
             _ = BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, true, async (IBleDevice bleDevice) =>
-            {
+                        {
                 if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
                 await BleHub.StopScan();
                 Device.BeginInvokeOnMainThread(async () =>

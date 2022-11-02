@@ -108,15 +108,6 @@
 
                 </StackLayout>
 
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
-
-                    <Label Text="Pairing: "
-                           Style="{StaticResource Description}"/>
-
-                    <Label Text="{Binding DeviceIsBondedStatus }"
-                           Style="{StaticResource Description}"/>
-
-                </StackLayout>
             </StackLayout>
 
 

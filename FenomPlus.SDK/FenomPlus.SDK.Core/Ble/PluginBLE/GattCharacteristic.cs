@@ -2,6 +2,7 @@
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Utils;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.BLE.Abstractions.EventArgs;
@@ -223,6 +224,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             {
                 PerformanceLogger.StartLog(typeof(GattCharacteristic), "DeviceInfoHandler");
                 Cache.DecodeDeviceInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** DeviceInfoHandler called: DeviceInfo Updated in Cache");
             }
             catch (Exception ex)
             {
@@ -247,6 +249,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             {
                 PerformanceLogger.StartLog(typeof(GattCharacteristic), "EnvironmentalInfoHandler");
                 Cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** EnvironmentalInfoHandler called: EnvironmentalInfo Updated in Cache");
             }
             catch (Exception ex)
             {
