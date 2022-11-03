@@ -10,12 +10,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged, IBaseServices
+    public class BaseViewModel : ObservableObject, IBaseServices
     {
         public IAppServices Services => IOC.Services;
         public IBleHubService BleHub => Services.BleHub;

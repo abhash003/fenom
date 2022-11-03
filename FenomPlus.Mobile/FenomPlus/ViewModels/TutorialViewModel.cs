@@ -3,22 +3,165 @@ using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using System;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class TutorialViewModel : BaseViewModel
+    public partial class TutorialViewModel : BaseViewModel
     {
         public ObservableCollection<Tutorial> Tutorials { get; set; }
+
+        [ObservableProperty]
+        private string _header;
+
+        [ObservableProperty] 
+        private string _title;
+
+        [ObservableProperty] 
+        private string _info;
+
+        [ObservableProperty] 
+        private string _illustration;
+
+        [ObservableProperty] 
+        private bool _showStep;
+
+        public bool ShowImage => (!ShowStep);
+
+        public bool ShowGuage => (ShowStep);
+
+
+
+        private float guageData;
+        public float GuageData
+        {
+            get => guageData;
+            set
+            {
+                guageData = value;
+                OnPropertyChanged("GuageData");
+                if ((Stop == false) && (TutorialIndex == 4))
+                {
+                    PlaySounds.PlaySound(GuageData);
+                }
+                else
+                {
+                    PlaySounds.StopAll();
+                }
+            }
+        }
+
+        private string guageStatus;
+        public string GuageStatus
+        {
+            get => guageStatus;
+            set
+            {
+                guageStatus = value;
+                OnPropertyChanged("GuageStatus");
+            }
+        }
+
+        protected bool showBack;
+        public bool ShowBack
+        {
+            get => showBack;
+            set
+            {
+                showBack = value;
+                OnPropertyChanged("ShowBack");
+            }
+        }
+
+        protected bool showNext;
+        public bool ShowNext
+        {
+            get => showNext;
+            set
+            {
+                showNext = value;
+                OnPropertyChanged("ShowNext");
+            }
+        }
+
+        protected bool showTutorial;
+        public bool ShowTutorial
+        {
+            get => showTutorial;
+            set
+            {
+                showTutorial = value;
+                OnPropertyChanged("ShowTutorial");
+            }
+        }
+
+        protected bool showSuccess;
+        public bool ShowSuccess
+        {
+            get => showSuccess;
+            set
+            {
+                showSuccess = value;
+                OnPropertyChanged("ShowSuccess");
+            }
+        }
+
+
+
+        protected int _tutorialIndex;
+        public int TutorialIndex
+        {
+            get => _tutorialIndex;
+            set
+            {
+                _tutorialIndex = value;
+
+                Title = Tutorials[_tutorialIndex].Title;
+                Info = Tutorials[_tutorialIndex].Info;
+                Illustration = Tutorials[_tutorialIndex].Illustration;
+                ShowStep = Tutorials[_tutorialIndex].ShowStep;
+
+                OnPropertyChanging(nameof(ShowImage));
+                OnPropertyChanging(nameof(ShowGuage));
+
+                UpdateButtons();
+            }
+        }
+
+        private bool Stop;
+
+        private string _TestType;
+        public string TestType
+        {
+            get => _TestType;
+            set
+            {
+                _TestType = value;
+                OnPropertyChanged("TestType");
+            }
+        }
+
+        private int _TestTime;
+        public int TestTime
+        {
+            get => _TestTime;
+            set
+            {
+                _TestTime = value;
+                OnPropertyChanged("TestTime");
+            }
+        }
+
+
+
+
 
         public TutorialViewModel()
         {
             InitializeCollection();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private void InitializeCollection()
         {
             Tutorials = new ObservableCollection<Tutorial>();
@@ -63,19 +206,16 @@ namespace FenomPlus.ViewModels
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void UpdateViews()
+        public void UpdateButtons()
         {
-            if (TutorialPosition <= 0)
+            if (TutorialIndex <= 0)
             {
                 ShowBack = false;
                 ShowNext = true;
                 ShowTutorial = true;
                 ShowSuccess = false;
             }
-            else if (TutorialPosition < Tutorials.Count)
+            else if (TutorialIndex < Tutorials.Count)
             {
                 ShowBack = true;
                 ShowNext = true;
@@ -91,39 +231,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool Stop;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int _TestTime;
-        public int TestTime
-        {
-            get => _TestTime;
-            set
-            {
-                _TestTime = value;
-                OnPropertyChanged("TestTime"); 
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -131,7 +238,7 @@ namespace FenomPlus.ViewModels
             Services.BleHub.IsNotConnectedRedirect();
             Stop = false;
 
-            // start timer to read measure constally
+            // start timer to read measure constantly
             Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
                 GuageData = Cache.BreathFlow;
@@ -139,9 +246,6 @@ namespace FenomPlus.ViewModels
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -150,124 +254,6 @@ namespace FenomPlus.ViewModels
             PlaySounds.StopAll();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private float guageData;
-        public float GuageData
-        {
-            get => guageData;
-            set
-            {
-                guageData = value;
-                OnPropertyChanged("GuageData");
-                if ((Stop == false) && (TutorialPosition == 4))
-                {
-                    PlaySounds.PlaySound(GuageData);
-                } else {
-                    PlaySounds.StopAll();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private string guageStatus;
-        public string GuageStatus
-        {
-            get => guageStatus;
-            set
-            {
-                guageStatus = value;
-                OnPropertyChanged("GuageStatus");
-            }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        protected bool showBack;
-        public bool ShowBack
-        {
-            get => showBack;
-            set
-            {
-                showBack = value;
-                OnPropertyChanged("ShowBack");
-            }
-        }
-
-        protected bool showNext;
-        public bool ShowNext
-        {
-            get => showNext;
-            set
-            {
-                showNext = value;
-                OnPropertyChanged("ShowNext");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected bool showTutorial;
-        public bool ShowTutorial
-        {
-            get => showTutorial;
-            set
-            {
-                showTutorial = value;
-                OnPropertyChanged("ShowTutorial");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected bool showSuccess;
-        public bool ShowSuccess
-        {
-            get => showSuccess;
-            set
-            {
-                showSuccess = value;
-                OnPropertyChanged("ShowSuccess");
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected string header;
-        public string Header
-        {
-            get => header;
-            set
-            {
-                header = value;
-                OnPropertyChanged("Header");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected int tutorialPosition;
-        public int TutorialPosition
-        {
-            get => tutorialPosition;
-            set
-            {
-                tutorialPosition = value;
-                OnPropertyChanged("TutorialPosition");
-                UpdateViews();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();

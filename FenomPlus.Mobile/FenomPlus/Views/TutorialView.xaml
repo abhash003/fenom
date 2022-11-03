@@ -11,9 +11,11 @@
     Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
 
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
@@ -29,34 +31,39 @@
 
                     <Label Style="{StaticResource Header}" Grid.Row="0" Text="{Binding Header}" />
 
-                    <CarouselView x:Name="carousel" Loop="False" IsSwipeEnabled="False" Grid.Row="1" >
+                    <!--<CarouselView x:Name="carousel" Loop="False" IsSwipeEnabled="False" >
                         <CarouselView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="*, *"
-                                      Padding="16, 0">
-                                    <Label FontSize="32"
-                                           Grid.Column="0"
-                                           Text="{Binding Info}"
-                                           VerticalTextAlignment="Start"
-                                           x:Name="info" />
-                                    <Image x:Name="image"
-                                           Grid.Column="1"
-                                           Source="{Binding Illustration}"
-                                           Aspect="AspectFit"
-                                           IsVisible="{Binding ShowImage}"/>
-                                    <controls:BreathGuage
-                                        Grid.Column="1"
-                                        GuageSize="350"
-                                        GuageData="{Binding BindingContext.GuageData , Source={x:Reference TutorialPage}}"
-                                        Text=""
-                                        IsShowStep="{Binding ShowStep}"
-                                        Value=""
-                                        IsVisible="{Binding ShowGuage}"
-                                      />
-                                </Grid>
-                            </DataTemplate>
+                            <DataTemplate>-->
+
+
+                    <Grid  Grid.Row="1" ColumnDefinitions="*, *" Padding="16, 0">
+
+                        <Label FontSize="32"
+                               Grid.Column="0"
+                               Text="{Binding Info}"
+                               VerticalTextAlignment="Start"
+                               x:Name="info"/>
+
+                        <Image x:Name="image"
+                               Grid.Column="1"
+                               Source="{Binding Illustration}"
+                               Aspect="AspectFit"
+                               IsVisible="{Binding ShowImage}"/>
+
+                        <controls:BreathGuage
+                            Grid.Column="1"
+                            GuageSize="350"
+                            GuageData="{Binding BindingContext.GuageData , Source={x:Reference TutorialPage}}"
+                            Text=""
+                            IsShowStep="{Binding ShowStep}"
+                            Value=""
+                            IsVisible="{Binding ShowGuage}"/>
+
+                    </Grid>
+
+                            <!--</DataTemplate>
                         </CarouselView.ItemTemplate>
-                    </CarouselView>
+                    </CarouselView>-->
 
                 </Grid>
 

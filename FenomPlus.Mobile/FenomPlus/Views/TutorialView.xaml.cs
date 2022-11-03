@@ -11,7 +11,6 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new TutorialViewModel();
-            carousel.ItemsSource = model.Tutorials;
         }
 
         /// <summary>
@@ -21,14 +20,14 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnNext(object sender, EventArgs e)
         {
-            if (model.TutorialPosition + 1 < model.Tutorials.Count)
+            if (model.TutorialIndex + 1 < model.Tutorials.Count)
             {
-                GotoPosition(model.TutorialPosition + 1);
+                GotoPosition(model.TutorialIndex + 1);
             } else
             {
-                model.TutorialPosition = model.Tutorials.Count;
+                model.TutorialIndex = model.Tutorials.Count;
             }
-            model.UpdateViews();
+            model.UpdateButtons();
         }
 
         /// <summary>
@@ -38,15 +37,15 @@ namespace FenomPlus.Views
         /// <param name="e"></param>
         private void OnBack(object sender, EventArgs e)
         {
-            if(model.TutorialPosition >= model.Tutorials.Count)
+            if(model.TutorialIndex >= model.Tutorials.Count)
             {
-                model.TutorialPosition = model.Tutorials.Count;
+                model.TutorialIndex = model.Tutorials.Count;
             }
-            if (model.TutorialPosition > 0)
+            if (model.TutorialIndex > 0)
             {
-                GotoPosition(model.TutorialPosition - 1);
+                GotoPosition(model.TutorialIndex - 1);
             }
-            model.UpdateViews();
+            model.UpdateButtons();
         }
 
         /// <summary>
@@ -55,9 +54,9 @@ namespace FenomPlus.Views
         /// <param name="position"></param>
         public void GotoPosition(int position)
         {
-            model.TutorialPosition = position;
-            carousel.Position = position;
-            model.Header = $"Step {carousel.Position + 1}";
+            model.TutorialIndex = position;
+            //carousel.Position = position;
+            model.Header = $"Step {model.TutorialIndex + 1}";
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace FenomPlus.Views
             base.OnAppearing();
             GotoPosition(0);
             model.OnAppearing();
-            model.UpdateViews();
+            model.UpdateButtons();
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace FenomPlus.Views
             model.OnDisappearing();
             // force refresh here to zero
             //GotoPosition(0);
-            model.UpdateViews();
+            model.UpdateButtons();
         }
 
         /// <summary>
