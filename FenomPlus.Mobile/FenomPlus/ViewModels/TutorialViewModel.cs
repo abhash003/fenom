@@ -4,13 +4,20 @@ using FenomPlus.SDK.Core.Models;
 using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
     public partial class TutorialViewModel : BaseViewModel
     {
-        public ObservableCollection<Tutorial> Tutorials { get; set; }
+        private bool Stop;
+
+
+        [ObservableProperty]
+        private int _tutorialIndex = 0;
+
+        private ObservableCollection<Tutorial> Tutorials { get; set; }
 
         [ObservableProperty]
         private string _header;
@@ -24,134 +31,38 @@ namespace FenomPlus.ViewModels
         [ObservableProperty] 
         private string _illustration;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private bool _showStep;
 
-        public bool ShowImage => (!ShowStep);
+        [ObservableProperty]
+        private bool _showImage;
 
-        public bool ShowGuage => (ShowStep);
+        [ObservableProperty]
+        private bool _showGuage;
 
+        [ObservableProperty]
+        private float _guageData;
 
+        [ObservableProperty]
+        private string _guageStatus;
 
-        private float guageData;
-        public float GuageData
-        {
-            get => guageData;
-            set
-            {
-                guageData = value;
-                OnPropertyChanged("GuageData");
-                if ((Stop == false) && (TutorialIndex == 4))
-                {
-                    PlaySounds.PlaySound(GuageData);
-                }
-                else
-                {
-                    PlaySounds.StopAll();
-                }
-            }
-        }
+        [ObservableProperty]
+        protected bool _showBack;
 
-        private string guageStatus;
-        public string GuageStatus
-        {
-            get => guageStatus;
-            set
-            {
-                guageStatus = value;
-                OnPropertyChanged("GuageStatus");
-            }
-        }
+        [ObservableProperty]
+        protected bool _showNext;
 
-        protected bool showBack;
-        public bool ShowBack
-        {
-            get => showBack;
-            set
-            {
-                showBack = value;
-                OnPropertyChanged("ShowBack");
-            }
-        }
+        [ObservableProperty]
+        private string _testType;
 
-        protected bool showNext;
-        public bool ShowNext
-        {
-            get => showNext;
-            set
-            {
-                showNext = value;
-                OnPropertyChanged("ShowNext");
-            }
-        }
+        [ObservableProperty]
+        private int _testTime;
 
-        protected bool showTutorial;
-        public bool ShowTutorial
-        {
-            get => showTutorial;
-            set
-            {
-                showTutorial = value;
-                OnPropertyChanged("ShowTutorial");
-            }
-        }
+        [ObservableProperty]
+        protected bool _showTutorial = true;
 
-        protected bool showSuccess;
-        public bool ShowSuccess
-        {
-            get => showSuccess;
-            set
-            {
-                showSuccess = value;
-                OnPropertyChanged("ShowSuccess");
-            }
-        }
-
-
-
-        protected int _tutorialIndex;
-        public int TutorialIndex
-        {
-            get => _tutorialIndex;
-            set
-            {
-                _tutorialIndex = value;
-
-                Title = Tutorials[_tutorialIndex].Title;
-                Info = Tutorials[_tutorialIndex].Info;
-                Illustration = Tutorials[_tutorialIndex].Illustration;
-                ShowStep = Tutorials[_tutorialIndex].ShowStep;
-
-                OnPropertyChanging(nameof(ShowImage));
-                OnPropertyChanging(nameof(ShowGuage));
-
-                UpdateButtons();
-            }
-        }
-
-        private bool Stop;
-
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
-
-        private int _TestTime;
-        public int TestTime
-        {
-            get => _TestTime;
-            set
-            {
-                _TestTime = value;
-                OnPropertyChanged("TestTime");
-            }
-        }
+        [ObservableProperty]
+        protected bool _showSuccess;
 
 
 
@@ -160,6 +71,24 @@ namespace FenomPlus.ViewModels
         public TutorialViewModel()
         {
             InitializeCollection();
+        }
+
+        // These are called when corresponding property changes
+
+        partial void OnTutorialIndexChanged(int value)
+        {
+            UpdateContent();
+        }
+
+        partial void OnShowStepChanged(bool value)
+        {
+            UpdateContent();
+        }
+
+        partial void OnGuageDataChanged(float value)
+        {
+            //UpdateContent();
+
         }
 
         private void InitializeCollection()
@@ -206,10 +135,21 @@ namespace FenomPlus.ViewModels
             });
         }
 
-        public void UpdateButtons()
+        private void UpdateContent()
         {
+            Header = $"Step {TutorialIndex + 1}";
+
+            ShowImage = !ShowStep;
+
+            ShowGuage = ShowStep;
+
             if (TutorialIndex <= 0)
             {
+                Title = Tutorials[TutorialIndex].Title;
+                Info = Tutorials[TutorialIndex].Info;
+                Illustration = Tutorials[TutorialIndex].Illustration;
+                ShowStep = Tutorials[TutorialIndex].ShowStep;
+
                 ShowBack = false;
                 ShowNext = true;
                 ShowTutorial = true;
@@ -217,23 +157,43 @@ namespace FenomPlus.ViewModels
             }
             else if (TutorialIndex < Tutorials.Count)
             {
+                Title = Tutorials[TutorialIndex].Title;
+                Info = Tutorials[TutorialIndex].Info;
+                Illustration = Tutorials[TutorialIndex].Illustration;
+                ShowStep = Tutorials[TutorialIndex].ShowStep;
+
                 ShowBack = true;
                 ShowNext = true;
                 ShowTutorial = true;
                 ShowSuccess = false;
             }
+            //else
+            //{
+            //    ShowBack = true;
+            //    ShowNext = false;
+            //    ShowTutorial = false;
+            //    ShowSuccess = true;
+            //}
+
+            if ((Stop == false) && (TutorialIndex == 4))
+            {
+                PlaySounds.PlaySound(GuageData);
+            }
             else
             {
-                ShowBack = true;
-                ShowNext = false;
-                ShowTutorial = false;
-                ShowSuccess = true;
+                PlaySounds.StopAll();
             }
         }
 
         public override void OnAppearing()
         {
             base.OnAppearing();
+
+            TutorialIndex = 0;
+
+            // Force update no matter the TutorialIndex
+            UpdateContent();
+
             BleHub.StartTest(BreathTestEnum.Training);
             Services.BleHub.IsNotConnectedRedirect();
             Stop = false;
@@ -259,5 +219,82 @@ namespace FenomPlus.ViewModels
             base.NewGlobalData();
             GuageData = Cache.BreathFlow;
         }
+
+        [RelayCommand]
+        private void Next()
+        {
+            //if (TutorialIndex < Tutorials.Count - 1)
+            //{
+            //    TutorialIndex += 1;
+            //}
+            //else
+            //{
+            //    TutorialIndex = Tutorials.Count - 1;
+            //}
+
+            if (TutorialIndex + 1 < Tutorials.Count)
+            {
+                TutorialIndex = TutorialIndex + 1;
+            }
+            else
+            {
+                TutorialIndex = Tutorials.Count - 1;
+
+                UpdateContent();
+                ShowBack = true;
+                ShowNext = false;
+                ShowTutorial = false;
+                ShowSuccess = true;
+            }
+
+        }
+
+        [RelayCommand]
+        private void Back()
+        {
+            //if (TutorialIndex >= Tutorials.Count)
+            //{
+            //    TutorialIndex = Tutorials.Count;
+            //}
+
+            //if (TutorialIndex > 0)
+            //{
+            //    TutorialIndex -= 1;
+            //}
+
+            if (TutorialIndex >= Tutorials.Count)
+            {
+                TutorialIndex = Tutorials.Count;
+            }
+            if (TutorialIndex > 0)
+            {
+                TutorialIndex = TutorialIndex - 1;
+            }
+        }
+
+
+        //private void OnNext(object sender, EventArgs e)
+        //{
+        //    if (TutorialIndex + 1 < Tutorials.Count)
+        //    {
+        //        TutorialIndex = TutorialIndex + 1;
+        //    }
+        //    else
+        //    {
+        //        TutorialIndex = Tutorials.Count;
+        //    }
+        //}
+
+        //private void OnBack(object sender, EventArgs e)
+        //{
+        //    if (TutorialIndex >= Tutorials.Count)
+        //    {
+        //        TutorialIndex = Tutorials.Count;
+        //    }
+        //    if (TutorialIndex > 0)
+        //    {
+        //        TutorialIndex = TutorialIndex - 1;
+        //    }
+        //}
     }
 }
