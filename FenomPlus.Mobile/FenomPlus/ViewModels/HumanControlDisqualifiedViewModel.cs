@@ -1,33 +1,16 @@
 ﻿
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
+
 namespace FenomPlus.ViewModels
 {
-    public class HumanControlDisqualifiedViewModel : BaseViewModel
+    public partial class HumanControlDisqualifiedViewModel : BaseViewModel
     {
         public HumanControlDisqualifiedViewModel()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnAppearing()
-        {
-            base.OnAppearing();
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnDisappearing()
-        {
-            base.OnDisappearing();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

@@ -4,49 +4,30 @@ namespace FenomPlus.Views
 {
     public partial class HumanControlPerformingView : BaseContentPage
     {
-        private HumanControlPerformingViewModel model;
+        private readonly HumanControlPerformingViewModel HumanControlPerformingViewModel;
 
         public HumanControlPerformingView()
         {
             InitializeComponent();
-            BindingContext = model = new HumanControlPerformingViewModel();
+            BindingContext = HumanControlPerformingViewModel = new HumanControlPerformingViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void OnCancel(System.Object sender, System.EventArgs e)
-        {
-            await Services.Navigation.QualityControlView();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            HumanControlPerformingViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            HumanControlPerformingViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            HumanControlPerformingViewModel.NewGlobalData();
         }
     }
 }

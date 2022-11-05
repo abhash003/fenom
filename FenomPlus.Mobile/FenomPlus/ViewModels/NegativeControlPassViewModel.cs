@@ -1,33 +1,32 @@
 ﻿
+using CommunityToolkit.Mvvm.Input;
+
 namespace FenomPlus.ViewModels
 {
-    public class NegativeControlPassViewModel : BaseViewModel
+    public partial class NegativeControlPassViewModel : BaseViewModel
     {
         public NegativeControlPassViewModel()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnAppearing()
+        [RelayCommand]
+        private async void Next()
+        {
+            await Services.Navigation.HumanControlPerformingView();
+        }
+
+        public override void OnAppearing()
         {
             base.OnAppearing();
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

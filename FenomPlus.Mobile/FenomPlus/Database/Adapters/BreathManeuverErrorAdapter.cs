@@ -5,11 +5,6 @@ namespace FenomPlus.Database.Adapters
 {
     public static class BreathManeuverErrorAdapter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public static BreathManeuverErrorDBModel Convert(this BreathManeuverErrorTb input)
         {
             if (input == null) return null;
@@ -25,11 +20,6 @@ namespace FenomPlus.Database.Adapters
             };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public static BreathManeuverErrorTb Convert(this BreathManeuverErrorDBModel input)
         {
             if (input == null) return null;
@@ -45,11 +35,6 @@ namespace FenomPlus.Database.Adapters
             };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public static BreathManeuverErrorDataModel ConvertForGrid(this BreathManeuverErrorTb input)
         {
             if (input == null) return null;

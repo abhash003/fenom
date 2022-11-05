@@ -4,49 +4,30 @@ namespace FenomPlus.Views
 {
     public partial class NegativeControlFailView : BaseContentPage
     {
-        private NegativeControlFailViewModel model;
+        private readonly NegativeControlFailViewModel NegativeControlFailViewModel;
 
         public NegativeControlFailView()
         {
             InitializeComponent();
-            BindingContext = model = new NegativeControlFailViewModel();
+            BindingContext = NegativeControlFailViewModel = new NegativeControlFailViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void OnClose(System.Object sender, System.EventArgs e)
-        {
-            await Services.Navigation.QualityControlView();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            NegativeControlFailViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            NegativeControlFailViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            NegativeControlFailViewModel.NewGlobalData();
         }
     }
 }

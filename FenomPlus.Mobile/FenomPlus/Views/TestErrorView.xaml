@@ -10,37 +10,56 @@
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+
                 <Label Text="Test Error" Style="{StaticResource Header}"/>
+
                 <Label Text="{Binding ErrorCode}" Style="{StaticResource Important}"/>
+
                 <Label Text="{Binding ErrorMessage}" Style="{StaticResource Notice}"/>
+
                 <Label Text="You can test again or follow the tutorial." Style="{StaticResource Notice}"/>
+
                 <Label Style="{StaticResource Notice}">
+
                     <Label.FormattedText>
+
                         <FormattedString>
+
                             <Span Text="For more information about this error,&#x0a;" />
+
                             <Span Text="please view our online FAQ" TextColor="DodgerBlue"/>
+
                         </FormattedString>
+
                     </Label.FormattedText>
+
                 </Label>
 
-                 <Button Text="Take New Test"
-                    Style="{StaticResource defaultButton}"
-                    Clicked="StartTest"/>
-
-                <Button Text="Take Tutorial"
-                    Style="{StaticResource defaultButton}"
-                    Clicked="GoToTutorial"/>
-
-                <Button Text="Exit"
-                    Style="{StaticResource defaultButton}"
-                    Clicked="OnCancel"/>
             </StackLayout>
-        </ScrollView>
+
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToDashboardCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
     </ContentPage.Content>
 </views:BaseContentPage>

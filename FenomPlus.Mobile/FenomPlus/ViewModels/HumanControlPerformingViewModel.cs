@@ -13,7 +13,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
             TestTime = 10;
@@ -58,7 +58,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
             Stop = true;
@@ -126,7 +126,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

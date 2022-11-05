@@ -13,30 +13,30 @@ namespace FenomPlus.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StatusDeviceInfoView : BaseContentPage
     {
-        private StatusDeviceInfoViewModel model;
+        private StatusDeviceInfoViewModel StatusDeviceInfoViewModel;
 
         public StatusDeviceInfoView()
         {
             InitializeComponent();
-            BindingContext = model = new StatusDeviceInfoViewModel();
+            BindingContext = StatusDeviceInfoViewModel = new StatusDeviceInfoViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            StatusDeviceInfoViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            StatusDeviceInfoViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            StatusDeviceInfoViewModel.NewGlobalData();
         }
     }
 }

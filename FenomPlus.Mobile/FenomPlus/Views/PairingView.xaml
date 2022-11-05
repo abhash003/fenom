@@ -10,21 +10,29 @@
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                        <Button Text="Exit"
-                            Grid.Row="2"
-                            Style="{StaticResource defaultButton}"
-                            Clicked="OnExitToDashboard"
-                            VerticalOptions="End"
-                            HorizontalOptions="Center"
-                        />
-        </ScrollView>
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToDashboardCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

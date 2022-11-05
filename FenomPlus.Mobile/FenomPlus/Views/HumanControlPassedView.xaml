@@ -10,28 +10,54 @@
     Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+
                 <Label Text="Human Control Test" Style="{StaticResource Header}" />
+
                 <Label Text="Pass" Style="{StaticResource Important}" />
+
                 <Label Text="Quality Control will be valid for 7 days" Style="{StaticResource EmCaption}"/>
+
                 <Label FontSize="24"
                        FontAttributes="Bold"
                        TextColor="#333"
                        HorizontalTextAlignment="Center">
+
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Device " />
                             <Span Text="{Binding DeviceSerialNumber}" />
                         </FormattedString>
                     </Label.FormattedText>
+
                 </Label>
-                <Button Text="EXIT" Style="{StaticResource defaultButton}" Clicked="OnFinish" />
+
             </StackLayout>
-        </ScrollView>
+
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToQCCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+
+        </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

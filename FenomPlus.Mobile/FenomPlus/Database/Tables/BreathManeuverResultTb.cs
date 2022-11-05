@@ -18,5 +18,33 @@ namespace FenomPlus.Database.Tables
         public string QCStatus { get; set; }
         public string TestResult { get; set; }
 
+        public string TestDate
+        {
+            get
+            {
+                var dateInfo = DateOfTest.Split('T');
+                return dateInfo[0].ToString();
+            }
+        }
+
+        public string TestTime
+        {
+            get
+            {
+                var dateInfo = DateOfTest.Split('T');
+                return dateInfo[1].ToString();
+            }
+        }
+
+        public string TestDateTime
+        {
+            get
+            {
+                //var dateInfo = DateOfTest.Split('T');
+                //return $"{dateInfo[0]}  {dateInfo[1]}";
+                return DateOfTest.Replace("T", "   ");
+            }
+        }
+
     }
 }

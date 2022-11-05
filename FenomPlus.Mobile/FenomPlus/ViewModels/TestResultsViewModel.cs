@@ -11,7 +11,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
             if (Cache.TestType == TestTypeEnum.Standard)
@@ -31,7 +31,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
@@ -67,7 +67,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
@@ -6,77 +10,68 @@ using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public class ViewPastResultsViewModel : BaseViewModel
+    public partial class ViewPastResultsViewModel : BaseViewModel
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        [ObservableProperty]
+        private RangeObservableCollection<BreathManeuverResultDataModel> _pastResultsData;
+
         public ViewPastResultsViewModel()
         {
-            DataForGrid = new RangeObservableCollection<BreathManeuverResultDataModel>();
-            UpdateGrid();
+            PastResultsData = new RangeObservableCollection<BreathManeuverResultDataModel>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void UpdateGrid()
+        [RelayCommand]
+        public void UpdatePastResultsData()
         {
-            DataForGrid.Clear();
+            PastResultsData.Clear();
+
             IEnumerable<BreathManeuverResultTb> records = ResultsRepo.SelectAll();
+
             foreach (BreathManeuverResultTb record in records)
             {
-                AddToGrid(record);
+                PastResultsData.Add(record.ConvertForGrid());
             }
+
+            AddMockData(); // For debugging only!
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="record"></param>
-        public void AddToGrid(BreathManeuverResultTb record)
+        private void AddMockData()
         {
-            if (record != null)
+            PastResultsData.Clear();
+
+            int maxEntries = 160;
+
+            // Create test data & add
+            for (int i = 0; i < maxEntries; i++)
             {
-                DataForGrid.Add(record.ConvertForGrid());
+                BreathManeuverResultTb record = new BreathManeuverResultTb
+                {
+                    SerialNumber = "F150-00000022",
+                    TestType = i % 2 == 0 ? "Standard" : "Short",
+                    DateOfTest = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString),
+                    QCStatus = "?"
+                };
+
+                Random random = new Random();
+                double minNumber = 25;
+                double maxNumber = 45;
+                record.TestResult = (random.NextDouble() * (maxNumber - minNumber) + minNumber).ToString("N0"); ;
+
+                PastResultsData.Add(record.ConvertForGrid());
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
-            //UpdateGrid();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private RangeObservableCollection<BreathManeuverResultDataModel> _DataForGrid;
-        public RangeObservableCollection<BreathManeuverResultDataModel> DataForGrid
-        {
-            get => _DataForGrid;
-            set
-            {
-                _DataForGrid = value;
-                OnPropertyChanged("DataForGrid");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

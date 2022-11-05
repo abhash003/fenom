@@ -4,12 +4,12 @@ namespace FenomPlus.Views
 {
     public partial class PairingView : BaseContentPage
     {
-        private PairingViewModel model;
+        private PairingViewModel PairingViewModel;
 
         public PairingView()
         {
             InitializeComponent();
-            BindingContext = model = new PairingViewModel();
+            BindingContext = PairingViewModel = new PairingViewModel();
         }
 
         /// <summary>
@@ -18,8 +18,8 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
-            OnExitToDashboard(this, null);
+            PairingViewModel.OnAppearing();
+            PairingViewModel.ExitToDashboardCommand.Execute(null);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace FenomPlus.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            PairingViewModel.OnDisappearing();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            PairingViewModel.NewGlobalData();
         }
     }
 }

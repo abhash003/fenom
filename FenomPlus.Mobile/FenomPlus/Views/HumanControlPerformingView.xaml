@@ -10,43 +10,54 @@
     Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <StackLayout VerticalOptions="CenterAndExpand"
-                     HorizontalOptions="CenterAndExpand">
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
                 <Label Text="Performing Human Control test"
                        FontSize="30"
                        TextColor="#333"
                        HorizontalTextAlignment="Center" />
 
-            <Label Text="Your goal is to hit the star"
-                       FontSize="16"
-                       TextColor="#333"
-                       HorizontalTextAlignment="Center" />
+                <Label Text="Your goal is to hit the star"
+                           FontSize="16"
+                           TextColor="#333"
+                           HorizontalTextAlignment="Center" />
 
-            <controls:BreathGuage GuageSize="350"
-                              GuageData="{Binding GuageData}"
-                              Text="Seconds"
-                              IsShowStep="false"
-                              Value="{Binding GuageSeconds}" />
+                <controls:BreathGuage GuageSize="350"
+                                  GuageData="{Binding GuageData}"
+                                  Text="Seconds"
+                                  IsShowStep="false"
+                                  Value="{Binding GuageSeconds}" />
 
-            <Label Text="{Binding GuageStatus}"
-                       FontSize="16"
-                       TextColor="#333"
-                       HorizontalTextAlignment="Center" />
+                <Label Text="{Binding GuageStatus}"
+                           FontSize="16"
+                           TextColor="#333"
+                           HorizontalTextAlignment="Center" />
+
+            </StackLayout>
 
             <Button Text="Exit"
-                    Padding="4"
-                    TextColor="LightBlue"
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Center"
-                    Margin="5"
-                    Clicked="OnCancel"
-                        />
-            </StackLayout>
-            </ScrollView>
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToQCCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

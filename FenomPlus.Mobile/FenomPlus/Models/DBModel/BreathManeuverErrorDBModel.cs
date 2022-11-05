@@ -3,6 +3,7 @@ using FenomPlus.Enums;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
 using System;
+using Xamarin.Essentials;
 
 namespace FenomPlus.Models
 {
@@ -22,12 +23,15 @@ namespace FenomPlus.Models
         {
             int statusCode = (input.StatusCode >= ErrorCodesEnum.code.Length) ? ErrorCodesEnum.code.Length : input.StatusCode;
 
+            // Get current version of software
+            VersionTracking.Track();
+
             return new BreathManeuverErrorDBModel()
             {
                 ErrorCode = ErrorCodesEnum.code[statusCode],
                 Description = ErrorCodesEnum.title[statusCode],
                 SerialNumber = IOC.Services.Cache.DeviceSerialNumber,
-                Software = IOC.Services.Cache.Firmware,
+                Software = VersionTracking.CurrentVersion,
                 Firmware = IOC.Services.Cache.Firmware,
                 DateError = DateTime.Now.ToString(),
                 Humidity = IOC.Services.Cache._EnvironmentalInfo.Humidity.ToString()

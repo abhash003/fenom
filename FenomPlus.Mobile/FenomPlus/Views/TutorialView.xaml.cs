@@ -5,35 +5,30 @@ namespace FenomPlus.Views
 {
     public partial class TutorialView : BaseContentPage
     {
-        private TutorialViewModel model;
+        private TutorialViewModel TutorialViewModel;
 
         public TutorialView()
         {
             InitializeComponent();
-            BindingContext = model = new TutorialViewModel();
-        }
-
-        private async void OnCancelled(object sender, EventArgs e)
-        {
-            await Services.Navigation.ChooseTestView();
+            BindingContext = TutorialViewModel = new TutorialViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            TutorialViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            TutorialViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            TutorialViewModel.NewGlobalData();
         }
     }
 }

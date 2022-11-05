@@ -10,27 +10,54 @@
     Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
             <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+
                 <Label Text="Performing Negative Control Test" Style="{StaticResource Header}" />
+
                 <Label Text="{Binding TestTime}" Style="{StaticResource Important}" />
+
                 <Label Text="Seconds" Style="{StaticResource EmCaption}"/>
+
                 <Label Style="{StaticResource EmCaption}">
+
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Device " />
                             <Span Text="{Binding DeviceSerialNumber}" />
                         </FormattedString>
                     </Label.FormattedText>
+
                 </Label>
+
                 <Label Text="Please leave your device undisturbed on a stationary surface" Style="{StaticResource Notice}"/>
+
                 <Label Text="If your device is plugged into the charging cable, please do not unplug your device." Style="{StaticResource Notice}" />
-                <Button Text="Exit" Style="{StaticResource defaultButton}" Clicked="OnCancel" />
+
             </StackLayout>
-        </ScrollView>
+
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToQCCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

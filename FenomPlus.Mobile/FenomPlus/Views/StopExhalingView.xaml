@@ -10,19 +10,24 @@
     Shell.NavBarIsVisible="{Binding ShowAllMenus}"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
+
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
+
     <ContentPage.Content>
-        <StackLayout VerticalOptions="CenterAndExpand"
-                     HorizontalOptions="CenterAndExpand">
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
             <Image Source="StopSign"
                    Aspect="AspectFit"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    WidthRequest="400"
-                   HeightRequest="400"
-            />
+                   HeightRequest="400"/>
+
         </StackLayout>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

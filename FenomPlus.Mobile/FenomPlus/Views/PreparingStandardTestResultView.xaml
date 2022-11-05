@@ -12,22 +12,19 @@
     NavigationPage.HasNavigationBar="False">
 
     <Shell.TitleView>
+
         <Image Source="TitleIcon"
                Aspect="AspectFit"
                Margin="0, 16"
-               HorizontalOptions="StartAndExpand"
-        />
+               HorizontalOptions="StartAndExpand"/>
+
     </Shell.TitleView>
 
     <ContentPage.Content>
 
-            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
             <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" AutoPlay="True" AutoHide="False"/>
-
-            <!--<Label Text="Preparing results, please wait."
-                   Style="{StaticResource Header}"
-                   VerticalTextAlignment="Center"/>-->
 
         </StackLayout>
 

@@ -56,12 +56,12 @@ namespace FenomPlus.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public async void OnExitToDashboard(object sender, EventArgs e)
-        {
-            if (Services.BleHub.IsNotConnectedRedirect())
-            {
-                await Services.Navigation.ChooseTestView();
-            }
-        }
+        //public async void OnExitToDashboard(object sender, EventArgs e)
+        //{
+        //    if (Services.BleHub.IsNotConnectedRedirect())
+        //    {
+        //        await Services.Navigation.ChooseTestView();
+        //    }
+        //}
     }
 }

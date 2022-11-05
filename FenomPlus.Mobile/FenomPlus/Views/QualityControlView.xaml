@@ -79,10 +79,9 @@
                 <Button Text="Exit"
                         Grid.Row="2"
                         Style="{StaticResource defaultButton}"
-                        Clicked="OnExitToDashboard"
-                        VerticalOptions="End"
+                        Command="{Binding ExitToDashboardCommand }"
                         HorizontalOptions="End"
-                        />
+                        Margin="0,0,40,0"/>
 
             </Grid> 
         

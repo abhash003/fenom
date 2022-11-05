@@ -1,32 +1,15 @@
-﻿namespace FenomPlus.ViewModels
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
+
+namespace FenomPlus.ViewModels
 {
-    public class HumanControlPassedViewModel : BaseViewModel
+    public partial class HumanControlPassedViewModel : BaseViewModel
     {
         public HumanControlPassedViewModel()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnAppearing()
-        {
-            base.OnAppearing();
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void OnDisappearing()
-        {
-            base.OnDisappearing();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

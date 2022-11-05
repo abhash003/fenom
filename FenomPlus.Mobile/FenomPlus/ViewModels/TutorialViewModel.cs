@@ -3,6 +3,7 @@ using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Xamarin.Forms;
@@ -65,9 +66,6 @@ namespace FenomPlus.ViewModels
         protected bool _showSuccess;
 
 
-
-
-
         public TutorialViewModel()
         {
             InitializeCollection();
@@ -87,8 +85,14 @@ namespace FenomPlus.ViewModels
 
         partial void OnGuageDataChanged(float value)
         {
-            //UpdateContent();
-
+            if ((Stop == false) && (TutorialIndex == 4))
+            {
+                PlaySounds.PlaySound(GuageData);
+            }
+            else
+            {
+                PlaySounds.StopAll();
+            }
         }
 
         private void InitializeCollection()
@@ -143,37 +147,25 @@ namespace FenomPlus.ViewModels
 
             ShowGuage = ShowStep;
 
+            Title = Tutorials[TutorialIndex].Title;
+            Info = Tutorials[TutorialIndex].Info;
+            Illustration = Tutorials[TutorialIndex].Illustration;
+            ShowStep = Tutorials[TutorialIndex].ShowStep;
+
             if (TutorialIndex <= 0)
             {
-                Title = Tutorials[TutorialIndex].Title;
-                Info = Tutorials[TutorialIndex].Info;
-                Illustration = Tutorials[TutorialIndex].Illustration;
-                ShowStep = Tutorials[TutorialIndex].ShowStep;
-
                 ShowBack = false;
                 ShowNext = true;
                 ShowTutorial = true;
                 ShowSuccess = false;
             }
-            else if (TutorialIndex < Tutorials.Count)
+            else
             {
-                Title = Tutorials[TutorialIndex].Title;
-                Info = Tutorials[TutorialIndex].Info;
-                Illustration = Tutorials[TutorialIndex].Illustration;
-                ShowStep = Tutorials[TutorialIndex].ShowStep;
-
                 ShowBack = true;
                 ShowNext = true;
                 ShowTutorial = true;
                 ShowSuccess = false;
             }
-            //else
-            //{
-            //    ShowBack = true;
-            //    ShowNext = false;
-            //    ShowTutorial = false;
-            //    ShowSuccess = true;
-            //}
 
             if ((Stop == false) && (TutorialIndex == 4))
             {
@@ -223,15 +215,6 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void Next()
         {
-            //if (TutorialIndex < Tutorials.Count - 1)
-            //{
-            //    TutorialIndex += 1;
-            //}
-            //else
-            //{
-            //    TutorialIndex = Tutorials.Count - 1;
-            //}
-
             if (TutorialIndex + 1 < Tutorials.Count)
             {
                 TutorialIndex = TutorialIndex + 1;
@@ -246,22 +229,11 @@ namespace FenomPlus.ViewModels
                 ShowTutorial = false;
                 ShowSuccess = true;
             }
-
         }
 
         [RelayCommand]
         private void Back()
         {
-            //if (TutorialIndex >= Tutorials.Count)
-            //{
-            //    TutorialIndex = Tutorials.Count;
-            //}
-
-            //if (TutorialIndex > 0)
-            //{
-            //    TutorialIndex -= 1;
-            //}
-
             if (TutorialIndex >= Tutorials.Count)
             {
                 TutorialIndex = Tutorials.Count;
@@ -271,30 +243,5 @@ namespace FenomPlus.ViewModels
                 TutorialIndex = TutorialIndex - 1;
             }
         }
-
-
-        //private void OnNext(object sender, EventArgs e)
-        //{
-        //    if (TutorialIndex + 1 < Tutorials.Count)
-        //    {
-        //        TutorialIndex = TutorialIndex + 1;
-        //    }
-        //    else
-        //    {
-        //        TutorialIndex = Tutorials.Count;
-        //    }
-        //}
-
-        //private void OnBack(object sender, EventArgs e)
-        //{
-        //    if (TutorialIndex >= Tutorials.Count)
-        //    {
-        //        TutorialIndex = Tutorials.Count;
-        //    }
-        //    if (TutorialIndex > 0)
-        //    {
-        //        TutorialIndex = TutorialIndex - 1;
-        //    }
-        //}
     }
 }

@@ -4,49 +4,30 @@ namespace FenomPlus.Views
 {
     public partial class TestResultsView : BaseContentPage
     {
-        private TestResultsViewModel model;
+        private readonly TestResultsViewModel TestResultsViewModel;
 
         public TestResultsView()
         {
             InitializeComponent();
-            BindingContext = model = new TestResultsViewModel();
+            BindingContext = TestResultsViewModel = new TestResultsViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            TestResultsViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            TestResultsViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void Finish_Pressed(System.Object sender, System.EventArgs e)
-        {
-            Services.Navigation.ChooseTestView();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            TestResultsViewModel.NewGlobalData();
         }
     }
 }

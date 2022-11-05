@@ -5,40 +5,31 @@ namespace FenomPlus.Views
 {
     public partial class ViewRecentErrorsView : BaseContentPage
     {
-        private ViewRecentErrorsViewModel model;
+        private ViewRecentErrorsViewModel ViewRecentErrorsViewModel;
 
         public ViewRecentErrorsView()
         {
             InitializeComponent();
-            BindingContext = model = new ViewRecentErrorsViewModel();
+            BindingContext = ViewRecentErrorsViewModel = new ViewRecentErrorsViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            ViewRecentErrorsViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            ViewRecentErrorsViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            ViewRecentErrorsViewModel.NewGlobalData();
         }
     }
 }

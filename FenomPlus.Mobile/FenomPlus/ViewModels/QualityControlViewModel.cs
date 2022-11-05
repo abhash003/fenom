@@ -43,7 +43,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
             UpdateGrid();
@@ -53,7 +53,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
@@ -75,7 +75,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

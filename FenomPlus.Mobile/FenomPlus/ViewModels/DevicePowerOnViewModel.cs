@@ -136,7 +136,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnAppearing()
+        public override void OnAppearing()
         {
             Stop = false;
             StopScan();
@@ -146,7 +146,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void OnDisappearing()
+        public override void OnDisappearing()
         {
             Stop = true;
             StopScan();
@@ -155,7 +155,7 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        override public void NewGlobalData()
+        public override void NewGlobalData()
         {
             base.NewGlobalData();
         }

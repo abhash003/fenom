@@ -18,7 +18,7 @@
 
     <ContentPage.Content>
 
-        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20,20,20,20">
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -84,34 +84,25 @@
 
             <Grid x:Name="ButtonsGrid" Grid.Row="2" Margin="0,20,0,0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
 
-                <Button Text="BACK"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        HorizontalOptions="End"
-                        Style="{StaticResource defaultButton}"
-                        IsVisible="{Binding ShowBack}"
-                        Command="{Binding BackCommand}"/>
+                    <Button Text="BACK"
+                            Style="{StaticResource defaultButton}"
+                            IsVisible="{Binding ShowBack}"
+                            Command="{Binding BackCommand}"/>
 
                     <Button Text="NEXT"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            HorizontalOptions="Start"
                             Style="{StaticResource defaultButton}"
                             IsVisible="{Binding ShowNext}"
                             Command="{Binding NextCommand}"/>
 
-                    <Button Text="EXIT"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            HorizontalOptions="End"
-                            Margin="0,0,40,0"
-                            Style="{StaticResource defaultButton}"
-                            Clicked="OnCancelled" />
+                </StackLayout>
+
+                <Button Text="EXIT"
+                        HorizontalOptions="End"
+                        Margin="0,0,40,0"
+                        Style="{StaticResource defaultButton}"
+                        Command="{Binding ExitToDashboardCommand}"/>
 
             </Grid>
 

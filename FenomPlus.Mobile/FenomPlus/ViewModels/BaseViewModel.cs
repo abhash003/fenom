@@ -9,14 +9,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class BaseViewModel : ObservableObject, IBaseServices
+    public partial class BaseViewModel : ObservableObject, IBaseServices
     {
         public IAppServices Services => IOC.Services;
         public IBleHubService BleHub => Services.BleHub;
@@ -30,109 +32,44 @@ namespace FenomPlus.ViewModels
         public IQualityControlDevicesRepository QCDevicesRepo => Services.Database.QualityControlDevicesRepo;
         public IQualityControlUsersRepository QCUsersRepo => Services.Database.QualityControlUsersRepo;
 
-        bool isBusy = false;
-        public bool IsBusy
-        {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
+        [ObservableProperty]
+        bool _isBusy = false;
 
-        private string title = string.Empty;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
+        [ObservableProperty]
+        private string _title = string.Empty;
 
-        private string deviceSerialNumber;
-        public string DeviceSerialNumber
-        {
-            get { return deviceSerialNumber; }
-            set { SetProperty(ref deviceSerialNumber, value);  }
-        }
+        [ObservableProperty]
+        private string _deviceSerialNumber;
 
-        private string firmware;
-        public string Firmware
-        {
-            get { return firmware; }
-            set { SetProperty(ref firmware, value); }
-        }
+        [ObservableProperty]
+        private string _firmware;
+
+        [ObservableProperty]
+        private string _deviceConnectedStatus;
+
+        [ObservableProperty]
+        private bool _isDeviceConnected;
+
+        [ObservableProperty]
+        private bool _showAllMenus;
+
+        [ObservableProperty] private DeviceStatus _deviceStatus;
+
+        [ObservableProperty]
+        private bool errorVisible;
+
+        [ObservableProperty]
+        private int _errorHeight;
 
 
-        private string deviceConnectedStatus;
-        public string DeviceConnectedStatus
-        {
-            get { return deviceConnectedStatus; }
-            set { SetProperty(ref deviceConnectedStatus, value); }
-        }
-        
-
-        private bool isDeviceConnected;
-        public bool IsDeviceConnected
-        {
-            get { return isDeviceConnected; }
-            set { SetProperty(ref isDeviceConnected, value); }
-        }
-
-        private bool showAllMenus;
-        public bool ShowAllMenus
-        {
-            get { return showAllMenus; }
-            set { SetProperty(ref showAllMenus, value); }
-        }
-        
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="backingStore"></param>
-        /// <param name="value"></param>
-        /// <param name="propertyName"></param>
-        /// <param name="onChanged"></param>
-        /// <returns></returns>
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName] string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
-        public ICommand DismissCommand { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public BaseViewModel()
         {
             DeviceStatus = new DeviceStatus();
 
             RefreshIconStatus();
             ShowAllMenus = true;
-            NewGlobalData();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void RefreshIconStatus()
         {
             int BatteryLevel = Cache.BatteryLevel;
@@ -147,54 +84,27 @@ namespace FenomPlus.ViewModels
             DeviceStatus.UpdateTemperature(0);
         }
 
-        public DeviceStatus DeviceStatus { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool errorVisable;
-        public bool ErrorVisable
+        [RelayCommand]
+        public async Task ExitToDashboard()
         {
-            get => errorVisable;
-            set
-            {
-                errorVisable = value;
-                OnPropertyChanged("ErrorVisable");
-            }
+            await Services.Navigation.ChooseTestView();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private int errorHeight;
-        public int ErrorHeight
+        [RelayCommand]
+        public async Task ExitToQC()
         {
-            get => errorHeight;
-            set
-            {
-                errorHeight = value;
-                OnPropertyChanged("ErrorHeight");
-            }
+            await Services.Navigation.QualityControlView();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual void OnAppearing()
         {
             NewGlobalData();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual void OnDisappearing()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual void NewGlobalData()
         {
             RefreshIconStatus();
