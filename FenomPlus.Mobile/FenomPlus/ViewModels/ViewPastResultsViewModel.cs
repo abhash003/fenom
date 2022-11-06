@@ -32,11 +32,13 @@ namespace FenomPlus.ViewModels
                 PastResultsData.Add(record.ConvertForGrid());
             }
 
-            AddMockData(); // For debugging only!
+            InjectMockData(); //For debugging only!
         }
 
-        private void AddMockData()
+        private void InjectMockData()
         {
+            //For debugging only!
+
             PastResultsData.Clear();
 
             int maxEntries = 160;
@@ -59,16 +61,6 @@ namespace FenomPlus.ViewModels
 
                 PastResultsData.Add(record.ConvertForGrid());
             }
-        }
-
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
-        }
-
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
         }
 
         public override void NewGlobalData()

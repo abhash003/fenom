@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.TestErrorView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -32,7 +31,7 @@
 
                 <Label Text="{Binding ErrorMessage}" Style="{StaticResource Notice}"/>
 
-                <Label Text="You can test again or follow the tutorial." Style="{StaticResource Notice}"/>
+                <Label Text="You can test again or follow the tutorial." Style="{StaticResource Notice}" Margin="0,0,0,20"/>
 
                 <Label Style="{StaticResource Notice}">
 
@@ -40,7 +39,7 @@
 
                         <FormattedString>
 
-                            <Span Text="For more information about this error,&#x0a;" />
+                            <Span Text="For more information about this error,&#x0a;"/>
 
                             <Span Text="please view our online FAQ" TextColor="DodgerBlue"/>
 

@@ -8,8 +8,6 @@
     xmlns:sfgrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:sfPager="clr-namespace:Syncfusion.SfDataGrid.XForms.DataPager;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
-    Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -38,8 +36,8 @@
                     VerticalOptions="FillAndExpand"
                     BorderWidth="1">
 
-                    <sfgrid:SfDataGrid x:Name="dataGrid"
-                                       ItemsSource="{Binding PagedSource, Source={x:Reference dataPager}}"
+                    <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
+                                       ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
                                        VerticalOptions="FillAndExpand"
                                        HorizontalOptions="FillAndExpand"
                                        AllowResizingColumn="False"
@@ -60,33 +58,33 @@
 
                             <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
                             
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" Width="125" />
+                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError"/>
                             
-                            <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description" Width="400" />
+                            <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
                             
-                            <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity" Width="75" />
+                            <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity"/>
                             
-                            <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Width="125" />
+                            <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
                             
-                            <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware" Width="75" />
+                            <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware"/>
                             
-                            <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software" Width="75" />
+                            <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
 
                         </sfgrid:SfDataGrid.Columns>
 
                         <sfgrid:SfDataGrid.SortColumnDescriptions>
-                            <sfgrid:SortColumnDescription ColumnName="DateOfTest" SortDirection="Descending" />
+                            <sfgrid:SortColumnDescription ColumnName="DateError" SortDirection="Descending" />
                         </sfgrid:SfDataGrid.SortColumnDescriptions>
 
                     </sfgrid:SfDataGrid>
 
                 </border:SfBorder>
 
-                <sfPager:SfDataPager x:Name ="dataPager"
+                <sfPager:SfDataPager x:Name ="DataPager"
                                      PageSize="5" 
                                      NumericButtonCount="14"
                                      AutoEllipsisMode="None"
-                                     Source="{Binding DataForGrid}"
+                                     Source="{Binding RecentErrorsData}"
                                      HorizontalOptions="FillAndExpand"
                                      HeightRequest="50"
                                      Margin="0,0,0,4"
@@ -102,5 +100,7 @@
                     Margin="0,0,40,0"/>
 
         </Grid>
+
     </ContentPage.Content>
+
 </views:BaseContentPage>

@@ -7,7 +7,6 @@
     xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
     x:Class="FenomPlus.Views.DevicePowerOnView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">

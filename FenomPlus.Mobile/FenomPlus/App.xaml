@@ -45,6 +45,7 @@
         </Style>
         <Style x:Key="MainView" TargetType="ContentPage">
             <Setter Property="BackgroundImageSource" Value="Background.png" />
+            <Setter Property="BackgroundImageSource" Value="Background.png" />
         </Style>
         <Style x:Key="MainContentView" TargetType="ContentView">
             <!--<Setter Property="BackgroundImageSource" Value="Background.png" />-->

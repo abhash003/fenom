@@ -11,22 +11,25 @@ namespace FenomPlus.Views
     // Documentation:  https://help.syncfusion.com/xamarin/datagrid/export-to-pdf
     // Documentation:  https://help.syncfusion.com/xamarin/pdf-viewer/printing-pdf-files
 
-
     public partial class ViewPastResultsView : BaseContentPage
     {
-        private ViewPastResultsViewModel model;
+        private readonly ViewPastResultsViewModel ViewPastResultsViewModel;
 
         public ViewPastResultsView()
         {
             InitializeComponent();
 
-            BindingContext = model = new ViewPastResultsViewModel();
+            BindingContext = ViewPastResultsViewModel = new ViewPastResultsViewModel();
             PastResultsDataGrid.GridStyle = new CustomGridStyle();
 
             PastResultsDataGrid.Focus();
 
-            //dataGrid.AllowSorting
-            //dataGrid.ExportToPdf or ExportToPdfGrid
+            //PastResultsDataGrid.ExportToPdf or ExportToPdfGrid
+        }
+
+        private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         private void PDFExport_Clicked(object sender, EventArgs e)
@@ -49,30 +52,27 @@ namespace FenomPlus.Views
         {
             base.OnAppearing();
 
-            PastResultsDataGrid.Columns.Suspend();
-
-            model.UpdatePastResultsDataCommand.Execute(null);
-
-            // Add or Remove More columns
+            // Chunk of code is for optimization
+            PastResultsDataGrid.Columns.Suspend(); 
+            ViewPastResultsViewModel.UpdatePastResultsDataCommand.Execute(null);
             PastResultsDataGrid.Columns.Resume();
             PastResultsDataGrid.RefreshColumns();
         }
 
+
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            ViewPastResultsViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            ViewPastResultsViewModel.NewGlobalData();
         }
 
-        private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
+
     }
 }

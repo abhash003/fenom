@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.TestFailedView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -24,19 +23,19 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+            <StackLayout Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="10">
 
-                <Label Text="Standard Test Failed" Style="{StaticResource Header}"/>
+                <Label Text="Standard Test Failed" Style="{StaticResource Header}" HorizontalTextAlignment="Start"/>
                 
-                <Label Text="Possible issues affecting your test include:" Style="{StaticResource Description}"/>
-                
-                <Label Text="- Exhaling too hard" Style="{StaticResource Description}"/>
-                
-                <Label Text="- Exhaling too soft" Style="{StaticResource Description}" />
-                
-                <Label Text="- Exhaling at an unsteady rate that was not in range" Style="{StaticResource Description}"/>
-                
-                <Label Text="- Failing to make a seal around the mouthpiece" Style="{StaticResource Description}"/>
+                <Label Text="Possible issues affecting your test include:" Style="{StaticResource Description}" Margin="0,0,0,10"/>
+
+                <Label Text="     ● Exhaling too hard" Style="{StaticResource Description}"/>
+
+                <Label Text="     ● Exhaling too soft" Style="{StaticResource Description}" />
+
+                <Label Text="     ● Exhaling at an unsteady rate that was not in range" Style="{StaticResource Description}"/>
+
+                <Label Text="     ● Failing to make a seal around the mouthpiece" Style="{StaticResource Description}"/>
 
             </StackLayout>
 

@@ -7,80 +7,55 @@ namespace FenomPlus.Views
 {
     public partial class ChooseTestView : BaseContentPage
     {
-        private ChooseTestViewModel model;
+        private readonly ChooseTestViewModel ChooseTestViewModel;
 
         public ChooseTestView()
         {
             InitializeComponent();
-            BindingContext = model = new ChooseTestViewModel();
+            BindingContext = ChooseTestViewModel = new ChooseTestViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void OnStandartTest(object sender, EventArgs e)
+        private async void OnStandardTest(object sender, EventArgs e)
         {
-            if (Services.BleHub.IsNotConnectedRedirect() && Cache.ReadyForTest)
+            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect() && ChooseTestViewModel.Cache.ReadyForTest)
             {
-                Cache.TestType = TestTypeEnum.Standard;
-                await BleHub.StartTest(BreathTestEnum.Start10Second);
-                await Services.Navigation.BreathManeuverFeedbackView();
+                ChooseTestViewModel.Cache.TestType = TestTypeEnum.Standard;
+                await ChooseTestViewModel.BleHub.StartTest(BreathTestEnum.Start10Second);
+                await ChooseTestViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
 
-        /// <summary>
-        ///     
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void OnShortTest(object sender, EventArgs e)
         {
-            if (Services.BleHub.IsNotConnectedRedirect() && Cache.ReadyForTest)
+            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect() && ChooseTestViewModel.Cache.ReadyForTest)
             {
-                Cache.TestType = TestTypeEnum.Short;
-                await BleHub.StartTest(BreathTestEnum.Start6Second);
-                await Services.Navigation.BreathManeuverFeedbackView();
+                ChooseTestViewModel.Cache.TestType = TestTypeEnum.Short;
+                await ChooseTestViewModel.BleHub.StartTest(BreathTestEnum.Start6Second);
+                await ChooseTestViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void OnTutorial(object sender, EventArgs e)
         {
-            await Services.Navigation.TutorialView();
+            await ChooseTestViewModel.Services.Navigation.TutorialView();
         }
         
-
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            ChooseTestViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            ChooseTestViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            ChooseTestViewModel.NewGlobalData();
         }
     }
 }

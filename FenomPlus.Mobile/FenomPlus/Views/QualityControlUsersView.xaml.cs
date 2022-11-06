@@ -10,23 +10,15 @@ namespace FenomPlus.Views
 {
     public partial class QualityControlUsersView : BaseContentPage
     {
-        private QualityControlUsersViewModel model;
+        private readonly QualityControlUsersViewModel QualityControlUsersViewModel;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public QualityControlUsersView()
         {
             InitializeComponent();
-            BindingContext = model = new QualityControlUsersViewModel();
+            BindingContext = QualityControlUsersViewModel = new QualityControlUsersViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void OnDelete(object sender, EventArgs e)
         {
             dataGrid.SelectedItem = (sender as Button).BindingContext;
@@ -34,29 +26,19 @@ namespace FenomPlus.Views
             bool answer = await DisplayAlert("Delete User", "Are you sure you want to delete user " + dataModel.User, "Yes, Delete", "Cancel");
             if (answer == true)
             {
-                QCUsersRepo.Delete(dataModel);
-                model.UpdateGrid();
+                QualityControlUsersViewModel.QCUsersRepo.Delete(dataModel);
+                QualityControlUsersViewModel.UpdateGrid();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnRenew(object sender, EventArgs e)
         {
             dataGrid.SelectedItem = (sender as Button).BindingContext;
             QualityControlUsersDataModel dataModel = (QualityControlUsersDataModel)dataGrid.SelectedItem;
-            Services.Cache.QCUsername = dataModel.User;
+            QualityControlUsersViewModel.Services.Cache.QCUsername = dataModel.User;
             // goto test now
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public async void OnAddNew(System.Object sender, System.EventArgs e)
         {
             // prompt for usere here
@@ -64,7 +46,7 @@ namespace FenomPlus.Views
             if (string.IsNullOrEmpty(userName)) return;
 
             // try to find if user is already in database
-            QualityControlUsersTb user = QCUsersRepo.FindUser(userName);
+            QualityControlUsersTb user = QualityControlUsersViewModel.QCUsersRepo.FindUser(userName);
             if (user == null)
             {
                 QualityControlUsersDBModel userDBModel = new Models.QualityControlUsersDBModel() {
@@ -72,37 +54,28 @@ namespace FenomPlus.Views
                     QCStatus = "Conditional",
                     DateAdded = DateTime.Now.ToString()
                 };
-                QualityControlUsersTb record = QCUsersRepo.Insert(userDBModel);
+                QualityControlUsersTb record = QualityControlUsersViewModel.QCUsersRepo.Insert(userDBModel);
                 userDBModel = record.Convert();
-                model.UpdateGrid();
+                QualityControlUsersViewModel.UpdateGrid();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            QualityControlUsersViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            QualityControlUsersViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            QualityControlUsersViewModel.NewGlobalData();
         }
     }
 }

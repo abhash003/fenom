@@ -66,7 +66,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 _DataForGrid = value;
-                OnPropertyChanged("DataForGrid");
+                OnPropertyChanged("RecentErrorsData");
             }
         }
 

@@ -9,7 +9,6 @@
     xmlns:sfPager="clr-namespace:Syncfusion.SfDataGrid.XForms.DataPager;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -39,7 +38,7 @@
                     BorderWidth="1">
 
                     <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
-                                       ItemsSource="{Binding PagedSource, Source={x:Reference dataPager}}"
+                                       ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
                                        VerticalOptions="FillAndExpand"
                                        HorizontalOptions="FillAndExpand"
                                        AllowResizingColumn="False"
@@ -60,7 +59,7 @@
 
                             <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
 
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="TestDateTime"/>
+                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
 
                             <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
 
@@ -80,7 +79,7 @@
 
                 </border:SfBorder>
 
-                <sfPager:SfDataPager x:Name ="dataPager"
+                <sfPager:SfDataPager x:Name ="DataPager"
                                      PageSize="5" 
                                      NumericButtonCount="14"
                                      AutoEllipsisMode="None"

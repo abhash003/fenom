@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <views:BaseContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                  xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
-                  xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
-                  x:Class="FenomPlus.Views.QCTabView"
-                  Shell.PresentationMode="ModalAnimated"
-                  Title="Quality Control"
-                  Style="{StaticResource MainView}"
-                  Shell.NavBarIsVisible="True"
-                  NavigationPage.HasBackButton="False"
-                  NavigationPage.HasNavigationBar="False">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+    xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+    x:Class="FenomPlus.Views.QCTabView"
+    Shell.PresentationMode="ModalAnimated"
+    Title="Quality Control"
+    Shell.NavBarIsVisible="True"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False">
 
     <Shell.TitleView>
         <controls:TitleContentView />
@@ -38,78 +37,94 @@
 
     <ContentPage.Content>
 
-        <Grid>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid HorizontalOptions="StartAndExpand" Grid.Row="0" Margin="10,0,10,0" ColumnSpacing="5">
+            <Grid Grid.Row="0" >
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="0">
+                <Grid HorizontalOptions="StartAndExpand" Grid.Row="0" Margin="10,0,10,0" ColumnSpacing="5">
 
-                <Button Text="Perform QC"
-                        Style="{StaticResource TabButtons}"
-                        Clicked="Tab1ButtonClicked"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <BoxView x:Name="Tab1ButtonBorder" 
-                         Style="{StaticResource TabButtonUnderline}"
-                         IsVisible="True"/>
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="0">
 
-                </StackLayout>
-
-                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
-
-                    <Button Text="User Management"
+                    <Button Text="Perform QC"
                             Style="{StaticResource TabButtons}"
-                            Clicked="Tab2ButtonClicked"/>
+                            Clicked="Tab1ButtonClicked"/>
 
-                    <BoxView x:Name="Tab2ButtonBorder" 
+                    <BoxView x:Name="Tab1ButtonBorder" 
                              Style="{StaticResource TabButtonUnderline}"
-                             IsVisible="False"/>
+                             IsVisible="True"/>
 
-                </StackLayout>
+                    </StackLayout>
 
-                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="2">
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
 
-                    <Button Text="Device Management"
-                            Style="{StaticResource TabButtons}"
-                            Clicked="Tab3ButtonClicked"/>
+                        <Button Text="User Management"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab2ButtonClicked"/>
 
-                    <BoxView x:Name="Tab3ButtonBorder" 
-                             Style="{StaticResource TabButtonUnderline}"
-                             IsVisible="False"/>
+                        <BoxView x:Name="Tab2ButtonBorder" 
+                                 Style="{StaticResource TabButtonUnderline}"
+                                 IsVisible="False"/>
 
-                </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="2">
+
+                        <Button Text="Device Management"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab3ButtonClicked"/>
+
+                        <BoxView x:Name="Tab3ButtonBorder" 
+                                 Style="{StaticResource TabButtonUnderline}"
+                                 IsVisible="False"/>
+
+                    </StackLayout>
+
+                </Grid>
+
+                <Grid Grid.Row="1" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill">
+
+                    <!--Temporary Placeholders-->
+
+                    <ContentView x:Name="Tab1Content" IsVisible="True">
+                        <Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </ContentView>
+
+                    <ContentView x:Name="Tab2Content" IsVisible="False">
+                        <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </ContentView>
+
+                    <ContentView x:Name="Tab3Content" IsVisible="False">
+                        <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </ContentView>
+
+                </Grid>
 
             </Grid>
 
-            <Grid Grid.Row="1" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToDashboardCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
 
-                <!--Temporary Placeholders-->
-
-                <ContentView x:Name="Tab1Content" IsVisible="True">
-                    <Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </ContentView>
-
-                <ContentView x:Name="Tab2Content" IsVisible="False">
-                    <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </ContentView>
-
-                <ContentView x:Name="Tab3Content" IsVisible="False">
-                    <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </ContentView>
-
-            </Grid>
-
-        </Grid> 
+        </Grid>
 
     </ContentPage.Content>
 

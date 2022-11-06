@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.HumanControlPassedView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">

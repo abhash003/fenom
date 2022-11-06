@@ -6,121 +6,125 @@
 
     <ContentPage.Content>
 
-        <Grid>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="120"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Text="Status Page"
-                   Style="{StaticResource Header}"
-                   HorizontalOptions="CenterAndExpand" 
-                   Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Margin="0,20,0,0"/>
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="100"/>
+                </Grid.RowDefinitions>
+
+                <Label Text="Status Page"
+                       Style="{StaticResource Header}"
+                       HorizontalOptions="CenterAndExpand" 
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Margin="0,20,0,0"/>
 
 
-            <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
+                <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
 
-                <Label Text="Software Info..." Style="{StaticResource Description24}" Margin="0,0,0,20"/>
+                    <Label Text="Software Info..." Style="{StaticResource Description24}" Margin="0,0,0,20"/>
 
-                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal">
 
-                    <Label Text="Software Version: "
-                           Style="{StaticResource Description}"/>
+                        <Label Text="Software Version: "
+                               Style="{StaticResource Description}"/>
 
-                    <Label Text="{Binding SoftwareVersion }"
-                           Style="{StaticResource Description}"/>
+                        <Label Text="{Binding SoftwareVersion }"
+                               Style="{StaticResource Description}"/>
 
-                </StackLayout>
+                    </StackLayout>
 
-                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal">
 
-                    <Label Text="Software Build: "
-                           Style="{StaticResource Description}"/>
+                        <Label Text="Software Build: "
+                               Style="{StaticResource Description}"/>
 
-                    <Label Text="{Binding SoftwareBuild }"
-                           Style="{StaticResource Description}"/>
+                        <Label Text="{Binding SoftwareBuild }"
+                               Style="{StaticResource Description}"/>
 
-                </StackLayout>
+                    </StackLayout>
 
-                <StackLayout Orientation="Horizontal" >
+                    <StackLayout Orientation="Horizontal" >
 
-                    <Label Text="Connection Status: "
-                           Style="{StaticResource Description}"/>
+                        <Label Text="Connection Status: "
+                               Style="{StaticResource Description}"/>
 
-                    <Label Text="{Binding DeviceConnectionStatus }"
-                           Style="{StaticResource Description}"/>
+                        <Label Text="{Binding DeviceConnectionStatus }"
+                               Style="{StaticResource Description}"/>
 
-                </StackLayout>
-
-            </StackLayout>
-
-            <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
-
-                <Label Text="Device Info..." Style="{StaticResource Description24}"  IsVisible="{Binding DeviceIsConnected}" Margin="0,0,0,20"/>
-
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
-
-                    <Label Text="Name: "
-                           Style="{StaticResource Description}"/>
-
-                    <Label Text="{Binding DeviceName }"
-                           Style="{StaticResource Description}"/>
-
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
-
-                    <Label Text="Manufacturer: "
-                           Style="{StaticResource Description}"/>
-
-                    <Label Text="Caire Diagnostics"
-                           Style="{StaticResource Description}"/>
+                    </StackLayout>
 
                 </StackLayout>
 
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+                <StackLayout HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
 
-                    <Label Text="Serial Number: "
-                           Style="{StaticResource Description}"/>
+                    <Label Text="Device Info..." Style="{StaticResource Description24}"  IsVisible="{Binding DeviceIsConnected}" Margin="0,0,0,20"/>
 
-                    <Label Text="{Binding DeviceSerialNumber }"
-                           Style="{StaticResource Description}"/>
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                        <Label Text="Name: "
+                               Style="{StaticResource Description}"/>
+
+                        <Label Text="{Binding DeviceName }"
+                               Style="{StaticResource Description}"/>
+
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                        <Label Text="Manufacturer: "
+                               Style="{StaticResource Description}"/>
+
+                        <Label Text="Caire Diagnostics"
+                               Style="{StaticResource Description}"/>
+
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                        <Label Text="Serial Number: "
+                               Style="{StaticResource Description}"/>
+
+                        <Label Text="{Binding DeviceSerialNumber }"
+                               Style="{StaticResource Description}"/>
+
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+
+                        <Label Text="Firmware Version: "
+                               Style="{StaticResource Description}"/>
+
+                        <Label Text="{Binding Firmware }"
+                               Style="{StaticResource Description}"/>
+
+                    </StackLayout>
 
                 </StackLayout>
 
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding DeviceIsConnected}">
+            </Grid>
 
-                    <Label Text="Firmware Version: "
-                           Style="{StaticResource Description}"/>
-
-                    <Label Text="{Binding Firmware }"
-                           Style="{StaticResource Description}"/>
-
-                </StackLayout>
-
-            </StackLayout>
-
-
-                <Button Text="Exit"
-                        Grid.Row="2" 
-                        Grid.Column="0" 
-                        Grid.ColumnSpan="2"
-                        Style="{StaticResource defaultButton}"
-                        Command="{Binding ExitToDashboardCommand }"
-                        HorizontalOptions="End"
-                        Margin="0,0,40,0"/>
-
-
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToDashboardCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
 
         </Grid>
 

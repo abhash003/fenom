@@ -10,23 +10,15 @@ namespace FenomPlus.Views
 {
     public partial class QualityControlDevicesView : BaseContentPage
     {
-        private QualityControlDevicesViewModel model;
+        private readonly QualityControlDevicesViewModel QualityControlDevicesViewModel;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public QualityControlDevicesView()
         {
             InitializeComponent();
-            BindingContext = model = new QualityControlDevicesViewModel();
+            BindingContext = QualityControlDevicesViewModel = new QualityControlDevicesViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void OnDelete(object sender, EventArgs e)
         {
             dataGrid.SelectedItem = (sender as Button).BindingContext;
@@ -34,16 +26,11 @@ namespace FenomPlus.Views
             bool answer = await DisplayAlert("Delete Device", "Are you sure you want to delete device " + dataModel.SerialNumber, "Yes, Delete", "Cancel");
             if (answer == true)
             {
-                QCDevicesRepo.Delete(dataModel);
-                model.UpdateGrid();
+                QualityControlDevicesViewModel.QCDevicesRepo.Delete(dataModel);
+                QualityControlDevicesViewModel.UpdateGrid();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public async void OnAddNew(System.Object sender, System.EventArgs e)
         {
             // prompt for usere here
@@ -51,7 +38,7 @@ namespace FenomPlus.Views
             if (string.IsNullOrEmpty(serialNumber)) return;
 
             // try to find if user is already in database
-            QualityControlDevicesTb device = QCDevicesRepo.FindDevice(serialNumber);
+            QualityControlDevicesTb device = QualityControlDevicesViewModel.QCDevicesRepo.FindDevice(serialNumber);
             if (device == null)
             {
                 QualityControlDeviceDBModel deviceDBModel = new Models.QualityControlDeviceDBModel()
@@ -59,37 +46,28 @@ namespace FenomPlus.Views
                     SerialNumber = serialNumber,
                     LastConnected = DateTime.Now.ToString()
                 };
-                QualityControlDevicesTb record = QCDevicesRepo.Insert(deviceDBModel);
+                QualityControlDevicesTb record = QualityControlDevicesViewModel.QCDevicesRepo.Insert(deviceDBModel);
                 deviceDBModel = record.Convert();
-                model.UpdateGrid();
+                QualityControlDevicesViewModel.UpdateGrid();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            QualityControlDevicesViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            QualityControlDevicesViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            QualityControlDevicesViewModel.NewGlobalData();
         }
     }
 }

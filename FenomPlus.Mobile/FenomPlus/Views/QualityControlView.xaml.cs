@@ -11,23 +11,15 @@ namespace FenomPlus.Views
 {
     public partial class QualityControlView : BaseContentPage
     {
-        private QualityControlViewModel model;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public QualityControlView()
         {
             InitializeComponent();
-            BindingContext = model = new QualityControlViewModel();
+            BindingContext = QualityControlViewModel = new QualityControlViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void OnDelete(object sender, EventArgs e)
         {
             dataGrid.SelectedItem = (sender as Button).BindingContext;
@@ -35,19 +27,14 @@ namespace FenomPlus.Views
             bool answer = await DisplayAlert("Delete Test Record", "Are you sure you want to delete record?", "Yes, Delete", "Cancel");
             if (answer == true)
             {
-                QCRepo.Delete(dataModel);
-                model.UpdateGrid();
+                QualityControlViewModel.QCRepo.Delete(dataModel);
+                QualityControlViewModel.UpdateGrid();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public async void OnAddNew(System.Object sender, System.EventArgs e)
         {
-            IEnumerable<QualityControlUsersTb> records = QCUsersRepo.SelectAll();
+            IEnumerable<QualityControlUsersTb> records = QualityControlViewModel.QCUsersRepo.SelectAll();
             List<string> userRecords = new List<string>();
             foreach (QualityControlUsersTb userRecord in records)
             {
@@ -60,42 +47,33 @@ namespace FenomPlus.Views
             if (string.IsNullOrEmpty(userName)) return;
 
             // ok goto test, for now create random
-            Services.Cache.QCUsername = userName;
+            QualityControlViewModel.Services.Cache.QCUsername = userName;
 
             // send QC model
-            await BleHub.StartTest(BreathTestEnum.QuailtyControl);
+            await QualityControlViewModel.BleHub.StartTest(BreathTestEnum.QuailtyControl);
 
             //ok goto test now.
-            await Services.Navigation.NegativeControlPerformView();
+            await QualityControlViewModel.Services.Navigation.NegativeControlPerformView();
 
-            model.UpdateGrid();
+            QualityControlViewModel.UpdateGrid();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            QualityControlViewModel.OnAppearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            QualityControlViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            QualityControlViewModel.NewGlobalData();
         }
     }
 }

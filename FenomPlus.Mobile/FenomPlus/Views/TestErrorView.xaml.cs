@@ -15,12 +15,12 @@ namespace FenomPlus.Views
 
         private async void GoToTutorial(object sender, EventArgs e)
         {
-            await Services.Navigation.TutorialView();
+            await TestErrorViewModel.Services.Navigation.TutorialView();
         }
 
         private async void StartTest(object sender, EventArgs e)
         {
-            await Services.Navigation.ChooseTestView();
+            await TestErrorViewModel.Services.Navigation.ChooseTestView();
         }
 
         protected override void OnAppearing()

@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.TestResultsView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">

@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.StopExhalingView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="{Binding ShowAllMenus}"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">

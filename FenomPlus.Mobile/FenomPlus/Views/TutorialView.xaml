@@ -7,7 +7,6 @@
     x:Class="FenomPlus.Views.TutorialView"
     x:Name="TutorialPage" 
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">

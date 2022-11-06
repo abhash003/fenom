@@ -7,7 +7,6 @@
     x:Class="FenomPlus.Views.ChooseTestView"
     x:Name="ChooseTestsView"
     Title="{Binding Title}"
-    Style="{StaticResource MainView}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -39,7 +38,7 @@
                            HorizontalOptions="Start"
                            VerticalOptions="StartAndExpand">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandartTest"/>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandardTest"/>
                         </Frame.GestureRecognizers>
                         <StackLayout VerticalOptions="CenterAndExpand">
                             <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
