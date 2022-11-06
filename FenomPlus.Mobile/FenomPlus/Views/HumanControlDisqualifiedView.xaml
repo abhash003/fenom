@@ -50,7 +50,7 @@
                     </Label.FormattedText>
                 </Label>
 
-                <Button Text="EXIT" Style="{StaticResource defaultButton}" Command="{Binding ExitToQC}"/>
+                <Button Text="EXIT" Style="{StaticResource defaultButton}" Command="{Binding ExitToQCCommand}"/>
 
             </StackLayout>
 
