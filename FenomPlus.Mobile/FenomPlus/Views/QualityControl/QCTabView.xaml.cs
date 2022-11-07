@@ -1,4 +1,5 @@
 ﻿using System;
+using FenomPlus.ViewModels;
 using Xamarin.Forms;
 
 namespace FenomPlus.Views
@@ -17,6 +18,8 @@ namespace FenomPlus.Views
             Tab3Content.IsVisible = false;
 
             UpdateTabButtonBorder();
+
+            BindingContext = new BaseViewModel();
         }
 
         public void Tab1ButtonClicked(object sender, EventArgs eventArgs)

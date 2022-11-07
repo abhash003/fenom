@@ -1,8 +1,9 @@
 ﻿using FenomPlus.Services;
 using System;
+using FenomPlus.Views;
 using Xamarin.Forms;
 
-namespace FenomPlus.Views
+namespace FenomPlus
 {
     public partial class AppShell : Shell
     {

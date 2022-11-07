@@ -60,9 +60,6 @@
     <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Remove="AppShell.xaml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="AppShell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -75,7 +72,7 @@
     <Compile Remove="ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\AppShell.xaml.cs">
+    <Compile Update="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Other\StatusDeviceInfoView.xaml.cs">

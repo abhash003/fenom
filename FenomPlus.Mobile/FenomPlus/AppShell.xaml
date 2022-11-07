@@ -1,93 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+﻿<Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:FenomPlus.Views"
-       Title="FenomPlus"
-       x:Class="FenomPlus.AppShell">
+       xmlns:pages="clr-namespace:FenomPlus.Views"
+       xmlns:controls="clr-namespace:FenomPlus.Controls"
+       x:Class="FenomPlus.AppShell"
+       BackgroundColor="#4895D9"
+       Shell.NavBarIsVisible="True"
+       NavigationPage.HasBackButton="False"
+       NavigationPage.HasNavigationBar="False">
 
-    <!--
-        The overall app visual hierarchy is defined here, along with navigation.
+    <Shell.FlyoutHeader>
+        <controls:HeaderContentView />
+    </Shell.FlyoutHeader>
+
+    <ShellContent FlyoutItemIsVisible="False"
+                  Title="DevicePowerOnView"
+                  Route="DevicePowerOnView"
+                  ContentTemplate="{DataTemplate pages:DevicePowerOnView}"/>
+
+    <ShellContent x:Name="StatusDeviceInfo"
+                  Icon="icon_feed"
+                  Title="Status Screen / Device Info"
+                  ContentTemplate="{DataTemplate pages:StatusDeviceInfoView}"
+                  Route="StatusDeviceInfoView"
+                  IsVisible="true"/>
+
+    <ShellContent x:Name="QualityControl"
+                  Icon="QualityControlIcon"
+                  Title="Quality Control"
+                  ContentTemplate="{DataTemplate pages:QCTabView}" 
+                  Route="QCTabView"
+                  IsVisible="true"/>
+
+    <ShellContent x:Name="PastResults"
+                  Icon="PastResultIcon"
+                  Title="Past Results"
+                  ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
+                  Route="ViewPastResultsView"
+                  IsVisible="true"/>
+
+    <ShellContent x:Name="ViewRecentErrors"
+                  Icon="RecentErrorIcon"
+                  Title="Error Log"
+                  ContentTemplate="{DataTemplate pages:ViewRecentErrorsView}"
+                  Route="ViewRecentErrorsView"
+                  IsVisible="true"/>
+
+    <ShellContent Title="Pairing Menu"
+                  Icon="BluetoothIcon"
+                  ContentTemplate="{DataTemplate pages:PairingView}"
+                  Route="PairingView"
+                  IsVisible="true"/>
+
+
+    <!--The following are for debugging purposes only-->
+
+    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="ChooseTestView"              ContentTemplate="{DataTemplate pages:ChooseTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPerformingView"    Route="HumanControlPerformingView"  ContentTemplate="{DataTemplate pages:HumanControlPerformingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPreparingView"     Route="HumanControlPreparingView"   ContentTemplate="{DataTemplate pages:HumanControlPreparingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPerformView"    Route="NegativeControlPerformView"  ContentTemplate="{DataTemplate pages:NegativeControlPerformView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlFailView"       Route="NegativeControlFailView"     ContentTemplate="{DataTemplate pages:NegativeControlFailView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView"       Route="NegativeControlPassView"     ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="PreparingStandardTestResultView" Route="PreparingStandardTestResultView" ContentTemplate="{DataTemplate pages:PreparingStandardTestResultView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="StartTestView"                 Route="StartTestView"               ContentTemplate="{DataTemplate pages:StartTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="StopExhalingView"              Route="StopExhalingView"            ContentTemplate="{DataTemplate pages:StopExhalingView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestErrorView"                 Route="TestErrorView"               ContentTemplate="{DataTemplate pages:TestErrorView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestFailedView"                Route="TestFailedView"              ContentTemplate="{DataTemplate pages:TestFailedView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="TestResultsView"               Route="TestResultsView"             ContentTemplate="{DataTemplate pages:TestResultsView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:TutorialView}" />
     
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
-    -->
-
-    <Shell.Resources>
-        <ResourceDictionary>
-            <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
-                <Setter Property="Shell.TitleColor" Value="White" />
-                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
-                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
-            </Style>
-            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
-            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
-
-            <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
-            -->
-            <Style Class="FlyoutItemLabelStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="White"></Setter>
-            </Style>
-            <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{x:OnPlatform UWP=Transparent, iOS=White}" />
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Selected">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-
-            <!--
-            Custom Style you can apply to any Flyout Item
-            -->
-            <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </Shell.Resources>
-
-    <!-- 
-        When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
-        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    -->
-
-    <!--
-        TabBar lets you define content that won't show up in a flyout menu. When this content is active
-        the flyout menu won't be available. This is useful for creating areas of the application where 
-        you don't want users to be able to navigate away from. If you would like to navigate to this 
-        content you can do so by calling 
-        await Shell.Current.GoToAsync("//LoginPage");
-    -->
-    <TabBar>
-        <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
-    </TabBar>
-
 </Shell>

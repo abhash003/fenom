@@ -34,6 +34,9 @@ namespace FenomPlus.Views
 
         private void PDFExport_Clicked(object sender, EventArgs e)
         {
+            //PastResultsDataGrid
+
+
             //DataGridPdfExportingController pdfExport = new DataGridPdfExportingController();
             //MemoryStream stream = new MemoryStream();
             //var exportToPdf = pdfExport.ExportToPdf(this.dataGrid, new DataGridPdfExportOption()

@@ -12,7 +12,9 @@ namespace FenomPlus
         public App()
         {
             InitializeComponent();
+
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzMxNjc0QDMyMzAyZTMzMmUzMGNPR1AvcXFJQUtROGhzTDFic05UQ1FtTkFEZDY2eHJxTHZDOTd0ZUx1UlU9");
+
             AppShell = new AppShell();
             MainPage = AppShell;
         }
