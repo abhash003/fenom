@@ -1,5 +1,7 @@
 ﻿
-namespace FenomPlus.ViewModels
+using FenomPlus.ViewModels;
+
+namespace FenomPlus.Controls
 {
     public class HeaderContentViewModel : BaseViewModel
     {

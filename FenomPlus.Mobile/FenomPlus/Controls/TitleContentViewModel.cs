@@ -5,9 +5,11 @@ using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.Services;
 using System;
+using FenomPlus.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace FenomPlus.ViewModels
+namespace FenomPlus.Controls
 {
     public partial class TitleContentViewModel : BaseViewModel
     {

@@ -6,11 +6,11 @@ using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public class QualityControlUsersViewModel : BaseViewModel
+    public class QualityControlDevicesViewModel : BaseViewModel
     {
-        public QualityControlUsersViewModel()
+        public QualityControlDevicesViewModel()
         {
-            DataForGrid = new RangeObservableCollection<QualityControlUsersDataModel>();
+            DataForGrid = new RangeObservableCollection<QualityControlDevicesDataModel>();
             UpdateGrid();
         }
 
@@ -20,8 +20,8 @@ namespace FenomPlus.ViewModels
         public void UpdateGrid()
         {
             DataForGrid.Clear();
-            IEnumerable<QualityControlUsersTb> records = QCUsersRepo.SelectAll();
-            foreach (QualityControlUsersTb record in records)
+            IEnumerable<QualityControlDevicesTb> records = QCDevicesRepo.SelectAll();
+            foreach (QualityControlDevicesTb record in records)
             {
                 AddToGrid(record);
             }
@@ -31,7 +31,7 @@ namespace FenomPlus.ViewModels
         /// 
         /// </summary>
         /// <param name="record"></param>
-        public void AddToGrid(QualityControlUsersTb record)
+        public void AddToGrid(QualityControlDevicesTb record)
         {
             if (record != null)
             {
@@ -59,8 +59,8 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private RangeObservableCollection<QualityControlUsersDataModel> _DataForGrid;
-        public RangeObservableCollection<QualityControlUsersDataModel> DataForGrid
+        private RangeObservableCollection<QualityControlDevicesDataModel> _DataForGrid;
+        public RangeObservableCollection<QualityControlDevicesDataModel> DataForGrid
         {
             get => _DataForGrid;
             set

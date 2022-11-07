@@ -3,15 +3,14 @@ using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
-using FenomPlus.SDK.Core.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public class QualityControlViewModel : BaseViewModel
+    public class QualityControlUsersViewModel : BaseViewModel
     {
-        public QualityControlViewModel()
+        public QualityControlUsersViewModel()
         {
-            DataForGrid = new RangeObservableCollection<QualityControlDataModel>();
+            DataForGrid = new RangeObservableCollection<QualityControlUsersDataModel>();
             UpdateGrid();
         }
 
@@ -21,8 +20,8 @@ namespace FenomPlus.ViewModels
         public void UpdateGrid()
         {
             DataForGrid.Clear();
-            IEnumerable<QualityControlTb> records = QCRepo.SelectAll();
-            foreach (QualityControlTb record in records)
+            IEnumerable<QualityControlUsersTb> records = QCUsersRepo.SelectAll();
+            foreach (QualityControlUsersTb record in records)
             {
                 AddToGrid(record);
             }
@@ -32,7 +31,7 @@ namespace FenomPlus.ViewModels
         /// 
         /// </summary>
         /// <param name="record"></param>
-        public void AddToGrid(QualityControlTb record)
+        public void AddToGrid(QualityControlUsersTb record)
         {
             if (record != null)
             {
@@ -47,7 +46,6 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             UpdateGrid();
-            BleHub.StartTest(BreathTestEnum.Stop);
         }
 
         /// <summary>
@@ -61,8 +59,8 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private RangeObservableCollection<QualityControlDataModel> _DataForGrid;
-        public RangeObservableCollection<QualityControlDataModel> DataForGrid
+        private RangeObservableCollection<QualityControlUsersDataModel> _DataForGrid;
+        public RangeObservableCollection<QualityControlUsersDataModel> DataForGrid
         {
             get => _DataForGrid;
             set
