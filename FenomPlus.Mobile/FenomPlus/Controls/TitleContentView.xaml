@@ -3,28 +3,47 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="FenomPlus.Controls.TitleContentView">
+
     <ContentView.Content>
+
         <Grid>
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
             <Image  Grid.Column="1"
                     Source="TitleIcon"
                     Aspect="AspectFit"
                     Margin="0, 0, 20, 0"
-                    HorizontalOptions="CenterAndExpand"
-            />
-            <StackLayout Grid.Column="2" Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10" Margin="5,0,5,0">
-                <Image Source="{Binding DeviceStatus.Battery.Image}" Aspect="AspectFit" />
-                <Image Source="{Binding DeviceStatus.QualityControlExpiration.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.Sensor.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.Device.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.RelativeHumidity.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.Temperature.Image}" Aspect="AspectFit"  />
-                <Image Source="{Binding DeviceStatus.Pressure.Image}" Aspect="AspectFit"  />
+                    HorizontalOptions="CenterAndExpand"/>
+
+            <StackLayout Grid.Column="2" 
+                         Orientation="Horizontal" 
+                         HorizontalOptions="EndAndExpand" 
+                         Spacing="10" 
+                         Margin="5,0,5,0">
+
+                <Image Source="{Binding Battery.Image}" Aspect="AspectFit" />
+
+                <Image Source="{Binding QualityControlExpiration.Image}" Aspect="AspectFit"  />
+
+                <Image Source="{Binding Sensor.Image}" Aspect="AspectFit"  />
+
+                <Image Source="{Binding Device.Image}" Aspect="AspectFit"  />
+
+                <Image Source="{Binding RelativeHumidity.Image}" Aspect="AspectFit"  />
+
+                <Image Source="{Binding Temperature.Image}" Aspect="AspectFit"  />
+
+                <Image Source="{Binding Pressure.Image}" Aspect="AspectFit"  />
+
             </StackLayout>
+
         </Grid>
+
     </ContentView.Content>
+
 </ContentView>

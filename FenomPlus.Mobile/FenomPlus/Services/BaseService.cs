@@ -6,8 +6,10 @@ namespace FenomPlus.Services
 	public class BaseService
 	{
 		protected IAppServices Services;
-		
-		public BaseService(IAppServices services)
+
+        public TinyIoCContainer Container => TinyIoCContainer.Current;
+
+        public BaseService(IAppServices services)
 		{
 			this.Services = services;
 		}
@@ -16,10 +18,5 @@ namespace FenomPlus.Services
 		{
 			this.Services = IOC.Services;
 		}
-
-		public TinyIoCContainer Container
-		{
-			get { return TinyIoCContainer.Current; }
-		}
-	}
+    }
 }

@@ -33,7 +33,7 @@ namespace FenomPlus.ViewModels
                 RecentErrorsData.Add(record.ConvertForGrid());
             }
 
-            InjectMockData();  //For debugging only!
+            //InjectMockData();  //For debugging only!
         }
 
         private void InjectMockData()

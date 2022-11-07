@@ -7,14 +7,14 @@ namespace FenomPlus
 {
     public partial class App : Application
     {
-        public static MainView mainView { get; set; }
+        public static AppShell AppShell { get; set; }
 
         public App()
         {
             InitializeComponent();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzMxNjc0QDMyMzAyZTMzMmUzMGNPR1AvcXFJQUtROGhzTDFic05UQ1FtTkFEZDY2eHJxTHZDOTd0ZUx1UlU9");
-            mainView = new MainView();
-            MainPage = mainView;
+            AppShell = new AppShell();
+            MainPage = AppShell;
         }
 
         protected override void OnStart()
@@ -31,9 +31,9 @@ namespace FenomPlus
 
         public static void NotifyViews()
         {
-            if (mainView != null)
+            if (AppShell != null)
             {
-                mainView.NotifyViews();
+                AppShell.NotifyViews();
             }
         }
 
@@ -42,9 +42,9 @@ namespace FenomPlus
         /// </summary>
         public static void NotifyViewModels()
         {
-            if (mainView != null)
+            if (AppShell != null)
             {
-                mainView.NotifyViewModels();
+                AppShell.NotifyViewModels();
             }
         }
 
@@ -55,11 +55,11 @@ namespace FenomPlus
         public static Page GetCurrentPage()
         {
             Page page = null;
-            if ((Current != null) && (mainView.CurrentPage != null))
+            if ((Current != null) && (AppShell.CurrentPage != null))
             {
                 try
                 {
-                    page = mainView.CurrentPage;
+                    page = AppShell.CurrentPage;
                 }
                 catch (Exception ex)
                 {

@@ -13,22 +13,12 @@ namespace FenomPlus.SDK.Core.Models
         public byte Pressure;
         public byte BatteryLevel;       // new version
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public static EnvironmentalInfo Create(byte[] data)
         {
             EnvironmentalInfo environmentalInfo = new EnvironmentalInfo();
             return environmentalInfo.Decode(data);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public EnvironmentalInfo Decode(byte[] data)
         {
             try

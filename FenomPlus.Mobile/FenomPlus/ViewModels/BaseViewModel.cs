@@ -1,20 +1,11 @@
-﻿using FenomPlus.Database.Repository.Interfaces;
-using FenomPlus.Enums;
-using FenomPlus.Helpers;
-using FenomPlus.Interfaces;
-using FenomPlus.Models;
-using FenomPlus.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using FenomPlus.Database.Repository.Interfaces;
+using FenomPlus.Interfaces;
+using FenomPlus.Services;
+using System.Threading.Tasks;
+using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
@@ -61,11 +52,9 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private int _errorHeight;
 
-
         public BaseViewModel()
         {
             DeviceStatus = new DeviceStatus();
-
             RefreshIconStatus();
             ShowAllMenus = true;
         }

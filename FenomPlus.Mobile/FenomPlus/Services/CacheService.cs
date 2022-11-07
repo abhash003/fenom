@@ -14,7 +14,7 @@ namespace FenomPlus.Services
 {
     public class CacheService : BaseService, ICacheService
     {
-        private RingBuffer BreathBuffer;
+        private readonly RingBuffer BreathBuffer;
 
         public CacheService(IAppServices services) : base(services)
         {
@@ -43,27 +43,41 @@ namespace FenomPlus.Services
         }
 
         public RangeObservableCollection<DebugLog> DebugList {get;set;}
+
         public ILoggerFactory Logger { get; set; }
 
         public int BatteryLevel { get; set; }
         
         public DateTime SensorExpireDate { get; set; }
+
         public TestTypeEnum TestType { get; set; }
+
         public int BreathFlowTimer { get; set; }
+
         public int NOScore { get; set; }
+
         public float HumanControlResult { get; set; }
+
         private float _BreathFlow { get; set; }
-        public float BreathFlow { get { return _BreathFlow / 1000; } set { _BreathFlow = value; } }
+
+        public float BreathFlow 
+        { 
+            get => _BreathFlow / 1000;
+            set { _BreathFlow = value; }
+        }
         
         public EnvironmentalInfo _EnvironmentalInfo { get; set; }
+
         public BreathManeuver _BreathManeuver { get; set; }
+
         public DeviceInfo _DeviceInfo { get; set; }
+
         public DebugMsg _DebugMsg { get; set; }
 
         public string deviceConnectedStatus = "Unknown";
         public string DeviceConnectedStatus
         {
-            get { return deviceConnectedStatus; }
+            get => deviceConnectedStatus;
             set {
                 deviceConnectedStatus = value;
                 NotifyViews();
@@ -74,7 +88,7 @@ namespace FenomPlus.Services
         public string firmware;
         public string Firmware
         {
-            get { return firmware; }
+            get => firmware;
             set {
                 firmware = value;
                 NotifyViews();
@@ -85,7 +99,7 @@ namespace FenomPlus.Services
         public string deviceSerialNumber;
         public string DeviceSerialNumber
         {
-            get { return deviceSerialNumber; }
+            get => deviceSerialNumber;
             set {
                 deviceSerialNumber = value;
                 NotifyViews();
@@ -93,28 +107,16 @@ namespace FenomPlus.Services
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private static ISettings AppSettings
-        {
-            get { return CrossSettings.Current; }
-        }
+        private static ISettings AppSettings => CrossSettings.Current;
 
         public bool ReadyForTest { get; set; }
+
         public bool FenomReady { get; set; }
+
         public float FenomValue { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string QCUsername { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data)
         {
             try
@@ -133,11 +135,6 @@ namespace FenomPlus.Services
             return _EnvironmentalInfo;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public BreathManeuver DecodeBreathManeuver(byte[] data)
         {
             try
@@ -176,11 +173,6 @@ namespace FenomPlus.Services
             return _BreathManeuver;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public DeviceInfo DecodeDeviceInfo(byte[] data)
         {
             try
@@ -214,11 +206,6 @@ namespace FenomPlus.Services
             return _DeviceInfo;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
             try
@@ -240,17 +227,11 @@ namespace FenomPlus.Services
             return _DebugMsg;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private void NotifyViews()
         {
             App.NotifyViews();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private void NotifyViewModels()
         {
             App.NotifyViewModels();

@@ -1,42 +1,18 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Forms;
 
 namespace FenomPlus.Models
 {
-    public class SensorStatus : BaseModel
+    public partial class SensorStatus : ObservableObject
     {
+        [ObservableProperty]
         private ImageSource image;
-        public ImageSource Image
-        {
-            get => image;
-            set
-            {
-                image = value;
-                OnPropertyChanged("Image");
-            }
-        }
 
-        private string value;
-        public string Value
-        {
-            get => value;
-            set
-            {
-                this.value = value;
-                OnPropertyChanged("Value");
-            }
-        }
+        [ObservableProperty]
+        private string _value;
 
-        private Color color;
-        public Color Color
-        {
-            get => color;
-            set
-            {
-                color = value;
-                OnPropertyChanged("Color");
-            }
-        }
-
+        [ObservableProperty]
+        private Color _color;
     }
 }
