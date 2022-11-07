@@ -55,23 +55,23 @@ namespace FenomPlus.ViewModels
         public BaseViewModel()
         {
             DeviceStatus = new DeviceStatus();
-            RefreshIconStatus();
+            //RefreshIconStatus();
             ShowAllMenus = true;
         }
 
-        public void RefreshIconStatus()
-        {
-            int BatteryLevel = Cache.BatteryLevel;
-            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
+        //public void RefreshIconStatus()
+        //{
+        //    int BatteryLevel = Cache.BatteryLevel;
+        //    int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
 
-            DeviceStatus.UpdateBattery(BatteryLevel);
-            DeviceStatus.UpdateDevice(daysRemaining);
-            DeviceStatus.UpdateSensor(daysRemaining);
-            DeviceStatus.UpdateQualityControlExpiration(0);
-            DeviceStatus.UpdatePressure(0);
-            DeviceStatus.UpdateRelativeHumidity(0);
-            DeviceStatus.UpdateTemperature(0);
-        }
+        //    DeviceStatus.UpdateBattery(BatteryLevel);
+        //    DeviceStatus.UpdateDevice(daysRemaining);
+        //    DeviceStatus.UpdateSensor(daysRemaining);
+        //    DeviceStatus.UpdateQualityControlExpiration(0);
+        //    DeviceStatus.UpdatePressure(0);
+        //    DeviceStatus.UpdateRelativeHumidity(0);
+        //    DeviceStatus.UpdateTemperature(0);
+        //}
 
         [RelayCommand]
         public async Task ExitToDashboard()
@@ -96,7 +96,7 @@ namespace FenomPlus.ViewModels
 
         public virtual void NewGlobalData()
         {
-            RefreshIconStatus();
+            //RefreshIconStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
 
             Firmware = Services.Cache.Firmware;

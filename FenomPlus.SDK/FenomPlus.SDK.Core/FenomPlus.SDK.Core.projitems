@@ -20,7 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\AsyncHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Logger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\PerformanceLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SynchronizedList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FenomHubSystemDiscovery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ble\Interface\CharacteristicPropertiesEnum.cs" />

@@ -32,10 +32,10 @@ namespace FenomPlus.Services
             });
 
             DebugList = new RangeObservableCollection<DebugLog>();
-            _EnvironmentalInfo = new EnvironmentalInfo();
-            _BreathManeuver = new BreathManeuver();
-            _DeviceInfo = new DeviceInfo();
-            _DebugMsg = new DebugMsg();
+            EnvironmentalInfo = new EnvironmentalInfo();
+            BreathManeuver = new BreathManeuver();
+            DeviceInfo = new DeviceInfo();
+            DebugMsg = new DebugMsg();
 
             // write path to debug
             DebugList.Insert(0, DebugLog.Create("App Starting"));
@@ -47,7 +47,6 @@ namespace FenomPlus.Services
         public ILoggerFactory Logger { get; set; }
 
         public int BatteryLevel { get; set; }
-        
         public DateTime SensorExpireDate { get; set; }
 
         public TestTypeEnum TestType { get; set; }
@@ -58,50 +57,49 @@ namespace FenomPlus.Services
 
         public float HumanControlResult { get; set; }
 
-        private float _BreathFlow { get; set; }
-
+        private float _breathFlow { get; set; }
         public float BreathFlow 
         { 
-            get => _BreathFlow / 1000;
-            set { _BreathFlow = value; }
+            get => _breathFlow / 1000;
+            set { _breathFlow = value; }
         }
         
-        public EnvironmentalInfo _EnvironmentalInfo { get; set; }
+        public EnvironmentalInfo EnvironmentalInfo { get; set; }
 
-        public BreathManeuver _BreathManeuver { get; set; }
+        public BreathManeuver BreathManeuver { get; set; }
 
-        public DeviceInfo _DeviceInfo { get; set; }
+        public DeviceInfo DeviceInfo { get; set; }
 
-        public DebugMsg _DebugMsg { get; set; }
+        public DebugMsg DebugMsg { get; set; }
 
-        public string deviceConnectedStatus = "Unknown";
+        public string _deviceConnectedStatus = "Unknown";
         public string DeviceConnectedStatus
         {
-            get => deviceConnectedStatus;
+            get => _deviceConnectedStatus;
             set {
-                deviceConnectedStatus = value;
+                _deviceConnectedStatus = value;
                 NotifyViews();
                 NotifyViewModels();
             }
         }
 
-        public string firmware;
+        public string _firmware;
         public string Firmware
         {
-            get => firmware;
+            get => _firmware;
             set {
-                firmware = value;
+                _firmware = value;
                 NotifyViews();
                 NotifyViewModels();
             }
         }
 
-        public string deviceSerialNumber;
+        public string _deviceSerialNumber;
         public string DeviceSerialNumber
         {
-            get => deviceSerialNumber;
+            get => _deviceSerialNumber;
             set {
-                deviceSerialNumber = value;
+                _deviceSerialNumber = value;
                 NotifyViews();
                 NotifyViewModels();
             }
@@ -121,73 +119,73 @@ namespace FenomPlus.Services
         {
             try
             {
-                if (_EnvironmentalInfo == null)
+                if (EnvironmentalInfo == null)
                 {
-                    _EnvironmentalInfo = new EnvironmentalInfo();
+                    EnvironmentalInfo = new EnvironmentalInfo();
                 }
-                _EnvironmentalInfo.Decode(data);
+                EnvironmentalInfo.Decode(data);
 
-                BatteryLevel = _EnvironmentalInfo.BatteryLevel;
+                BatteryLevel = EnvironmentalInfo.BatteryLevel;
 
                 NotifyViews();
                 NotifyViewModels();
             } finally { }
-            return _EnvironmentalInfo;
+            return EnvironmentalInfo;
         }
 
         public BreathManeuver DecodeBreathManeuver(byte[] data)
         {
             try
             {
-                if (_BreathManeuver == null)
+                if (BreathManeuver == null)
                 {
-                    _BreathManeuver = new BreathManeuver();
+                    BreathManeuver = new BreathManeuver();
                 }
 
-                _BreathManeuver.Decode(data);
+                BreathManeuver.Decode(data);
 
-                if (_BreathManeuver.TimeRemaining == 0xff)
+                if (BreathManeuver.TimeRemaining == 0xff)
                 {
                     FenomReady = false;
                     ReadyForTest = true;
                     DeviceConnectedStatus = "Ready For Test";
-                } else if (_BreathManeuver.TimeRemaining == 0xfe) {
+                } else if (BreathManeuver.TimeRemaining == 0xfe) {
                     ReadyForTest = false;
                     FenomReady = true;
-                    FenomValue = _BreathManeuver.NOScore;
-                } else if (_BreathManeuver.TimeRemaining == 0xf0) {
+                    FenomValue = BreathManeuver.NOScore;
+                } else if (BreathManeuver.TimeRemaining == 0xf0) {
                     // log ??
                 } else {
                     DeviceConnectedStatus = "Processing Test";
                     FenomReady = false;
 
                     // add new value and average it
-                    BreathFlow = BreathBuffer.Add(_BreathManeuver.BreathFlow);
+                    BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
 
                     // get the noscores
-                    NOScore = _BreathManeuver.NOScore;
+                    NOScore = BreathManeuver.NOScore;
                 }
                 NotifyViews();
                 NotifyViewModels();
             } finally { }
-            return _BreathManeuver;
+            return BreathManeuver;
         }
 
         public DeviceInfo DecodeDeviceInfo(byte[] data)
         {
             try
             {
-                if (_DeviceInfo == null)
+                if (DeviceInfo == null)
                 {
-                    _DeviceInfo = new DeviceInfo();
+                    DeviceInfo = new DeviceInfo();
                 }
 
-                _DeviceInfo.Decode(data);
+                DeviceInfo.Decode(data);
 
                 // setup serial number
-                if ((_DeviceInfo.SerialNumber != null) && (_DeviceInfo.SerialNumber.Length > 0))
+                if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
                 {
-                    DeviceSerialNumber = $"{Encoding.Default.GetString(_DeviceInfo.SerialNumber)}";
+                    DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
                     Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
 
                     // update the database
@@ -195,27 +193,27 @@ namespace FenomPlus.Services
                 }
 
                 // setup firmware version
-                Firmware = $"{_DeviceInfo.MajorVersion}.{_DeviceInfo.MinorVersion}.{_DeviceInfo.BuildVersion}";
+                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}.{DeviceInfo.BuildVersion}";
 
                 // get SensorExpireDate
-                SensorExpireDate = new DateTime(_DeviceInfo.SensorExpDateYear, _DeviceInfo.SensorExpDateMonth, _DeviceInfo.SensorExpDateDay);
+                SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
 
                 NotifyViews();
                 NotifyViewModels();
             } finally { }
-            return _DeviceInfo;
+            return DeviceInfo;
         }
 
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
             try
             {
-                if (_DebugMsg == null)
+                if (DebugMsg == null)
                 {
-                    _DebugMsg = new DebugMsg();
+                    DebugMsg = new DebugMsg();
                 }
 
-                _DebugMsg.Decode(data);
+                DebugMsg.Decode(data);
 
                 DebugLog debugLog = DebugLog.Create(data);
 
@@ -224,14 +222,16 @@ namespace FenomPlus.Services
                 NotifyViews();
                 NotifyViewModels();
             } finally { }
-            return _DebugMsg;
+            return DebugMsg;
         }
 
+        // ToDo: Remove - bad design
         private void NotifyViews()
         {
             App.NotifyViews();
         }
 
+        // ToDo: Remove - bad design
         private void NotifyViewModels()
         {
             App.NotifyViewModels();

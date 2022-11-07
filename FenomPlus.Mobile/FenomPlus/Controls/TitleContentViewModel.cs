@@ -5,6 +5,7 @@ using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.Services;
 using System;
+using System.Timers;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -62,6 +63,8 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private SensorStatus _pressure;
 
+        private readonly Timer DeviceStatusTimer = new Timer(1000);
+
         public TitleContentViewModel()
         {
             Battery = new SensorStatus();
@@ -70,20 +73,35 @@ namespace FenomPlus.Controls
             Device = new SensorStatus();
             Temperature = new SensorStatus();
             Pressure = new SensorStatus();
+            RelativeHumidity = new SensorStatus();
+
+
+            RefreshIconStatus();
+
+            DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
+        }
+
+        private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            RefreshIconStatus();
         }
 
         public void RefreshIconStatus()
         {
-            int BatteryLevel = Cache.BatteryLevel;
-            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
+            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdateBattery(BatteryLevel);
+            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
             UpdateDevice(daysRemaining);
-            UpdateSensor(daysRemaining);
+
+            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
+
             UpdateQualityControlExpiration(0);
-            UpdatePressure(0);
-            UpdateRelativeHumidity(0);
-            UpdateTemperature(0);
+
+            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
+
+            UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
+
+            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
         }
 
         public SensorStatus UpdateBattery(int value)
@@ -271,22 +289,6 @@ namespace FenomPlus.Controls
 
             OnPropertyChanged(nameof(Pressure));
             return Pressure;
-        }
-
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
-
-        }
-
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-        }
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
         }
     }
 }

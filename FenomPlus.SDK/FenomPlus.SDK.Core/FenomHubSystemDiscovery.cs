@@ -22,12 +22,12 @@ namespace FenomPlus.SDK.Core
         /// </summary>
         public FenomHubSystemDiscovery()
         {
-            PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
+            //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
             _bleRadio = new BleRadioService();
             _bleRadio.DeviceConnectionLost += DeviceConnectionLost;
             _loggingMaager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
-            PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
+            //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
         }
 
         /// <summary>
@@ -68,12 +68,12 @@ namespace FenomPlus.SDK.Core
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "Scan");
+                //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "Scan");
                 _logger.LogDebug("FenomHubSystemDiscovery: Scan");
 
                 if (IsScanning)
                 {
-                    _logger.LogError("FenomHubSystemDeiscovery.Scan() - already scanning");
+                    _logger.LogError("FenomHubSystemDiscovery.Scan() - already scanning");
                     return null;
                 }
 
@@ -107,7 +107,7 @@ namespace FenomPlus.SDK.Core
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "Scan");
+                //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "Scan");
             }
         }
 
@@ -116,12 +116,12 @@ namespace FenomPlus.SDK.Core
         /// </summary>
         public async Task<bool> StopScan()
         {
-            PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "StopScan");
+            //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "StopScan");
             _logger.LogDebug("FenomHubSystemDiscovery: StopScan");
 
             await _bleRadio.StopScan();
 
-            PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "StopScan");
+            //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "StopScan");
             return true;
         }
     }

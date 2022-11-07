@@ -47,7 +47,7 @@ namespace FenomPlus.Services
         {
             if (dateTime == null) dateTime = DateTime.Now;
             string filePath = GetFilePath();
-            string content = string.Format("{0},{1}\n", dateTime.ToString("MM/dd/yyyy HH:mm:ss:ffff"), msg);
+            string content = string.Format("{0},{1}\n", dateTime.ToString("yyyy/mm/dd HH:mm:ss:ffff"), msg);
             File.AppendAllText(filePath, content);
         }
 

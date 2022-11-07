@@ -37,14 +37,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// </summary>
         public BleRadioService()
         {
-            PerformanceLogger.StartLog(typeof(BleRadioService), "BleRadioService");
+            //PerformanceLogger.StartLog(typeof(BleRadioService), "BleRadioService");
 
             Adapter.DeviceAdvertised += Adapter_DeviceAdvertised;
             Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
             Adapter.DeviceConnected += Adapter_DeviceConnected;
             Adapter.DeviceDisconnected += Adapter_DeviceDisconnected;
             Adapter.DeviceConnectionLost += Adapter_DeviceConnectionLost;
-            PerformanceLogger.EndLog(typeof(BleRadioService), "BleRadioService");
+            //PerformanceLogger.EndLog(typeof(BleRadioService), "BleRadioService");
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleRadioService), "Scan");
+                //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan");
                 if (IsScanning)
                 {
                     return false;
@@ -215,14 +215,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                             BleDevice bleDevice = new BleDevice(device);
                             _bondeddevices.Add(bleDevice);
                             deviceFoundCallback?.Invoke(bleDevice);
                         }
                         finally
                         {
-                            PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                         }
                     }
                 }
@@ -240,7 +240,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
                             // create ble device and push to caller
                             BleDevice bleDevice = new BleDevice(e.Device);
@@ -249,7 +249,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                         }
                         finally
                         {
-                            PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                         }
                     }
 
@@ -274,7 +274,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleRadioService), "Scan");
+                //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan");
             }
         }
 
@@ -289,7 +289,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleRadioService), "ConnectToDeviceAsync");
+                //PerformanceLogger.StartLog(typeof(BleRadioService), "ConnectToDeviceAsync");
 
                 if (device == null && id == default)
                 {
@@ -346,7 +346,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleRadioService), "ConnectToDeviceAsync");
+                //PerformanceLogger.EndLog(typeof(BleRadioService), "ConnectToDeviceAsync");
             }
         }
 
@@ -359,7 +359,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             try
             {
                 
-                PerformanceLogger.StartLog(typeof(BleRadioService), "StopScan");
+                //PerformanceLogger.StartLog(typeof(BleRadioService), "StopScan");
 
                 if (IsScanning)
                 {
@@ -374,7 +374,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleRadioService), "StopScan");
+                //PerformanceLogger.EndLog(typeof(BleRadioService), "StopScan");
             }
         }
 
@@ -387,7 +387,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleRadioService), "CharacteristicToString");
+                //PerformanceLogger.StartLog(typeof(BleRadioService), "CharacteristicToString");
 
                 if (characteristic == null)
                 {
@@ -408,7 +408,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleRadioService), "CharacteristicToString");
+                //PerformanceLogger.EndLog(typeof(BleRadioService), "CharacteristicToString");
             }
         }
     }

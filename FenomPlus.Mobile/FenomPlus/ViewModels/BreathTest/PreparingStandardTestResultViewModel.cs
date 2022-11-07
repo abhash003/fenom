@@ -52,13 +52,13 @@ namespace FenomPlus.ViewModels
             if (Seconds > 0) Seconds--;
             if (Cache.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Cache._BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
 
                 ResultsRepo.Insert(model);
 
-                if (Cache._BreathManeuver.StatusCode != 0x00)
+                if (Cache.BreathManeuver.StatusCode != 0x00)
                 {
-                    var errorModel = BreathManeuverErrorDBModel.Create(Cache._BreathManeuver);
+                    var errorModel = BreathManeuverErrorDBModel.Create(Cache.BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();

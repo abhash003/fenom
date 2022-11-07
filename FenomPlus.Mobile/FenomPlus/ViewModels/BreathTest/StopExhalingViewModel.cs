@@ -44,9 +44,9 @@ namespace FenomPlus.ViewModels
             if (Stop == true) seconds = 0;
             if ((Seconds <= 0) && (Stop == false))
             {
-                if (Cache._BreathManeuver.StatusCode != 0x00)
+                if (Cache.BreathManeuver.StatusCode != 0x00)
                 {
-                    var model = BreathManeuverErrorDBModel.Create(Cache._BreathManeuver);
+                    var model = BreathManeuverErrorDBModel.Create(Cache.BreathManeuver);
                     ErrorsRepo.Insert(model);
 
                     PlaySounds.PlayFailedSound();

@@ -56,7 +56,7 @@ namespace FenomPlus.ViewModels
         public async Task FoundDevice(IBleDevice bleDevice)
         {
             Stop = true;
-            Cache._DeviceInfo = null;
+            Cache.DeviceInfo = null;
             await Services.BleHub.RequestDeviceInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
 
@@ -68,8 +68,8 @@ namespace FenomPlus.ViewModels
         /// <returns></returns>
         public bool DeviceInfoTimer()
         {
-            if (Cache._DeviceInfo == null) return true;
-            Cache._EnvironmentalInfo = null;
+            if (Cache.DeviceInfo == null) return true;
+            Cache.EnvironmentalInfo = null;
             Services.BleHub.RequestEnvironmentalInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
@@ -81,7 +81,7 @@ namespace FenomPlus.ViewModels
         /// <returns></returns>
         public bool EnvironmentalInfo()
         {
-            if (Cache._EnvironmentalInfo == null) return true;
+            if (Cache.EnvironmentalInfo == null) return true;
             Services.Navigation.ChooseTestView();
             return false;
         }

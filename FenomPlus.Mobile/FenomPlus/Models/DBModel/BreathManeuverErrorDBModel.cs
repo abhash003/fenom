@@ -34,7 +34,7 @@ namespace FenomPlus.Models
                 Software = VersionTracking.CurrentVersion,
                 Firmware = IOC.Services.Cache.Firmware,
                 DateError = DateTime.Now.ToString(),
-                Humidity = IOC.Services.Cache._EnvironmentalInfo.Humidity.ToString()
+                Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString()
             };
         }
     }

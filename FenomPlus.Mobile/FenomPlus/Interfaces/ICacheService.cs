@@ -12,7 +12,6 @@ namespace FenomPlus.Interfaces
         ILoggerFactory Logger { get; set; }
         string QCUsername { get; set; }
 
-        int BatteryLevel { get; set; }
         DateTime SensorExpireDate { get; set; }
         string DeviceConnectedStatus { get; set; }
         string DeviceSerialNumber { get; set; }
@@ -25,10 +24,10 @@ namespace FenomPlus.Interfaces
         float HumanControlResult { get; set; }
 
         RangeObservableCollection<DebugLog> DebugList { get; set; }
-        EnvironmentalInfo _EnvironmentalInfo { get; set; }
-        BreathManeuver _BreathManeuver { get; set; }
-        DeviceInfo _DeviceInfo { get; set; }
-        DebugMsg _DebugMsg { get; set; }
+        EnvironmentalInfo EnvironmentalInfo { get; set; }
+        BreathManeuver BreathManeuver { get; set; }
+        DeviceInfo DeviceInfo { get; set; }
+        DebugMsg DebugMsg { get; set; }
 
         EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data);
         BreathManeuver DecodeBreathManeuver(byte[] data);

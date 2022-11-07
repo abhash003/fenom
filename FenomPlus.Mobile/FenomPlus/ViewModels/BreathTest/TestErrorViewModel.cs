@@ -38,9 +38,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         private void UpdateError()
         {
-            int statusCode = (Cache._BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
+            int statusCode = (Cache.BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
                 ErrorCodesEnum.code.Length :
-                Cache._BreathManeuver.StatusCode;
+                Cache.BreathManeuver.StatusCode;
 
             ErrorCode = ErrorCodesEnum.code[statusCode];
             ErrorMessage = ErrorCodesEnum.title[statusCode];

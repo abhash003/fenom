@@ -1,4 +1,5 @@
 ﻿using System;
+using FenomPlus.Controls;
 using FenomPlus.Interfaces;
 using TinyIoC;
 
@@ -6,6 +7,8 @@ namespace FenomPlus.Services
 {
     public class AppServices : IAppServices
     {
+        public static TinyIoCContainer Container => TinyIoCContainer.Current;
+
         protected IBleHubService _BleHub;
         public IBleHubService BleHub
         {
@@ -17,7 +20,7 @@ namespace FenomPlus.Services
         public IConfigService Config
         {
             get => _Config ??= Container.Resolve<IConfigService>();
-            set { _Config = value; }
+            set => _Config = value;
         }
 
         protected ICacheService _Cache;
@@ -62,8 +65,6 @@ namespace FenomPlus.Services
             set => _Usb = value;
         }
 
-        public static TinyIoCContainer Container => TinyIoCContainer.Current;
-
         public AppServices()
         {
             try
@@ -74,6 +75,9 @@ namespace FenomPlus.Services
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
                 Container.Register<IDebugLogFileService, DebugLogFileService>().AsSingleton();
                 Container.Register<ILogCatService, LogCatService>().AsSingleton();
+
+                // We only want one instance of this - includes its own timer
+                Container.Register<TitleContentViewModel>().AsSingleton();
             }
             catch (Exception ex)
             {

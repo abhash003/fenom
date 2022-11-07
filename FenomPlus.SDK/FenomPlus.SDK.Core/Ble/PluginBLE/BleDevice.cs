@@ -23,9 +23,9 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// <param name="device"></param>
         public BleDevice(IDevice device)
         {
-            PerformanceLogger.StartLog(typeof(BleDevice), "BleDevice");
+            //PerformanceLogger.StartLog(typeof(BleDevice), "BleDevice");
             Device = device;
-            PerformanceLogger.EndLog(typeof(BleDevice), "BleDevice");
+            //PerformanceLogger.EndLog(typeof(BleDevice), "BleDevice");
         }
 
         // get device here injected from constuctor
@@ -58,7 +58,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleDevice), "ConnectAsync");
+                //PerformanceLogger.StartLog(typeof(BleDevice), "ConnectAsync");
 
                 if (!(GattCharacteristics is SynchronizedList<IGattCharacteristic> gattCharacteristics))
                 {
@@ -111,7 +111,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleDevice), "ConnectAsync");
+                //PerformanceLogger.EndLog(typeof(BleDevice), "ConnectAsync");
             }
         }
 
@@ -123,7 +123,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleDevice), "DisconnectAsync");
+                //PerformanceLogger.StartLog(typeof(BleDevice), "DisconnectAsync");
 
                 var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
                 gattCharacteristics?.Clear();
@@ -143,7 +143,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleDevice), "DisconnectAsync");
+                //PerformanceLogger.EndLog(typeof(BleDevice), "DisconnectAsync");
             }
         }
 
@@ -155,7 +155,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         {
             try
             {
-                PerformanceLogger.StartLog(typeof(BleDevice), "GetCharacterasticsAync");
+                //PerformanceLogger.StartLog(typeof(BleDevice), "GetCharacterasticsAync");
 
                 var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
 
@@ -194,7 +194,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                PerformanceLogger.EndLog(typeof(BleDevice), "GetCharacterasticsAync");
+                //PerformanceLogger.EndLog(typeof(BleDevice), "GetCharacterasticsAync");
             }
         }
 
