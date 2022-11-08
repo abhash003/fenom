@@ -102,7 +102,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 1",
                 Illustration = "TutStep1",
-                Info = "Insert new mouthpiece.",
+                Info = "Place new mouthpiece",
                 ShowStep = false,
             });
 
@@ -110,7 +110,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 2",
                 Illustration = "TutStep2",
-                Info = "Hold the device with your hand firmly grasping the grip area.",
+                Info = "Firmly grasp the device",
                 ShowStep = false,
             });
 
@@ -118,7 +118,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 3",
                 Illustration = "TutStep3",
-                Info = "Make sure patient is seated,\nSitting in an upright position.",
+                Info = "Sit up straight",
                 ShowStep = false,
             });
 
@@ -126,7 +126,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 4",
                 Illustration = "TutStep4",
-                Info = "Breathe in deeply and tightly seal your mouth around the mouthpiece.",
+                Info = "Take a deep breath\n\nPlace your lips around the mouthpiece",
                 ShowStep = false,
             });
 
@@ -134,7 +134,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 5",
                 Illustration = "TutStep5",
-                Info = "Exhale steadily. This moves the needle in the direction of the white dot at the center of the meter.\n\nExhaling to reach the white star is your goal.",
+                Info = "Exhale steadily\n\nHit the star",
                 ShowStep = true,
             });
         }

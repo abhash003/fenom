@@ -166,8 +166,8 @@ namespace FenomPlus.SDK.Core.Features
         /// date and time
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, DateTime _IDVAR)
         {
-            //string dateTime = _IDVAR.ToString("MMddyyyyHHmmss");
-            string dateTime = _IDVAR.ToString("yyyy-MM-ddTHH:mm:ss");
+            //string dateTime = _IDVAR.ToString("MMddyyyyHHmmss");  Older Value
+            string dateTime = _IDVAR.ToString("yyyyMMddTHH:mm:ss");
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
 

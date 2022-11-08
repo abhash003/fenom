@@ -193,7 +193,7 @@ namespace FenomPlus.Services
                 }
 
                 // setup firmware version
-                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}.{DeviceInfo.BuildVersion}";
+                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
