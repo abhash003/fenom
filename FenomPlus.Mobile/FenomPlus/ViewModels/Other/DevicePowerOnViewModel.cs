@@ -114,7 +114,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 seconds = value;
-                Message = string.Format("Scanning for Device Please Wait...", seconds);
+                Message = string.Format("Scanning for Device Please Wait {0} seconds...", seconds);
                 OnPropertyChanged("Seconds");
             }
         }
