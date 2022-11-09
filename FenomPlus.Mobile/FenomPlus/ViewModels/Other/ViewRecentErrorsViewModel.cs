@@ -66,5 +66,15 @@ namespace FenomPlus.ViewModels
         {
             base.NewGlobalData();
         }
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
+        public override void OnDisappearing()
+        {
+            base.OnDisappearing();
+        }
     }
 }
