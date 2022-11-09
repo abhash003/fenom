@@ -102,7 +102,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 1",
                 Illustration = "TutStep1",
-                Info = "Place new mouthpiece",
+                Info = "Snap new mouthpiece onto the device",
                 ShowStep = false,
             });
 
@@ -134,7 +134,7 @@ namespace FenomPlus.ViewModels
             {
                 Title = "Step 5",
                 Illustration = "TutStep5",
-                Info = "Exhale steadily\n\nHit the star",
+                Info = "Exhale into the device now\n\nPoint the needle at the star",
                 ShowStep = true,
             });
         }
