@@ -11,7 +11,7 @@ namespace FenomPlus.Controls
     public partial class TitleContentView : ContentView
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
-        private TitleContentViewModel TitleContentViewModel;
+        private readonly TitleContentViewModel TitleContentViewModel;
 
         public TitleContentView()
         {
@@ -20,11 +20,6 @@ namespace FenomPlus.Controls
             // Use a single app wide instance
             TitleContentViewModel = Container.Resolve<TitleContentViewModel>();
             BindingContext = TitleContentViewModel;
-        }
-
-        private void ImageButton_OnClicked(object sender, EventArgs e)
-        {
-
         }
     }
 }

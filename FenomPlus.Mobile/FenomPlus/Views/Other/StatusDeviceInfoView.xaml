@@ -2,7 +2,18 @@
 <views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
-                 x:Class="FenomPlus.Views.StatusDeviceInfoView">
+                 xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                 x:Class="FenomPlus.Views.StatusDeviceInfoView"    
+                 Shell.PresentationMode="ModalAnimated"
+                 Title="Device Status"
+                 Shell.NavBarIsVisible="True"
+                 NavigationPage.HasBackButton="False"
+                 NavigationPage.HasNavigationBar="False">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
 
     <ContentPage.Content>
 

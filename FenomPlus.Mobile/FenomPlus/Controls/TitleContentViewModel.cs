@@ -6,6 +6,7 @@ using FenomPlus.Models;
 using FenomPlus.Services;
 using System;
 using System.Timers;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -79,6 +80,12 @@ namespace FenomPlus.Controls
             RefreshIconStatus();
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
+        }
+
+        [RelayCommand]
+        private void NavigateToStatusPage()
+        {
+            Services.Navigation.DeviceStatusView();
         }
 
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)

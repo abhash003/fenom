@@ -8,6 +8,7 @@ namespace FenomPlus.Interfaces
         Task GotoBluetoothSettings();
         Task BreathManeuverFeedbackView();
         Task ChooseTestView();
+        Task DeviceStatusView();
         Task DevicePowerOnView();
         Task DeviceReadyView();
         Task HumanControlDisqualifiedView();

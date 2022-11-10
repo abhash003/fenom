@@ -29,6 +29,11 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ChooseTestView)}"), false);
         }
 
+        public async Task DeviceStatusView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StatusDeviceInfoView)}"), false);
+        }
+
         public async Task DevicePowerOnView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DevicePowerOnView)}"), false);
