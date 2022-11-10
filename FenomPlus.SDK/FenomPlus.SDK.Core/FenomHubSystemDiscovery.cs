@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
@@ -17,6 +19,14 @@ namespace FenomPlus.SDK.Core
         private IFenomHubSystem _FenomHubSystem;
         public readonly IBleRadioService BleRadio;
 
+        // Define message
+        public class DeviceConnectedMessage : ValueChangedMessage<bool>
+        {
+            public DeviceConnectedMessage(bool isConnected) : base(isConnected)
+            {
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -32,8 +42,12 @@ namespace FenomPlus.SDK.Core
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
         }
 
+
+
         private void BleRadioOnDeviceConnected(object sender, DeviceEventArgs e)
         {
+            // Send message
+            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
         }
 
         /// <summary>
@@ -43,6 +57,8 @@ namespace FenomPlus.SDK.Core
         /// <param name="e"></param>
         private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
+            // Send message
+            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
         }
 
         /// <summary>
