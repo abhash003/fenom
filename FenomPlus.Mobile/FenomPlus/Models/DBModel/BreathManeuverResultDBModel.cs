@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FenomPlus.Database.Tables;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
@@ -21,7 +22,7 @@ namespace FenomPlus.Models
             return new BreathManeuverResultDBModel()
             {
                 BreathFlow = input.BreathFlow,
-                DateOfTest = DateTime.Now.ToString(),
+                DateOfTest = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                 NOScore = input.NOScore,
                 Pressure = input.Pressure,
                 StatusCode = input.StatusCode,

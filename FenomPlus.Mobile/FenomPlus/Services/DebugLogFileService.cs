@@ -2,6 +2,7 @@
 /// adb -d shell "run-as com.caireinc.fenomplus cat /data/data/com.caireinc.fenomplus/files/.local/share/debug_6222022.txt"
 /// adb -d shell "run-as com.caireinc.fenomplus rm /data/data/com.caireinc.fenomplus/files/.local/share/debug_6222022.txt"
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
@@ -38,7 +39,7 @@ namespace FenomPlus.Services
                 dateTime = DateTime.Now;
 
             string filePath = GetFilePath();
-            string content = $"{dateTime.ToString("yyyy mm dd HH:mm:ss:ffff")},{msg}\n";
+            string content = $"{dateTime.ToString(Constants.DateTimeFormatString, CultureInfo.InvariantCulture)},{msg}\n";
             File.AppendAllText(filePath, content);
         }
 

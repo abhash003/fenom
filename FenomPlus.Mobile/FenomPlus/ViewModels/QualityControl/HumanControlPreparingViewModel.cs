@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FenomPlus.Controls;
 using FenomPlus.Models;
 using Xamarin.Forms;
@@ -29,7 +30,7 @@ namespace FenomPlus.ViewModels
                 {
                     QualityControlDataModel model = new QualityControlDataModel()
                     {
-                        DateTaken = DateTime.Now.ToString(),
+                        DateTaken = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                         User = Services.Cache.QCUsername,
                         TestResult = Cache.BreathFlow,
                         SerialNumber = this.DeviceSerialNumber,

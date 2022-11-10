@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace FenomPlus.Models
@@ -62,7 +63,7 @@ namespace FenomPlus.Models
         public override string ToString()
         {
             string content = string.Format("{0}\n{1}\n{2}\n",
-                DateTime.ToString("yyyy mm dd HH:mm:ss:ffff"),
+                DateTime.ToString(Constants.DateTimeFormatString, CultureInfo.InvariantCulture),
                 HexMsg,
                 Msg);
             return content;

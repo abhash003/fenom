@@ -29,7 +29,7 @@ namespace FenomPlus.Services
         /// 
         /// </summary>
         private IFenomHubSystemDiscovery fenomHubSystemDiscovery;
-        protected  IFenomHubSystemDiscovery FenomHubSystemDiscovery
+        public  IFenomHubSystemDiscovery FenomHubSystemDiscovery
         {
             get
             {

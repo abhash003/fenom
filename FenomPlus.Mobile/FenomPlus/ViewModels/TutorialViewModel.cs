@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Syncfusion.Pdf.Graphics;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -16,33 +17,116 @@ namespace FenomPlus.ViewModels
 
 
         [ObservableProperty]
-        private int _tutorialIndex = 0;
+        private int _tutorialIndex = 1;
 
-        private ObservableCollection<Tutorial> Tutorials { get; set; }
+
+        //partial void OnTutorialIndexChanging(int value)
+        //{
+        //    if (TutorialIndex == 5) // Page with Breath Guage
+        //    {
+        //        BleHub.StartTest(BreathTestEnum.Training);
+        //        Services.BleHub.IsNotConnectedRedirect();
+        //        Stop = false;
+
+        //        // start timer to read measure constantly
+        //        Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
+        //        {
+        //            GuageData = Cache.BreathFlow;
+        //            return !Stop;
+        //        });
+        //    }
+        //    else if (TutorialIndex == 4 || TutorialIndex == 6)
+        //    {
+        //        Stop = true;
+        //        BleHub.StartTest(BreathTestEnum.Stop);
+        //        PlaySounds.StopAll();
+        //    }
+        //}
+
+
+        partial void OnTutorialIndexChanged(int value)
+        {
+            if (TutorialIndex < 1)
+                TutorialIndex = 1;
+
+            if (TutorialIndex > 6)
+                TutorialIndex = 6;
+
+            UpdateContent();
+        }
 
         [ObservableProperty]
-        private string _header;
-
-        [ObservableProperty] 
-        private string _title;
-
-        [ObservableProperty] 
-        private string _info;
-
-        [ObservableProperty] 
-        private string _illustration;
+        private bool _instructionsVisible;
 
         [ObservableProperty]
-        private bool _showStep;
+        private bool _illustrationVisible;
 
         [ObservableProperty]
-        private bool _showImage;
+        private bool _breathGuageVisible;
+
+        [ObservableProperty]
+        private bool _successPanelVisible;
+
+
+        [ObservableProperty] 
+        private string _stepTitle;
+
+        [ObservableProperty] 
+        private string _instructionsText;
+
+        [ObservableProperty] 
+        private string _illustrationSource;
+
 
         [ObservableProperty]
         private bool _showGuage;
 
         [ObservableProperty]
         private float _guageData;
+
+        partial void OnGuageDataChanged(float value)
+        {
+            if ((Stop == false) && (TutorialIndex == 5))
+            {
+                PlaySounds.PlaySound(value);
+            }
+            else
+            {
+                PlaySounds.StopAll();
+            }
+        }
+
+        [RelayCommand]
+        private void PlaySound()
+        {
+            if ((Stop == false) && (TutorialIndex == 5))
+            {
+                PlaySounds.PlaySound(GuageData);
+            }
+            else
+            {
+                PlaySounds.StopAll();
+            }
+        }
+
+        //private float guageData;
+        //private float GuageData
+        //{
+        //    get => guageData;
+        //    set
+        //    {
+        //        guageData = value;
+        //        OnPropertyChanged("GuageData");
+        //        if ((Stop == false) && (TutorialIndex == 5))
+        //        {
+        //            PlaySounds.PlaySound(GuageData);
+        //        }
+        //        else
+        //        {
+        //            PlaySounds.StopAll();
+        //        }
+        //    }
+        //}
 
         [ObservableProperty]
         private string _guageStatus;
@@ -68,112 +152,99 @@ namespace FenomPlus.ViewModels
 
         public TutorialViewModel()
         {
-            InitializeCollection();
-        }
-
-        // These are called when corresponding property changes
-
-        partial void OnTutorialIndexChanged(int value)
-        {
-            UpdateContent();
-        }
-
-        partial void OnShowStepChanged(bool value)
-        {
-            UpdateContent();
-        }
-
-        partial void OnGuageDataChanged(float value)
-        {
-            if ((Stop == false) && (TutorialIndex == 4))
-            {
-                PlaySounds.PlaySound(GuageData);
-            }
-            else
-            {
-                PlaySounds.StopAll();
-            }
-        }
-
-        private void InitializeCollection()
-        {
-            Tutorials = new ObservableCollection<Tutorial>();
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 1",
-                Illustration = "TutStep1",
-                Info = "Snap new mouthpiece onto the device",
-                ShowStep = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 2",
-                Illustration = "TutStep2",
-                Info = "Firmly grasp the device",
-                ShowStep = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 3",
-                Illustration = "TutStep3",
-                Info = "Sit up straight",
-                ShowStep = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 4",
-                Illustration = "TutStep4",
-                Info = "Take a deep breath\n\nPlace your lips around the mouthpiece",
-                ShowStep = false,
-            });
-
-            Tutorials.Add(new Tutorial()
-            {
-                Title = "Step 5",
-                Illustration = "TutStep5",
-                Info = "Exhale into the device now\n\nPoint the needle at the star",
-                ShowStep = true,
-            });
         }
 
         private void UpdateContent()
         {
-            Header = $"Step {TutorialIndex + 1}";
-
-            ShowImage = !ShowStep;
-
-            ShowGuage = ShowStep;
-
-            Title = Tutorials[TutorialIndex].Title;
-            Info = Tutorials[TutorialIndex].Info;
-            Illustration = Tutorials[TutorialIndex].Illustration;
-            ShowStep = Tutorials[TutorialIndex].ShowStep;
-
-            if (TutorialIndex <= 0)
+            switch (TutorialIndex)
             {
-                ShowBack = false;
-                ShowNext = true;
-                ShowTutorial = true;
-                ShowSuccess = false;
-            }
-            else
-            {
-                ShowBack = true;
-                ShowNext = true;
-                ShowTutorial = true;
-                ShowSuccess = false;
-            }
+                // Pages
+                case 1:
+                    InstructionsVisible = true;
+                    IllustrationVisible = true;
+                    BreathGuageVisible = false;
+                    SuccessPanelVisible = false;
 
-            if ((Stop == false) && (TutorialIndex == 4))
-            {
-                PlaySounds.PlaySound(GuageData);
-            }
-            else
-            {
-                PlaySounds.StopAll();
+                    ShowBack = false;
+                    ShowNext = true;
+
+                    StepTitle = "Step 1";
+                    IllustrationSource = "TutStep1";
+                    InstructionsText = "Snap new mouthpiece onto the device";
+                    break;
+
+                case 2:
+                    InstructionsVisible = true;
+                    IllustrationVisible = true;
+                    BreathGuageVisible = false;
+                    SuccessPanelVisible = false;
+
+                    ShowBack = true;
+                    ShowNext = true;
+
+                    StepTitle = "Step 2";
+                    IllustrationSource = "TutStep2";
+                    InstructionsText = "Firmly grasp the device";
+                    break;
+
+                case 3:
+                    InstructionsVisible = true;
+                    IllustrationVisible = true;
+                    BreathGuageVisible = false;
+                    SuccessPanelVisible = false;
+
+                    ShowBack = true;
+                    ShowNext = true;
+
+                    StepTitle = "Step 3";
+                    IllustrationSource = "TutStep3";
+                    InstructionsText = "Sit up straight";
+                    break;
+
+                case 4:
+                    InstructionsVisible = true;
+                    IllustrationVisible = true;
+                    BreathGuageVisible = false;
+                    SuccessPanelVisible = false;
+
+                    ShowBack = true;
+                    ShowNext = true;
+
+                    StepTitle = "Step 4";
+                    IllustrationSource = "TutStep4";
+                    InstructionsText = "Take a deep breath\n\nPlace your lips around the mouthpiece";
+                    break;
+
+                case 5:
+                    InstructionsVisible = true;
+                    IllustrationVisible = false;
+                    BreathGuageVisible = true;
+                    SuccessPanelVisible = false;
+
+                    ShowBack = true;
+                    ShowNext = true;
+
+                    StepTitle = "Step 5";
+                    IllustrationSource = "TutStep5";
+                    InstructionsText = "Exhale into the device now\n\nPoint the needle at the star";
+
+                    //BleHub.StartTest(BreathTestEnum.Training);
+                    //Services.BleHub.IsNotConnectedRedirect();
+                    break;
+
+                case 6: // success Page
+                    InstructionsVisible = false;
+                    IllustrationVisible = false;
+                    BreathGuageVisible = false;
+                    SuccessPanelVisible = true;
+
+                    ShowBack = true;
+                    ShowNext = false;
+
+                    StepTitle = string.Empty;
+                    IllustrationSource = "TutStep5";
+                    InstructionsText = "Exhale into the device now\n\nPoint the needle at the star";
+                    break;
             }
         }
 
@@ -181,7 +252,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
 
-            TutorialIndex = 0;
+            TutorialIndex = 1;
 
             // Force update no matter the TutorialIndex
             UpdateContent();
@@ -201,6 +272,7 @@ namespace FenomPlus.ViewModels
         public override void OnDisappearing()
         {
             base.OnDisappearing();
+
             Stop = true;
             BleHub.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
@@ -215,33 +287,13 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void Next()
         {
-            if (TutorialIndex + 1 < Tutorials.Count)
-            {
-                TutorialIndex = TutorialIndex + 1;
-            }
-            else
-            {
-                TutorialIndex = Tutorials.Count - 1;
-
-                UpdateContent();
-                ShowBack = true;
-                ShowNext = false;
-                ShowTutorial = false;
-                ShowSuccess = true;
-            }
+            TutorialIndex += 1;
         }
 
         [RelayCommand]
         private void Back()
         {
-            if (TutorialIndex >= Tutorials.Count)
-            {
-                TutorialIndex = Tutorials.Count;
-            }
-            if (TutorialIndex > 0)
-            {
-                TutorialIndex = TutorialIndex - 1;
-            }
+            TutorialIndex -= 1;
         }
     }
 }

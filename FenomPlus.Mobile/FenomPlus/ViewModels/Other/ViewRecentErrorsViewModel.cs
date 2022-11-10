@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Database.Adapters;
@@ -52,7 +53,7 @@ namespace FenomPlus.ViewModels
                     ErrorCode = $"Error {i*10}",
                     Description = "Error of type {i*10}",
                     Humidity = "40",
-                    DateError = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString),
+                    DateError = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                     SerialNumber = "F150-00000022",
                     Firmware ="xxxx",
                     Software = "xxxx"

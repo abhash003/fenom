@@ -3,6 +3,7 @@ using FenomPlus.Enums;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
 using System;
+using System.Globalization;
 using Xamarin.Essentials;
 
 namespace FenomPlus.Models
@@ -33,7 +34,7 @@ namespace FenomPlus.Models
                 SerialNumber = IOC.Services.Cache.DeviceSerialNumber,
                 Software = VersionTracking.CurrentVersion,
                 Firmware = IOC.Services.Cache.Firmware,
-                DateError = DateTime.Now.ToString(),
+                DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                 Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString()
             };
         }

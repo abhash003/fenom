@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
@@ -52,7 +53,7 @@ namespace FenomPlus.Views
                 QualityControlUsersDBModel userDBModel = new Models.QualityControlUsersDBModel() {
                     User = userName,
                     QCStatus = "Conditional",
-                    DateAdded = DateTime.Now.ToString()
+                    DateAdded = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture)
                 };
                 QualityControlUsersTb record = QualityControlUsersViewModel.QCUsersRepo.Insert(userDBModel);
                 userDBModel = record.Convert();

@@ -5,7 +5,7 @@ namespace FenomPlus.Views
 {
     public partial class TutorialView : BaseContentPage
     {
-        private TutorialViewModel TutorialViewModel;
+        private readonly TutorialViewModel TutorialViewModel;
 
         public TutorialView()
         {
