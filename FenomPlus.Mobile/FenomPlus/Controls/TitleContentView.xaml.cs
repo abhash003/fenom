@@ -21,5 +21,10 @@ namespace FenomPlus.Controls
             TitleContentViewModel = Container.Resolve<TitleContentViewModel>();
             BindingContext = TitleContentViewModel;
         }
+
+        private void ImageButton_OnClicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }

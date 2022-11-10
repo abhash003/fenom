@@ -26,19 +26,19 @@
                          Spacing="10" 
                          Margin="5,0,5,0">
 
-                <Image Source="{Binding Battery.Image}" Aspect="AspectFit" />
+                <ImageButton Source="{Binding Battery.Image}" Aspect="AspectFit" Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding QualityControlExpiration.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding QualityControlExpiration.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding Sensor.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Sensor.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding Device.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Device.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding RelativeHumidity.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding RelativeHumidity.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding Temperature.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Temperature.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
-                <Image Source="{Binding Pressure.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Pressure.Image}" Aspect="AspectFit"  Clicked="ImageButton_OnClicked"/>
 
             </StackLayout>
 
