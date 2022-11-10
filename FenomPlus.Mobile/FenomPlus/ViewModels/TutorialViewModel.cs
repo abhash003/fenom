@@ -15,35 +15,8 @@ namespace FenomPlus.ViewModels
     {
         private bool Stop;
 
-
         [ObservableProperty]
         private int _tutorialIndex = 1;
-
-
-        //partial void OnTutorialIndexChanging(int value)
-        //{
-        //    if (TutorialIndex == 5) // Page with Breath Guage
-        //    {
-        //        BleHub.StartTest(BreathTestEnum.Training);
-        //        Services.BleHub.IsNotConnectedRedirect();
-        //        Stop = false;
-
-        //        // start timer to read measure constantly
-        //        Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
-        //        {
-        //            GuageData = Cache.BreathFlow;
-        //            return !Stop;
-        //        });
-        //    }
-        //    else if (TutorialIndex == 4 || TutorialIndex == 6)
-        //    {
-        //        Stop = true;
-        //        BleHub.StartTest(BreathTestEnum.Stop);
-        //        PlaySounds.StopAll();
-        //    }
-        //}
-
-
         partial void OnTutorialIndexChanged(int value)
         {
             if (TutorialIndex < 1)
@@ -53,6 +26,26 @@ namespace FenomPlus.ViewModels
                 TutorialIndex = 6;
 
             UpdateContent();
+
+            if (TutorialIndex == 5) // Page with Breath Guage
+            {
+                BleHub.StartTest(BreathTestEnum.Training);
+                Services.BleHub.IsNotConnectedRedirect();
+                Stop = false;
+
+                // start timer to read measure constantly
+                Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
+                {
+                    GuageData = Cache.BreathFlow;
+                    return !Stop;
+                });
+            }
+            else if (TutorialIndex == 4 || TutorialIndex == 6)
+            {
+                Stop = true;
+                BleHub.StartTest(BreathTestEnum.Stop);
+                PlaySounds.StopAll();
+            }
         }
 
         [ObservableProperty]
@@ -67,7 +60,6 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _successPanelVisible;
 
-
         [ObservableProperty] 
         private string _stepTitle;
 
@@ -77,13 +69,11 @@ namespace FenomPlus.ViewModels
         [ObservableProperty] 
         private string _illustrationSource;
 
-
         [ObservableProperty]
         private bool _showGuage;
 
         [ObservableProperty]
         private float _guageData;
-
         partial void OnGuageDataChanged(float value)
         {
             if ((Stop == false) && (TutorialIndex == 5))
@@ -95,38 +85,6 @@ namespace FenomPlus.ViewModels
                 PlaySounds.StopAll();
             }
         }
-
-        [RelayCommand]
-        private void PlaySound()
-        {
-            if ((Stop == false) && (TutorialIndex == 5))
-            {
-                PlaySounds.PlaySound(GuageData);
-            }
-            else
-            {
-                PlaySounds.StopAll();
-            }
-        }
-
-        //private float guageData;
-        //private float GuageData
-        //{
-        //    get => guageData;
-        //    set
-        //    {
-        //        guageData = value;
-        //        OnPropertyChanged("GuageData");
-        //        if ((Stop == false) && (TutorialIndex == 5))
-        //        {
-        //            PlaySounds.PlaySound(GuageData);
-        //        }
-        //        else
-        //        {
-        //            PlaySounds.StopAll();
-        //        }
-        //    }
-        //}
 
         [ObservableProperty]
         private string _guageStatus;
@@ -227,9 +185,6 @@ namespace FenomPlus.ViewModels
                     StepTitle = "Step 5";
                     IllustrationSource = "TutStep5";
                     InstructionsText = "Exhale into the device now\n\nPoint the needle at the star";
-
-                    //BleHub.StartTest(BreathTestEnum.Training);
-                    //Services.BleHub.IsNotConnectedRedirect();
                     break;
 
                 case 6: // success Page
@@ -242,8 +197,8 @@ namespace FenomPlus.ViewModels
                     ShowNext = false;
 
                     StepTitle = string.Empty;
-                    IllustrationSource = "TutStep5";
-                    InstructionsText = "Exhale into the device now\n\nPoint the needle at the star";
+                    IllustrationSource = string.Empty;
+                    InstructionsText = string.Empty;
                     break;
             }
         }
@@ -256,23 +211,13 @@ namespace FenomPlus.ViewModels
 
             // Force update no matter the TutorialIndex
             UpdateContent();
-
-            BleHub.StartTest(BreathTestEnum.Training);
-            Services.BleHub.IsNotConnectedRedirect();
-            Stop = false;
-
-            // start timer to read measure constantly
-            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
-            {
-                GuageData = Cache.BreathFlow;
-                return !Stop;
-            });
         }
 
         public override void OnDisappearing()
         {
             base.OnDisappearing();
 
+            // Must stop sound and guage if we were on Index = 5
             Stop = true;
             BleHub.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
