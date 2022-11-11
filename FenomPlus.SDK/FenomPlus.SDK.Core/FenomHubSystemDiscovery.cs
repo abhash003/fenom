@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -9,6 +10,7 @@ using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
+using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core
 {
@@ -48,6 +50,7 @@ namespace FenomPlus.SDK.Core
         {
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
+            Debug.WriteLine("!!!!!  Device Connected");
         }
 
         /// <summary>
@@ -59,6 +62,7 @@ namespace FenomPlus.SDK.Core
         {
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
+            Debug.WriteLine("!!!!!  Device Lost connection");
         }
 
         /// <summary>

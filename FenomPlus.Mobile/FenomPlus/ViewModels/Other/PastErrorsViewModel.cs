@@ -10,14 +10,14 @@ using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public partial class ViewRecentErrorsViewModel : BaseViewModel
+    public partial class PastErrorsViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private RangeObservableCollection<BreathManeuverErrorDataModel> _recentErrorsData;
+        private List<BreathManeuverErrorDataModel> _recentErrorsData;
 
-        public ViewRecentErrorsViewModel()
+        public PastErrorsViewModel()
         {
-            RecentErrorsData = new RangeObservableCollection<BreathManeuverErrorDataModel>();
+            RecentErrorsData = new List<BreathManeuverErrorDataModel>();
             UpdateRecentErrorsData();
         }
 

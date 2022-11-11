@@ -11,14 +11,14 @@ using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public partial class ViewPastResultsViewModel : BaseViewModel
+    public partial class PastResultsViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private RangeObservableCollection<BreathManeuverResultDataModel> _pastResultsData;
+        private List<BreathManeuverResultDataModel> _pastResultsData;
 
-        public ViewPastResultsViewModel()
+        public PastResultsViewModel()
         {
-            PastResultsData = new RangeObservableCollection<BreathManeuverResultDataModel>();
+            PastResultsData = new List<BreathManeuverResultDataModel>();
         }
 
         [RelayCommand]

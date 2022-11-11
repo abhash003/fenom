@@ -80,6 +80,12 @@
     <Compile Update="Views\Other\StatusDeviceInfoView.xaml.cs">
       <DependentUpon>StatusDeviceInfoView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Other\PastResultsView.xaml.cs">
+      <DependentUpon>PastResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Other\PastErrorsView.xaml.cs">
+      <DependentUpon>PastErrorsView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\QualityControl\QCTabView.xaml.cs">
       <DependentUpon>QCTabView.xaml</DependentUpon>
     </Compile>

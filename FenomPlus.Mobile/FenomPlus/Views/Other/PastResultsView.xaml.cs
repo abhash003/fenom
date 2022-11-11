@@ -11,15 +11,15 @@ namespace FenomPlus.Views
     // Documentation:  https://help.syncfusion.com/xamarin/datagrid/export-to-pdf
     // Documentation:  https://help.syncfusion.com/xamarin/pdf-viewer/printing-pdf-files
 
-    public partial class ViewPastResultsView : BaseContentPage
+    public partial class PastResultsView : BaseContentPage
     {
-        private readonly ViewPastResultsViewModel ViewPastResultsViewModel;
+        private readonly PastResultsViewModel PastResultsViewModel;
 
-        public ViewPastResultsView()
+        public PastResultsView()
         {
             InitializeComponent();
 
-            BindingContext = ViewPastResultsViewModel = new ViewPastResultsViewModel();
+            BindingContext = PastResultsViewModel = new PastResultsViewModel();
             PastResultsDataGrid.GridStyle = new CustomGridStyle();
 
             PastResultsDataGrid.Focus();
@@ -57,7 +57,7 @@ namespace FenomPlus.Views
 
             // Chunk of code is for optimization
             PastResultsDataGrid.Columns.Suspend(); 
-            ViewPastResultsViewModel.UpdatePastResultsDataCommand.Execute(null);
+            PastResultsViewModel.UpdatePastResultsDataCommand.Execute(null);
             PastResultsDataGrid.Columns.Resume();
             PastResultsDataGrid.RefreshColumns();
         }
@@ -67,13 +67,13 @@ namespace FenomPlus.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ViewPastResultsViewModel.OnDisappearing();
+            PastResultsViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            ViewPastResultsViewModel.NewGlobalData();
+            PastResultsViewModel.NewGlobalData();
         }
 
 
