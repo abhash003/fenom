@@ -29,9 +29,6 @@ namespace FenomPlus.SDK.Core
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public FenomHubSystemDiscovery()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
@@ -45,58 +42,33 @@ namespace FenomPlus.SDK.Core
         }
 
 
-
         private void BleRadioOnDeviceConnected(object sender, DeviceEventArgs e)
         {
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
             Debug.WriteLine("!!!!!  Device Connected");
-
-            if (Trigger)
-                Debugger.Break();
         }
 
-        private bool Trigger;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
             Debug.WriteLine("!!!!!  Device Lost connection");
-
-            Trigger = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public IFenomHubSystem FenomHubSystem
         {
             get => _FenomHubSystem;
             set => _FenomHubSystem = value as IFenomHubSystem;
         }
 
-        /// <summary>
-        /// SetLoggerFactory
-        /// </summary>
         public void SetLoggerFactory(ILoggerFactory loggerFactory)
         {
             _loggingMaager.SetLoggingFactory(loggerFactory);
         }
 
-        /// <summary>
-        /// IsScanning
-        /// </summary>
         public bool IsScanning => BleRadio.IsScanning;
 
-        /// <summary>
-        /// Scan
-        /// </summary>
         public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
         {
             try
@@ -144,9 +116,6 @@ namespace FenomPlus.SDK.Core
             }
         }
 
-        /// <summary>
-        /// StopScan
-        /// </summary>
         public async Task<bool> StopScan()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "StopScan");
