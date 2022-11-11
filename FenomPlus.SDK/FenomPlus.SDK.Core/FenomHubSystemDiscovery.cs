@@ -51,7 +51,12 @@ namespace FenomPlus.SDK.Core
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
             Debug.WriteLine("!!!!!  Device Connected");
+
+            if (Trigger)
+                Debugger.Break();
         }
+
+        private bool Trigger;
 
         /// <summary>
         /// 
@@ -63,6 +68,8 @@ namespace FenomPlus.SDK.Core
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
             Debug.WriteLine("!!!!!  Device Lost connection");
+
+            Trigger = true;
         }
 
         /// <summary>

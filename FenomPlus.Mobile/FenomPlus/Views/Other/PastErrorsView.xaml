@@ -57,8 +57,8 @@
                         <sfgrid:SfDataGrid.Columns>
 
                             <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
-                            
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError"/>
+
+                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" ColumnSizer="Auto"/>
                             
                             <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
                             

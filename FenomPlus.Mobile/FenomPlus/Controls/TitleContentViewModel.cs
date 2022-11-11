@@ -81,6 +81,7 @@ namespace FenomPlus.Controls
             RefreshIconStatus();
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
+            DeviceStatusTimer.Start();
         }
 
         [RelayCommand]
