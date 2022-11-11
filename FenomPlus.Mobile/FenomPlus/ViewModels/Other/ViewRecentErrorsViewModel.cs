@@ -71,6 +71,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
+            UpdateRecentErrorsData();
         }
 
         public override void OnDisappearing()

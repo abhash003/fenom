@@ -51,7 +51,7 @@ namespace FenomPlus.ViewModels
                 {
                     SerialNumber = "F150-00000022",
                     TestType = i % 2 == 0 ? "Standard" : "Short",
-                    DateOfTest = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString,CultureInfo.CurrentCulture),
+                    DateOfTest = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                     QCStatus = "?"
                 };
 
@@ -67,6 +67,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
+            UpdatePastResultsData();
         }
 
         public override void OnDisappearing()
