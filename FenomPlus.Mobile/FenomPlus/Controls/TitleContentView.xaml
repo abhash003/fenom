@@ -4,6 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="FenomPlus.Controls.TitleContentView">
 
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="StatusBarButton" TargetType="ImageButton">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
     <ContentView.Content>
 
         <Grid>
@@ -26,19 +41,33 @@
                          Spacing="10" 
                          Margin="5,0,5,0">
 
-                <Image Source="{Binding Battery.Image}" Aspect="AspectFit" />
+                <ImageButton Source="{Binding Battery.Image}" 
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding QualityControlExpiration.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding QualityControlExpiration.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding Sensor.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Sensor.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding Device.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Device.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding RelativeHumidity.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding RelativeHumidity.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding Temperature.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Temperature.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <Image Source="{Binding Pressure.Image}" Aspect="AspectFit"  />
+                <ImageButton Source="{Binding Pressure.Image}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
             </StackLayout>
 

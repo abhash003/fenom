@@ -34,15 +34,15 @@
     <ShellContent x:Name="PastResults"
                   Icon="PastResultIcon"
                   Title="Past Results"
-                  ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
-                  Route="ViewPastResultsView"
+                  ContentTemplate="{DataTemplate pages:PastResultsView}" 
+                  Route="PastResultsView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="ViewRecentErrors"
                   Icon="RecentErrorIcon"
                   Title="Error Log"
-                  ContentTemplate="{DataTemplate pages:ViewRecentErrorsView}"
-                  Route="ViewRecentErrorsView"
+                  ContentTemplate="{DataTemplate pages:PastErrorsView}"
+                  Route="PastErrorsView"
                   IsVisible="true"/>
 
     <ShellContent Title="Pairing Menu"

@@ -16,19 +16,24 @@
             </Grid.RowDefinitions>
 
             <BoxView Grid.ColumnSpan="2" Grid.RowSpan="2" Opacity="0.6">
+
                 <BoxView.Background>
+
                     <LinearGradientBrush EndPoint="1, 0">
                         <GradientStop Color="DodgerBlue" Offset="0.1" />
                         <GradientStop Color="PaleVioletRed" Offset="1.0" />
                     </LinearGradientBrush>
+
                 </BoxView.Background>
             </BoxView>
+
             <Image Source="TitleIcon.png"
                    HeightRequest="25"
                    Grid.Column="0"
                    Grid.Row="0"
                    HorizontalOptions="Start"
                    VerticalOptions="End" />
+
         </Grid>
     </ContentView.Content>
 </ContentView>

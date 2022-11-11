@@ -4,11 +4,10 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:FenomPlus.Controls"
-    x:Class="FenomPlus.Views.ViewPastResultsView"
+    x:Class="FenomPlus.Views.PastErrorsView"
     xmlns:sfgrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:sfPager="clr-namespace:Syncfusion.SfDataGrid.XForms.DataPager;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
-    Title="{Binding Title}"
     Shell.NavBarIsVisible="true"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
@@ -37,7 +36,7 @@
                     VerticalOptions="FillAndExpand"
                     BorderWidth="1">
 
-                    <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
+                    <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
                                        ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
                                        VerticalOptions="FillAndExpand"
                                        HorizontalOptions="FillAndExpand"
@@ -59,20 +58,22 @@
 
                             <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
 
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
-
+                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" ColumnSizer="Auto"/>
+                            
+                            <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
+                            
+                            <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity"/>
+                            
                             <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
-
-                            <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType"/>
-
-                            <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus"/>
-
-                            <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult"/>
+                            
+                            <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware"/>
+                            
+                            <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
 
                         </sfgrid:SfDataGrid.Columns>
 
                         <sfgrid:SfDataGrid.SortColumnDescriptions>
-                            <sfgrid:SortColumnDescription ColumnName="DateOfTest" SortDirection="Descending" />
+                            <sfgrid:SortColumnDescription ColumnName="DateError" SortDirection="Descending" />
                         </sfgrid:SfDataGrid.SortColumnDescriptions>
 
                     </sfgrid:SfDataGrid>
@@ -83,7 +84,7 @@
                                      PageSize="5" 
                                      NumericButtonCount="14"
                                      AutoEllipsisMode="None"
-                                     Source="{Binding PastResultsData}"
+                                     Source="{Binding RecentErrorsData}"
                                      HorizontalOptions="FillAndExpand"
                                      HeightRequest="50"
                                      Margin="0,0,0,4"

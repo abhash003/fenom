@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
+using FenomPlus.Views;
 using Xamarin.Forms;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
@@ -27,10 +28,16 @@ namespace FenomPlus.ViewModels
 
                 bool isConnected = (bool)m.Value;
 
-                if (isConnected)
+                if (isConnected && Services.BleHub.BleDevice.Connected) // Todo: We shouldn't need both but trying to resolve weak connections
                 {
                     Debug.WriteLine("********* Device Connected!");
-                    Services.Navigation.ChooseTestView();
+
+                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because vie wmodels never die
+                    {
+                        // Only navigate if during startup
+                        Services.Navigation.ChooseTestView();
+                    }
+
                 }
                 else
                 {

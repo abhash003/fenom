@@ -19,24 +19,21 @@
                    Aspect="Fill"
                    HeightRequest="60"
                    WidthRequest="94"
-                   HorizontalOptions="Center"
-            />
+                   HorizontalOptions="Center"/>
 
             <Label Text="{Binding TestType}"
                    FontSize="30"
                    TextColor="#333"
                    HorizontalTextAlignment="Center"
                    HorizontalOptions="Center"
-                   Margin="5"
-                   />
+                   Margin="5"/>
 
             <Label Text="{Binding TestSeconds}"
                    FontSize="14"
                    TextColor="#333"
                    HorizontalTextAlignment="Center"
                    Padding="0,0,0,40"
-                   HorizontalOptions="Center"
-                   />
+                   HorizontalOptions="Center"/>
 
             <Button Text="{Binding TestButton}"
                     Style="{StaticResource defaultButton}"
@@ -49,6 +46,7 @@
             <Button Text="Exit"
                     Style="{StaticResource defaultButton}"
                     Clicked="OnCancel"/>
+
         </StackLayout>
     </ContentPage.Content>
 </views:BaseContentPage>

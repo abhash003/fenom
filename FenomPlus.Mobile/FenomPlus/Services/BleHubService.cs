@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
@@ -112,6 +113,7 @@ namespace FenomPlus.Services
                 // if disconnected try to re-connect
                 if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
+                    Debug.WriteLine("Error: Trying to reconnect...");
                     // try to connect
                     BleDevice.ConnectAsync();
                 }

@@ -10,15 +10,15 @@ namespace FenomPlus.Views
     // Documentation:  https://help.syncfusion.com/xamarin/datagrid/export-to-pdf
     // Documentation:  https://help.syncfusion.com/xamarin/pdf-viewer/printing-pdf-files
 
-    public partial class ViewRecentErrorsView : BaseContentPage
+    public partial class PastErrorsView : BaseContentPage
     {
-        private readonly ViewRecentErrorsViewModel ViewRecentErrorsViewModel;
+        private readonly PastErrorsViewModel PastErrorsViewModel;
 
-        public ViewRecentErrorsView()
+        public PastErrorsView()
         {
             InitializeComponent();
 
-            BindingContext = ViewRecentErrorsViewModel = new ViewRecentErrorsViewModel();
+            BindingContext = PastErrorsViewModel = new PastErrorsViewModel();
             RecentErrorsDataGrid.GridStyle = new CustomGridStyle();
 
             RecentErrorsDataGrid.Focus();
@@ -49,11 +49,11 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewRecentErrorsViewModel.OnAppearing();
+            PastErrorsViewModel.OnAppearing();
 
             // Chunk of code is for optimization
             RecentErrorsDataGrid.Columns.Suspend();
-            ViewRecentErrorsViewModel.UpdateRecentErrorsDataCommand.Execute(null);
+            PastErrorsViewModel.UpdateRecentErrorsDataCommand.Execute(null);
             RecentErrorsDataGrid.Columns.Resume();
             RecentErrorsDataGrid.RefreshColumns();
         }
@@ -61,13 +61,13 @@ namespace FenomPlus.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ViewRecentErrorsViewModel.OnDisappearing();
+            PastErrorsViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            ViewRecentErrorsViewModel.NewGlobalData();
+            PastErrorsViewModel.NewGlobalData();
         }
 
 
