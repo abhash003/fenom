@@ -19,6 +19,11 @@ namespace FenomPlus.Views
         {
             if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect())
             {
+                //if (!ChooseTestViewModel.Services.BleHub.ReadyForTest().Result)
+                //{
+                //    await DisplayAlert("Not Ready", "Device is not prepared for another test.  Please wait.", "OK");
+                //}
+
                 ChooseTestViewModel.Cache.TestType = TestTypeEnum.Standard;
                 await ChooseTestViewModel.BleHub.StartTest(BreathTestEnum.Start10Second);
                 await ChooseTestViewModel.Services.Navigation.BreathManeuverFeedbackView();

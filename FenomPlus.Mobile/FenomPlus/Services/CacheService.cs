@@ -23,7 +23,7 @@ namespace FenomPlus.Services
             BreathFlowTimer = Services.Config.BreathFlowTimeout;
             DeviceSerialNumber = "F150-??????";
             Firmware = "Firmware ?.?.?";
-            ReadyForTest = true;
+            FenomReady = true;
 
             Logger = LoggerFactory.Create(builder =>
             {
@@ -149,13 +149,18 @@ namespace FenomPlus.Services
                     FenomReady = false;
                     ReadyForTest = true;
                     DeviceConnectedStatus = "Ready For Test";
-                } else if (BreathManeuver.TimeRemaining == 0xfe) {
+                } else if (BreathManeuver.TimeRemaining == 0xfe) 
+                {
                     ReadyForTest = false;
                     FenomReady = true;
                     FenomValue = BreathManeuver.NOScore;
-                } else if (BreathManeuver.TimeRemaining == 0xf0) {
+                } 
+                else if (BreathManeuver.TimeRemaining == 0xf0) 
+                {
                     // log ??
-                } else {
+                } 
+                else 
+                {
                     DeviceConnectedStatus = "Processing Test";
                     FenomReady = false;
 

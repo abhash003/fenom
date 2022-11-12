@@ -138,6 +138,35 @@ namespace FenomPlus.Services
             return false;
         }
 
+
+        public async Task<bool> ReadyForTest()
+        {
+            if (IsConnected())
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                await Services.BleHub.RequestDeviceInfo();
+
+                var status = Services.Cache.DeviceInfo.DeviceStatus;
+
+
+                //_ = await BleDevice.BREATHTEST(BreathTestEnum.Start6Second);
+                //bool isReady = Services.Cache.FenomReady;
+                //_ = await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+
+                stopwatch.Stop();
+                var milliseconds = stopwatch.ElapsedMilliseconds;
+
+                bool isReady = true;
+                return isReady;
+            }
+
+            return false;
+        }
+
+
+
         /// <summary>
         /// 
         /// </summary>
