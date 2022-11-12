@@ -17,7 +17,7 @@ namespace FenomPlus.Views
 
         private async void OnStandardTest(object sender, EventArgs e)
         {
-            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect() && ChooseTestViewModel.Cache.ReadyForTest)
+            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect())
             {
                 ChooseTestViewModel.Cache.TestType = TestTypeEnum.Standard;
                 await ChooseTestViewModel.BleHub.StartTest(BreathTestEnum.Start10Second);
@@ -27,7 +27,7 @@ namespace FenomPlus.Views
 
         private async void OnShortTest(object sender, EventArgs e)
         {
-            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect() && ChooseTestViewModel.Cache.ReadyForTest)
+            if (ChooseTestViewModel.Services.BleHub.IsNotConnectedRedirect())
             {
                 ChooseTestViewModel.Cache.TestType = TestTypeEnum.Short;
                 await ChooseTestViewModel.BleHub.StartTest(BreathTestEnum.Start6Second);

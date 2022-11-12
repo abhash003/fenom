@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Views;
+using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
@@ -28,8 +29,14 @@ namespace FenomPlus.ViewModels
 
                 bool isConnected = (bool)m.Value;
 
-                if (isConnected && Services.BleHub.BleDevice.Connected) // Todo: We shouldn't need both but trying to resolve weak connections
+                if (isConnected) // Todo: We shouldn't need both but trying to resolve weak connections
                 {
+
+                    if (!Services.BleHub.BleDevice.Connected)
+                    {
+                        // ToDo: Remove - This is a double check
+                    }
+
                     Debug.WriteLine("********* Device Connected!");
 
                     if (App.GetCurrentPage() == null)

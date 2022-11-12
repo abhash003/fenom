@@ -55,6 +55,7 @@ namespace FenomPlus.Controls
         public MarigoldProgressWheel()
         {
             InitializeComponent();
+            IsVisible = false;
 
             PetalImageFileNames.Add("petals_01.png");
             PetalImageFileNames.Add("petals_02.png");
@@ -106,6 +107,7 @@ namespace FenomPlus.Controls
             Device.BeginInvokeOnMainThread(() =>
             {
                 ActualTimeLabel.Text = string.Empty;
+                IsVisible = true;
                 MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
             });
 
@@ -119,7 +121,11 @@ namespace FenomPlus.Controls
         {
             Device.BeginInvokeOnMainThread(() =>
             {
+                IsVisible = false;
                 Stopwatch.Stop();
+
+                PetalIndex = PetalImageFileNames.Count - 1;
+                MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
             });
 
             AnimationTimer.Stop();
@@ -127,18 +133,13 @@ namespace FenomPlus.Controls
 
         private Task IncrementMarigoldPetals()
         {
-            PetalIndex += 1;
-
-            if (PetalIndex <= PetalImageFileNames.Count - 1)
+            if (PetalIndex < PetalImageFileNames.Count - 1)
             {
+                PetalIndex += 1;
+
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
-
-                    if (ShowTime)
-                    {
-                        ActualTimeLabel.Text = (Stopwatch.ElapsedMilliseconds / 1000).ToString("N1");
-                    }
                 });
             }
             else
