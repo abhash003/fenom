@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
@@ -18,6 +19,7 @@ namespace FenomPlus.Services
         
         public BleHubService(IAppServices services) : base(services)
         {
+
         }
 
         /// <summary>
@@ -37,9 +39,19 @@ namespace FenomPlus.Services
                 {
                     fenomHubSystemDiscovery = new FenomHubSystemDiscovery();
                     fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
+
+                    fenomHubSystemDiscovery.DeviceConnected += (object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e) =>
+                        {
+                            Debugger.Break();
+                        };
                 }
                 return fenomHubSystemDiscovery;
             }
+        }
+
+        private void FenomHubSystemDiscovery_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -63,7 +75,7 @@ namespace FenomPlus.Services
         /// <param name="deviceFoundCallback"></param>
         /// <param name="scanCompletedCallback"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
+        public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = false, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
         {
             return await FenomHubSystemDiscovery.Scan(scanTime, scanBondedDevices, scanBleDevices, deviceFoundCallback, scanCompletedCallback);
         }
@@ -75,8 +87,24 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public async Task<bool> Connect(IBleDevice bleDevice)
         {
-            await Disconnect();
-            BleDevice = bleDevice;
+            if (bleDevice.Connected)
+            {
+                BleDevice = bleDevice;
+                return true;
+            }
+            else
+            {
+                // disconnect from existing if different device
+                if (BleDevice != bleDevice)
+                {
+                    // disconnect from BleDevice
+                    await Disconnect();
+
+                    // connect to bleDevice (notice capitalization)
+                    BleDevice = bleDevice;
+                }
+            }
+
             return await bleDevice.ConnectAsync();
         }
 
@@ -106,6 +134,8 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsConnected(bool devicePowerOn = false)
         {
+            System.Console.WriteLine("******** IsConnected: {0}", devicePowerOn);
+
             // do we have a device
             if(BleDevice != null)
             {
