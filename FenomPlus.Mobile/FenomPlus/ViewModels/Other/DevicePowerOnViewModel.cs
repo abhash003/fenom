@@ -32,7 +32,13 @@ namespace FenomPlus.ViewModels
                 {
                     Debug.WriteLine("********* Device Connected!");
 
-                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because vie wmodels never die
+                    if (App.GetCurrentPage() == null)
+                        return;
+
+                    if (App.GetCurrentPage() is ChooseTestView)
+                        return;
+
+                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
                     {
                         // Only navigate if during startup
                         Services.Navigation.ChooseTestView();
