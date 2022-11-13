@@ -32,7 +32,7 @@ namespace FenomPlus.Views
 
         private async void OnCancel(object sender, EventArgs e)
         {
-            await StartTestViewModel.Services.Navigation.ChooseTestView();
+            await StartTestViewModel.Services.Navigation.DashboardView();
         }
 
         private async void StartTest(object sender, EventArgs e)

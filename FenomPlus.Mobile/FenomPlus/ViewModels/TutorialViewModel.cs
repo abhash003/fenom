@@ -25,20 +25,29 @@ namespace FenomPlus.ViewModels
             if (TutorialIndex > 6)
                 TutorialIndex = 6;
 
-            UpdateContent();
-
             if (TutorialIndex == 5) // Page with Breath Guage
             {
-                BleHub.StartTest(BreathTestEnum.Training);
-                Services.BleHub.IsNotConnectedRedirect();
-                Stop = false;
+                // ToDo: Need to work this out so Toast isn't shown until we reach page 5 of tutorial
+                //if (!BleHub.ReadyForTest)
+                //{
+                //    //await DisplayAlert("Not Ready", "Device is currently preparing for another test.  Please wait.", "OK");
+                //    int secondsRemaining = BleHub.DeviceReadyCountDown;
+                //    Dialogs.ShowToast($"Device is currently preparing for another test.  An additional {secondsRemaining} seconds is required.", secondsRemaining);
+                //    TutorialIndex = 4;
+                //}
+                //else
+                //{
+                    BleHub.StartTest(BreathTestEnum.Training);
+                    Services.BleHub.IsNotConnectedRedirect();
+                    Stop = false;
 
-                // start timer to read measure constantly
-                Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
-                {
-                    GuageData = Cache.BreathFlow;
-                    return !Stop;
-                });
+                    // start timer to read measure constantly
+                    Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
+                    {
+                        GuageData = Cache.BreathFlow;
+                        return !Stop;
+                    });
+                //}
             }
             else if (TutorialIndex == 4 || TutorialIndex == 6)
             {

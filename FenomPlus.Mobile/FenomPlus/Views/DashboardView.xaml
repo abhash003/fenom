@@ -4,7 +4,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:FenomPlus.Controls"
-    x:Class="FenomPlus.Views.ChooseTestView"
+    x:Class="FenomPlus.Views.DashboardView"
     x:Name="ChooseTestsView"
     Title="{Binding Title}"
     Shell.NavBarIsVisible="True"

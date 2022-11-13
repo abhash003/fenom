@@ -54,7 +54,7 @@
 
     <!--The following are for debugging purposes only-->
 
-    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="ChooseTestView"              ContentTemplate="{DataTemplate pages:ChooseTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="DashboardView"              ContentTemplate="{DataTemplate pages:DashboardView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />

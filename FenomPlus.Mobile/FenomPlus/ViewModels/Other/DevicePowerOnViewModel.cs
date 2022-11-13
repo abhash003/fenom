@@ -42,13 +42,13 @@ namespace FenomPlus.ViewModels
                     if (App.GetCurrentPage() == null)
                         return;
 
-                    if (App.GetCurrentPage() is ChooseTestView)
+                    if (App.GetCurrentPage() is DashboardView)
                         return;
 
                     if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
                     {
                         // Only navigate if during startup
-                        Services.Navigation.ChooseTestView();
+                        Services.Navigation.DashboardView();
                     }
 
                 }
@@ -124,7 +124,7 @@ namespace FenomPlus.ViewModels
         public bool EnvironmentalInfo()
         {
             if (Cache.EnvironmentalInfo == null) return true;
-            //Services.Navigation.ChooseTestView();
+            //Services.Navigation.DashboardView();
             return false;
         }
 
