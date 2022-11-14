@@ -27,27 +27,16 @@ namespace FenomPlus.ViewModels
 
             if (TutorialIndex == 5) // Page with Breath Guage
             {
-                // ToDo: Need to work this out so Toast isn't shown until we reach page 5 of tutorial
-                //if (!BleHub.ReadyForTest)
-                //{
-                //    //await DisplayAlert("Not Ready", "Device is currently preparing for another test.  Please wait.", "OK");
-                //    int secondsRemaining = BleHub.DeviceReadyCountDown;
-                //    Dialogs.ShowToast($"Device is currently preparing for another test.  An additional {secondsRemaining} seconds is required.", secondsRemaining);
-                //    TutorialIndex = 4;
-                //}
-                //else
-                //{
-                    BleHub.StartTest(BreathTestEnum.Training);
-                    Services.BleHub.IsNotConnectedRedirect();
-                    Stop = false;
+                BleHub.StartTest(BreathTestEnum.Training);
+                Services.BleHub.IsNotConnectedRedirect();
+                Stop = false;
 
-                    // start timer to read measure constantly
-                    Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
-                    {
-                        GuageData = Cache.BreathFlow;
-                        return !Stop;
-                    });
-                //}
+                // start timer to read measure constantly
+                Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
+                {
+                    GuageData = Cache.BreathFlow;
+                    return !Stop;
+                });
             }
             else if (TutorialIndex == 4 || TutorialIndex == 6)
             {
@@ -55,6 +44,8 @@ namespace FenomPlus.ViewModels
                 BleHub.StartTest(BreathTestEnum.Stop);
                 PlaySounds.StopAll();
             }
+
+            UpdateContent();
         }
 
         [ObservableProperty]
@@ -241,6 +232,13 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void Next()
         {
+            // Need only check on the next button event
+            if (TutorialIndex == 4 && !BleHub.ReadyForTest)
+            {
+                DeviceNotReadyWarning();
+                return;
+            }
+
             TutorialIndex += 1;
         }
 
@@ -248,6 +246,15 @@ namespace FenomPlus.ViewModels
         private void Back()
         {
             TutorialIndex -= 1;
+        }
+
+        private void DeviceNotReadyWarning()
+        {
+            if (!BleHub.ReadyForTest)
+            {
+                int secondsRemaining = BleHub.DeviceReadyCountDown;
+                Dialogs.ShowToast($"{secondsRemaining} seconds required before next breath test. This message disappears when device is ready...", secondsRemaining);
+            }
         }
     }
 }

@@ -22,8 +22,7 @@ namespace FenomPlus.Views
             {
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                    DashboardViewModel.Dialogs.ShowToast($"Device is currently preparing for another test. An additional {secondsRemaining} seconds is required and this message will go away when the device is ready...", secondsRemaining);
+                    DeviceNotReadyWarning();
                     return;
                 }
 
@@ -39,8 +38,7 @@ namespace FenomPlus.Views
             {
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                    DashboardViewModel.Dialogs.ShowToast($"Device is currently preparing for another test. An additional {secondsRemaining} seconds is required and this message will go away when the device is ready...", secondsRemaining);
+                    DeviceNotReadyWarning();                   
                     return;
                 }
 
@@ -50,16 +48,17 @@ namespace FenomPlus.Views
             }
         }
 
-        private async void OnTutorial(object sender, EventArgs e)
+        private void DeviceNotReadyWarning()
         {
             if (!DashboardViewModel.BleHub.ReadyForTest)
             {
-                //await DisplayAlert("Not Ready", "Device is currently preparing for another test.  Please wait.", "OK");
                 int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
                 DashboardViewModel.Dialogs.ShowToast($"Device is currently preparing for another test. An additional {secondsRemaining} seconds is required and this message will go away when the device is ready...", secondsRemaining);
-                return;
             }
+        }
 
+        private async void OnTutorial(object sender, EventArgs e)
+        {
             await DashboardViewModel.Services.Navigation.TutorialView();
         }
         
