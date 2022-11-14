@@ -24,6 +24,7 @@ namespace FenomPlus.Interfaces
         Task TestFailedView();
         Task TestResultsView();
         Task TutorialView();
+        void DisplayAlert(string title, string message, string cancel);
     }
 }
 

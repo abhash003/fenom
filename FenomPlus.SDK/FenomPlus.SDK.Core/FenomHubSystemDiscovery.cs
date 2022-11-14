@@ -5,8 +5,10 @@ using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Utils;
+using FenomPlus.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
+using Syncfusion.SfDataGrid.XForms.DataPager;
 
 namespace FenomPlus.SDK.Core
 {
@@ -17,11 +19,19 @@ namespace FenomPlus.SDK.Core
         private IFenomHubSystem _FenomHubSystem;
         private readonly IBleRadioService _bleRadio;
 
+        #region Delegates
         private EventHandler<DeviceEventArgs> _deviceAdvertised;
         private EventHandler<DeviceEventArgs> _deviceDiscovered;
         private EventHandler<DeviceEventArgs> _deviceConnected;
         private EventHandler<DeviceEventArgs> _deviceDisconnected;
         private EventHandler<DeviceErrorEventArgs> _deviceConnectionLost;
+        #endregion
+
+        /*
+        event EventHandler<DeviceEventArgs> DeviceConnected;
+        event EventHandler<DeviceEventArgs> DeviceDisconnected;
+        event EventHandler<DeviceEventArgs> DeviceConnectionLost;
+        */
 
         /// <summary>
         /// 
@@ -30,7 +40,6 @@ namespace FenomPlus.SDK.Core
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
             _bleRadio = new BleRadioService();
-            _bleRadio.DeviceConnectionLost += DeviceConnectionLost;
             _loggingMaager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
@@ -42,35 +51,46 @@ namespace FenomPlus.SDK.Core
             _bleRadio.DeviceConnectionLost += _bleRadio_DeviceConnectionLost;
         }
 
+        #region Events from IFenomHubSystemDiscovery
+
         event EventHandler<DeviceEventArgs> IFenomHubSystemDiscovery.DeviceConnected
         {
-            add
-            {
-                _deviceConnected += value;
-            }
-
-            remove
-            {
-                _deviceConnected -= value;
-            }
+            add { _deviceConnected += value; }
+            remove { _deviceConnected -= value; }
         }
 
+        event EventHandler<DeviceEventArgs> IFenomHubSystemDiscovery.DeviceDisconnected
+        {
+            add { _deviceDisconnected += value; }
+            remove { _deviceDisconnected -= value; }
+        }
+
+        event EventHandler<DeviceErrorEventArgs> IFenomHubSystemDiscovery.DeviceConnectionLost
+        {
+            add { _deviceConnectionLost += value; }
+            remove { _deviceConnectionLost -= value; }
+        }
+        
+        #endregion
+
+        #region Event Handlers
         private void _bleRadio_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
             System.Console.WriteLine("***************** 1 DeviceConnectionLost: {0}", e.ToString());
+            _deviceConnectionLost?.Invoke(this, e);
         }
 
         private void _bleRadio_DeviceDisconnected(object sender, DeviceEventArgs e)
         {
             System.Console.WriteLine("***************** DeviceDisconnected: {0}", e.ToString());
+            _deviceDisconnected?.Invoke(this, e);
         }
 
         private async void _bleRadio_DeviceConnected(object sender, DeviceEventArgs e)
         {
-            System.Console.WriteLine("***************** DeviceConnected: {0}", e.ToString());
+            System.Console.WriteLine("***************** DeviceConnected: {0}", e.Device.ToString() + " : " + e.Device.Id);
             await StopScan();
-            DeviceConnected?.Invoke(this, e);
-            //DeviceConnected?.Invoke(this, e);
+            _deviceConnected?.Invoke(this, e);
         }
 
         private void _bleRadio_DeviceDiscovered(object sender, DeviceEventArgs e)
@@ -82,16 +102,7 @@ namespace FenomPlus.SDK.Core
         {
             System.Console.WriteLine("***************** DeviceAdvertised: {0}", e.ToString());
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
-        {
-            System.Console.WriteLine("!!!!!!!!!!!!!!!!! 2 DeviceConnectionLost: {0}", e.ErrorMessage?.ToString());
-        }
+        #endregion
 
         /// <summary>
         /// 
@@ -114,8 +125,6 @@ namespace FenomPlus.SDK.Core
         /// IsScanning
         /// </summary>
         public bool IsScanning => _bleRadio.IsScanning;
-
-        event EventHandler<DeviceEventArgs> DeviceConnected;
 
         /// <summary>
         /// Scan

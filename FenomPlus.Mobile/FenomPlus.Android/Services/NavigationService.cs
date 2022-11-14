@@ -143,6 +143,13 @@ namespace FenomPlus.Services
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ViewRecentErrorsView)}"), false);
         }
+        public void DisplayAlert(string title, string message, string cancel)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                DisplayAlert(title, message, cancel);
+            });
+        }
     }
 }
 

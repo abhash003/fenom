@@ -10,16 +10,28 @@ using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Views;
+using Plugin.BLE.Abstractions.EventArgs;
 using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
     public class BleHubService : BaseService, IBleHubService
     {
-        
         public BleHubService(IAppServices services) : base(services)
         {
+            FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
+            {
+                //if (AppShell.Current.CurrentPage)
+                //_ = Services.Navigation.DevicePowerOnView();
+            };
 
+            FenomHubSystemDiscovery.DeviceConnectionLost += (object sender, DeviceErrorEventArgs e) =>
+            {
+                //if (AppShell.Current.CurrentPage)
+                //_ = Services.Navigation.DevicePowerOnView();
+
+                Services.Navigation.DisplayAlert("Alert", "You have been alerted", "OK");
+            };
         }
 
         /// <summary>
@@ -42,16 +54,11 @@ namespace FenomPlus.Services
 
                     fenomHubSystemDiscovery.DeviceConnected += (object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e) =>
                         {
-                            Debugger.Break();
+                            System.Console.WriteLine("******************************************* fenomHubSystemDiscovery.DeviceConnected");
                         };
                 }
                 return fenomHubSystemDiscovery;
             }
-        }
-
-        private void FenomHubSystemDiscovery_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -134,13 +141,15 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsConnected(bool devicePowerOn = false)
         {
-            System.Console.WriteLine("******** IsConnected: {0}", devicePowerOn);
+            System.Console.WriteLine("******** IsConnected: devicePowerOn: {0}", devicePowerOn);
 
             // do we have a device
             if(BleDevice != null)
             {
+                System.Console.WriteLine("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected);
+
                 // if disconnected try to re-connect
-                if((BleDevice.Connected == false) && (devicePowerOn == false))
+                if ((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     // try to connect
                     BleDevice.ConnectAsync();
@@ -158,7 +167,6 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsNotConnectedRedirect(bool devicePowerOn = false)
         {
-            //return true;
             if(IsConnected(devicePowerOn)) {
                 return true;
             }
