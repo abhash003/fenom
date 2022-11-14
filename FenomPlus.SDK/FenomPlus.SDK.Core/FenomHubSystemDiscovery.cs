@@ -4,22 +4,28 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using FenomPlus.Interfaces;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
+using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
+using TinyIoC;
 using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core
 {
     public class FenomHubSystemDiscovery : IFenomHubSystemDiscovery
     {
+        public static TinyIoCContainer Container => TinyIoCContainer.Current;
+
         private LoggingManager _loggingMaager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
         public readonly IBleRadioService BleRadio;
+        private IDialogService DialogService;
 
         // Define message
         public class DeviceConnectedMessage : ValueChangedMessage<bool>
@@ -39,6 +45,8 @@ namespace FenomPlus.SDK.Core
             _logger = new Logger("FenomBLE");
 
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
+
+            DialogService =  Container.Resolve<IDialogService>();
         }
 
 
@@ -47,6 +55,8 @@ namespace FenomPlus.SDK.Core
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
             Debug.WriteLine("!!!!!  Device Connected");
+
+            DialogService.ShowToast("Bluetooth connected", 4);
         }
 
         private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
@@ -54,6 +64,8 @@ namespace FenomPlus.SDK.Core
             // Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
             Debug.WriteLine("!!!!!  Device Lost connection");
+
+            DialogService.ShowToast("Bluetooth connection was lost...", 4);
         }
 
         public IFenomHubSystem FenomHubSystem

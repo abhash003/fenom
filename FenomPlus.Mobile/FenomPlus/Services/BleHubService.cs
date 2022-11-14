@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Timers;
@@ -17,11 +18,15 @@ namespace FenomPlus.Services
     public class BleHubService : BaseService, IBleHubService
     {
         private readonly Timer DeviceReadyTimer;
+        readonly IDialogService DialogService;
+
 
         public BleHubService(IAppServices services) : base(services)
         {
             DeviceReadyTimer = new Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
+
+            DialogService = Container.Resolve<IDialogService>();
 
             ReadyForTest = true;
         }
@@ -148,6 +153,7 @@ namespace FenomPlus.Services
                 if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     Debug.WriteLine("Error: Trying to reconnect...");
+                    DialogService.ShowToast("Error: Trying to reconnect...", 4);
                     // try to connect
                     BleDevice.ConnectAsync();
                 }

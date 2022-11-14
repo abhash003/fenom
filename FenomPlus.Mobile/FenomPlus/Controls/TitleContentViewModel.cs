@@ -65,7 +65,7 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private SensorStatus _pressure;
 
-        private readonly Timer DeviceStatusTimer = new Timer(5000);
+        private readonly Timer DeviceStatusTimer = new Timer(30000);
 
         public TitleContentViewModel()
         {
