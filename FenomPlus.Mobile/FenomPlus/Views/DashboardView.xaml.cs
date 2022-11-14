@@ -22,7 +22,7 @@ namespace FenomPlus.Views
             {
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    DeviceNotReadyWarning();
+                    DeviceNotReadyWarning1();
                     return;
                 }
 
@@ -38,7 +38,7 @@ namespace FenomPlus.Views
             {
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    DeviceNotReadyWarning();                   
+                    DeviceNotReadyWarning2();                   
                     return;
                 }
 
@@ -48,12 +48,21 @@ namespace FenomPlus.Views
             }
         }
 
-        private void DeviceNotReadyWarning()
+        private void DeviceNotReadyWarning1()
         {
             if (!DashboardViewModel.BleHub.ReadyForTest)
             {
                 int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowToast($"Device is currently preparing for another test. An additional {secondsRemaining} seconds is required and this message will go away when the device is ready...", secondsRemaining);
+                DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
+            }
+        }
+
+        private void DeviceNotReadyWarning2()
+        {
+            if (!DashboardViewModel.BleHub.ReadyForTest)
+            {
+                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+                DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
             }
         }
 

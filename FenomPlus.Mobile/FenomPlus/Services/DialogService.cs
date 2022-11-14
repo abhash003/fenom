@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
 using FenomPlus.SDK.Core.Features;
+using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
@@ -16,17 +18,24 @@ namespace FenomPlus.Services
             return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
         }
 
-        private IProgressDialog SecondsProgressDialog;
-        // UserDialogs.Instance.SecondsProgressDialog.PercentComplete = ?
-
         public async Task ShowSecondsProgress(string message, int seconds)
         {
-            SecondsProgressDialog = UserDialogs.Instance.Progress("Progress", null, null, true, MaskType.Black);
+            IProgressDialog secondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.Gradient);
+
+            double increment = Convert.ToDouble(100 / seconds);
 
             for (int i = 0; i < 100; i++)
             {
-                SecondsProgressDialog.PercentComplete = i;
-                await Task.Delay(60);
+                secondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+
+                if (secondsProgressDialog.PercentComplete >= 99)
+                {
+                    secondsProgressDialog.Dispose();
+                }
+                else
+                {
+                    await Task.Delay(1000);
+                }
             }
         }
 
