@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using FenomPlus.Core.Database.Repository;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Repository.Interfaces;
@@ -106,14 +107,14 @@ namespace FenomPlus.Database.Repository
             {
                 device = new QualityControlDevicesTb()
                 {
-                    LastConnected = DateTime.Now.ToString(),
+                    LastConnected = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                     SerialNumber = serialNumber
                 };
                 Insert(device);
             }
             else
             {
-                device.LastConnected = DateTime.Now.ToString();
+                device.LastConnected = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture);
                 Update(device);
             }
             return device;

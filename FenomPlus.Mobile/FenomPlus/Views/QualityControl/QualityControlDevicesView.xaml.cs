@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
@@ -44,7 +45,7 @@ namespace FenomPlus.Views
                 QualityControlDeviceDBModel deviceDBModel = new Models.QualityControlDeviceDBModel()
                 {
                     SerialNumber = serialNumber,
-                    LastConnected = DateTime.Now.ToString()
+                    LastConnected = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture)
                 };
                 QualityControlDevicesTb record = QualityControlDevicesViewModel.QCDevicesRepo.Insert(deviceDBModel);
                 deviceDBModel = record.Convert();

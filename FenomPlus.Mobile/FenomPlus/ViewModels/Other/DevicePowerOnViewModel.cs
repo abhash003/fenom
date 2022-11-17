@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using Xamarin.Forms;
+using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
 namespace FenomPlus.ViewModels
 {
     public class DevicePowerOnViewModel : BaseViewModel
     {
+
         private bool Stop;
 
         /// <summary>
@@ -15,7 +19,25 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public DevicePowerOnViewModel()
         {
+            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
+            {
+                // Handle the message here, with r being the recipient and m being the
+                // input message. Using the recipient passed as input makes it so that
+                // the lambda expression doesn't capture "this", improving performance.
 
+                bool isConnected = (bool)m.Value;
+
+                if (isConnected)
+                {
+                    Debug.WriteLine("********* Device Connected!");
+                    Services.Navigation.ChooseTestView();
+                }
+                else
+                {
+                    Debug.WriteLine("********* Device Disconnected!");
+                }
+
+            });
         }
 
         /// <summary>
@@ -82,7 +104,7 @@ namespace FenomPlus.ViewModels
         public bool EnvironmentalInfo()
         {
             if (Cache.EnvironmentalInfo == null) return true;
-            Services.Navigation.ChooseTestView();
+            //Services.Navigation.ChooseTestView();
             return false;
         }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
@@ -17,6 +19,7 @@ namespace FenomPlus.SDK.Core
         private LoggingManager _loggingMaager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
+
         private readonly IBleRadioService _bleRadio;
 
         #region Delegates
@@ -27,11 +30,14 @@ namespace FenomPlus.SDK.Core
         private EventHandler<DeviceErrorEventArgs> _deviceConnectionLost;
         #endregion
 
-        /*
-        event EventHandler<DeviceEventArgs> DeviceConnected;
-        event EventHandler<DeviceEventArgs> DeviceDisconnected;
-        event EventHandler<DeviceEventArgs> DeviceConnectionLost;
-        */
+
+        // Define message
+        public class DeviceConnectedMessage : ValueChangedMessage<bool>
+        {
+            public DeviceConnectedMessage(bool isConnected) : base(isConnected)
+            {
+            }
+        }
 
         /// <summary>
         /// 
@@ -39,11 +45,10 @@ namespace FenomPlus.SDK.Core
         public FenomHubSystemDiscovery()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
+
             _bleRadio = new BleRadioService();
             _loggingMaager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
-            //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
-
             _bleRadio.DeviceAdvertised += _bleRadio_DeviceAdvertised;
             _bleRadio.DeviceDiscovered += _bleRadio_DeviceDiscovered;
             _bleRadio.DeviceConnected += _bleRadio_DeviceConnected;
@@ -77,6 +82,8 @@ namespace FenomPlus.SDK.Core
         private void _bleRadio_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
             System.Console.WriteLine("***************** 1 DeviceConnectionLost: {0}", e.ToString());
+			// Send message
+            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
             _deviceConnectionLost?.Invoke(this, e);
         }
 
@@ -89,6 +96,8 @@ namespace FenomPlus.SDK.Core
         private async void _bleRadio_DeviceConnected(object sender, DeviceEventArgs e)
         {
             System.Console.WriteLine("***************** DeviceConnected: {0}", e.Device.ToString() + " : " + e.Device.Id);
+			// Send message
+            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
             await StopScan();
             _deviceConnected?.Invoke(this, e);
         }

@@ -80,6 +80,11 @@ namespace FenomPlus.ViewModels
                 BreathTestEnum.Start6Second);
         }
 
+        public override void OnDisappearing()
+        {
+            base.OnDisappearing();
+        }
+
         /// <summary>
         /// 
         /// </summary>

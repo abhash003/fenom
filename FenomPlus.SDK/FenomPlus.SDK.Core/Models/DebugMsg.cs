@@ -31,7 +31,7 @@ namespace FenomPlus.SDK.Core.Models
             try
             {
                 Data = data;
-                if ((data != null) && (data.Length >= Min))
+                //if ((data != null) && (data.Length >= Min))
                 {
                     Message = BitConverter.ToString(data);
                 }

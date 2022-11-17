@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http.Headers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -50,7 +51,7 @@ namespace FenomPlus.ViewModels
                 {
                     SerialNumber = "F150-00000022",
                     TestType = i % 2 == 0 ? "Standard" : "Short",
-                    DateOfTest = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString),
+                    DateOfTest = DateTime.Now.AddDays(-(maxEntries - i)).ToString(Constants.DateTimeFormatString,CultureInfo.CurrentCulture),
                     QCStatus = "?"
                 };
 
@@ -61,6 +62,16 @@ namespace FenomPlus.ViewModels
 
                 PastResultsData.Add(record.ConvertForGrid());
             }
+        }
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
+        public override void OnDisappearing()
+        {
+            base.OnDisappearing();
         }
 
         public override void NewGlobalData()

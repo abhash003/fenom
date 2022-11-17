@@ -242,16 +242,29 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                         {
                             //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
-                            // create ble device and push to caller
-                            BleDevice bleDevice = new BleDevice(e.Device);
-                            _devices.Add(bleDevice);
-                            deviceFoundCallback?.Invoke(bleDevice);
+
+                            //if (e.Device != null && e.Device.Name.ToUpper().Contains("FENOM"))
+                            //{
+                                // create ble device and push to caller
+                                BleDevice bleDevice = new BleDevice(e.Device);
+                                _devices.Add(bleDevice);
+                                deviceFoundCallback?.Invoke(bleDevice);
+                            //}
+
                         }
                         finally
                         {
                             //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                         }
                     }
+
+                    //if (_devices.Count > 1)
+                    //{
+                    //    foreach (var device in _devices)
+                    //    {
+
+                    //    }
+                    //}
 
                     _devices.Clear();
 
@@ -278,77 +291,77 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="device"></param>
-        /// <param name="id"></param>
-        /// <param name="disconnect"></param>
-        /// <returns></returns>
-        private async Task<BleDevice> ConnectToDeviceAsync(IDevice device = null, Guid id = default, bool disconnect = false)
-        {
-            try
-            {
-                //PerformanceLogger.StartLog(typeof(BleRadioService), "ConnectToDeviceAsync");
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="device"></param>
+        ///// <param name="id"></param>
+        ///// <param name="disconnect"></param>
+        ///// <returns></returns>
+        //private async Task<BleDevice> ConnectToDeviceAsync(IDevice device = null, Guid id = default, bool disconnect = false)
+        //{
+        //    try
+        //    {
+        //        //PerformanceLogger.StartLog(typeof(BleRadioService), "ConnectToDeviceAsync");
 
-                if (device == null && id == default)
-                {
-                    throw new Exception("need device or id to connect");
-                }
+        //        if (device == null && id == default)
+        //        {
+        //            throw new Exception("need device or id to connect");
+        //        }
 
-                if (device != null && id != default)
-                {
-                    throw new Exception("both device and id can't be active");
-                }
+        //        if (device != null && id != default)
+        //        {
+        //            throw new Exception("both device and id can't be active");
+        //        }
 
-                IDevice connectedDevice = null;
+        //        IDevice connectedDevice = null;
 
-                if (device != null)
-                {
-                    connectedDevice = await Adapter.ConnectToKnownDeviceAsync(device.Id, new ConnectParameters(true, true));
-                }
-                else if (id != default)
-                {
-                    connectedDevice = await Adapter.ConnectToKnownDeviceAsync(id, new ConnectParameters(true, true));
-                }
+        //        if (device != null)
+        //        {
+        //            connectedDevice = await Adapter.ConnectToKnownDeviceAsync(device.Id, new ConnectParameters(true, true));
+        //        }
+        //        else if (id != default)
+        //        {
+        //            connectedDevice = await Adapter.ConnectToKnownDeviceAsync(id, new ConnectParameters(true, true));
+        //        }
 
-                if (connectedDevice == null)
-                {
-                    _logger.LogWarning("BleRadioService.ConnectToDeviceAsync() - null connected device");
-                    return null;
-                }
+        //        if (connectedDevice == null)
+        //        {
+        //            _logger.LogWarning("BleRadioService.ConnectToDeviceAsync() - null connected device");
+        //            return null;
+        //        }
 
-                var bleDevice = new BleDevice(connectedDevice);
+        //        var bleDevice = new BleDevice(connectedDevice);
 
-                if (!(await bleDevice.GetCharacterasticsAync() is SynchronizedList<IGattCharacteristic>
-                    gattCharacteristics))
-                {
-                    _logger.LogWarning("BleRadioService.ConnectToDeviceAsync() - null gatt characteristics");
-                    return null;
-                }
+        //        if (!(await bleDevice.GetCharacterasticsAync() is SynchronizedList<IGattCharacteristic>
+        //            gattCharacteristics))
+        //        {
+        //            _logger.LogWarning("BleRadioService.ConnectToDeviceAsync() - null gatt characteristics");
+        //            return null;
+        //        }
 
-                if (disconnect)
-                {
-                    await Adapter.DisconnectDeviceAsync(connectedDevice);
-                }
+        //        if (disconnect)
+        //        {
+        //            await Adapter.DisconnectDeviceAsync(connectedDevice);
+        //        }
 
-                return bleDevice;
-            }
-            catch (DeviceConnectionException ex)
-            {
-                _logger.LogException(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogException(ex);
-                return null;
-            }
-            finally
-            {
-                //PerformanceLogger.EndLog(typeof(BleRadioService), "ConnectToDeviceAsync");
-            }
-        }
+        //        return bleDevice;
+        //    }
+        //    catch (DeviceConnectionException ex)
+        //    {
+        //        _logger.LogException(ex);
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogException(ex);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        //PerformanceLogger.EndLog(typeof(BleRadioService), "ConnectToDeviceAsync");
+        //    }
+        //}
 
         /// <summary>
         /// 

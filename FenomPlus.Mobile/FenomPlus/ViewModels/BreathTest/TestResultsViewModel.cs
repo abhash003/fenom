@@ -1,4 +1,5 @@
-﻿using FenomPlus.Enums;
+﻿using System.Globalization;
+using FenomPlus.Enums;
 
 namespace FenomPlus.ViewModels
 {
@@ -25,7 +26,7 @@ namespace FenomPlus.ViewModels
 
             TestResult = (Cache.FenomValue) < 5 ? "< 5" :
                         (Cache.FenomValue) > 300 ? "> 300":
-                        Cache.FenomValue.ToString();
+                        Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>

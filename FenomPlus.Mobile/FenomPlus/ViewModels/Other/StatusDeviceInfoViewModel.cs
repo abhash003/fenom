@@ -94,13 +94,6 @@ namespace FenomPlus.ViewModels
                 DeviceName = device.Name;
                 Manufacturer = device.Manufacturer;
                 FirmwareVersion = Services.Cache.Firmware;
-
-                //DeviceConnectionStatus = "Connected";
-                //DeviceSerialNumber = device.SerialNumber;
-                //Firmware = device.SoftwareVersion;
-                //DeviceName = device.Name;
-                //Manufacturer = device.Manufacturer;
-                //FirmwareVersion = Services.Cache.Firmware;
             }
             else
             {
