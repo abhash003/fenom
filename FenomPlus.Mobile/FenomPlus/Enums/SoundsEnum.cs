@@ -4,6 +4,7 @@ namespace FenomPlus.Enums
 {
     public enum SoundsEnum
     {
+        none,
         red_low,
         red_high,
         yellow_low,

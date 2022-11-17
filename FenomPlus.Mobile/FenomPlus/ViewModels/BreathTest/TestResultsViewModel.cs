@@ -27,6 +27,8 @@ namespace FenomPlus.ViewModels
             TestResult = (Cache.FenomValue) < 5 ? "< 5" :
                         (Cache.FenomValue) > 300 ? "> 300":
                         Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
+
+            BleHub.ReadyForTest = false;
         }
 
         /// <summary>

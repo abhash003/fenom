@@ -30,6 +30,13 @@ namespace FenomPlus.Services
             set => _Cache = value;
         }
 
+        protected IDialogService _Dialogs;
+        public IDialogService Dialogs
+        {
+            get => _Dialogs ??= Container.Resolve<IDialogService>();
+            set => _Dialogs = value;
+        }
+
         protected IDatabaseService _Database;
         public IDatabaseService Database
         {
@@ -72,6 +79,7 @@ namespace FenomPlus.Services
                 Container.Register<IConfigService, ConfigService>().AsSingleton();
                 Container.Register<IBleHubService, BleHubService>().AsSingleton();
                 Container.Register<ICacheService, CacheService>().AsSingleton();
+                Container.Register<IDialogService, DialogService>().AsSingleton();
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
                 Container.Register<IDebugLogFileService, DebugLogFileService>().AsSingleton();
                 Container.Register<ILogCatService, LogCatService>().AsSingleton();

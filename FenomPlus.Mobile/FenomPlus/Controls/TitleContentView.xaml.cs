@@ -11,7 +11,7 @@ namespace FenomPlus.Controls
     public partial class TitleContentView : ContentView
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
-        private TitleContentViewModel TitleContentViewModel;
+        private readonly TitleContentViewModel TitleContentViewModel;
 
         public TitleContentView()
         {

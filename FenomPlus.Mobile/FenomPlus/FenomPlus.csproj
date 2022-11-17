@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Syncfusion.Xamarin.DataGridExport" Version="20.3.0.52" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="20.3.0.52" />
@@ -54,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="TinyIoC\" />
     <Folder Include="Helpers\" />
     <Folder Include="Models\DBModel\" />
@@ -77,8 +77,17 @@
     <Compile Update="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Other\StatusDeviceInfoView.xaml.cs">
       <DependentUpon>StatusDeviceInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Other\PastResultsView.xaml.cs">
+      <DependentUpon>PastResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Other\PastErrorsView.xaml.cs">
+      <DependentUpon>PastErrorsView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\QualityControl\QCTabView.xaml.cs">
       <DependentUpon>QCTabView.xaml</DependentUpon>

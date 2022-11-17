@@ -20,7 +20,7 @@ namespace FenomPlus.Views
 
         private async void StartTest(object sender, EventArgs e)
         {
-            await TestErrorViewModel.Services.Navigation.ChooseTestView();
+            await TestErrorViewModel.Services.Navigation.DashboardView();
         }
 
         protected override void OnAppearing()

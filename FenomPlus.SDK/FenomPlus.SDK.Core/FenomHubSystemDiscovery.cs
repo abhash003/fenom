@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -11,6 +12,7 @@ using FenomPlus.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
 using Syncfusion.SfDataGrid.XForms.DataPager;
+using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core
 {
@@ -39,9 +41,6 @@ namespace FenomPlus.SDK.Core
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public FenomHubSystemDiscovery()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
@@ -113,18 +112,14 @@ namespace FenomPlus.SDK.Core
         }
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+
+
         public IFenomHubSystem FenomHubSystem
         {
             get => _FenomHubSystem;
             set => _FenomHubSystem = value as IFenomHubSystem;
         }
 
-        /// <summary>
-        /// SetLoggerFactory
-        /// </summary>
         public void SetLoggerFactory(ILoggerFactory loggerFactory)
         {
             _loggingMaager.SetLoggingFactory(loggerFactory);
@@ -135,9 +130,7 @@ namespace FenomPlus.SDK.Core
         /// </summary>
         public bool IsScanning => _bleRadio.IsScanning;
 
-        /// <summary>
-        /// Scan
-        /// </summary>
+
         public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
         {
             try
@@ -185,9 +178,6 @@ namespace FenomPlus.SDK.Core
             }
         }
 
-        /// <summary>
-        /// StopScan
-        /// </summary>
         public async Task<bool> StopScan()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "StopScan");

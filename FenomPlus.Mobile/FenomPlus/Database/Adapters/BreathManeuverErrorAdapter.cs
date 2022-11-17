@@ -1,4 +1,6 @@
-﻿using FenomPlus.Database.Tables;
+﻿using System;
+using System.Globalization;
+using FenomPlus.Database.Tables;
 using FenomPlus.Models;
 
 namespace FenomPlus.Database.Adapters
@@ -37,12 +39,24 @@ namespace FenomPlus.Database.Adapters
 
         public static BreathManeuverErrorDataModel ConvertForGrid(this BreathManeuverErrorTb input)
         {
-            if (input == null) return null;
+            if (input == null) 
+                return null;
+
+            string prettyDateTime;
+
+            if (DateTime.TryParse(input.DateError, out var dt))
+            {
+                prettyDateTime = dt.ToString(Constants.PrettyTimeFormatString, CultureInfo.CurrentCulture);
+            }
+            else
+            {
+                prettyDateTime = input.DateError;
+            }
+
             return new BreathManeuverErrorDataModel()
             {
                 _id = input._id,
-                DateError = input.DateError,
-                Description = input.Description,
+                DateError = prettyDateTime,
                 Firmware = input.Firmware,
                 Humidity = input.Humidity,
                 SerialNumber = input.SerialNumber,

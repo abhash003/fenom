@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using FenomPlus.Controls;
 using FenomPlus.Enums;
 using Plugin.SimpleAudioPlayer;
@@ -62,9 +63,8 @@ namespace FenomPlus.Helpers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private static SoundsEnum CurrentSound = SoundsEnum.none;
+
         public static void PlaySound(float guageData)
         {
             InitSound();
@@ -73,41 +73,99 @@ namespace FenomPlus.Helpers
             if ((guageData <= BreathGuageValues.White1Top) || (guageData >= BreathGuageValues.Red4Top))
             {
                 StopAll();
+                CurrentSound = SoundsEnum.none;
             }
             // play red_low
             else if (guageData <= BreathGuageValues.Red2Top)
             {
                 PlaySound(SoundsEnum.red_low, 100);
+                if (CurrentSound != SoundsEnum.red_low)
+                    StopSound();
+                CurrentSound = SoundsEnum.red_low;
             }
             // play yellow_low
             else if (guageData <= BreathGuageValues.Yellow1Top)
             {
                 PlaySound(SoundsEnum.yellow_low, 100);
+                if (CurrentSound != SoundsEnum.yellow_low)
+                    StopSound();
+                CurrentSound = SoundsEnum.yellow_low;
             }
             // play green_low
             else if (guageData <= BreathGuageValues.Green1Top)
             {
                 PlaySound(SoundsEnum.green_low, 100);
+                if (CurrentSound != SoundsEnum.green_low)
+                    StopSound();
+                CurrentSound = SoundsEnum.green_low;
             }
             // play red_high
             else if (guageData >= BreathGuageValues.Yellow2Top)
             {
                 PlaySound(SoundsEnum.red_high, 100);
+                if (CurrentSound != SoundsEnum.red_high)
+                    StopSound();
+                CurrentSound = SoundsEnum.red_high;
             }            
             // play yellow_high
             else if (guageData >= BreathGuageValues.Green3Top)
             {
                 PlaySound(SoundsEnum.yellow_high, 100);
+                if (CurrentSound != SoundsEnum.yellow_high)
+                    StopSound();
+                CurrentSound = SoundsEnum.yellow_high;
             }
             // play green_high
             else if (guageData >= BreathGuageValues.Green2Top)
             {
                 PlaySound(SoundsEnum.green_high, 100);
+                if (CurrentSound != SoundsEnum.green_high)
+                    StopSound();
+                CurrentSound = SoundsEnum.green_high;
             }
             // play green_mid
             else
             {
                 PlaySound(SoundsEnum.green_mid, 100);
+                if (CurrentSound != SoundsEnum.green_mid)
+                    StopSound();
+                CurrentSound = SoundsEnum.green_mid;
+            }
+        }
+
+        private static void StopSound()
+        {
+            switch (CurrentSound)
+            {
+                case SoundsEnum.none:
+                    break;
+                case SoundsEnum.red_low:
+                    StopRedLow();
+                    break;
+                case SoundsEnum.red_high:
+                    StopRedHigh();
+                    break;
+                case SoundsEnum.yellow_low:
+                    StopYellowLow();
+                    break;
+                case SoundsEnum.yellow_high:
+                    StopYellowHigh();
+                    break;
+                case SoundsEnum.green_low:
+                    StopGreenLow();
+                    break;
+                case SoundsEnum.green_mid:
+                    StopGreenMid();
+                    break;
+                case SoundsEnum.green_high:
+                    StopGreenHigh();
+                    break;
+                case SoundsEnum.test_failure:
+                    break;
+                case SoundsEnum.test_success:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

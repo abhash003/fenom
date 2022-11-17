@@ -34,15 +34,15 @@
     <ShellContent x:Name="PastResults"
                   Icon="PastResultIcon"
                   Title="Past Results"
-                  ContentTemplate="{DataTemplate pages:ViewPastResultsView}" 
-                  Route="ViewPastResultsView"
+                  ContentTemplate="{DataTemplate pages:PastResultsView}" 
+                  Route="PastResultsView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="ViewRecentErrors"
                   Icon="RecentErrorIcon"
                   Title="Error Log"
-                  ContentTemplate="{DataTemplate pages:ViewRecentErrorsView}"
-                  Route="ViewRecentErrorsView"
+                  ContentTemplate="{DataTemplate pages:PastErrorsView}"
+                  Route="PastErrorsView"
                   IsVisible="true"/>
 
     <ShellContent Title="Pairing Menu"
@@ -54,7 +54,7 @@
 
     <!--The following are for debugging purposes only-->
 
-    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="ChooseTestView"              ContentTemplate="{DataTemplate pages:ChooseTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="DashboardView"              ContentTemplate="{DataTemplate pages:DashboardView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />

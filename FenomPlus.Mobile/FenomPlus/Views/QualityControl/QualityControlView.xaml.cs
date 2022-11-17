@@ -50,7 +50,7 @@ namespace FenomPlus.Views
             QualityControlViewModel.Services.Cache.QCUsername = userName;
 
             // send QC model
-            await QualityControlViewModel.BleHub.StartTest(BreathTestEnum.QuailtyControl);
+            await QualityControlViewModel.BleHub.StartTest(BreathTestEnum.QualityControl);
 
             //ok goto test now.
             await QualityControlViewModel.Services.Navigation.NegativeControlPerformView();

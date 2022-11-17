@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using FenomPlus.Interfaces;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core;
@@ -17,9 +18,16 @@ namespace FenomPlus.Services
 {
     public class BleHubService : BaseService, IBleHubService
     {
+        private readonly Timer DeviceReadyTimer;
+
         public BleHubService(IAppServices services) : base(services)
         {
-            FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
+            DeviceReadyTimer = new Timer(1000);
+            DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
+
+            ReadyForTest = true;
+			
+			FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
             {
                 //if (AppShell.Current.CurrentPage)
                 //_ = Services.Navigation.DevicePowerOnView();
@@ -32,6 +40,35 @@ namespace FenomPlus.Services
 
                 Services.Navigation.DisplayAlert("Alert", "You have been alerted", "OK");
             };
+        }
+
+        public int DeviceReadyCountDown { get; set; }
+
+        private bool _readyForTest;
+        public bool ReadyForTest
+        {
+            get => _readyForTest;
+            set
+            {
+                _readyForTest = value;
+
+                if (_readyForTest == false)
+                {
+                    DeviceReadyCountDown = 32;
+                    DeviceReadyTimer.Start();
+                }
+            }
+        }
+
+        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            DeviceReadyCountDown -= 1;
+
+            if (DeviceReadyCountDown <= 0)
+            {
+                ReadyForTest = true;
+                DeviceReadyTimer.Stop();
+            }
         }
 
         /// <summary>
@@ -151,6 +188,7 @@ namespace FenomPlus.Services
                 // if disconnected try to re-connect
                 if ((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
+                    Debug.WriteLine("Error: Trying to reconnect...");
                     // try to connect
                     BleDevice.ConnectAsync();
                 }
@@ -173,6 +211,34 @@ namespace FenomPlus.Services
             Services.Navigation.DevicePowerOnView();
             return false;
         }
+
+        //public async Task<bool> ReadyForTest()
+        //{
+        //    if (IsConnected())
+        //    {
+        //        Stopwatch stopwatch = new Stopwatch();
+        //        stopwatch.Start();
+
+        //        await Services.BleHub.RequestDeviceInfo();
+
+        //        var status = Services.Cache.DeviceInfo.DeviceStatus;
+
+
+        //        //_ = await BleDevice.BREATHTEST(BreathTestEnum.Start6Second);
+        //        //bool isReady = Services.Cache.FenomReady;
+        //        //_ = await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+
+        //        stopwatch.Stop();
+        //        var milliseconds = stopwatch.ElapsedMilliseconds;
+
+        //        bool isReady = true;
+        //        return isReady;
+        //    }
+
+        //    return false;
+        //}
+
+
 
         /// <summary>
         /// 

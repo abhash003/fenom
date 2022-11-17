@@ -13,6 +13,9 @@ namespace FenomPlus.Interfaces
         //bool IsScanning { get; set; }
         IBleDevice BleDevice { get; set; }
 
+        int DeviceReadyCountDown { get; set; }
+        bool ReadyForTest { get; set; }
+
         Task<bool> Connect(IBleDevice bleDevice);
         Task<bool> Disconnect();
 

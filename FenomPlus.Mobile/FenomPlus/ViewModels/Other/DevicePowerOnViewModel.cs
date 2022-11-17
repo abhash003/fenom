@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
+using FenomPlus.Views;
+using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
@@ -27,10 +29,28 @@ namespace FenomPlus.ViewModels
 
                 bool isConnected = (bool)m.Value;
 
-                if (isConnected)
+                if (isConnected) // Todo: We shouldn't need both but trying to resolve weak connections
                 {
+
+                    if (!Services.BleHub.BleDevice.Connected)
+                    {
+                        // ToDo: Remove - This is a double check
+                    }
+
                     Debug.WriteLine("********* Device Connected!");
-                    Services.Navigation.ChooseTestView();
+
+                    if (App.GetCurrentPage() == null)
+                        return;
+
+                    if (App.GetCurrentPage() is DashboardView)
+                        return;
+
+                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                    {
+                        // Only navigate if during startup
+                        Services.Navigation.DashboardView();
+                    }
+
                 }
                 else
                 {
@@ -104,7 +124,7 @@ namespace FenomPlus.ViewModels
         public bool EnvironmentalInfo()
         {
             if (Cache.EnvironmentalInfo == null) return true;
-            //Services.Navigation.ChooseTestView();
+            //Services.Navigation.DashboardView();
             return false;
         }
 

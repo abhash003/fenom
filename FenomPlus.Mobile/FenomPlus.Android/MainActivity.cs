@@ -10,6 +10,7 @@ using FenomPlus.Interfaces;
 using System.ComponentModel;
 using System.Linq;
 using Android;
+using Acr.UserDialogs;
 
 namespace FenomPlus.Droid
 {
@@ -22,6 +23,8 @@ namespace FenomPlus.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+            UserDialogs.Init(this);
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();

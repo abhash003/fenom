@@ -15,7 +15,8 @@ namespace FenomPlus.ViewModels
         public IBleHubService BleHub => Services.BleHub;
         public ICacheService Cache => Services.Cache;
         public IConfigService Config => Services.Config;
-        
+        public IDialogService Dialogs => Services.Dialogs;
+
         // repos here
         public IBreathManeuverErrorRepository ErrorsRepo => Services.Database.BreathManeuverErrorRepo;
         public IBreathManeuverResultRepository ResultsRepo => Services.Database.BreathManeuverResultRepo;
@@ -76,7 +77,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         public async Task ExitToDashboard()
         {
-            await Services.Navigation.ChooseTestView();
+            await Services.Navigation.DashboardView();
         }
 
         [RelayCommand]

@@ -5,7 +5,9 @@ using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.Services;
 using System;
+using System.Diagnostics;
 using System.Timers;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -63,7 +65,7 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private SensorStatus _pressure;
 
-        private readonly Timer DeviceStatusTimer = new Timer(1000);
+        private readonly Timer DeviceStatusTimer = new Timer(5000);
 
         public TitleContentViewModel()
         {
@@ -79,10 +81,20 @@ namespace FenomPlus.Controls
             RefreshIconStatus();
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
+            DeviceStatusTimer.Start();
+        }
+
+        [RelayCommand]
+        private void NavigateToStatusPage()
+        {
+            Services.Navigation.DeviceStatusView();
         }
 
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
+            // Get latest environmental info
+            Services.BleHub.RequestEnvironmentalInfo();
+
             RefreshIconStatus();
         }
 
@@ -102,6 +114,8 @@ namespace FenomPlus.Controls
             UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+
+            Debug.WriteLine("Note: Status icons updated!");
         }
 
         public SensorStatus UpdateBattery(int value)

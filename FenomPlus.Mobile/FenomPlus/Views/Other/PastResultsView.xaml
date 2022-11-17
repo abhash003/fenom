@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<views:BaseContentPage
+    xmlns:views="clr-namespace:FenomPlus.Views"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
+    x:Class="FenomPlus.Views.PastResultsView"
+    xmlns:sfgrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:sfPager="clr-namespace:Syncfusion.SfDataGrid.XForms.DataPager;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="true"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20">
+             
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" Margin="0" Padding="0">
+
+                <!--<SearchBar Placeholder="ID" TextChanged="SearchBar_OnTextChanged" />-->
+
+                <border:SfBorder 
+                    BorderColor="LightGray"
+                    BackgroundColor="Transparent" 
+                    HorizontalOptions="FillAndExpand" 
+                    VerticalOptions="FillAndExpand"
+                    BorderWidth="1">
+
+                    <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
+                                       ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                       VerticalOptions="FillAndExpand"
+                                       HorizontalOptions="FillAndExpand"
+                                       AllowResizingColumn="False"
+                                       AutoGenerateColumns="False"
+                                       AllowEditing="False"
+                                       AllowSorting="False"
+                                       NavigationMode="Row"
+                                       SelectionMode="Single"
+                                       AutoExpandGroups="False"
+                                       AllowGroupExpandCollapse="False"
+                                       ColumnSizer="Star"
+                                       VerticalScrollBarVisibility="False"
+                                       HorizontalScrollBarVisibility="False"
+                                       VerticalOverScrollMode="None"
+                                       AllowPullToRefresh="False">
+
+                        <sfgrid:SfDataGrid.Columns>
+
+                            <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
+
+                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
+
+                            <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
+
+                            <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType"/>
+
+                            <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus"/>
+
+                            <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult"/>
+
+                        </sfgrid:SfDataGrid.Columns>
+
+                        <sfgrid:SfDataGrid.SortColumnDescriptions>
+                            <sfgrid:SortColumnDescription ColumnName="DateOfTest" SortDirection="Descending" />
+                        </sfgrid:SfDataGrid.SortColumnDescriptions>
+
+                    </sfgrid:SfDataGrid>
+
+                </border:SfBorder>
+
+                <sfPager:SfDataPager x:Name ="DataPager"
+                                     PageSize="5" 
+                                     NumericButtonCount="14"
+                                     AutoEllipsisMode="None"
+                                     Source="{Binding PastResultsData}"
+                                     HorizontalOptions="FillAndExpand"
+                                     HeightRequest="50"
+                                     Margin="0,0,0,4"
+                                     IsTabStop="False"/>
+
+            </StackLayout>
+
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToDashboardCommand }"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>
