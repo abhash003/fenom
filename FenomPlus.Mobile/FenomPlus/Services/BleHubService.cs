@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using FenomPlus.Interfaces;
@@ -10,9 +9,7 @@ using FenomPlus.SDK.Core;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
-using FenomPlus.Views;
 using Plugin.BLE.Abstractions.EventArgs;
-using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
@@ -22,7 +19,7 @@ namespace FenomPlus.Services
 
         public BleHubService(IAppServices services) : base(services)
         {
-            DeviceReadyTimer = new Timer(1000);
+            DeviceReadyTimer = new System.Timers.Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
 
             ReadyForTest = true;
