@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusInfoButton"
+             xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+             x:Class="FenomPlus.Controls.StatusInfoButton">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="smallButton" TargetType="Button">
+                <Setter Property="WidthRequest" Value="120" />
+                <Setter Property="TextColor" Value="#077DCD" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+            </Style>
+
+            <Style x:Key="smallLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="#333"/>
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="#fff" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!--<ContentView.Content>-->
+
+    <buttons:SfButton x:Name="InnerButton" 
+                    HasShadow="True" 
+                    BorderColor="#EBEBEB" 
+                    BorderWidth="1" 
+                    Margin="10,10,10,0">
+
+        <Grid BackgroundColor="#F9F9F0"  
+                          HorizontalOptions="FillAndExpand" 
+                          VerticalOptions="CenterAndExpand" 
+                          Grid.RowSpacing="0" 
+                          Grid.Padding="0"
+                          x:DataType="controls:StatusInfoBoxViewModel">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label x:Name="InfoBlockTitle"
+                        Grid.Row="0"
+                        Text="{Binding Header}"
+                        VerticalOptions="Center" 
+                        VerticalTextAlignment="Center" 
+                        HorizontalOptions="Center" 
+                        Margin="0,5,0,0" 
+                        TextColor="#333" 
+                        FontSize="16"/>
+
+                <Image x:Name="InfoBlockIcon"
+                       Source="{Binding ImagePath}"
+                       Grid.Row="1" 
+                       VerticalOptions="CenterAndExpand"
+                       Aspect="AspectFit"/>
+
+                <Label x:Name="InfoBlockValue"
+                        Grid.Row="2" 
+                        Text="{Binding Value}"
+                        VerticalOptions="Center" 
+                        VerticalTextAlignment="Start" 
+                        HorizontalOptions="Center" 
+                        TextColor="Red" 
+                        FontSize="20"/>
+
+                <Label x:Name="InfoBlockLabel"
+                        Grid.Row="3" 
+                        Text="{Binding Label}"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Center" 
+                        TextColor="{Binding Color}" 
+                        FontSize="12"/>
+
+                <Label x:Name="InfoBlockLink"
+                        Grid.Row="4" 
+                        Text="{Binding ButtonText}"
+                        FontSize="16"
+                        TextColor="#077DCD" 
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Margin="0,5,0,5"/>
+
+            </Grid>
+
+        </buttons:SfButton>
+
+    <!--</ContentView.Content>-->
+
+</ContentView>

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using Android;
 using Acr.UserDialogs;
+using TinySvgHelper;
 
 namespace FenomPlus.Droid
 {
@@ -25,10 +26,12 @@ namespace FenomPlus.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
             UserDialogs.Init(this);
+            SvgHelper.Init();
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
             AppServices.Container.Register<IUsbDeviceService, UsbDeviceService>().AsSingleton();
+
 
             LoadApplication(new App());
             //CheckPermissions();

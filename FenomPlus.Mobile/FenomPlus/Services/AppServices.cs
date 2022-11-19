@@ -1,6 +1,7 @@
 ﻿using System;
 using FenomPlus.Controls;
 using FenomPlus.Interfaces;
+using FenomPlus.ViewModels;
 using TinyIoC;
 
 namespace FenomPlus.Services
@@ -85,7 +86,7 @@ namespace FenomPlus.Services
                 Container.Register<ILogCatService, LogCatService>().AsSingleton();
 
                 // We only want one instance of this - includes its own timer
-                Container.Register<TitleContentViewModel>().AsSingleton();
+                Container.Register<StatusViewModel>().AsSingleton();
             }
             catch (Exception ex)
             {

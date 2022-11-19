@@ -2,7 +2,9 @@
 <ContentView HorizontalOptions="FillAndExpand"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="FenomPlus.Controls.TitleContentView">
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+    x:Class="FenomPlus.Controls.TitleContentView"
+    x:DataType="viewModels:StatusViewModel">
 
 
     <ContentView.Resources>
@@ -10,12 +12,14 @@
 
             <Style x:Key="StatusBarButton" TargetType="ImageButton">
                 <Setter Property="Aspect" Value="AspectFit" />
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="BorderColor" Value="Transparent" />
                 <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HeightRequest" Value="40"/>
             </Style>
+
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -35,39 +39,47 @@
                     Margin="0, 0, 20, 0"
                     HorizontalOptions="CenterAndExpand"/>
 
-            <StackLayout Grid.Column="2" 
+            <StackLayout Grid.Column="0" 
+                         Grid.ColumnSpan="3"
                          Orientation="Horizontal" 
-                         HorizontalOptions="EndAndExpand" 
-                         Spacing="10" 
-                         Margin="5,0,5,0">
+                         HorizontalOptions="End" 
+                         Spacing="0" 
+                         Margin="0,0,10,0">
 
-                <ImageButton Source="{Binding Battery.Image}" 
+
+                <ImageButton Source="{Binding SensorBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding QualityControlExpiration.Image}"                             
+                <ImageButton Source="{Binding DeviceBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding Sensor.Image}"                             
+                <ImageButton Source="{Binding QcBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding Device.Image}"                             
+                <ImageButton Source="{Binding BluetoothBarIcon}" 
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding RelativeHumidity.Image}"                             
+                <ImageButton Source="{Binding PressureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding Temperature.Image}"                             
+                <ImageButton Source="{Binding HumidityBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding Pressure.Image}"                             
+                <ImageButton Source="{Binding TemperatureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
+
+                <ImageButton Source="{Binding BatteryBarIcon}" 
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
+
+
 
             </StackLayout>
 
