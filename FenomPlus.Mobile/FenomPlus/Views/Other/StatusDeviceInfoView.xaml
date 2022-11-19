@@ -79,46 +79,52 @@
                     <controls:StatusInfoButton 
                         x:Name="SensorInfo"
                         Grid.Row="0" 
-                        Grid.Column="0"/>
-
-                    <!--Command="{Binding ShowSensorDetailsCommand}"-->
+                        Grid.Column="0"
+                        Command="{Binding ShowSensorDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="DeviceInfo"
                         Grid.Row="0" 
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Command="{Binding ShowDeviceDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="QualityControlInfo"
                         Grid.Row="0" 
-                        Grid.Column="2"/>
+                        Grid.Column="2"
+                        Command="{Binding ShowQualityControlDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="BluetoothInfo"
                         Grid.Row="0" 
-                        Grid.Column="3"/>
+                        Grid.Column="3"
+                        Command="{Binding ShowBluetoothDetailsCommand}"/>
 
                     <!--Individual Items Row 2-->
 
                     <controls:StatusInfoButton 
                         x:Name="HumidityInfo"
                         Grid.Row="1" 
-                        Grid.Column="0"/>
+                        Grid.Column="0"
+                        Command="{Binding ShowHumidityDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="PressureInfo"
                         Grid.Row="1" 
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        Command="{Binding ShowPressureDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="TemperatureInfo"
                         Grid.Row="1" 
-                        Grid.Column="2"/>
+                        Grid.Column="2"
+                        Command="{Binding ShowTemperatureDetailsCommand}"/>
 
                     <controls:StatusInfoButton 
                         x:Name="BatteryInfo"
                         Grid.Row="1" 
-                        Grid.Column="3"/>
+                        Grid.Column="3"
+                        Command="{Binding ShowBatteryDetailsCommand}"/>
 
                     </Grid>
 

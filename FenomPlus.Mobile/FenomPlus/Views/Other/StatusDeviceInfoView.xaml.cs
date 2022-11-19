@@ -49,5 +49,15 @@ namespace FenomPlus.Views
             base.NewGlobalData();
             StatusViewModel.NewGlobalData();
         }
+
+        private void DeviceInfo_OnClicked(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void SensorInfo_OnClicked(object sender, EventArgs e)
+        {
+           
+        }
     }
 }

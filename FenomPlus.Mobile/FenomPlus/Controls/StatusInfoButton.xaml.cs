@@ -12,20 +12,20 @@ namespace FenomPlus.Controls
     {
         //public event EventHandler Clicked = delegate { };
 
-        //public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusInfoButton), propertyChanged: CommandUpdated);
-        //public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusInfoButton), propertyChanged: CommandParameterUpdated);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusInfoButton), propertyChanged: CommandUpdated);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusInfoButton), propertyChanged: CommandParameterUpdated);
 
-        //public ICommand Command
-        //{
-        //    get => (ICommand)this.GetValue(CommandProperty);
-        //    set => this.SetValue(CommandProperty, value);
-        //}
+        public ICommand Command
+        {
+            get => (ICommand)this.GetValue(CommandProperty);
+            set => this.SetValue(CommandProperty, value);
+        }
 
-        //public object CommandParameter
-        //{
-        //    get => this.GetValue(CommandParameterProperty);
-        //    set => this.SetValue(CommandParameterProperty, value);
-        //}
+        public object CommandParameter
+        {
+            get => this.GetValue(CommandParameterProperty);
+            set => this.SetValue(CommandParameterProperty, value);
+        }
 
 
         public StatusInfoButton()
@@ -39,25 +39,26 @@ namespace FenomPlus.Controls
 
 
 
-        //private static void CommandUpdated(object sender, object oldValue, object newValue)
-        //{
-        //    if (sender is StatusInfoButton statusInfoButton && newValue is ICommand newCommand)
-        //    {
-        //        statusInfoButton.InnerButton.Command = newCommand;
-        //    }
-        //}
+        private static void CommandUpdated(object sender, object oldValue, object newValue)
+        {
+            if (sender is StatusInfoButton statusInfoButton && newValue is ICommand newCommand)
+            {
+                statusInfoButton.InnerButton.Command = newCommand;
+            }
+        }
 
-        //private static void CommandParameterUpdated(object sender, object oldValue, object newValue)
-        //{
-        //    if (sender is StatusInfoButton statusInfoButton && newValue != null)
-        //    {
-        //        statusInfoButton.InnerButton.CommandParameter = newValue;
-        //    }
-        //}
+        private static void CommandParameterUpdated(object sender, object oldValue, object newValue)
+        {
+            if (sender is StatusInfoButton statusInfoButton && newValue != null)
+            {
+                statusInfoButton.InnerButton.CommandParameter = newValue;
+            }
+        }
 
         //private void OnClicked(object sender, EventArgs args)
         //{
-        //    this.Clicked?.Invoke(sender, args);
+        //    Command.Execute(null);
+        //    //this.Clicked?.Invoke(sender, args);
         //}
     }
 }
