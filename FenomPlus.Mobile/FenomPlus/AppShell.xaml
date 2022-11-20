@@ -20,8 +20,8 @@
     <ShellContent x:Name="StatusDeviceInfo"
                   Icon="icon_feed"
                   Title="Status Screen / Device Info"
-                  ContentTemplate="{DataTemplate pages:StatusDeviceHubView}"
-                  Route="StatusDeviceHubView"
+                  ContentTemplate="{DataTemplate pages:DeviceHubView}"
+                  Route="DeviceHubView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="QualityControl"

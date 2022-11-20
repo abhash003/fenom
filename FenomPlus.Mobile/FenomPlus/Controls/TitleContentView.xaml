@@ -59,9 +59,6 @@
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding BluetoothBarIcon}" 
-                             Style="{StaticResource StatusBarButton}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding PressureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
@@ -75,10 +72,13 @@
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding BatteryBarIcon}" 
+                <ImageButton Source="{Binding BluetoothBarIcon}" 
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
+                <ImageButton Source="{Binding BatteryBarIcon}" 
+                             Style="{StaticResource StatusBarButton}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
 
             </StackLayout>

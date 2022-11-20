@@ -5,12 +5,14 @@ using System.Text;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
 using FenomPlus.Models;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
+using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
 namespace FenomPlus.ViewModels
 {
@@ -58,21 +60,94 @@ namespace FenomPlus.ViewModels
         public StatusViewModel()
         {
             VersionTracking.Track();
+
             SoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
 
+            BluetoothInfoViewModel.Header = "Bluetooth";
             SensorInfoViewModel.Header = "Sensor";
             DeviceInfoViewModel.Header = "Device";
             QualityControlInfoViewModel.Header = "Quality Control";
-            BluetoothInfoViewModel.Header = "Bluetooth";
             HumidityInfoViewModel.Header = "Humidity";
             PressureInfoViewModel.Header = "Pressure";
             TemperatureInfoViewModel.Header = "Temperature";
             BatteryInfoViewModel.Header = "Battery";
 
+            SetDefaults();
+
             RefreshIconStatus();
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
+
+            // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
+            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
+            {
+                UpdateBluetooth(Services.BleHub.IsConnected());
+            });
+        }
+
+        private void SetDefaults()
+        {
+            SerialNumber = string.Empty;
+            FirmwareVersion = string.Empty;
+
+            BluetoothBarIcon = "wo_bluetooth_red.png";
+            BluetoothInfoViewModel.ImagePath = "bluetooth_red.png";
+            BluetoothInfoViewModel.Color = Color.Red;
+            BluetoothInfoViewModel.Label = "Disconnected";
+            BluetoothInfoViewModel.Value = "";
+
+            //SensorInfoViewModel.Header = "Sensor";
+            SensorBarIcon = "wo_sensor_red.png";
+            SensorInfoViewModel.ImagePath = "sensor_red.png";
+            SensorInfoViewModel.Color = Color.Red;
+            SensorInfoViewModel.Label = "Disconnected";
+            SensorInfoViewModel.Value = "";
+
+            //DeviceInfoViewModel.Header = "Device";
+            DeviceBarIcon = "wo_device_red.png";
+            DeviceInfoViewModel.ImagePath = "device_red.png";
+            DeviceInfoViewModel.Color = Color.Red;
+            DeviceInfoViewModel.Label = "Disconnected";
+            DeviceInfoViewModel.Value = "";
+
+            //QualityControlInfoViewModel.Header = "Quality Control";
+            QcBarIcon = "wo_quality_control_red.png";
+            QualityControlInfoViewModel.ImagePath = "quality_control_red.png";
+            QualityControlInfoViewModel.Color = Color.Red;
+            QualityControlInfoViewModel.Label = "Disconnected";
+            QualityControlInfoViewModel.Value = "";
+
+            //HumidityInfoViewModel.Header = "Humidity";
+            HumidityBarIcon = "wo_humidity_red.png";
+            HumidityInfoViewModel.ImagePath = "humidity_red.png";
+            HumidityInfoViewModel.Color = Color.Red;
+            HumidityInfoViewModel.Label = "Disconnected";
+            HumidityInfoViewModel.Value = "";
+
+            //PressureInfoViewModel.Header = "Pressure";
+            PressureBarIcon = "wo_pressure_red.png";
+            PressureInfoViewModel.ImagePath = "pressure_red.png";
+            PressureInfoViewModel.Color = Color.Red;
+            PressureInfoViewModel.Label = "Disconnected";
+            PressureInfoViewModel.Value = "";
+
+            //TemperatureInfoViewModel.Header = "Temperature";
+            TemperatureBarIcon = "wo_temperature_red.png";
+            TemperatureInfoViewModel.ImagePath = "temperature_red.png";
+            TemperatureInfoViewModel.Color = Color.Red;
+            TemperatureInfoViewModel.Label = "Disconnected";
+            TemperatureInfoViewModel.Value = "";
+
+            //BatteryInfoViewModel.Header = "Battery";
+            BatteryBarIcon = "wo_battery_red.png";
+            BatteryInfoViewModel.ImagePath = "battery_red.png";
+            BatteryInfoViewModel.Color = Color.Red;
+            BatteryInfoViewModel.Label = "Disconnected";
+            BatteryInfoViewModel.Value = "";
+
+
+
         }
 
         [RelayCommand]
@@ -100,11 +175,13 @@ namespace FenomPlus.ViewModels
             {
                 SerialNumber = string.Empty;
                 FirmwareVersion = string.Empty;
+                SetDefaults();
             }
 
-            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdateBluetooth(Services.BleHub.IsConnected()); // Cache is updated when characteristic changes
+            //UpdateBluetooth(Services.BleHub.IsConnected()); // Cache is updated when characteristic changes
+
+            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
             int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
             UpdateDevice(daysRemaining);
@@ -122,6 +199,32 @@ namespace FenomPlus.ViewModels
             Debug.WriteLine("Note: Status icons updated!");
         }
 
+        [ObservableProperty]
+        private bool _bluetoothConnected;
+
+        public void UpdateBluetooth(bool connected)
+        {
+            BluetoothConnected = connected;
+
+            BluetoothInfoViewModel.ButtonText = "Settings";
+
+            if (BluetoothConnected)
+            {
+                BluetoothBarIcon = "wo_bluetooth_green.png";
+                BluetoothInfoViewModel.ImagePath = "bluetooth_green.png";
+                BluetoothInfoViewModel.Color = Color.Green;
+                BluetoothInfoViewModel.Label = "Connected";
+                BluetoothInfoViewModel.Value = "OK";
+            }
+            else
+            {
+                BluetoothBarIcon = "wo_bluetooth_red.png";
+                BluetoothInfoViewModel.ImagePath = "bluetooth_red.png";
+                BluetoothInfoViewModel.Color = Color.Red;
+                BluetoothInfoViewModel.Label = "Disconnected";
+                BluetoothInfoViewModel.Value = "";
+            }
+        }
 
         public const int BatteryCritical = 3;
         public const int BatteryWarning = 20;
@@ -158,7 +261,7 @@ namespace FenomPlus.ViewModels
             else if (value > BatteryCritical)
             {
                 BatteryBarIcon = "wo_battery_charge_yellow.png";
-                BatteryInfoViewModel.ImagePath = "battery_charge_yellow";
+                BatteryInfoViewModel.ImagePath = "battery_charge_yellow.png";
                 BatteryInfoViewModel.Color = Color.Yellow;
                 BatteryInfoViewModel.Label = "Warning";
             }
@@ -168,28 +271,6 @@ namespace FenomPlus.ViewModels
                 BatteryInfoViewModel.ImagePath = "battery_charge_red.png";
                 BatteryInfoViewModel.Color = Color.Red;
                 BatteryInfoViewModel.Label = "Low";
-            }
-        }
-
-        public void UpdateBluetooth(bool connected)
-        {
-            BluetoothInfoViewModel.ButtonText = "Settings";
-
-            if (Services.BleHub.IsConnected())
-            {
-                BluetoothBarIcon = "wo_bluetooth_green.png";
-                BluetoothInfoViewModel.ImagePath = "bluetooth_green.png";
-                BluetoothInfoViewModel.Color = Color.Green;
-                BluetoothInfoViewModel.Label = "Connected";
-                BluetoothInfoViewModel.Value = "OK";
-            }
-            else
-            {
-                BluetoothBarIcon = "wo_bluetooth_red.png";
-                BluetoothInfoViewModel.ImagePath = "bluetooth_red.png";
-                BluetoothInfoViewModel.Color = Color.Red;
-                BluetoothInfoViewModel.Label = "Disconnected";
-                BluetoothInfoViewModel.Value = "";
             }
         }
 
@@ -246,15 +327,15 @@ namespace FenomPlus.ViewModels
             else if (value <= QualityControlExpirationWarning)
             {
                 // warning
-                QcBarIcon = "wo_quality_control_yellow";
-                QualityControlInfoViewModel.ImagePath = "quality_control_yellow";
+                QcBarIcon = "wo_quality_control_yellow.png";
+                QualityControlInfoViewModel.ImagePath = "quality_control_yellow.png";
                 QualityControlInfoViewModel.Color = Color.Yellow;
             }
             else
             {
                 // full
-                QcBarIcon = "wo_quality_control_green";
-                QualityControlInfoViewModel.ImagePath = "quality_control_green";
+                QcBarIcon = "wo_quality_control_green.png";
+                QualityControlInfoViewModel.ImagePath = "quality_control_green.png";
                 QualityControlInfoViewModel.Color = Color.Green;
             }
         }
@@ -272,22 +353,22 @@ namespace FenomPlus.ViewModels
             if (value <= DeviceLow)
             {
                 // low
-                DeviceBarIcon = "wo_device_red";
-                DeviceInfoViewModel.ImagePath = "device_red";
+                DeviceBarIcon = "wo_device_red.png";
+                DeviceInfoViewModel.ImagePath = "device_red.png";
                 DeviceInfoViewModel.Color = Color.Red;
             }
             else if (value <= DeviceWarning)
             {
                 // warning
-                DeviceBarIcon = "_3x_wo_device_yellow";
-                DeviceInfoViewModel.ImagePath = "_3x_device_yellow";
+                DeviceBarIcon = "_3x_wo_device_yellow.png";
+                DeviceInfoViewModel.ImagePath = "_3x_device_yellow.png";
                 DeviceInfoViewModel.Color = Color.Yellow;
             }
             else
             {
                 // full
-                DeviceBarIcon = "wo_device_green_100";
-                DeviceInfoViewModel.ImagePath = "device_green_100";
+                DeviceBarIcon = "wo_device_green_100.png";
+                DeviceInfoViewModel.ImagePath = "device_green_100.png";
                 DeviceInfoViewModel.Color = Color.Green;
             }
         }
@@ -397,53 +478,112 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        [ObservableProperty]
+        private bool _showDetail;
+
+        [ObservableProperty] 
+        private string _detailsHeader;
+
+        [ObservableProperty]
+        private string _detailsImagePath;
+
+        [ObservableProperty]
+        private string _detailsValue;
+
+        [ObservableProperty]
+        private string _detailsLabel;
+
+        [ObservableProperty]
+        private string _detailsDescription;
+
         [RelayCommand]
         private void ShowSensorDetails()
         {
-
+            DetailsHeader = SensorInfoViewModel.Header;
+            DetailsImagePath = SensorInfoViewModel.ImagePath;
+            DetailsValue = SensorInfoViewModel.Value;
+            DetailsLabel = SensorInfoViewModel.Label;
+            DetailsDescription = SensorInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowDeviceDetails()
         {
-
+            DetailsHeader = DeviceInfoViewModel.Header;
+            DetailsImagePath = DeviceInfoViewModel.ImagePath;
+            DetailsValue = DeviceInfoViewModel.Value;
+            DetailsLabel = DeviceInfoViewModel.Label;
+            DetailsDescription = DeviceInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowQualityControlDetails()
         {
-
+            DetailsHeader = QualityControlInfoViewModel.Header;
+            DetailsImagePath = QualityControlInfoViewModel.ImagePath;
+            DetailsValue = QualityControlInfoViewModel.Value;
+            DetailsLabel = QualityControlInfoViewModel.Label;
+            DetailsDescription = QualityControlInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowBluetoothDetails()
         {
-
+            DetailsHeader = BluetoothInfoViewModel.Header;
+            DetailsImagePath = BluetoothInfoViewModel.ImagePath;
+            DetailsValue = BluetoothInfoViewModel.Value;
+            DetailsLabel = BluetoothInfoViewModel.Label;
+            DetailsDescription = BluetoothInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowHumidityDetails()
         {
-
+            DetailsHeader = HumidityInfoViewModel.Header;
+            DetailsImagePath = HumidityInfoViewModel.ImagePath;
+            DetailsValue = HumidityInfoViewModel.Value;
+            DetailsLabel = HumidityInfoViewModel.Label;
+            DetailsDescription = HumidityInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowPressureDetails()
         {
-
+            DetailsHeader = PressureInfoViewModel.Header;
+            DetailsImagePath = PressureInfoViewModel.ImagePath;
+            DetailsValue = PressureInfoViewModel.Value;
+            DetailsLabel = PressureInfoViewModel.Label;
+            DetailsDescription = PressureInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowTemperatureDetails()
         {
-
+            DetailsHeader = TemperatureInfoViewModel.Header;
+            DetailsImagePath = TemperatureInfoViewModel.ImagePath;
+            DetailsValue = TemperatureInfoViewModel.Value;
+            DetailsLabel = TemperatureInfoViewModel.Label;
+            DetailsDescription = TemperatureInfoViewModel.Description;
+            ShowDetail = true;
         }
 
         [RelayCommand]
         private void ShowBatteryDetails()
         {
-
+            DetailsHeader = BatteryInfoViewModel.Header;
+            DetailsImagePath = BatteryInfoViewModel.ImagePath;
+            DetailsValue = BatteryInfoViewModel.Value;
+            DetailsLabel = BatteryInfoViewModel.Label;
+            DetailsDescription = BatteryInfoViewModel.Description;
+            ShowDetail = true;
         }
+
 
 
     }

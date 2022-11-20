@@ -14,6 +14,7 @@ namespace FenomPlus.Controls
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusInfoButton), propertyChanged: CommandUpdated);
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusInfoButton), propertyChanged: CommandParameterUpdated);
+        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(StatusInfoButton), propertyChanged: EnabledUpdated);
 
         public ICommand Command
         {
@@ -25,6 +26,12 @@ namespace FenomPlus.Controls
         {
             get => this.GetValue(CommandParameterProperty);
             set => this.SetValue(CommandParameterProperty, value);
+        }
+
+        public bool Enabled
+        {
+            get => (bool)this.GetValue(EnabledProperty);
+            set => this.SetValue(EnabledProperty, value);
         }
 
 
@@ -52,6 +59,14 @@ namespace FenomPlus.Controls
             if (sender is StatusInfoButton statusInfoButton && newValue != null)
             {
                 statusInfoButton.InnerButton.CommandParameter = newValue;
+            }
+        }
+
+        private static void EnabledUpdated(object sender, object oldValue, object newValue)
+        {
+            if (sender is StatusInfoButton statusInfoButton && newValue != null)
+            {
+                statusInfoButton.InnerButton.IsEnabled = (bool)newValue;
             }
         }
 

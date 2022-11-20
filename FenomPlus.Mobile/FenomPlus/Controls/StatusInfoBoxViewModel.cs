@@ -23,10 +23,19 @@ namespace FenomPlus.Controls
         private string _label;
 
         [ObservableProperty]
+        private string _description;
+
+        [ObservableProperty]
         private string _buttonText;
 
         [ObservableProperty]
         private Color _color;
+
+        [ObservableProperty]
+        private string _helpLink;
+
+        [ObservableProperty]
+        private bool _displayPopup;
 
         public StatusInfoBoxViewModel()
         {

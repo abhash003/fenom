@@ -56,7 +56,7 @@ namespace FenomPlus.SDK.Core
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
             Debug.WriteLine("!!!!!  Device Connected");
 
-            DialogService.ShowToast("Bluetooth connected", 4);
+            //DialogService.ShowToast("Bluetooth connected", 4);
         }
 
         private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
@@ -65,7 +65,7 @@ namespace FenomPlus.SDK.Core
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
             Debug.WriteLine("!!!!!  Device Lost connection");
 
-            DialogService.ShowToast("Bluetooth connection was lost...", 4);
+            //DialogService.ShowToast("Bluetooth connection was lost...", 4);
         }
 
         public IFenomHubSystem FenomHubSystem

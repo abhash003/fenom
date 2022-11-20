@@ -75,8 +75,14 @@
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer">
       <Version>20.3.0.57</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout">
+      <Version>20.3.0.57</Version>
+    </PackageReference>
     <PackageReference Include="TinySvgHelper">
       <Version>1.0.266</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.CommunityToolkit">
+      <Version>2.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />

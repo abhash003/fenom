@@ -12,7 +12,9 @@
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="20.3.0.57" />
     <PackageReference Include="Syncfusion.Xamarin.DataGridExport" Version="20.3.0.57" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="20.3.0.57" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="20.3.0.57" />
     <PackageReference Include="TinySvgHelper" Version="1.0.266" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
@@ -88,6 +90,9 @@
     <Compile Update="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
+      <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\StatusInfoButton.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>StatusInfoButton.xaml</DependentUpon>
@@ -110,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Controls\MarigoldActivityWheel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusInfoButton.xaml">

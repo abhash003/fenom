@@ -33,16 +33,40 @@
 
     <buttons:SfButton x:Name="InnerButton" 
                     HasShadow="True" 
-                    BorderColor="#EBEBEB" 
+                    BorderColor="#E7E7E7" 
                     BorderWidth="1" 
+                    EnableRippleEffect="True"
                     Margin="10,10,10,0">
 
+        <!--<VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal">
+                    <VisualState.Setters>
+                        <Setter Property="TextColor" Value="White" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="Pressed">
+                    <VisualState.Setters>
+                        <Setter Property="TextColor" Value="Black" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="Disabled">
+                    <VisualState.Setters>
+                        <Setter Property="TextColor" Value="White" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>-->
+
         <Grid BackgroundColor="#F9F9F0"  
-                          HorizontalOptions="FillAndExpand" 
-                          VerticalOptions="CenterAndExpand" 
-                          Grid.RowSpacing="0" 
-                          Grid.Padding="0"
-                          x:DataType="controls:StatusInfoBoxViewModel">
+              HorizontalOptions="FillAndExpand" 
+              VerticalOptions="CenterAndExpand" 
+              Grid.RowSpacing="0" 
+              Grid.Padding="0"
+              x:DataType="controls:StatusInfoBoxViewModel"
+              IsEnabled="False">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -82,7 +106,7 @@
                     Text="{Binding Label}"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" 
-                    TextColor="{Binding Color}" 
+                    TextColor="#333" 
                     FontSize="12"/>
 
             <Label x:Name="InfoBlockLink"

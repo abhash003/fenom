@@ -153,7 +153,8 @@ namespace FenomPlus.Services
                 if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     Debug.WriteLine("Error: Trying to reconnect...");
-                    DialogService.ShowToast("Error: Trying to reconnect...", 4);
+                    
+                    //DialogService.ShowToast("Error: Trying to reconnect...", 4);
                     // try to connect
                     BleDevice.ConnectAsync();
                 }

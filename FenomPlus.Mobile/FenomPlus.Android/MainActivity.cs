@@ -27,6 +27,7 @@ namespace FenomPlus.Droid
 
             UserDialogs.Init(this);
             SvgHelper.Init();
+            Syncfusion.XForms.Android.PopupLayout.SfPopupLayoutRenderer.Init();
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
