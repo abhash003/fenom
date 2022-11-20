@@ -9,15 +9,15 @@ namespace FenomPlus.Controls
 {
     public partial class StatusDetailsPopup : Popup
     {
-        private readonly StatusInfoBoxViewModel StatusInfoBoxViewModel;
+        private readonly StatusButtonViewModel StatusButtonViewModel;
 
-        public StatusDetailsPopup(StatusInfoBoxViewModel viewModel)
+        public StatusDetailsPopup(StatusButtonViewModel viewModel)
         {
             InitializeComponent();
-            StatusInfoBoxViewModel = viewModel;
-            BindingContext = StatusInfoBoxViewModel;
+            StatusButtonViewModel = viewModel;
+            BindingContext = StatusButtonViewModel;
 
-            MoreHelpButton.IsVisible = !string.IsNullOrEmpty(StatusInfoBoxViewModel.HelpLink);
+            MoreHelpButton.IsVisible = !string.IsNullOrEmpty(StatusButtonViewModel.HelpLink);
         }
 
         private void CloseButton_OnClicked(object sender, System.EventArgs e)
@@ -27,7 +27,7 @@ namespace FenomPlus.Controls
 
         private async void MoreHelpButton_OnClicked(object sender, EventArgs e)
         {
-            Uri uri = new Uri(StatusInfoBoxViewModel.HelpLink);
+            Uri uri = new Uri(StatusButtonViewModel.HelpLink);
             await Browser.OpenAsync(uri);
         }
     }

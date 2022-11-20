@@ -1,79 +1,92 @@
 ﻿using System;
-using System.Collections.Generic;
-using FenomPlus.Database.Tables;
-using FenomPlus.Helpers;
-using FenomPlus.Models;
-using FenomPlus.SDK.Core.Models;
+using Acr.UserDialogs;
 using FenomPlus.ViewModels;
-using Xamarin.Forms;
+using FenomPlus.SDK.Core.Models;
+using FenomPlus.Enums;
 
 namespace FenomPlus.Views
 {
     public partial class QualityControlView : BaseContentPage
     {
-        private readonly QualityControlViewModel QualityControlViewModel;
+        private readonly DashboardViewModel DashboardViewModel;
 
         public QualityControlView()
         {
             InitializeComponent();
-            BindingContext = QualityControlViewModel = new QualityControlViewModel();
-            dataGrid.GridStyle = new CustomGridStyle();
+            BindingContext = DashboardViewModel = new DashboardViewModel();
         }
 
-        private async void OnDelete(object sender, EventArgs e)
+        private async void OnStandardTest(object sender, EventArgs e)
         {
-            dataGrid.SelectedItem = (sender as Button).BindingContext;
-            QualityControlDataModel dataModel = (QualityControlDataModel)dataGrid.SelectedItem;
-            bool answer = await DisplayAlert("Delete Test Record", "Are you sure you want to delete record?", "Yes, Delete", "Cancel");
-            if (answer == true)
+            if (DashboardViewModel.BleHub.IsNotConnectedRedirect())
             {
-                QualityControlViewModel.QCRepo.Delete(dataModel);
-                QualityControlViewModel.UpdateGrid();
+                if (!DashboardViewModel.BleHub.ReadyForTest)
+                {
+                    DeviceNotReadyWarning1();
+                    return;
+                }
+
+                DashboardViewModel.Cache.TestType = TestTypeEnum.Standard;
+                await DashboardViewModel.BleHub.StartTest(BreathTestEnum.Start10Second);
+                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
 
-        public async void OnAddNew(System.Object sender, System.EventArgs e)
+        private async void OnShortTest(object sender, EventArgs e)
         {
-            IEnumerable<QualityControlUsersTb> records = QualityControlViewModel.QCUsersRepo.SelectAll();
-            List<string> userRecords = new List<string>();
-            foreach (QualityControlUsersTb userRecord in records)
+            if (DashboardViewModel.Services.BleHub.IsNotConnectedRedirect())
             {
-                userRecords.Add(userRecord.User);
+                if (!DashboardViewModel.BleHub.ReadyForTest)
+                {
+                    DeviceNotReadyWarning2();                   
+                    return;
+                }
+
+                DashboardViewModel.Cache.TestType = TestTypeEnum.Short;
+                await DashboardViewModel.BleHub.StartTest(BreathTestEnum.Start6Second);
+                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
-
-            if (userRecords.Count <= 0) return;
-
-            string userName = await DisplayActionSheet("Select User", "Cancel", "", userRecords.ToArray());
-            if (string.IsNullOrEmpty(userName)) return;
-
-            // ok goto test, for now create random
-            QualityControlViewModel.Services.Cache.QCUsername = userName;
-
-            // send QC model
-            await QualityControlViewModel.BleHub.StartTest(BreathTestEnum.QualityControl);
-
-            //ok goto test now.
-            await QualityControlViewModel.Services.Navigation.NegativeControlPerformView();
-
-            QualityControlViewModel.UpdateGrid();
         }
 
+        private void DeviceNotReadyWarning1()
+        {
+            if (!DashboardViewModel.BleHub.ReadyForTest)
+            {
+                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+                DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
+            }
+        }
+
+        private void DeviceNotReadyWarning2()
+        {
+            if (!DashboardViewModel.BleHub.ReadyForTest)
+            {
+                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+                DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
+            }
+        }
+
+        private async void OnTutorial(object sender, EventArgs e)
+        {
+            await DashboardViewModel.Services.Navigation.TutorialView();
+        }
+        
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            QualityControlViewModel.OnAppearing();
+            DashboardViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            QualityControlViewModel.OnDisappearing();
+            DashboardViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            QualityControlViewModel.NewGlobalData();
+            DashboardViewModel.NewGlobalData();
         }
     }
 }

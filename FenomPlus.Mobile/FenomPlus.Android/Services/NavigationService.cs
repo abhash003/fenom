@@ -91,11 +91,6 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(PreparingStandardTestResultView)}"), false);
         }
 
-        public async Task QCTabView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCTabView)}"), false);
-        }
-
         public async Task QualityControlView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlView)}"), false);
@@ -151,7 +146,7 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ViewRecentErrorsView)}"), false);
         }
 
-        public async Task ShowStatusDetailsPopup(StatusInfoBoxViewModel viewModel)
+        public async Task ShowStatusDetailsPopup(StatusButtonViewModel viewModel)
         {
             await Shell.Current.ShowPopupAsync(new StatusDetailsPopup(viewModel));
         }

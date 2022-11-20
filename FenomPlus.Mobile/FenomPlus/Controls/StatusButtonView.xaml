@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusInfoButton"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusButtonView"
              xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
-             x:Class="FenomPlus.Controls.StatusInfoButton">
+             x:Class="FenomPlus.Controls.StatusButtonView">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -65,7 +65,7 @@
               VerticalOptions="CenterAndExpand" 
               Grid.RowSpacing="0" 
               Grid.Padding="0"
-              x:DataType="controls:StatusInfoBoxViewModel"
+              x:DataType="controls:StatusButtonViewModel"
               IsEnabled="False">
 
             <Grid.RowDefinitions>

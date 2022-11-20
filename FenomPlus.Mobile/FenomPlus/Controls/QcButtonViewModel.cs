@@ -8,7 +8,7 @@ using FenomPlus.ViewModels;
 
 namespace FenomPlus.Controls
 {
-    public partial class StatusInfoBoxViewModel :BaseViewModel
+    public partial class QcButtonViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string _header;
@@ -37,7 +37,7 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private bool _displayPopup;
 
-        public StatusInfoBoxViewModel()
+        public QcButtonViewModel()
         {
             
         }

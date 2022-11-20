@@ -8,13 +8,13 @@ namespace FenomPlus.Controls
 {
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StatusInfoButton
+    public partial class StatusButtonView
     {
         //public event EventHandler Clicked = delegate { };
 
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusInfoButton), propertyChanged: CommandUpdated);
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusInfoButton), propertyChanged: CommandParameterUpdated);
-        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(StatusInfoButton), propertyChanged: EnabledUpdated);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusButtonView), propertyChanged: CommandUpdated);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusButtonView), propertyChanged: CommandParameterUpdated);
+        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(StatusButtonView), propertyChanged: EnabledUpdated);
 
         public ICommand Command
         {
@@ -35,7 +35,7 @@ namespace FenomPlus.Controls
         }
 
 
-        public StatusInfoButton()
+        public StatusButtonView()
         {
             InitializeComponent();
 
@@ -48,7 +48,7 @@ namespace FenomPlus.Controls
 
         private static void CommandUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is StatusInfoButton statusInfoButton && newValue is ICommand newCommand)
+            if (sender is StatusButtonView statusInfoButton && newValue is ICommand newCommand)
             {
                 statusInfoButton.InnerButton.Command = newCommand;
             }
@@ -56,7 +56,7 @@ namespace FenomPlus.Controls
 
         private static void CommandParameterUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is StatusInfoButton statusInfoButton && newValue != null)
+            if (sender is StatusButtonView statusInfoButton && newValue != null)
             {
                 statusInfoButton.InnerButton.CommandParameter = newValue;
             }
@@ -64,7 +64,7 @@ namespace FenomPlus.Controls
 
         private static void EnabledUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is StatusInfoButton statusInfoButton && newValue != null)
+            if (sender is StatusButtonView statusInfoButton && newValue != null)
             {
                 statusInfoButton.InnerButton.IsEnabled = (bool)newValue;
             }

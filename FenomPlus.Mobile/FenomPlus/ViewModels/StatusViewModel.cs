@@ -19,14 +19,14 @@ namespace FenomPlus.ViewModels
 {
     public partial class StatusViewModel : BaseViewModel
     {
-        public StatusInfoBoxViewModel SensorInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel DeviceInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel QualityControlInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel BluetoothInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel HumidityInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel PressureInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel TemperatureInfoViewModel = new StatusInfoBoxViewModel();
-        public StatusInfoBoxViewModel BatteryInfoViewModel = new StatusInfoBoxViewModel();
+        public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel QualityControlViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel BluetoothViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel HumidityViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel PressureViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel TemperatureViewModel = new StatusButtonViewModel();
+        public StatusButtonViewModel BatteryViewModel = new StatusButtonViewModel();
 
         // Used in the titlebar status region
         [ObservableProperty]
@@ -64,14 +64,14 @@ namespace FenomPlus.ViewModels
 
             SoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
 
-            BluetoothInfoViewModel.Header = "Bluetooth";
-            SensorInfoViewModel.Header = "Sensor";
-            DeviceInfoViewModel.Header = "Device";
-            QualityControlInfoViewModel.Header = "Quality Control";
-            HumidityInfoViewModel.Header = "Humidity";
-            PressureInfoViewModel.Header = "Pressure";
-            TemperatureInfoViewModel.Header = "Temperature";
-            BatteryInfoViewModel.Header = "Battery";
+            BluetoothViewModel.Header = "Bluetooth";
+            SensorViewModel.Header = "Sensor";
+            DeviceViewModel.Header = "Device";
+            QualityControlViewModel.Header = "Quality Control";
+            HumidityViewModel.Header = "Humidity";
+            PressureViewModel.Header = "Pressure";
+            TemperatureViewModel.Header = "Temperature";
+            BatteryViewModel.Header = "Battery";
 
             SetDefaults();
 
@@ -93,59 +93,59 @@ namespace FenomPlus.ViewModels
             FirmwareVersion = string.Empty;
 
             BluetoothBarIcon = "wo_bluetooth_red.png";
-            BluetoothInfoViewModel.ImagePath = "bluetooth_red.png";
-            BluetoothInfoViewModel.Color = Color.Red;
-            BluetoothInfoViewModel.Label = "Disconnected";
-            BluetoothInfoViewModel.Value = "";
+            BluetoothViewModel.ImagePath = "bluetooth_red.png";
+            BluetoothViewModel.Color = Color.Red;
+            BluetoothViewModel.Label = "Disconnected";
+            BluetoothViewModel.Value = "";
 
-            //SensorInfoViewModel.Header = "Sensor";
+            //SensorViewModel.Header = "Sensor";
             SensorBarIcon = "wo_sensor_red.png";
-            SensorInfoViewModel.ImagePath = "sensor_red.png";
-            SensorInfoViewModel.Color = Color.Red;
-            SensorInfoViewModel.Label = "Disconnected";
-            SensorInfoViewModel.Value = "";
+            SensorViewModel.ImagePath = "sensor_red.png";
+            SensorViewModel.Color = Color.Red;
+            SensorViewModel.Label = "Disconnected";
+            SensorViewModel.Value = "";
 
-            //DeviceInfoViewModel.Header = "Device";
+            //DeviceViewModel.Header = "Device";
             DeviceBarIcon = "wo_device_red.png";
-            DeviceInfoViewModel.ImagePath = "device_red.png";
-            DeviceInfoViewModel.Color = Color.Red;
-            DeviceInfoViewModel.Label = "Disconnected";
-            DeviceInfoViewModel.Value = "";
+            DeviceViewModel.ImagePath = "device_red.png";
+            DeviceViewModel.Color = Color.Red;
+            DeviceViewModel.Label = "Disconnected";
+            DeviceViewModel.Value = "";
 
-            //QualityControlInfoViewModel.Header = "Quality Control";
+            //QualityControlViewModel.Header = "Quality Control";
             QcBarIcon = "wo_quality_control_red.png";
-            QualityControlInfoViewModel.ImagePath = "quality_control_red.png";
-            QualityControlInfoViewModel.Color = Color.Red;
-            QualityControlInfoViewModel.Label = "Disconnected";
-            QualityControlInfoViewModel.Value = "";
+            QualityControlViewModel.ImagePath = "quality_control_red.png";
+            QualityControlViewModel.Color = Color.Red;
+            QualityControlViewModel.Label = "Disconnected";
+            QualityControlViewModel.Value = "";
 
-            //HumidityInfoViewModel.Header = "Humidity";
+            //HumidityViewModel.Header = "Humidity";
             HumidityBarIcon = "wo_humidity_red.png";
-            HumidityInfoViewModel.ImagePath = "humidity_red.png";
-            HumidityInfoViewModel.Color = Color.Red;
-            HumidityInfoViewModel.Label = "Disconnected";
-            HumidityInfoViewModel.Value = "";
+            HumidityViewModel.ImagePath = "humidity_red.png";
+            HumidityViewModel.Color = Color.Red;
+            HumidityViewModel.Label = "Disconnected";
+            HumidityViewModel.Value = "";
 
-            //PressureInfoViewModel.Header = "Pressure";
+            //PressureViewModel.Header = "Pressure";
             PressureBarIcon = "wo_pressure_red.png";
-            PressureInfoViewModel.ImagePath = "pressure_red.png";
-            PressureInfoViewModel.Color = Color.Red;
-            PressureInfoViewModel.Label = "Disconnected";
-            PressureInfoViewModel.Value = "";
+            PressureViewModel.ImagePath = "pressure_red.png";
+            PressureViewModel.Color = Color.Red;
+            PressureViewModel.Label = "Disconnected";
+            PressureViewModel.Value = "";
 
-            //TemperatureInfoViewModel.Header = "Temperature";
+            //TemperatureViewModel.Header = "Temperature";
             TemperatureBarIcon = "wo_temperature_red.png";
-            TemperatureInfoViewModel.ImagePath = "temperature_red.png";
-            TemperatureInfoViewModel.Color = Color.Red;
-            TemperatureInfoViewModel.Label = "Disconnected";
-            TemperatureInfoViewModel.Value = "";
+            TemperatureViewModel.ImagePath = "temperature_red.png";
+            TemperatureViewModel.Color = Color.Red;
+            TemperatureViewModel.Label = "Disconnected";
+            TemperatureViewModel.Value = "";
 
-            //BatteryInfoViewModel.Header = "Battery";
+            //BatteryViewModel.Header = "Battery";
             BatteryBarIcon = "wo_battery_red.png";
-            BatteryInfoViewModel.ImagePath = "battery_red.png";
-            BatteryInfoViewModel.Color = Color.Red;
-            BatteryInfoViewModel.Label = "Disconnected";
-            BatteryInfoViewModel.Value = "";
+            BatteryViewModel.ImagePath = "battery_red.png";
+            BatteryViewModel.Color = Color.Red;
+            BatteryViewModel.Label = "Disconnected";
+            BatteryViewModel.Value = "";
 
 
 
@@ -207,23 +207,23 @@ namespace FenomPlus.ViewModels
         {
             BluetoothConnected = connected;
 
-            BluetoothInfoViewModel.ButtonText = "Settings";
+            BluetoothViewModel.ButtonText = "Settings";
 
             if (BluetoothConnected)
             {
                 BluetoothBarIcon = "wo_bluetooth_green.png";
-                BluetoothInfoViewModel.ImagePath = "bluetooth_green.png";
-                BluetoothInfoViewModel.Color = Color.Green;
-                BluetoothInfoViewModel.Label = "Connected";
-                BluetoothInfoViewModel.Value = "OK";
+                BluetoothViewModel.ImagePath = "bluetooth_green.png";
+                BluetoothViewModel.Color = Color.Green;
+                BluetoothViewModel.Label = "Connected";
+                BluetoothViewModel.Value = "OK";
             }
             else
             {
                 BluetoothBarIcon = "wo_bluetooth_red.png";
-                BluetoothInfoViewModel.ImagePath = "bluetooth_red.png";
-                BluetoothInfoViewModel.Color = Color.Red;
-                BluetoothInfoViewModel.Label = "Disconnected";
-                BluetoothInfoViewModel.Value = "";
+                BluetoothViewModel.ImagePath = "bluetooth_red.png";
+                BluetoothViewModel.Color = Color.Red;
+                BluetoothViewModel.Label = "Disconnected";
+                BluetoothViewModel.Value = "";
             }
         }
 
@@ -235,43 +235,43 @@ namespace FenomPlus.ViewModels
 
         public void UpdateBattery(int value)
         {
-            BatteryInfoViewModel.Value = $"{value}%";
-            BatteryInfoViewModel.ButtonText = "Order";
+            BatteryViewModel.Value = $"{value}%";
+            BatteryViewModel.ButtonText = "Order";
 
             if (value > Battery75)
             {
                 BatteryBarIcon = "wo_battery_green_100.png";
-                BatteryInfoViewModel.ImagePath = "battery_green_100.png";
-                BatteryInfoViewModel.Color = Color.Green;
-                BatteryInfoViewModel.Label = "Charge";
+                BatteryViewModel.ImagePath = "battery_green_100.png";
+                BatteryViewModel.Color = Color.Green;
+                BatteryViewModel.Label = "Charge";
             }
             else if (value > Battery50)
             {
                 BatteryBarIcon = "wo_battery_green_75.png";
-                BatteryInfoViewModel.ImagePath = "battery_green_75.png";
-                BatteryInfoViewModel.Color = Color.Green;
-                BatteryInfoViewModel.Label = "Charge";
+                BatteryViewModel.ImagePath = "battery_green_75.png";
+                BatteryViewModel.Color = Color.Green;
+                BatteryViewModel.Label = "Charge";
             }
             else if (value > BatteryWarning)
             {
                 BatteryBarIcon = "wo_battery_green_50.png";
-                BatteryInfoViewModel.ImagePath = "battery_green_50.png";
-                BatteryInfoViewModel.Color = Color.Green;
-                BatteryInfoViewModel.Label = "Charge";
+                BatteryViewModel.ImagePath = "battery_green_50.png";
+                BatteryViewModel.Color = Color.Green;
+                BatteryViewModel.Label = "Charge";
             }
             else if (value > BatteryCritical)
             {
                 BatteryBarIcon = "wo_battery_charge_yellow.png";
-                BatteryInfoViewModel.ImagePath = "battery_charge_yellow.png";
-                BatteryInfoViewModel.Color = Color.Yellow;
-                BatteryInfoViewModel.Label = "Warning";
+                BatteryViewModel.ImagePath = "battery_charge_yellow.png";
+                BatteryViewModel.Color = Color.Yellow;
+                BatteryViewModel.Label = "Warning";
             }
             else
             {
                 BatteryBarIcon = "wo_battery_charge_red.png";
-                BatteryInfoViewModel.ImagePath = "battery_charge_red.png";
-                BatteryInfoViewModel.Color = Color.Red;
-                BatteryInfoViewModel.Label = "Low";
+                BatteryViewModel.ImagePath = "battery_charge_red.png";
+                BatteryViewModel.Color = Color.Red;
+                BatteryViewModel.Label = "Low";
             }
         }
 
@@ -280,31 +280,31 @@ namespace FenomPlus.ViewModels
 
         public void UpdateSensor(int value)
         {
-            SensorInfoViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
-            SensorInfoViewModel.Label = "Days Left";
-            SensorInfoViewModel.ButtonText = "Order";
+            SensorViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
+            SensorViewModel.Label = "Days Left";
+            SensorViewModel.ButtonText = "Order";
 
 
             if (value <= SensorLow)
             {
                 // low
                 SensorBarIcon = "wo_sensor_red.png";
-                SensorInfoViewModel.ImagePath = "sensor_red.png";
-                SensorInfoViewModel.Color = Color.Red;
+                SensorViewModel.ImagePath = "sensor_red.png";
+                SensorViewModel.Color = Color.Red;
             }
             else if (value <= SensorWarning)
             {
                 // warning
                 SensorBarIcon = "wo_sensor_yellow.png";
-                SensorInfoViewModel.ImagePath = "sensor_yellow.png";
-                SensorInfoViewModel.Color = Color.Yellow;
+                SensorViewModel.ImagePath = "sensor_yellow.png";
+                SensorViewModel.Color = Color.Yellow;
             }
             else
             {
                 // full
                 SensorBarIcon = "wo_sensor_green";
-                SensorInfoViewModel.ImagePath = "sensor_green";
-                SensorInfoViewModel.Color = Color.Green;
+                SensorViewModel.ImagePath = "sensor_green";
+                SensorViewModel.Color = Color.Green;
             }
         }
 
@@ -314,30 +314,30 @@ namespace FenomPlus.ViewModels
 
         public void UpdateQualityControlExpiration(int value)
         {
-            QualityControlInfoViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
-            QualityControlInfoViewModel.Label = "Days Left";
-            QualityControlInfoViewModel.ButtonText = "Settings";
+            QualityControlViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
+            QualityControlViewModel.Label = "Days Left";
+            QualityControlViewModel.ButtonText = "Settings";
 
             if (value <= QualityControlExpirationLow)
             {
                 // low
                 QcBarIcon = "wo_quality_control_red.png";
-                QualityControlInfoViewModel.ImagePath = "quality_control_red.png";
-                QualityControlInfoViewModel.Color = Color.Red;
+                QualityControlViewModel.ImagePath = "quality_control_red.png";
+                QualityControlViewModel.Color = Color.Red;
             }
             else if (value <= QualityControlExpirationWarning)
             {
                 // warning
                 QcBarIcon = "wo_quality_control_yellow.png";
-                QualityControlInfoViewModel.ImagePath = "quality_control_yellow.png";
-                QualityControlInfoViewModel.Color = Color.Yellow;
+                QualityControlViewModel.ImagePath = "quality_control_yellow.png";
+                QualityControlViewModel.Color = Color.Yellow;
             }
             else
             {
                 // full
                 QcBarIcon = "wo_quality_control_green.png";
-                QualityControlInfoViewModel.ImagePath = "quality_control_green.png";
-                QualityControlInfoViewModel.Color = Color.Green;
+                QualityControlViewModel.ImagePath = "quality_control_green.png";
+                QualityControlViewModel.Color = Color.Green;
             }
         }
 
@@ -347,30 +347,30 @@ namespace FenomPlus.ViewModels
 
         public void UpdateDevice(int value)
         {
-            DeviceInfoViewModel.Value = $"{value}";
-            DeviceInfoViewModel.ButtonText = "Order";
-            DeviceInfoViewModel.Label = "Days Left";
+            DeviceViewModel.Value = $"{value}";
+            DeviceViewModel.ButtonText = "Order";
+            DeviceViewModel.Label = "Days Left";
 
             if (value <= DeviceLow)
             {
                 // low
                 DeviceBarIcon = "wo_device_red.png";
-                DeviceInfoViewModel.ImagePath = "device_red.png";
-                DeviceInfoViewModel.Color = Color.Red;
+                DeviceViewModel.ImagePath = "device_red.png";
+                DeviceViewModel.Color = Color.Red;
             }
             else if (value <= DeviceWarning)
             {
                 // warning
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
-                DeviceInfoViewModel.ImagePath = "_3x_device_yellow.png";
-                DeviceInfoViewModel.Color = Color.Yellow;
+                DeviceViewModel.ImagePath = "_3x_device_yellow.png";
+                DeviceViewModel.Color = Color.Yellow;
             }
             else
             {
                 // full
                 DeviceBarIcon = "wo_device_green_100.png";
-                DeviceInfoViewModel.ImagePath = "device_green_100.png";
-                DeviceInfoViewModel.Color = Color.Green;
+                DeviceViewModel.ImagePath = "device_green_100.png";
+                DeviceViewModel.Color = Color.Green;
             }
         }
 
@@ -380,32 +380,32 @@ namespace FenomPlus.ViewModels
 
         public void UpdateRelativeHumidity(int value)
         {
-            HumidityInfoViewModel.Value = $"{value}%";
-            HumidityInfoViewModel.ButtonText = "Info";
+            HumidityViewModel.Value = $"{value}%";
+            HumidityViewModel.ButtonText = "Info";
 
             if (value <= RelativeHumidityLow)
             {
                 // low
                 HumidityBarIcon = "wo_humidity_red.png";
-                HumidityInfoViewModel.ImagePath = "humidity_red.png";
-                HumidityInfoViewModel.Color = Color.Red;
-                HumidityInfoViewModel.Label = "Out of Range";
+                HumidityViewModel.ImagePath = "humidity_red.png";
+                HumidityViewModel.Color = Color.Red;
+                HumidityViewModel.Label = "Out of Range";
             }
             else if (value <= RelativeHumidityWarning)
             {
                 // warning
                 HumidityBarIcon = "wo_humidity_yellow.png";
-                HumidityInfoViewModel.ImagePath = "humidity_yellow.png";
-                HumidityInfoViewModel.Color = Color.Yellow;
-                HumidityInfoViewModel.Label = "Warning Range";
+                HumidityViewModel.ImagePath = "humidity_yellow.png";
+                HumidityViewModel.Color = Color.Yellow;
+                HumidityViewModel.Label = "Warning Range";
             }
             else
             {
                 // full
                 HumidityBarIcon = "wo_humidity_green.png";
-                HumidityInfoViewModel.ImagePath = "humidity_green.png";
-                HumidityInfoViewModel.Color = Color.Green;
-                HumidityInfoViewModel.Label = "In Range";
+                HumidityViewModel.ImagePath = "humidity_green.png";
+                HumidityViewModel.Color = Color.Green;
+                HumidityViewModel.Label = "In Range";
             }
         }
 
@@ -415,32 +415,32 @@ namespace FenomPlus.ViewModels
 
         public void UpdateTemperature(int value)
         {
-            TemperatureInfoViewModel.Value = $"{value} °C";
-            TemperatureInfoViewModel.ButtonText = "Info";
+            TemperatureViewModel.Value = $"{value} °C";
+            TemperatureViewModel.ButtonText = "Info";
 
             if (value <= TemperatureLow)
             {
                 // low
                 TemperatureBarIcon = "wo_temperature_red.png";
-                TemperatureInfoViewModel.ImagePath = "temperature_red.png";
-                TemperatureInfoViewModel.Color = Color.Red;
-                TemperatureInfoViewModel.Label = "Out of Range";
+                TemperatureViewModel.ImagePath = "temperature_red.png";
+                TemperatureViewModel.Color = Color.Red;
+                TemperatureViewModel.Label = "Out of Range";
             }
             else if (value <= TemperatureWarning)
             {
                 // warning
                 TemperatureBarIcon = "wo_temperature_yellow.png";
-                TemperatureInfoViewModel.ImagePath = "temperature_yellow.png";
-                TemperatureInfoViewModel.Color = Color.Yellow;
-                TemperatureInfoViewModel.Label = "Warning Range";
+                TemperatureViewModel.ImagePath = "temperature_yellow.png";
+                TemperatureViewModel.Color = Color.Yellow;
+                TemperatureViewModel.Label = "Warning Range";
             }
             else
             {
                 // full
                 TemperatureBarIcon = "wo_temperature_green.png";
-                TemperatureInfoViewModel.ImagePath = "temperature_green.png";
-                TemperatureInfoViewModel.Color = Color.Green;
-                TemperatureInfoViewModel.Label = "In Range";
+                TemperatureViewModel.ImagePath = "temperature_green.png";
+                TemperatureViewModel.Color = Color.Green;
+                TemperatureViewModel.Label = "In Range";
             }
         }
 
@@ -450,141 +450,81 @@ namespace FenomPlus.ViewModels
 
         public void UpdatePressure(int value)
         {
-            PressureInfoViewModel.Value = $"{value} kPa";
-            PressureInfoViewModel.ButtonText = "Info";
+            PressureViewModel.Value = $"{value} kPa";
+            PressureViewModel.ButtonText = "Info";
 
             if (value <= PressureLow)
             {
                 // low
                 PressureBarIcon = "wo_pressure_red.png";
-                PressureInfoViewModel.ImagePath = "pressure_red.png";
-                PressureInfoViewModel.Color = Color.Red;
-                PressureInfoViewModel.Label = "Out of Range";
+                PressureViewModel.ImagePath = "pressure_red.png";
+                PressureViewModel.Color = Color.Red;
+                PressureViewModel.Label = "Out of Range";
             }
             else if (value <= PressureWarning)
             {
                 // warning
                 PressureBarIcon = "wo_pressure_yellow.png";
-                PressureInfoViewModel.ImagePath = "pressure_yellow.png";
-                PressureInfoViewModel.Color = Color.Yellow;
-                PressureInfoViewModel.Label = "Warning Range";
+                PressureViewModel.ImagePath = "pressure_yellow.png";
+                PressureViewModel.Color = Color.Yellow;
+                PressureViewModel.Label = "Warning Range";
             }
             else
             {
                 // full
                 PressureBarIcon = "wo_pressure_green.png";
-                PressureInfoViewModel.ImagePath = "pressure_green.png";
-                PressureInfoViewModel.Color = Color.Green;
-                PressureInfoViewModel.Label = "In Range";
+                PressureViewModel.ImagePath = "pressure_green.png";
+                PressureViewModel.Color = Color.Green;
+                PressureViewModel.Label = "In Range";
             }
         }
-
-        [ObservableProperty]
-        private bool _showDetail;
-
-        [ObservableProperty] 
-        private string _detailsHeader;
-
-        [ObservableProperty]
-        private string _detailsImagePath;
-
-        [ObservableProperty]
-        private string _detailsValue;
-
-        [ObservableProperty]
-        private string _detailsLabel;
-
-        [ObservableProperty]
-        private string _detailsDescription;
 
         [RelayCommand]
         private void ShowSensorDetails()
         {
-            //DetailsHeader = SensorInfoViewModel.Header;
-            //DetailsImagePath = SensorInfoViewModel.ImagePath;
-            //DetailsValue = SensorInfoViewModel.Value;
-            //DetailsLabel = SensorInfoViewModel.Label;
-            //DetailsDescription = SensorInfoViewModel.Description;
-            //ShowDetail = true;
-
-            Services.Navigation.ShowStatusDetailsPopup(SensorInfoViewModel);
+            Services.Navigation.ShowStatusDetailsPopup(SensorViewModel);
         }
 
         [RelayCommand]
         private void ShowDeviceDetails()
         {
-            DetailsHeader = DeviceInfoViewModel.Header;
-            DetailsImagePath = DeviceInfoViewModel.ImagePath;
-            DetailsValue = DeviceInfoViewModel.Value;
-            DetailsLabel = DeviceInfoViewModel.Label;
-            DetailsDescription = DeviceInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(DeviceViewModel);
         }
 
         [RelayCommand]
         private void ShowQualityControlDetails()
         {
-            DetailsHeader = QualityControlInfoViewModel.Header;
-            DetailsImagePath = QualityControlInfoViewModel.ImagePath;
-            DetailsValue = QualityControlInfoViewModel.Value;
-            DetailsLabel = QualityControlInfoViewModel.Label;
-            DetailsDescription = QualityControlInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(QualityControlViewModel);
         }
 
         [RelayCommand]
         private void ShowBluetoothDetails()
         {
-            DetailsHeader = BluetoothInfoViewModel.Header;
-            DetailsImagePath = BluetoothInfoViewModel.ImagePath;
-            DetailsValue = BluetoothInfoViewModel.Value;
-            DetailsLabel = BluetoothInfoViewModel.Label;
-            DetailsDescription = BluetoothInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(BluetoothViewModel);
         }
 
         [RelayCommand]
         private void ShowHumidityDetails()
         {
-            DetailsHeader = HumidityInfoViewModel.Header;
-            DetailsImagePath = HumidityInfoViewModel.ImagePath;
-            DetailsValue = HumidityInfoViewModel.Value;
-            DetailsLabel = HumidityInfoViewModel.Label;
-            DetailsDescription = HumidityInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(HumidityViewModel);
         }
 
         [RelayCommand]
         private void ShowPressureDetails()
         {
-            DetailsHeader = PressureInfoViewModel.Header;
-            DetailsImagePath = PressureInfoViewModel.ImagePath;
-            DetailsValue = PressureInfoViewModel.Value;
-            DetailsLabel = PressureInfoViewModel.Label;
-            DetailsDescription = PressureInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(PressureViewModel);
         }
 
         [RelayCommand]
         private void ShowTemperatureDetails()
         {
-            DetailsHeader = TemperatureInfoViewModel.Header;
-            DetailsImagePath = TemperatureInfoViewModel.ImagePath;
-            DetailsValue = TemperatureInfoViewModel.Value;
-            DetailsLabel = TemperatureInfoViewModel.Label;
-            DetailsDescription = TemperatureInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(TemperatureViewModel);
         }
 
         [RelayCommand]
         private void ShowBatteryDetails()
         {
-            DetailsHeader = BatteryInfoViewModel.Header;
-            DetailsImagePath = BatteryInfoViewModel.ImagePath;
-            DetailsValue = BatteryInfoViewModel.Value;
-            DetailsLabel = BatteryInfoViewModel.Label;
-            DetailsDescription = BatteryInfoViewModel.Description;
-            ShowDetail = true;
+            Services.Navigation.ShowStatusDetailsPopup(BatteryViewModel);
         }
 
 

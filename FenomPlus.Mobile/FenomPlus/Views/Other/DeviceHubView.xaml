@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<views:BaseContentPage 
+                 xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
                  xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
@@ -71,7 +72,7 @@
 
                         <!--Individual Items Row 1-->
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="SensorInfo"
                                 Grid.Row="0" 
                                 Grid.Column="0"
@@ -79,7 +80,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowSensorDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="DeviceInfo"
                                 Grid.Row="0" 
                                 Grid.Column="1"
@@ -87,7 +88,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowDeviceDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="QualityControlInfo"
                                 Grid.Row="0" 
                                 Grid.Column="2"
@@ -95,7 +96,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowQualityControlDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="BluetoothInfo"
                                 Grid.Row="0" 
                                 Grid.Column="3"
@@ -105,7 +106,7 @@
 
                     <!--Individual Items Row 2-->
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="HumidityInfo"
                                 Grid.Row="1" 
                                 Grid.Column="0"
@@ -113,7 +114,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowHumidityDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="PressureInfo"
                                 Grid.Row="1" 
                                 Grid.Column="1"
@@ -121,7 +122,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowPressureDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="TemperatureInfo"
                                 Grid.Row="1" 
                                 Grid.Column="2"
@@ -129,7 +130,7 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding ShowTemperatureDetailsCommand}"/>
 
-                    <controls:StatusInfoButton 
+                    <controls:StatusButtonView 
                                 x:Name="BatteryInfo"
                                 Grid.Row="1" 
                                 Grid.Column="3"

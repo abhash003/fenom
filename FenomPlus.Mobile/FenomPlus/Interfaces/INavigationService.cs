@@ -27,7 +27,7 @@ namespace FenomPlus.Interfaces
         Task TestResultsView();
         Task TutorialView();
 
-        Task ShowStatusDetailsPopup(StatusInfoBoxViewModel viewModel);
+        Task ShowStatusDetailsPopup(StatusButtonViewModel viewModel);
     }
 }
 

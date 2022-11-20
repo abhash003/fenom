@@ -27,8 +27,8 @@
     <ShellContent x:Name="QualityControl"
                   Icon="QualityControlIcon"
                   Title="Quality Control"
-                  ContentTemplate="{DataTemplate pages:QCTabView}" 
-                  Route="QCTabView"
+                  ContentTemplate="{DataTemplate pages:QualityControlView}" 
+                  Route="QualityControlView"
                   IsVisible="true"/>
 
     <ShellContent x:Name="PastResults"

@@ -82,9 +82,11 @@
     <Compile Remove="ViewModels\MainViewModel.cs" />
     <Compile Remove="ViewModels\Other\StatusDeviceInfoViewModel.cs" />
     <Compile Remove="Views\BreathTest\StartTestView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCTabView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\BreathTest\StartTestView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCTabView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="AppShell.xaml.cs">
@@ -93,9 +95,12 @@
     <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
       <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Controls\StatusInfoButton.xaml.cs">
+    <Compile Update="Controls\QCButtonView.xaml.cs">
+      <DependentUpon>QCButtonView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\StatusButtonView.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>StatusInfoButton.xaml</DependentUpon>
+      <DependentUpon>StatusButtonView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
@@ -109,8 +114,8 @@
     <Compile Update="Views\Other\PastErrorsView.xaml.cs">
       <DependentUpon>PastErrorsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\QualityControl\QCTabView.xaml.cs">
-      <DependentUpon>QCTabView.xaml</DependentUpon>
+    <Compile Update="Views\QualityControl\QualityControlView.xaml.cs">
+      <DependentUpon>QualityControlView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +125,10 @@
     <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\StatusInfoButton.xaml">
+    <EmbeddedResource Update="Controls\QCButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\StatusButtonView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -129,9 +137,6 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Other\StatusDeviceInfoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QCTabView.xaml">
-      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems')" />

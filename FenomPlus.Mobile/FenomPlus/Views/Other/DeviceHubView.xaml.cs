@@ -22,14 +22,14 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = StatusViewModel = new StatusViewModel();
 
-            SensorInfo.BindingContext = StatusViewModel.SensorInfoViewModel;
-            DeviceInfo.BindingContext = StatusViewModel.DeviceInfoViewModel;
-            QualityControlInfo.BindingContext = StatusViewModel.QualityControlInfoViewModel;
-            BluetoothInfo.BindingContext = StatusViewModel.BluetoothInfoViewModel;
-            HumidityInfo.BindingContext = StatusViewModel.HumidityInfoViewModel;
-            PressureInfo.BindingContext = StatusViewModel.PressureInfoViewModel;
-            TemperatureInfo.BindingContext = StatusViewModel.TemperatureInfoViewModel;
-            BatteryInfo.BindingContext = StatusViewModel.BatteryInfoViewModel;
+            SensorInfo.BindingContext = StatusViewModel.SensorViewModel;
+            DeviceInfo.BindingContext = StatusViewModel.DeviceViewModel;
+            QualityControlInfo.BindingContext = StatusViewModel.QualityControlViewModel;
+            BluetoothInfo.BindingContext = StatusViewModel.BluetoothViewModel;
+            HumidityInfo.BindingContext = StatusViewModel.HumidityViewModel;
+            PressureInfo.BindingContext = StatusViewModel.PressureViewModel;
+            TemperatureInfo.BindingContext = StatusViewModel.TemperatureViewModel;
+            BatteryInfo.BindingContext = StatusViewModel.BatteryViewModel;
 
             //DetailsPopup.BindingContext = StatusViewModel;
         }
