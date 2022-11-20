@@ -4,14 +4,91 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    Size="300,300"
+    xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
     IsLightDismissEnabled="True"
+    WidthRequest="300"
+    HeightRequest="500"
     x:Class="FenomPlus.Controls.StatusDetailsPopup">
 
-    <StackLayout>
-        <Label Text="Hello from popup!" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+    <Grid BackgroundColor="#F9F9F0"  
+              HorizontalOptions="FillAndExpand" 
+              VerticalOptions="CenterAndExpand" 
+              Grid.RowSpacing="0" 
+              x:DataType="controls:StatusInfoBoxViewModel"
+              IsEnabled="False">
 
-        <Button Text="Close me" Clicked="Button_Clicked" />
-    </StackLayout>
+        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label x:Name="InfoBlockTitle"
+               Grid.Row="0"
+               Text="{Binding Header}"
+               VerticalOptions="Center" 
+               VerticalTextAlignment="Center" 
+               HorizontalOptions="Center" 
+               TextColor="#333" 
+               FontSize="16"/>
+
+        <Image x:Name="InfoBlockIcon"
+               Source="{Binding ImagePath}"
+               Grid.Row="1" 
+               VerticalOptions="CenterAndExpand"
+               Aspect="AspectFit"/>
+
+        <Label x:Name="InfoBlockValue"
+               Grid.Row="2" 
+               Text="{Binding Value}"
+               VerticalOptions="Center" 
+               VerticalTextAlignment="Start" 
+               HorizontalOptions="Center" 
+               TextColor="Red" 
+               FontSize="20"/>
+
+        <Label x:Name="InfoBlockLabel"
+               Grid.Row="3" 
+               Text="{Binding Label}"
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" 
+               TextColor="#333" 
+               FontSize="12"/>
+
+        <Label x:Name="InfoBlockDescription"
+               Grid.Row="4" 
+               Text="{Binding Description}"
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" 
+               TextColor="#333" 
+               FontSize="18"
+               Margin="0,30,0,30"/>
+
+        <Button x:Name="CloseButton" 
+                Style="{StaticResource defaultButton}"
+                Grid.Row="5" 
+                Text="Close" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Clicked="CloseButton_OnClicked"/>
+
+        <Button x:Name="MoreHelpButton" 
+                BackgroundColor="Transparent"
+                BorderWidth="0"
+                Grid.Row="6" 
+                Text="Need more help?" 
+                TextColor="#077DCD"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Clicked="MoreHelpButton_OnClicked"
+                Margin="0,0,0,10"/>
+
+    </Grid>
 
 </xct:Popup>

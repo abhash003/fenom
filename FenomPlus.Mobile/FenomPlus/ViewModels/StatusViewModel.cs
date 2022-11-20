@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
+using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
@@ -499,12 +500,14 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void ShowSensorDetails()
         {
-            DetailsHeader = SensorInfoViewModel.Header;
-            DetailsImagePath = SensorInfoViewModel.ImagePath;
-            DetailsValue = SensorInfoViewModel.Value;
-            DetailsLabel = SensorInfoViewModel.Label;
-            DetailsDescription = SensorInfoViewModel.Description;
-            ShowDetail = true;
+            //DetailsHeader = SensorInfoViewModel.Header;
+            //DetailsImagePath = SensorInfoViewModel.ImagePath;
+            //DetailsValue = SensorInfoViewModel.Value;
+            //DetailsLabel = SensorInfoViewModel.Label;
+            //DetailsDescription = SensorInfoViewModel.Description;
+            //ShowDetail = true;
+
+            Services.Navigation.ShowStatusDetailsPopup(SensorInfoViewModel);
         }
 
         [RelayCommand]

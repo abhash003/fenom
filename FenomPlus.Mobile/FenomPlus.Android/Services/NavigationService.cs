@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FenomPlus.Controls;
 using FenomPlus.Interfaces;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Intent = Android.Content.Intent;
 
@@ -147,6 +149,11 @@ namespace FenomPlus.Services
         public async Task ViewRecentErrorsView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(ViewRecentErrorsView)}"), false);
+        }
+
+        public async Task ShowStatusDetailsPopup(StatusInfoBoxViewModel viewModel)
+        {
+            await Shell.Current.ShowPopupAsync(new StatusDetailsPopup(viewModel));
         }
     }
 }

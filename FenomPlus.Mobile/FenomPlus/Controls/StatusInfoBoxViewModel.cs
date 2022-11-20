@@ -23,7 +23,7 @@ namespace FenomPlus.Controls
         private string _label;
 
         [ObservableProperty]
-        private string _description;
+        private string _description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim.";
 
         [ObservableProperty]
         private string _buttonText;
@@ -32,7 +32,7 @@ namespace FenomPlus.Controls
         private Color _color;
 
         [ObservableProperty]
-        private string _helpLink;
+        private string _helpLink = "https://www.caireinc.com/";
 
         [ObservableProperty]
         private bool _displayPopup;

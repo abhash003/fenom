@@ -28,6 +28,7 @@ namespace FenomPlus.Droid
             UserDialogs.Init(this);
             SvgHelper.Init();
             Syncfusion.XForms.Android.PopupLayout.SfPopupLayoutRenderer.Init();
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
@@ -56,6 +57,7 @@ namespace FenomPlus.Droid
                 var blePermission = permissionsList.FirstOrDefault(p => p == permission);
                 
             }
+
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
@@ -69,7 +71,9 @@ namespace FenomPlus.Droid
                 "android.permission.BLUETOOTH_CONNECT",
                 "android.permission.BLUETOOTH_ADVERTISE",
                 Manifest.Permission.AccessCoarseLocation,
-                Manifest.Permission.AccessFineLocation
+                Manifest.Permission.AccessFineLocation,
+                Manifest.Permission_group.BluetoothNetwork,
+                Manifest.Permission_group.Location
             };
 
             bool minimumPermissionsGranted = true;

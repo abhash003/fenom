@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FenomPlus.Controls;
+using System;
 using System.Threading.Tasks;
 
 namespace FenomPlus.Interfaces
@@ -25,6 +26,8 @@ namespace FenomPlus.Interfaces
         Task TestFailedView();
         Task TestResultsView();
         Task TutorialView();
+
+        Task ShowStatusDetailsPopup(StatusInfoBoxViewModel viewModel);
     }
 }
 
