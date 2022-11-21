@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
 using FenomPlus.Interfaces;
 using FenomPlus.Models;
+using FenomPlus.Services;
 using FenomPlus.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -73,9 +74,8 @@ namespace FenomPlus.ViewModels
             TemperatureViewModel.Header = "Temperature";
             BatteryViewModel.Header = "Battery";
 
-            SetDefaults();
-
-            RefreshIconStatus();
+            BluetoothConnected = false;
+            UpdateBluetooth(BluetoothConnected);
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
@@ -95,56 +95,56 @@ namespace FenomPlus.ViewModels
             BluetoothBarIcon = "wo_bluetooth_red.png";
             BluetoothViewModel.ImagePath = "bluetooth_red.png";
             BluetoothViewModel.Color = Color.Red;
-            BluetoothViewModel.Label = "Disconnected";
+            BluetoothViewModel.Label = string.Empty;
             BluetoothViewModel.Value = string.Empty;
 
             //SensorViewModel.Header = "Sensor";
             SensorBarIcon = "wo_sensor_red.png";
             SensorViewModel.ImagePath = "sensor_red.png";
             SensorViewModel.Color = Color.Red;
-            SensorViewModel.Label = "Disconnected";
+            SensorViewModel.Label = string.Empty;
             SensorViewModel.Value = string.Empty;
 
             //DeviceViewModel.Header = "Device";
             DeviceBarIcon = "wo_device_red.png";
             DeviceViewModel.ImagePath = "device_red.png";
             DeviceViewModel.Color = Color.Red;
-            DeviceViewModel.Label = "Disconnected";
+            DeviceViewModel.Label = string.Empty;
             DeviceViewModel.Value = string.Empty;
 
             //QualityControlViewModel.Header = "Quality Control";
             QcBarIcon = "wo_quality_control_red.png";
             QualityControlViewModel.ImagePath = "quality_control_red.png";
             QualityControlViewModel.Color = Color.Red;
-            QualityControlViewModel.Label = "Disconnected";
+            QualityControlViewModel.Label = string.Empty;
             QualityControlViewModel.Value = string.Empty;
 
             //HumidityViewModel.Header = "Humidity";
             HumidityBarIcon = "wo_humidity_red.png";
             HumidityViewModel.ImagePath = "humidity_red.png";
             HumidityViewModel.Color = Color.Red;
-            HumidityViewModel.Label = "Disconnected";
-            HumidityViewModel.Value = "";
+            HumidityViewModel.Label = string.Empty;
+            HumidityViewModel.Value = string.Empty;
 
             //PressureViewModel.Header = "Pressure";
             PressureBarIcon = "wo_pressure_red.png";
             PressureViewModel.ImagePath = "pressure_red.png";
             PressureViewModel.Color = Color.Red;
-            PressureViewModel.Label = "Disconnected";
+            PressureViewModel.Label = string.Empty;
             PressureViewModel.Value = string.Empty;
 
             //TemperatureViewModel.Header = "Temperature";
             TemperatureBarIcon = "wo_temperature_red.png";
             TemperatureViewModel.ImagePath = "temperature_red.png";
             TemperatureViewModel.Color = Color.Red;
-            TemperatureViewModel.Label = "Disconnected";
+            TemperatureViewModel.Label = string.Empty;
             TemperatureViewModel.Value = string.Empty;
 
             //BatteryViewModel.Header = "Battery";
             BatteryBarIcon = "wo_battery_red.png";
             BatteryViewModel.ImagePath = "battery_red.png";
             BatteryViewModel.Color = Color.Red;
-            BatteryViewModel.Label = "Disconnected";
+            BatteryViewModel.Label = string.Empty;
             BatteryViewModel.Value = string.Empty;
 
 
@@ -167,26 +167,12 @@ namespace FenomPlus.ViewModels
 
         public void RefreshIconStatus()
         {
-            if (Services.BleHub.BreathTestInProgress)
+            if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
                 // Don't update during test
                 return;
             }
 
-            if (Services.BleHub.IsConnected())
-            {
-                SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
-                FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
-            }
-            else
-            {
-                SerialNumber = string.Empty;
-                FirmwareVersion = string.Empty;
-                SetDefaults();
-            }
-
-
-            //UpdateBluetooth(Services.BleHub.IsConnected()); // Cache is updated when characteristic changes
 
             UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
@@ -217,6 +203,9 @@ namespace FenomPlus.ViewModels
 
             if (BluetoothConnected)
             {
+                SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
+                FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
+
                 BluetoothBarIcon = "wo_bluetooth_green.png";
                 BluetoothViewModel.ImagePath = "bluetooth_green.png";
                 BluetoothViewModel.Color = Color.Green;
@@ -225,12 +214,19 @@ namespace FenomPlus.ViewModels
             }
             else
             {
+                SerialNumber = string.Empty;
+                FirmwareVersion = string.Empty;
+
                 BluetoothBarIcon = "wo_bluetooth_red.png";
                 BluetoothViewModel.ImagePath = "bluetooth_red.png";
                 BluetoothViewModel.Color = Color.Red;
                 BluetoothViewModel.Label = "Disconnected";
                 BluetoothViewModel.Value = string.Empty;
+
+                SetDefaults();
             }
+
+            RefreshIconStatus();
         }
 
         public const int BatteryCritical = 3;
@@ -241,6 +237,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateBattery(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             BatteryViewModel.Value = $"{value}%";
             BatteryViewModel.ButtonText = "Order";
 
@@ -286,6 +287,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateSensor(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             SensorViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
             SensorViewModel.Label = "Days Left";
             SensorViewModel.ButtonText = "Order";
@@ -320,6 +326,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateQualityControlExpiration(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             QualityControlViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
             QualityControlViewModel.Label = "Days Left";
             QualityControlViewModel.ButtonText = "Settings";
@@ -353,6 +364,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateDevice(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             DeviceViewModel.Value = $"{value}";
             DeviceViewModel.ButtonText = "Order";
             DeviceViewModel.Label = "Days Left";
@@ -386,6 +402,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateRelativeHumidity(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             HumidityViewModel.Value = $"{value}%";
             HumidityViewModel.ButtonText = "Info";
 
@@ -421,6 +442,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateTemperature(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             TemperatureViewModel.Value = $"{value} °C";
             TemperatureViewModel.ButtonText = "Info";
 
@@ -456,6 +482,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdatePressure(int value)
         {
+            if (!BluetoothConnected)
+            {
+                return;
+            }
+
             PressureViewModel.Value = $"{value} kPa";
             PressureViewModel.ButtonText = "Info";
 
@@ -486,51 +517,102 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        private void ShowSensorDetails()
-        {
-            Services.Navigation.ShowStatusDetailsPopup(SensorViewModel);
-        }
-
-        [RelayCommand]
-        private void ShowDeviceDetails()
-        {
-            Services.Navigation.ShowStatusDetailsPopup(DeviceViewModel);
-        }
-
-        [RelayCommand]
-        private void ShowQualityControlDetails()
-        {
-            Services.Navigation.ShowStatusDetailsPopup(QualityControlViewModel);
-        }
-
-        [RelayCommand]
         private void ShowBluetoothDetails()
         {
             Services.Navigation.ShowStatusDetailsPopup(BluetoothViewModel);
         }
 
         [RelayCommand]
+        private void ShowSensorDetails()
+        {
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(SensorViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
+        }
+
+        [RelayCommand]
+        private void ShowDeviceDetails()
+        {
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(DeviceViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
+        }
+
+        [RelayCommand]
+        private void ShowQualityControlDetails()
+        {
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(QualityControlViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
+        }
+
+
+
+        [RelayCommand]
         private void ShowHumidityDetails()
         {
-            Services.Navigation.ShowStatusDetailsPopup(HumidityViewModel);
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(HumidityViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
         }
 
         [RelayCommand]
         private void ShowPressureDetails()
         {
-            Services.Navigation.ShowStatusDetailsPopup(PressureViewModel);
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(PressureViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
         }
 
         [RelayCommand]
         private void ShowTemperatureDetails()
         {
-            Services.Navigation.ShowStatusDetailsPopup(TemperatureViewModel);
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(TemperatureViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
         }
 
         [RelayCommand]
         private void ShowBatteryDetails()
         {
-            Services.Navigation.ShowStatusDetailsPopup(BatteryViewModel);
+            if (BluetoothConnected)
+            {
+                Services.Navigation.ShowStatusDetailsPopup(BatteryViewModel);
+            }
+            else
+            {
+                Services.Dialogs.ShowToast("Device not connected", 4);
+            }
         }
 
 

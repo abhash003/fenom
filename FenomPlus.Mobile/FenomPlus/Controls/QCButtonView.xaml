@@ -22,6 +22,22 @@
                     EnableRippleEffect="True"
                     Margin="10,10,10,0">
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal">
+                    <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#F9F9F9" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="Pressed">
+                    <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#c8c8c8" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" x:DataType="controls:QcButtonViewModel">
 
             <Grid HorizontalOptions="FillAndExpand" 

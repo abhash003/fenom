@@ -49,34 +49,42 @@
 
                 <ImageButton Source="{Binding SensorBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding DeviceBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding QcBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
 
                 <ImageButton Source="{Binding PressureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding HumidityBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding TemperatureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
+
+
+                <ImageButton Source="{Binding BatteryBarIcon}" 
+                             Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding BluetoothConnected}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding BluetoothBarIcon}" 
-                             Style="{StaticResource StatusBarButton}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
-
-                <ImageButton Source="{Binding BatteryBarIcon}" 
                              Style="{StaticResource StatusBarButton}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 

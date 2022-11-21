@@ -39,11 +39,27 @@
                           EnableRippleEffect="True"
                           Margin="10,10,10,0">
 
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#F9F9F9" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#c8c8c8" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
             <Grid HorizontalOptions="FillAndExpand" 
-                      VerticalOptions="CenterAndExpand" 
-                      Grid.RowSpacing="0" 
-                      Grid.Padding="0"
-                      x:DataType="controls:StatusButtonViewModel">
+                  VerticalOptions="CenterAndExpand" 
+                  Grid.RowSpacing="0" 
+                  Grid.Padding="0"
+                  x:DataType="controls:StatusButtonViewModel">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -95,7 +111,7 @@
                     VerticalOptions="Center"
                     Margin="0,5,0,5"/>
 
-        </Grid>
+            </Grid>
 
     </buttons:SfButton>
 
