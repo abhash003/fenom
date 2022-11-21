@@ -33,7 +33,7 @@
 
     <buttons:SfButton x:Name="InnerButton" 
                     HasShadow="True" 
-                    BackgroundColor="#F9F9F0"
+                    BackgroundColor="#F9F9F9"
                     BorderColor="#E7E7E7" 
                     BorderWidth="1" 
                     EnableRippleEffect="True"
@@ -41,6 +41,7 @@
 
         <Grid HorizontalOptions="FillAndExpand" 
               VerticalOptions="FillAndExpand" 
+              Grid.Padding="5"
               x:DataType="controls:ImageButtonViewModel">
 
             <Image x:Name="ButtonImage"

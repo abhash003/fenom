@@ -9,7 +9,7 @@
     x:Class="FenomPlus.Controls.StatusDetailsPopup"
     WidthRequest="300">
 
-    <StackLayout BackgroundColor="#F9F9F0" x:DataType="controls:StatusButtonViewModel" Padding="20">
+    <StackLayout BackgroundColor="#F9F9F9" x:DataType="controls:StatusButtonViewModel" Padding="20">
 
         <Label x:Name="InfoBlockTitle"
                Text="{Binding Header}"

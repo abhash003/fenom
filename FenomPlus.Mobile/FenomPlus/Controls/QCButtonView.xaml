@@ -16,7 +16,7 @@
 
     <buttons:SfButton x:Name="InnerButton" 
                     HasShadow="True" 
-                    BackgroundColor="#F9F9F0"
+                    BackgroundColor="#F9F9F9"
                     BorderColor="#E7E7E7" 
                     BorderWidth="1" 
                     EnableRippleEffect="True"
@@ -24,11 +24,10 @@
 
         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" x:DataType="controls:QcButtonViewModel">
 
-            <Grid BackgroundColor="#F9F9F0"  
-                  HorizontalOptions="FillAndExpand" 
+            <Grid HorizontalOptions="FillAndExpand" 
                   VerticalOptions="FillAndExpand" 
                   Grid.RowSpacing="0" 
-                  Grid.Padding="0"
+                  Grid.Padding="5"
                   IsVisible="{Binding Assigned}">
 
             <Grid.RowDefinitions>
@@ -158,10 +157,11 @@
 
             <Grid HorizontalOptions="FillAndExpand" 
                   VerticalOptions="FillAndExpand"
-                  BackgroundColor="#F9F9F0"
                   IsVisible="{Binding Assigned, Converter={StaticResource InvertedBoolConverter}}">
 
-                <Label Text="Add User" FontSize="24"
+                <Label Text="Add User" 
+                       TextColor="#333" 
+                       FontSize="18"
                        HorizontalOptions="Center" 
                        VerticalOptions="Center"/>
 
