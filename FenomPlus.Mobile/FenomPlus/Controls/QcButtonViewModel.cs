@@ -1,41 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net.Http.Headers;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.ViewModels;
+using Xamarin.Forms;
 
 namespace FenomPlus.Controls
 {
     public partial class QcButtonViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private string _header;
+        private bool _assigned;
+
+        [ObservableProperty] 
+        private string _header = "QC User";
 
         [ObservableProperty]
-        private string _imagePath;
+        private string _status = "Expired";
 
         [ObservableProperty]
-        private string _value;
+        private string _expires = "DD MMM YYYY";
 
         [ObservableProperty]
-        private string _label;
+        private string _nextTest = "HH:MM:SS";
 
         [ObservableProperty]
-        private string _description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim.";
-
-        [ObservableProperty]
-        private string _buttonText;
-
-        [ObservableProperty]
-        private Color _color;
-
-        [ObservableProperty]
-        private string _helpLink = "https://www.caireinc.com/";
-
-        [ObservableProperty]
-        private bool _displayPopup;
+        private string _chart = "bar_chart";
 
         public QcButtonViewModel()
         {

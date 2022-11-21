@@ -36,8 +36,8 @@
                          Margin="10,0,10,5">
 
                 <Grid BackgroundColor="#F1F1F0"
-                  VerticalOptions="FillAndExpand"
-                  HorizontalOptions="FillAndExpand">
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -49,13 +49,13 @@
                     <Label Text="{Binding FirmwareVersion}" Grid.Row="0" Grid.Column="0" HorizontalOptions="End" Margin="20,0"/>
 
                     <Grid x:Name="InfoBoxesGrid"
-                  Grid.Row="1" 
-                  Grid.Column="0"
-                  BackgroundColor="White" 
-                  VerticalOptions="FillAndExpand"
-                  HorizontalOptions="FillAndExpand"
-                  RowSpacing="10"
-                  ColumnSpacing="10">
+                              Grid.Row="1" 
+                              Grid.Column="0"
+                              BackgroundColor="White" 
+                              VerticalOptions="FillAndExpand"
+                              HorizontalOptions="FillAndExpand"
+                              RowSpacing="10"
+                              ColumnSpacing="10">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -72,75 +72,73 @@
 
                         <!--Individual Items Row 1-->
 
-                    <controls:StatusButtonView 
-                                x:Name="SensorInfo"
-                                Grid.Row="0" 
-                                Grid.Column="0"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowSensorDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="SensorInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="0"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowSensorDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="DeviceInfo"
-                                Grid.Row="0" 
-                                Grid.Column="1"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowDeviceDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="DeviceInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="1"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowDeviceDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="QualityControlInfo"
-                                Grid.Row="0" 
-                                Grid.Column="2"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowQualityControlDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="QualityControlInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="2"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowQualityControlDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="BluetoothInfo"
-                                Grid.Row="0" 
-                                Grid.Column="3"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowBluetoothDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="BluetoothInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="3"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowBluetoothDetailsCommand}"/>
 
-                    <!--Individual Items Row 2-->
+                        <!--Individual Items Row 2-->
 
-                    <controls:StatusButtonView 
-                                x:Name="HumidityInfo"
-                                Grid.Row="1" 
-                                Grid.Column="0"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowHumidityDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="HumidityInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="0"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowHumidityDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="PressureInfo"
-                                Grid.Row="1" 
-                                Grid.Column="1"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowPressureDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="PressureInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="1"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowPressureDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="TemperatureInfo"
-                                Grid.Row="1" 
-                                Grid.Column="2"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowTemperatureDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="TemperatureInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="2"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowTemperatureDetailsCommand}"/>
 
-                    <controls:StatusButtonView 
-                                x:Name="BatteryInfo"
-                                Grid.Row="1" 
-                                Grid.Column="3"
-                                VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowBatteryDetailsCommand}"/>
+                        <controls:StatusButtonView 
+                                    x:Name="BatteryInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="3"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowBatteryDetailsCommand}"/>
 
                     </Grid>
-
-
 
                 </Grid>
 

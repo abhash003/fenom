@@ -92,6 +92,9 @@
     <Compile Update="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Controls\ImageButtonView.xaml.cs">
+      <DependentUpon>ImageButtonView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
       <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Controls\MarigoldActivityWheel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\ImageButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">

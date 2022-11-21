@@ -206,6 +206,11 @@ namespace FenomPlus.Services
         //}
 
 
+        public bool BreathTestInProgress
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 
@@ -216,6 +221,7 @@ namespace FenomPlus.Services
         {
             if(IsConnected())
             {
+                BreathTestInProgress = true;
                 return await BleDevice.BREATHTEST(breathTestEnum);
             }
             return false;
@@ -229,6 +235,7 @@ namespace FenomPlus.Services
         {
             if (IsConnected())
             {
+                BreathTestInProgress = false;
                 return await BleDevice.BREATHTEST(BreathTestEnum.Stop);
             }
             return false;

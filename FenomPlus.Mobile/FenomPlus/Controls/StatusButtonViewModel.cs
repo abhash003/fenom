@@ -8,7 +8,7 @@ using FenomPlus.ViewModels;
 
 namespace FenomPlus.Controls
 {
-    public partial class StatusButtonViewModel :BaseViewModel
+    public partial class StatusButtonViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string _header;
@@ -34,18 +34,15 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private string _helpLink = "https://www.caireinc.com/";
 
-        [ObservableProperty]
-        private bool _displayPopup;
-
         public StatusButtonViewModel()
         {
             
         }
 
-        [RelayCommand]
-        private void ButtonPress()
-        {
+        //[RelayCommand]
+        //private void ButtonPress()
+        //{
 
-        }
+        //}
     }
 }

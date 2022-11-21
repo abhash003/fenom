@@ -55,7 +55,7 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _firmwareVersion;
 
-        private readonly Timer DeviceStatusTimer = new Timer(30000);
+        private readonly Timer DeviceStatusTimer = new Timer(60000);
 
 
         public StatusViewModel()
@@ -96,28 +96,28 @@ namespace FenomPlus.ViewModels
             BluetoothViewModel.ImagePath = "bluetooth_red.png";
             BluetoothViewModel.Color = Color.Red;
             BluetoothViewModel.Label = "Disconnected";
-            BluetoothViewModel.Value = "";
+            BluetoothViewModel.Value = string.Empty;
 
             //SensorViewModel.Header = "Sensor";
             SensorBarIcon = "wo_sensor_red.png";
             SensorViewModel.ImagePath = "sensor_red.png";
             SensorViewModel.Color = Color.Red;
             SensorViewModel.Label = "Disconnected";
-            SensorViewModel.Value = "";
+            SensorViewModel.Value = string.Empty;
 
             //DeviceViewModel.Header = "Device";
             DeviceBarIcon = "wo_device_red.png";
             DeviceViewModel.ImagePath = "device_red.png";
             DeviceViewModel.Color = Color.Red;
             DeviceViewModel.Label = "Disconnected";
-            DeviceViewModel.Value = "";
+            DeviceViewModel.Value = string.Empty;
 
             //QualityControlViewModel.Header = "Quality Control";
             QcBarIcon = "wo_quality_control_red.png";
             QualityControlViewModel.ImagePath = "quality_control_red.png";
             QualityControlViewModel.Color = Color.Red;
             QualityControlViewModel.Label = "Disconnected";
-            QualityControlViewModel.Value = "";
+            QualityControlViewModel.Value = string.Empty;
 
             //HumidityViewModel.Header = "Humidity";
             HumidityBarIcon = "wo_humidity_red.png";
@@ -131,21 +131,21 @@ namespace FenomPlus.ViewModels
             PressureViewModel.ImagePath = "pressure_red.png";
             PressureViewModel.Color = Color.Red;
             PressureViewModel.Label = "Disconnected";
-            PressureViewModel.Value = "";
+            PressureViewModel.Value = string.Empty;
 
             //TemperatureViewModel.Header = "Temperature";
             TemperatureBarIcon = "wo_temperature_red.png";
             TemperatureViewModel.ImagePath = "temperature_red.png";
             TemperatureViewModel.Color = Color.Red;
             TemperatureViewModel.Label = "Disconnected";
-            TemperatureViewModel.Value = "";
+            TemperatureViewModel.Value = string.Empty;
 
             //BatteryViewModel.Header = "Battery";
             BatteryBarIcon = "wo_battery_red.png";
             BatteryViewModel.ImagePath = "battery_red.png";
             BatteryViewModel.Color = Color.Red;
             BatteryViewModel.Label = "Disconnected";
-            BatteryViewModel.Value = "";
+            BatteryViewModel.Value = string.Empty;
 
 
 
@@ -167,6 +167,12 @@ namespace FenomPlus.ViewModels
 
         public void RefreshIconStatus()
         {
+            if (Services.BleHub.BreathTestInProgress)
+            {
+                // Don't update during test
+                return;
+            }
+
             if (Services.BleHub.IsConnected())
             {
                 SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
@@ -215,7 +221,7 @@ namespace FenomPlus.ViewModels
                 BluetoothViewModel.ImagePath = "bluetooth_green.png";
                 BluetoothViewModel.Color = Color.Green;
                 BluetoothViewModel.Label = "Connected";
-                BluetoothViewModel.Value = "OK";
+                BluetoothViewModel.Value = string.Empty;
             }
             else
             {
@@ -223,7 +229,7 @@ namespace FenomPlus.ViewModels
                 BluetoothViewModel.ImagePath = "bluetooth_red.png";
                 BluetoothViewModel.Color = Color.Red;
                 BluetoothViewModel.Label = "Disconnected";
-                BluetoothViewModel.Value = "";
+                BluetoothViewModel.Value = string.Empty;
             }
         }
 

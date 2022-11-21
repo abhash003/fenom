@@ -31,7 +31,7 @@
                VerticalTextAlignment="End" 
                HorizontalOptions="Center" 
                TextColor="Red" 
-               FontSize="24"
+               FontSize="28"
                Margin="0"/>
 
         <Label x:Name="InfoBlockLabel"

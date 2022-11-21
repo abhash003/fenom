@@ -3,90 +3,43 @@ using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Enums;
+using FenomPlus.Controls;
 
 namespace FenomPlus.Views
 {
     public partial class QualityControlView : BaseContentPage
     {
-        private readonly DashboardViewModel DashboardViewModel;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
         public QualityControlView()
         {
             InitializeComponent();
-            BindingContext = DashboardViewModel = new DashboardViewModel();
+            BindingContext = QualityControlViewModel = new QualityControlViewModel();
+
+            NegativeControlButton.BindingContext = QualityControlViewModel.NegativeControlViewModel;
+
+            User1Button.BindingContext = QualityControlViewModel.QcUser1ViewModel;
+            User2Button.BindingContext = QualityControlViewModel.QcUser2ViewModel;
+            User3Button.BindingContext = QualityControlViewModel.QcUser3ViewModel;
+            User4Button.BindingContext = QualityControlViewModel.QcUser4ViewModel;
+            User5Button.BindingContext = QualityControlViewModel.QcUser5ViewModel;
+            User6Button.BindingContext = QualityControlViewModel.QcUser6ViewModel;
+            ImageButton.BindingContext = QualityControlViewModel.ImageButtonViewModel;
         }
 
-        private async void OnStandardTest(object sender, EventArgs e)
-        {
-            if (DashboardViewModel.BleHub.IsNotConnectedRedirect())
-            {
-                if (!DashboardViewModel.BleHub.ReadyForTest)
-                {
-                    DeviceNotReadyWarning1();
-                    return;
-                }
-
-                DashboardViewModel.Cache.TestType = TestTypeEnum.Standard;
-                await DashboardViewModel.BleHub.StartTest(BreathTestEnum.Start10Second);
-                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
-            }
-        }
-
-        private async void OnShortTest(object sender, EventArgs e)
-        {
-            if (DashboardViewModel.Services.BleHub.IsNotConnectedRedirect())
-            {
-                if (!DashboardViewModel.BleHub.ReadyForTest)
-                {
-                    DeviceNotReadyWarning2();                   
-                    return;
-                }
-
-                DashboardViewModel.Cache.TestType = TestTypeEnum.Short;
-                await DashboardViewModel.BleHub.StartTest(BreathTestEnum.Start6Second);
-                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
-            }
-        }
-
-        private void DeviceNotReadyWarning1()
-        {
-            if (!DashboardViewModel.BleHub.ReadyForTest)
-            {
-                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
-            }
-        }
-
-        private void DeviceNotReadyWarning2()
-        {
-            if (!DashboardViewModel.BleHub.ReadyForTest)
-            {
-                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
-            }
-        }
-
-        private async void OnTutorial(object sender, EventArgs e)
-        {
-            await DashboardViewModel.Services.Navigation.TutorialView();
-        }
-        
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            DashboardViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            DashboardViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            DashboardViewModel.NewGlobalData();
         }
     }
 }
