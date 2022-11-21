@@ -16,6 +16,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Svg;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
+// Note: Shared by DeviceHubView and TitleContentView
+
 namespace FenomPlus.ViewModels
 {
     public partial class StatusViewModel : BaseViewModel
@@ -95,7 +97,7 @@ namespace FenomPlus.ViewModels
             BluetoothBarIcon = "wo_bluetooth_red.png";
             BluetoothViewModel.ImagePath = "bluetooth_red.png";
             BluetoothViewModel.Color = Color.Red;
-            BluetoothViewModel.Label = string.Empty;
+            BluetoothViewModel.Label = "Disconnected";
             BluetoothViewModel.Value = string.Empty;
 
             //SensorViewModel.Header = "Sensor";
