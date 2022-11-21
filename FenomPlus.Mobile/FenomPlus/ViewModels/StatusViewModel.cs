@@ -148,9 +148,12 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Color = Color.Red;
             BatteryViewModel.Label = string.Empty;
             BatteryViewModel.Value = string.Empty;
+        }
 
-
-
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+            RefreshIconStatus();
         }
 
         [RelayCommand]
@@ -169,7 +172,9 @@ namespace FenomPlus.ViewModels
 
         public void RefreshIconStatus()
         {
-            if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
+            BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+
+            if (Services.BleHub.BreathTestInProgress)
             {
                 // Don't update during test
                 return;
