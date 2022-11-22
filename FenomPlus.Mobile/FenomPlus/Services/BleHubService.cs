@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -16,15 +16,19 @@ namespace FenomPlus.Services
     public class BleHubService : BaseService, IBleHubService
     {
         private readonly Timer DeviceReadyTimer;
+        readonly IDialogService DialogService;
+
 
         public BleHubService(IAppServices services) : base(services)
         {
-            DeviceReadyTimer = new System.Timers.Timer(1000);
+            DeviceReadyTimer = new Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
 
+            DialogService = Container.Resolve<IDialogService>();
+
             ReadyForTest = true;
-			
-			FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
+
+            FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
             {
                 //if (AppShell.Current.CurrentPage)
                 //_ = Services.Navigation.DevicePowerOnView();
@@ -77,7 +81,7 @@ namespace FenomPlus.Services
         /// 
         /// </summary>
         private IFenomHubSystemDiscovery fenomHubSystemDiscovery;
-        public  IFenomHubSystemDiscovery FenomHubSystemDiscovery
+        public IFenomHubSystemDiscovery FenomHubSystemDiscovery
         {
             get
             {
@@ -87,9 +91,9 @@ namespace FenomPlus.Services
                     fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
 
                     fenomHubSystemDiscovery.DeviceConnected += (object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e) =>
-                        {
-                            System.Console.WriteLine("******************************************* fenomHubSystemDiscovery.DeviceConnected");
-                        };
+                    {
+                        System.Console.WriteLine("******************************************* fenomHubSystemDiscovery.DeviceConnected");
+                    };
                 }
                 return fenomHubSystemDiscovery;
             }
@@ -178,7 +182,7 @@ namespace FenomPlus.Services
             System.Console.WriteLine("******** IsConnected: devicePowerOn: {0}", devicePowerOn);
 
             // do we have a device
-            if(BleDevice != null)
+            if (BleDevice != null)
             {
                 System.Console.WriteLine("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected);
 
@@ -202,7 +206,8 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsNotConnectedRedirect(bool devicePowerOn = false)
         {
-            if(IsConnected(devicePowerOn)) {
+            if (IsConnected(devicePowerOn))
+            {
                 return true;
             }
             Services.Navigation.DevicePowerOnView();
@@ -236,6 +241,11 @@ namespace FenomPlus.Services
         //}
 
 
+        public bool BreathTestInProgress
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 
@@ -244,8 +254,9 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
         {
-            if(IsConnected())
+            if (IsConnected())
             {
+                BreathTestInProgress = true;
                 return await BleDevice.BREATHTEST(breathTestEnum);
             }
             return false;
@@ -259,6 +270,7 @@ namespace FenomPlus.Services
         {
             if (IsConnected())
             {
+                BreathTestInProgress = false;
                 return await BleDevice.BREATHTEST(BreathTestEnum.Stop);
             }
             return false;

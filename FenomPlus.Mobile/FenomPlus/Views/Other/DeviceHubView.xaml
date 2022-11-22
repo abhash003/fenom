@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentPage 
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+                 xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                 xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+                 xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+                 xmlns:popupLayout="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+                 x:Class="FenomPlus.Views.DeviceHubView"    
+                 Shell.PresentationMode="ModalAnimated"
+                 Title="Device Status"
+                 Shell.NavBarIsVisible="True"
+                 NavigationPage.HasBackButton="False"
+                 NavigationPage.HasNavigationBar="False"
+                 x:DataType="viewModels:StatusViewModel">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+
+    <ContentPage.Content>
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0,20,0,20">
+
+            <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <border:SfBorder Grid.Row="0" 
+                         HasShadow="True" 
+                         BorderColor="#E7E7E7" 
+                         BorderWidth="1" 
+                         Margin="10,0,10,5">
+
+                <Grid BackgroundColor="#F1F1F0"
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Text="{Binding SoftwareVersion}" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0"/>
+                    <Label Text="{Binding SerialNumber}" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Margin="20,0"/>
+                    <Label Text="{Binding FirmwareVersion}" Grid.Row="0" Grid.Column="0" HorizontalOptions="End" Margin="20,0"/>
+
+                    <Grid x:Name="InfoBoxesGrid"
+                              Grid.Row="1" 
+                              Grid.Column="0"
+                              BackgroundColor="White" 
+                              VerticalOptions="FillAndExpand"
+                              HorizontalOptions="FillAndExpand"
+                              RowSpacing="10"
+                              ColumnSpacing="10">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Individual Items Row 1-->
+
+                        <controls:StatusButtonView 
+                                    x:Name="SensorInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="0"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowSensorDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="DeviceInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="1"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowDeviceDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="QualityControlInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="2"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowQualityControlDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="BluetoothInfo"
+                                    Grid.Row="0" 
+                                    Grid.Column="3"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowBluetoothDetailsCommand}"/>
+
+                        <!--Individual Items Row 2-->
+
+                        <controls:StatusButtonView 
+                                    x:Name="HumidityInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="0"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowHumidityDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="PressureInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="1"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowPressureDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="TemperatureInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="2"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowTemperatureDetailsCommand}"/>
+
+                        <controls:StatusButtonView 
+                                    x:Name="BatteryInfo"
+                                    Grid.Row="1" 
+                                    Grid.Column="3"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    Command="{Binding ShowBatteryDetailsCommand}"/>
+
+                    </Grid>
+
+                </Grid>
+
+            </border:SfBorder>
+
+            <Label Text="Copyright © 2022 Caire Diagnostics - All rights reserved" 
+               Grid.Row="1"
+               Grid.Column="0"
+               FontSize="Small"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+
+            <Button Text="Exit"
+                Grid.Row="1"
+                Margin="0,0,60,0"
+                Style="{StaticResource defaultButton}"
+                Command="{Binding ExitToDashboardCommand}"
+                HorizontalOptions="End"/>
+
+        </Grid> 
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>

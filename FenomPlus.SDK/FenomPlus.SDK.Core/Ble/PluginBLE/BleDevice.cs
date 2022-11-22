@@ -82,7 +82,16 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     if (device.State == DeviceState.Connected)
                     {
                         Device = device;
-                        await Device.RequestMtuAsync(164);
+
+                        try
+                        {
+                            int mtuActual = await Device.RequestMtuAsync(164);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+
                         Device.UpdateConnectionInterval(ConnectionInterval.Normal);
 
                         _ = await GetCharacterasticsAync();

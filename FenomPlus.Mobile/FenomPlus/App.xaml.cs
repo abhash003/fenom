@@ -2,6 +2,7 @@
 using FenomPlus.Views;
 using FenomPlus.Services;
 using System;
+using Xamarin.Forms.Svg;
 
 namespace FenomPlus
 {
@@ -13,7 +14,9 @@ namespace FenomPlus
         {
             InitializeComponent();
 
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU2MDE3QDMyMzAyZTMzMmUzMFdXSHRLTTRjTm80Wmw1QTgwaWlEL1dLSGdsTmxRZkhZS3ZWM2w3NFhIOHc9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzY0MTE5QDMyMzAyZTMzMmUzMFQ4aE9PM1F3RlN6NDhLU0lEbi9RRmt3akc4dWVBZGw5VEtRWG1sTituU289");
+
+            SvgImageSource.RegisterAssembly();
 
             AppShell = new AppShell();
             MainPage = AppShell;

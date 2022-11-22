@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusButtonView"
+             xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+             x:Class="FenomPlus.Controls.StatusButtonView">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="smallButton" TargetType="Button">
+                <Setter Property="WidthRequest" Value="120" />
+                <Setter Property="TextColor" Value="#077DCD" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+            </Style>
+
+            <Style x:Key="smallLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="#333"/>
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="#fff" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+        <buttons:SfButton x:Name="InnerButton" 
+                          HasShadow="True" 
+                          BackgroundColor="#F9F9F9"
+                          BorderColor="#E7E7E7" 
+                          BorderWidth="1" 
+                          EnableRippleEffect="True"
+                          Margin="10,10,10,0">
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#F9F9F9" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="#c8c8c8" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid HorizontalOptions="FillAndExpand" 
+                  VerticalOptions="CenterAndExpand" 
+                  Grid.RowSpacing="0" 
+                  Grid.Padding="0"
+                  x:DataType="controls:StatusButtonViewModel">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label x:Name="Header"
+                    Grid.Row="0"
+                    Text="{Binding Header}"
+                    VerticalOptions="Center" 
+                    VerticalTextAlignment="Center" 
+                    HorizontalOptions="Center" 
+                    Margin="0,5,0,0" 
+                    TextColor="#333" 
+                    FontSize="16"/>
+
+            <Image x:Name="Image"
+                   Source="{Binding ImagePath}"
+                   Grid.Row="1" 
+                   VerticalOptions="CenterAndExpand"
+                   Aspect="AspectFit"/>
+
+            <Label x:Name="Value"
+                    Grid.Row="2" 
+                    Text="{Binding Value}"
+                    VerticalOptions="Center" 
+                    VerticalTextAlignment="Start" 
+                    HorizontalOptions="Center" 
+                    TextColor="Red" 
+                    FontSize="20"/>
+
+            <Label x:Name="Label"
+                    Grid.Row="3" 
+                    Text="{Binding Label}"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    TextColor="#333" 
+                    FontSize="12"/>
+
+            <Label x:Name="ButtonText"
+                    Grid.Row="4" 
+                    Text="{Binding ButtonText}"
+                    FontSize="16"
+                    TextColor="#077DCD" 
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,5,0,5"/>
+
+            </Grid>
+
+    </buttons:SfButton>
+
+</ContentView>

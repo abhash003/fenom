@@ -45,7 +45,7 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _showAllMenus;
 
-        [ObservableProperty] private DeviceStatus _deviceStatus;
+        //[ObservableProperty] private DeviceStatus _deviceStatus;
 
         [ObservableProperty]
         private bool errorVisible;
@@ -55,7 +55,7 @@ namespace FenomPlus.ViewModels
 
         public BaseViewModel()
         {
-            DeviceStatus = new DeviceStatus();
+            //DeviceStatus = new DeviceStatus();
             //RefreshIconStatus();
             ShowAllMenus = true;
         }

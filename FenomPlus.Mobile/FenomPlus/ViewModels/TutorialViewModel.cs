@@ -184,7 +184,7 @@ namespace FenomPlus.ViewModels
 
                     StepTitle = "Step 5";
                     IllustrationSource = "TutStep5";
-                    InstructionsText = "Exhale into the device now\n\nPoint the needle at the star";
+                    InstructionsText = "Exhale into the device now\n\nPractice pointing the needle at the star";
                     break;
 
                 case 6: // success Page

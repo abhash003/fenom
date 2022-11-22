@@ -38,19 +38,19 @@ namespace FenomPlus.Models
             if (value <= BatteryLow) 
             {
                 // low
-                Battery.Image = "BatteryLow";
+                Battery.ImageName = "BatteryLow";
                 Battery.Color = Color.Red;
             } 
             else if (value <= BatteryWarning) 
             {
                 // warning
-                Battery.Image = "BatteryWarning";
+                Battery.ImageName = "BatteryWarning";
                 Battery.Color = Color.Orange;
             } 
             else 
             {
                 // full
-                Battery.Image = "BatteryFull";
+                Battery.ImageName = "BatteryFull";
                 Battery.Color = Color.Green;
             }
 
@@ -71,23 +71,23 @@ namespace FenomPlus.Models
             if (value <= SensorLow) 
             {
                 // low
-                Sensor.Image = "SensorLow";
+                Sensor.ImageName = "SensorLow";
                 Sensor.Color = Color.Red;
             } 
             else if (value <= SensorWarning) 
             {
                 // warning
-                Sensor.Image = "SensorWarning";
+                Sensor.ImageName = "SensorWarning";
                 Sensor.Color = Color.Orange;
             } 
             else 
             {
                 // full
-                Sensor.Image = "SensorFull";
+                Sensor.ImageName = "SensorFull";
                 Sensor.Color = Color.Green;
             }
 
-            Sensor.Value = string.Format("{0}", (int)((value < 365) ? value : value / 365));
+            Sensor.Value = $"{(int)((value < 365) ? value : value / 365)}";
             OnPropertyChanged(nameof(Sensor));
             return Sensor;
         }
@@ -104,19 +104,19 @@ namespace FenomPlus.Models
             if (value <= QualityControlExpirationLow) 
             {
                 // low
-                QualityControlExpiration.Image = "QualityControlLow";
+                QualityControlExpiration.ImageName = "QualityControlLow";
                 QualityControlExpiration.Color = Color.Red;
             } 
             else if (value <= QualityControlExpirationWarning) 
             {
                 // warning
-                QualityControlExpiration.Image = "QualityControlWarning";
+                QualityControlExpiration.ImageName = "QualityControlWarning";
                 QualityControlExpiration.Color = Color.Orange;
             } 
             else 
             {
                 // full
-                QualityControlExpiration.Image = "QualityControlFull";
+                QualityControlExpiration.ImageName = "QualityControlFull";
                 QualityControlExpiration.Color = Color.Green;
             }
 
@@ -139,19 +139,19 @@ namespace FenomPlus.Models
             if (value <= DeviceLow)
             {
                 // low
-                Device.Image = "DeviceLow";
+                Device.ImageName = "DeviceLow";
                 Device.Color = Color.Red;
             }
             else if (value <= DeviceWarning)
             {
                 // warning
-                Device.Image = "DeviceWarning";
+                Device.ImageName = "DeviceWarning";
                 Device.Color = Color.Orange;
             }
             else
             {
                 // full
-                Device.Image = "DeviceFull";
+                Device.ImageName = "DeviceFull";
                 Device.Color = Color.Green;
             }
 
@@ -173,19 +173,19 @@ namespace FenomPlus.Models
             if (value <= RelativeHumidityLow)
             {
                 // low
-                RelativeHumidity.Image = "RelativeHumidityLow";
+                RelativeHumidity.ImageName = "RelativeHumidityLow";
                 RelativeHumidity.Color = Color.Red;
             }
             else if (value <= RelativeHumidityWarning)
             {
                 // warning
-                RelativeHumidity.Image = "RelativeHumidityWarning";
+                RelativeHumidity.ImageName = "RelativeHumidityWarning";
                 RelativeHumidity.Color = Color.Orange;
             }
             else
             {
                 // full
-                RelativeHumidity.Image = "RelativeHumidityFull";
+                RelativeHumidity.ImageName = "RelativeHumidityFull";
                 RelativeHumidity.Color = Color.Green;
             }
 
@@ -207,19 +207,19 @@ namespace FenomPlus.Models
             if (value <= TemperatureLow)
             {
                 // low
-                Temperature.Image = "TemperatureLow";
+                Temperature.ImageName = "TemperatureLow";
                 Temperature.Color = Color.Red;
             }
             else if (value <= TemperatureWarning)
             {
                 // warning
-                Temperature.Image = "TemperatureWarning";
+                Temperature.ImageName = "TemperatureWarning";
                 Temperature.Color = Color.Orange;
             }
             else
             {
                 // full
-                Temperature.Image = "TemperatureFull";
+                Temperature.ImageName = "TemperatureFull";
                 Temperature.Color = Color.Green;
             }
 
@@ -241,19 +241,19 @@ namespace FenomPlus.Models
             if (value <= PressureLow)
             {
                 // low
-                Pressure.Image = "PressureLow";
+                Pressure.ImageName = "PressureLow";
                 Pressure.Color = Color.Red;
             }
             else if (value <= PressureWarning)
             {
                 // warning
-                Pressure.Image = "PressureWarning";
+                Pressure.ImageName = "PressureWarning";
                 Pressure.Color = Color.Orange;
             }
             else
             {
                 // full
-                Pressure.Image = "PressureFull";
+                Pressure.ImageName = "PressureFull";
                 Pressure.Color = Color.Green;
             }
 

@@ -107,8 +107,7 @@
             <Grid x:Name="ButtonsGrid" 
                   Grid.Row="1" 
                   Grid.Column="0" 
-                  Grid.ColumnSpan="3" 
-                  Margin="0,0,0,0">
+                  Grid.ColumnSpan="3">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -135,7 +134,7 @@
                         HorizontalOptions="End"
                         Style="{StaticResource defaultButton}"
                         Command="{Binding ExitToDashboardCommand}"
-                        Margin="0,0,40,0"/>
+                        Margin="5,5,40,5"/>
 
             </Grid>
 

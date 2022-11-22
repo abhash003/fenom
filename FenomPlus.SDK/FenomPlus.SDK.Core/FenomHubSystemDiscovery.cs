@@ -4,20 +4,25 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using FenomPlus.Interfaces;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
+using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Utils;
 using FenomPlus.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
 using Syncfusion.SfDataGrid.XForms.DataPager;
+using TinyIoC;
 using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core
 {
     public class FenomHubSystemDiscovery : IFenomHubSystemDiscovery
     {
+        public static TinyIoCContainer Container => TinyIoCContainer.Current;
+
         private LoggingManager _loggingMaager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
@@ -32,6 +37,7 @@ namespace FenomPlus.SDK.Core
         private EventHandler<DeviceErrorEventArgs> _deviceConnectionLost;
         #endregion
 
+        private IDialogService DialogService;
 
         // Define message
         public class DeviceConnectedMessage : ValueChangedMessage<bool>
@@ -53,6 +59,10 @@ namespace FenomPlus.SDK.Core
             _bleRadio.DeviceConnected += _bleRadio_DeviceConnected;
             _bleRadio.DeviceDisconnected += _bleRadio_DeviceDisconnected;
             _bleRadio.DeviceConnectionLost += _bleRadio_DeviceConnectionLost;
+
+            //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
+
+            DialogService = Container.Resolve<IDialogService>();
         }
 
         #region Events from IFenomHubSystemDiscovery
@@ -111,7 +121,6 @@ namespace FenomPlus.SDK.Core
             System.Console.WriteLine("***************** DeviceAdvertised: {0}", e.ToString());
         }
         #endregion
-
 
 
         public IFenomHubSystem FenomHubSystem

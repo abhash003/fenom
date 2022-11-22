@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http.Headers;
+using FenomPlus.Controls;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
 using FenomPlus.Helpers;
@@ -9,72 +11,52 @@ namespace FenomPlus.ViewModels
 {
     public class QualityControlViewModel : BaseViewModel
     {
+        public QcButtonViewModel NegativeControlViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser1ViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser2ViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser3ViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser4ViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser5ViewModel = new QcButtonViewModel();
+        public QcButtonViewModel QcUser6ViewModel = new QcButtonViewModel();
+        public ImageButtonViewModel ImageButtonViewModel = new ImageButtonViewModel();
+
         public QualityControlViewModel()
         {
-            DataForGrid = new RangeObservableCollection<QualityControlDataModel>();
-            UpdateGrid();
+            NegativeControlViewModel.Header = "Negative Control";
+            QcUser1ViewModel.Header = "QC User 1";
+            QcUser2ViewModel.Header = "QC User 2";
+            QcUser3ViewModel.Header = "QC User 3";
+            QcUser4ViewModel.Header = "QC User 4";
+            QcUser5ViewModel.Header = "QC User 5";
+            QcUser6ViewModel.Header = "QC User 6";
+
+            ImageButtonViewModel.ImageName = "TutStep2";
+
+            NegativeControlViewModel.Assigned = true; // Always
+            QcUser1ViewModel.Assigned = true;
+            QcUser2ViewModel.Assigned = true;
+            QcUser3ViewModel.Assigned = true;
+            QcUser4ViewModel.Assigned = false;
+            QcUser5ViewModel.Assigned = false;
+            QcUser6ViewModel.Assigned = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void UpdateGrid()
-        {
-            DataForGrid.Clear();
-            IEnumerable<QualityControlTb> records = QCRepo.SelectAll();
-            foreach (QualityControlTb record in records)
-            {
-                AddToGrid(record);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="record"></param>
-        public void AddToGrid(QualityControlTb record)
-        {
-            if (record != null)
-            {
-                DataForGrid.Add(record.ConvertForGrid());
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
-            UpdateGrid();
-            BleHub.StartTest(BreathTestEnum.Stop);
+            LoadData();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private void LoadData()
+        {
+            // ToDo: finish
+        }
+
         public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private RangeObservableCollection<QualityControlDataModel> _DataForGrid;
-        public RangeObservableCollection<QualityControlDataModel> DataForGrid
-        {
-            get => _DataForGrid;
-            set
-            {
-                _DataForGrid = value;
-                OnPropertyChanged("RecentErrorsData");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
