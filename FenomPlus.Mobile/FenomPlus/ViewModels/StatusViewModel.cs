@@ -110,19 +110,15 @@ namespace FenomPlus.ViewModels
             //});
         }
 
-        private void SetDefaults()
+        private void SetDisconnectedDefaults()
         {
             SerialNumber = string.Empty;
             FirmwareVersion = string.Empty;
 
-            BluetoothBarIcon = "wo_bluetooth_red.png";
-            BluetoothViewModel.ImagePath = "bluetooth_red.png";
-            BluetoothViewModel.Color = Color.Red;
-            BluetoothViewModel.Label = "Disconnected";
-            BluetoothViewModel.Value = string.Empty;
 
             //SensorViewModel.Header = "Sensor";
             SensorBarIcon = "wo_sensor_red.png";
+            SensorBarIconVisible = false;
             SensorViewModel.ImagePath = "sensor_red.png";
             SensorViewModel.Color = Color.Red;
             SensorViewModel.Label = string.Empty;
@@ -130,6 +126,7 @@ namespace FenomPlus.ViewModels
 
             //DeviceViewModel.Header = "Device";
             DeviceBarIcon = "wo_device_red.png";
+            DeviceBarIconVisible = false;
             DeviceViewModel.ImagePath = "device_red.png";
             DeviceViewModel.Color = Color.Red;
             DeviceViewModel.Label = string.Empty;
@@ -137,6 +134,7 @@ namespace FenomPlus.ViewModels
 
             //QualityControlViewModel.Header = "Quality Control";
             QcBarIcon = "wo_quality_control_red.png";
+            QcBarIconVisible = false;
             QualityControlViewModel.ImagePath = "quality_control_red.png";
             QualityControlViewModel.Color = Color.Red;
             QualityControlViewModel.Label = string.Empty;
@@ -144,6 +142,7 @@ namespace FenomPlus.ViewModels
 
             //HumidityViewModel.Header = "Humidity";
             HumidityBarIcon = "wo_humidity_red.png";
+            HumidityBarIconVisible = false;
             HumidityViewModel.ImagePath = "humidity_red.png";
             HumidityViewModel.Color = Color.Red;
             HumidityViewModel.Label = string.Empty;
@@ -151,6 +150,7 @@ namespace FenomPlus.ViewModels
 
             //PressureViewModel.Header = "Pressure";
             PressureBarIcon = "wo_pressure_red.png";
+            PressureBarIconVisible = false;
             PressureViewModel.ImagePath = "pressure_red.png";
             PressureViewModel.Color = Color.Red;
             PressureViewModel.Label = string.Empty;
@@ -158,6 +158,7 @@ namespace FenomPlus.ViewModels
 
             //TemperatureViewModel.Header = "Temperature";
             TemperatureBarIcon = "wo_temperature_red.png";
+            TemperatureBarIconVisible = false;
             TemperatureViewModel.ImagePath = "temperature_red.png";
             TemperatureViewModel.Color = Color.Red;
             TemperatureViewModel.Label = string.Empty;
@@ -169,6 +170,12 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Color = Color.Red;
             BatteryViewModel.Label = string.Empty;
             BatteryViewModel.Value = string.Empty;
+
+            BluetoothBarIcon = "wo_bluetooth_red.png";
+            BluetoothViewModel.ImagePath = "bluetooth_red.png";
+            BluetoothViewModel.Color = Color.Red;
+            BluetoothViewModel.Label = "Disconnected";
+            BluetoothViewModel.Value = string.Empty;
         }
 
         public override void OnAppearing()
@@ -255,7 +262,7 @@ namespace FenomPlus.ViewModels
                 BluetoothViewModel.Label = "Disconnected";
                 BluetoothViewModel.Value = string.Empty;
 
-                SetDefaults();
+                SetDisconnectedDefaults();
             }
 
             RefreshStatus();
