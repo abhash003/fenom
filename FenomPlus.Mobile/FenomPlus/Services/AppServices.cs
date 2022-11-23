@@ -84,6 +84,8 @@ namespace FenomPlus.Services
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
                 Container.Register<IDebugLogFileService, DebugLogFileService>().AsSingleton();
                 Container.Register<ILogCatService, LogCatService>().AsSingleton();
+                Container.Register<IUsbDeviceService, UsbDeviceService>().AsSingleton();
+
 
                 // We only want one instance of this - includes its own timer
                 Container.Register<StatusViewModel>().AsSingleton();
