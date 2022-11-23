@@ -58,7 +58,28 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _firmwareVersion;
 
-        private readonly Timer DeviceStatusTimer = new Timer(60000);
+        [ObservableProperty]
+        private bool _sensorBarIconVisible;
+
+        [ObservableProperty]
+        private bool _deviceBarIconVisible;
+
+        [ObservableProperty]
+        private bool _qcBarIconVisible;
+
+        [ObservableProperty]
+        private bool _pressureBarIconVisible;
+
+        [ObservableProperty]
+        private bool _humidityBarIconVisible;
+
+        [ObservableProperty]
+        private bool _temperatureBarIconVisible;
+
+        [ObservableProperty]
+        private bool _bluetoothConnected;
+
+        private readonly Timer DeviceStatusTimer = new Timer(30000);
 
 
         public StatusViewModel()
@@ -82,11 +103,11 @@ namespace FenomPlus.ViewModels
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
 
-            // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
-            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
-            {
-                UpdateBluetooth(Services.BleHub.IsConnected());
-            });
+            //// Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
+            //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
+            //{
+            //    UpdateBluetooth(Services.BleHub.IsConnected());
+            //});
         }
 
         private void SetDefaults()
@@ -153,7 +174,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            RefreshIconStatus();
+            RefreshStatus();
         }
 
         [RelayCommand]
@@ -167,10 +188,15 @@ namespace FenomPlus.ViewModels
             // Get latest environmental info
             Services.BleHub.RequestEnvironmentalInfo();
 
-            RefreshIconStatus();
+            RefreshStatus();
         }
 
-        public void RefreshIconStatus()
+        private bool CheckDeviceConnection()
+        {
+            return Services is { BleHub: { BleDevice: { Connected: true } } };
+        }
+
+        public void RefreshStatus()
         {
             BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
 
@@ -199,8 +225,7 @@ namespace FenomPlus.ViewModels
             Debug.WriteLine("Note: Status icons updated!");
         }
 
-        [ObservableProperty]
-        private bool _bluetoothConnected;
+
 
         public void UpdateBluetooth(bool connected)
         {
@@ -233,7 +258,7 @@ namespace FenomPlus.ViewModels
                 SetDefaults();
             }
 
-            RefreshIconStatus();
+            RefreshStatus();
         }
 
         public const int BatteryCritical = 3;

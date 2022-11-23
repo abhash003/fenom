@@ -56,11 +56,11 @@ namespace FenomPlus.ViewModels
         public BaseViewModel()
         {
             //DeviceStatus = new DeviceStatus();
-            //RefreshIconStatus();
+            //RefreshStatus();
             ShowAllMenus = true;
         }
 
-        //public void RefreshIconStatus()
+        //public void RefreshStatus()
         //{
         //    int BatteryLevel = Cache.BatteryLevel;
         //    int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
@@ -97,7 +97,7 @@ namespace FenomPlus.ViewModels
 
         public virtual void NewGlobalData()
         {
-            //RefreshIconStatus();
+            //RefreshStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
 
             Firmware = Services.Cache.Firmware;
