@@ -79,6 +79,8 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _bluetoothConnected;
 
+        private readonly Timer BluetoothStatusTimer = new Timer(2000);
+
         private readonly Timer DeviceStatusTimer = new Timer(30000);
 
 
@@ -99,6 +101,9 @@ namespace FenomPlus.ViewModels
 
             BluetoothConnected = false;
             UpdateBluetooth(BluetoothConnected);
+
+            BluetoothStatusTimer.Elapsed += BluetoothStatusTimerOnElapsed;
+            BluetoothStatusTimer.Start();
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
@@ -189,6 +194,15 @@ namespace FenomPlus.ViewModels
             Services.Navigation.DeviceStatusView();
         }
 
+        
+
+        private void BluetoothStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            BluetoothConnected = Services.BleHub.IsConnected();
+            UpdateBluetooth(BluetoothConnected);
+
+        }
+
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             if (BluetoothConnected)
@@ -241,7 +255,7 @@ namespace FenomPlus.ViewModels
 
         public void RefreshStatus()
         {
-            BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+            //BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
 
             if (Services.BleHub.BreathTestInProgress)
             {
