@@ -257,11 +257,20 @@ namespace FenomPlus.ViewModels
         {
             //BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
 
-            if (Services.BleHub.BreathTestInProgress)
+            if (BluetoothConnected)
             {
-                // Don't update during test
-                return;
+                if (Services.BleHub.BreathTestInProgress)
+                {
+                    // Don't update during test
+                    return;
+                }
             }
+            else
+            {
+                SetDisconnectedDefaults();
+            }
+
+
 
             UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
