@@ -221,7 +221,7 @@ namespace FenomPlus.ViewModels
 
         public void UpdateBluetooth(bool connected)
         {
-            BluetoothConnected = connected;
+            BluetoothConnected = CheckDeviceConnection(); //connected;
 
             BluetoothViewModel.ButtonText = "Settings";
 
@@ -255,22 +255,11 @@ namespace FenomPlus.ViewModels
 
         public void RefreshStatus()
         {
-            //BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
-
-            if (BluetoothConnected)
+            if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
-                if (Services.BleHub.BreathTestInProgress)
-                {
-                    // Don't update during test
-                    return;
-                }
+                // Don't update environmental properties during test
+                return;
             }
-            else
-            {
-                SetDisconnectedDefaults();
-            }
-
-
 
             UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
