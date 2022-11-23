@@ -115,57 +115,56 @@ namespace FenomPlus.ViewModels
             SerialNumber = string.Empty;
             FirmwareVersion = string.Empty;
 
-
-            //SensorViewModel.Header = "Sensor";
             SensorBarIcon = "wo_sensor_red.png";
             SensorBarIconVisible = false;
+
             SensorViewModel.ImagePath = "sensor_red.png";
             SensorViewModel.Color = Color.Red;
             SensorViewModel.Label = string.Empty;
             SensorViewModel.Value = string.Empty;
 
-            //DeviceViewModel.Header = "Device";
             DeviceBarIcon = "wo_device_red.png";
             DeviceBarIconVisible = false;
+
             DeviceViewModel.ImagePath = "device_red.png";
             DeviceViewModel.Color = Color.Red;
             DeviceViewModel.Label = string.Empty;
             DeviceViewModel.Value = string.Empty;
 
-            //QualityControlViewModel.Header = "Quality Control";
             QcBarIcon = "wo_quality_control_red.png";
             QcBarIconVisible = false;
+
             QualityControlViewModel.ImagePath = "quality_control_red.png";
             QualityControlViewModel.Color = Color.Red;
             QualityControlViewModel.Label = string.Empty;
             QualityControlViewModel.Value = string.Empty;
 
-            //HumidityViewModel.Header = "Humidity";
             HumidityBarIcon = "wo_humidity_red.png";
             HumidityBarIconVisible = false;
+
             HumidityViewModel.ImagePath = "humidity_red.png";
             HumidityViewModel.Color = Color.Red;
             HumidityViewModel.Label = string.Empty;
             HumidityViewModel.Value = string.Empty;
 
-            //PressureViewModel.Header = "Pressure";
             PressureBarIcon = "wo_pressure_red.png";
             PressureBarIconVisible = false;
+
             PressureViewModel.ImagePath = "pressure_red.png";
             PressureViewModel.Color = Color.Red;
             PressureViewModel.Label = string.Empty;
             PressureViewModel.Value = string.Empty;
 
-            //TemperatureViewModel.Header = "Temperature";
             TemperatureBarIcon = "wo_temperature_red.png";
             TemperatureBarIconVisible = false;
+
             TemperatureViewModel.ImagePath = "temperature_red.png";
             TemperatureViewModel.Color = Color.Red;
             TemperatureViewModel.Label = string.Empty;
             TemperatureViewModel.Value = string.Empty;
 
-            //BatteryViewModel.Header = "Battery";
             BatteryBarIcon = "wo_battery_red.png";
+
             BatteryViewModel.ImagePath = "battery_red.png";
             BatteryViewModel.Color = Color.Red;
             BatteryViewModel.Label = string.Empty;
@@ -192,8 +191,11 @@ namespace FenomPlus.ViewModels
 
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            // Get latest environmental info
-            Services.BleHub.RequestEnvironmentalInfo();
+            if (BluetoothConnected)
+            {
+                // Get latest environmental info
+                Services.BleHub.RequestEnvironmentalInfo();
+            }
 
             RefreshStatus();
         }
@@ -202,37 +204,6 @@ namespace FenomPlus.ViewModels
         {
             return Services is { BleHub: { BleDevice: { Connected: true } } };
         }
-
-        public void RefreshStatus()
-        {
-            BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
-
-            if (Services.BleHub.BreathTestInProgress)
-            {
-                // Don't update during test
-                return;
-            }
-
-
-            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
-
-            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
-            UpdateDevice(daysRemaining);
-
-            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
-
-            UpdateQualityControlExpiration(0); // ToDo:  Need value here
-
-            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
-
-            UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
-
-            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
-
-            Debug.WriteLine("Note: Status icons updated!");
-        }
-
-
 
         public void UpdateBluetooth(bool connected)
         {
@@ -266,6 +237,34 @@ namespace FenomPlus.ViewModels
             }
 
             RefreshStatus();
+        }
+
+        public void RefreshStatus()
+        {
+            BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+
+            if (Services.BleHub.BreathTestInProgress)
+            {
+                // Don't update during test
+                return;
+            }
+
+            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+
+            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
+            UpdateDevice(daysRemaining);
+
+            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
+
+            UpdateQualityControlExpiration(0); // ToDo:  Need value here
+
+            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
+
+            UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
+
+            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+
+            Debug.WriteLine("Note: Status icons updated!");
         }
 
         public const int BatteryCritical = 3;
