@@ -5,6 +5,7 @@ using FenomPlus.Interfaces;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Intent = Android.Content.Intent;
+using AndroidApplication = Android.App.Application;
 
 namespace FenomPlus.Services
 {
@@ -14,11 +15,12 @@ namespace FenomPlus.Services
         {
         }
 
-        [Obsolete]
-        public async Task GotoBluetoothSettings()
+        public void GotoBluetoothSettings()
         {
-            Intent bluetoothPicker = new Intent("android.bluetooth.devicepicker.action.LAUNCH");
-            Forms.Context.StartActivity(bluetoothPicker);
+            using (Intent bluetoothPicker = new Intent("android.bluetooth.devicepicker.action.LAUNCH"))
+            {
+                AndroidApplication.Context.StartActivity(bluetoothPicker);
+            }                
         }
 
         public async Task BreathManeuverFeedbackView()

@@ -6,7 +6,7 @@ namespace FenomPlus.Interfaces
 {
     public interface INavigationService
     {
-        Task GotoBluetoothSettings();
+        void GotoBluetoothSettings();
         Task BreathManeuverFeedbackView();
         Task DashboardView();
         Task DeviceStatusView();
