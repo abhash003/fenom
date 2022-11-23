@@ -4,12 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+    xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus" 
+    x:DataType="controls:StatusButtonViewModel"
     IsLightDismissEnabled="True"
     x:Class="FenomPlus.Controls.StatusDetailsPopup"
     WidthRequest="300">
 
-    <StackLayout BackgroundColor="#F9F9F9" x:DataType="controls:StatusButtonViewModel" Padding="20">
+    <StackLayout BackgroundColor="#F9F9F9" Padding="20">
 
         <Label x:Name="InfoBlockTitle"
                Text="{Binding Header}"
