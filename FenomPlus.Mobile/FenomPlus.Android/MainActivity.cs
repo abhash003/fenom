@@ -1,13 +1,9 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using Xamarin.Essentials;
 using FenomPlus.Services;
 using FenomPlus.Interfaces;
-using System.ComponentModel;
 using System.Linq;
 using Android;
 using Acr.UserDialogs;
