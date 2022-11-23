@@ -100,7 +100,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            UpdateBluetooth(BluetoothConnected);
+            UpdateBluetooth();
 
             BluetoothStatusTimer.Elapsed += BluetoothStatusTimerOnElapsed;
             BluetoothStatusTimer.Start();
@@ -199,7 +199,7 @@ namespace FenomPlus.ViewModels
         private void BluetoothStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             BluetoothConnected = Services.BleHub.IsConnected();
-            UpdateBluetooth(BluetoothConnected);
+            UpdateBluetooth();
 
         }
 
@@ -216,11 +216,13 @@ namespace FenomPlus.ViewModels
 
         private bool CheckDeviceConnection()
         {
+            // More robust way to determine if bluetooth device is connected
             return Services is { BleHub: { BleDevice: { Connected: true } } };
         }
 
-        public void UpdateBluetooth(bool connected)
+        public void UpdateBluetooth()
         {
+            // Note:  All device status parameters are conditional on the bluetooth connection
             BluetoothConnected = CheckDeviceConnection(); //connected;
 
             BluetoothViewModel.ButtonText = "Settings";
