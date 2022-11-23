@@ -81,9 +81,6 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer = new Timer(2000);
 
-        //private readonly Timer DeviceStatusTimer = new Timer(30000);
-
-
         public StatusViewModel()
         {
             VersionTracking.Track();
@@ -100,7 +97,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            UpdateBluetooth();
+            UpdateBluetoothStatus();
 
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
@@ -111,7 +108,7 @@ namespace FenomPlus.ViewModels
             //// Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             //{
-            //    UpdateBluetooth(Services.BleHub.IsConnected());
+            //    UpdateBluetoothStatus(Services.BleHub.IsConnected());
             //});
         }
 
@@ -188,19 +185,12 @@ namespace FenomPlus.ViewModels
             RefreshStatus();
         }
 
-        [RelayCommand]
-        private void NavigateToStatusPage()
-        {
-            Services.Navigation.DeviceStatusView();
-        }
-
         private int BluetoothCheckCount = 0;
 
         private void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
             // Note:  All device status parameters are conditional on the bluetooth connection
-            BluetoothConnected = CheckDeviceConnection(); //connected;
-            UpdateBluetooth();
+            UpdateBluetoothStatus();
 
             BluetoothCheckCount++;
 
@@ -215,23 +205,10 @@ namespace FenomPlus.ViewModels
                     RefreshStatus();
                 }
 
-            }
-            else
-            {
                 BluetoothCheckCount = 0; // Reset
+
             }
         }
-
-        //private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
-        //{
-        //    if (BluetoothConnected)
-        //    {
-        //        // Get latest environmental info
-        //        Services.BleHub.RequestEnvironmentalInfo();
-        //    }
-
-        //    RefreshStatus();
-        //}
 
         private bool CheckDeviceConnection()
         {
@@ -239,7 +216,7 @@ namespace FenomPlus.ViewModels
             return Services is { BleHub: { BleDevice: { Connected: true } } };
         }
 
-        public void UpdateBluetooth()
+        public void UpdateBluetoothStatus()
         {
             // Note:  All device status parameters are conditional on the bluetooth connection
             BluetoothConnected = CheckDeviceConnection(); //connected;
@@ -281,6 +258,8 @@ namespace FenomPlus.ViewModels
                 // Don't update environmental properties during test
                 return;
             }
+
+            // If this isn't called each time the app crashes????????
 
             UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
@@ -686,7 +665,11 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
+        [RelayCommand]
+        private void NavigateToStatusPage()
+        {
+            Services.Navigation.DeviceStatusView();
+        }
 
     }
 }
