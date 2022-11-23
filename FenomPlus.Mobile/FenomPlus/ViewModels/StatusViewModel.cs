@@ -81,7 +81,7 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer = new Timer(2000);
 
-        private readonly Timer DeviceStatusTimer = new Timer(30000);
+        //private readonly Timer DeviceStatusTimer = new Timer(30000);
 
 
         public StatusViewModel()
@@ -102,11 +102,11 @@ namespace FenomPlus.ViewModels
             BluetoothConnected = false;
             UpdateBluetooth();
 
-            BluetoothStatusTimer.Elapsed += BluetoothStatusTimerOnElapsed;
+            BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
 
-            DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
-            DeviceStatusTimer.Start();
+            //DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
+            //DeviceStatusTimer.Start();
 
             //// Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
@@ -194,25 +194,44 @@ namespace FenomPlus.ViewModels
             Services.Navigation.DeviceStatusView();
         }
 
-        
+        private int BluetoothCheckCount = 0;
 
-        private void BluetoothStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
+        private void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
-            BluetoothConnected = Services.BleHub.IsConnected();
+            // Note:  All device status parameters are conditional on the bluetooth connection
+            BluetoothConnected = CheckDeviceConnection(); //connected;
             UpdateBluetooth();
 
-        }
+            BluetoothCheckCount++;
 
-        private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (BluetoothConnected)
+            Debug.WriteLine($"Counter = {BluetoothCheckCount}");
+
+            if (BluetoothCheckCount == 15)
             {
-                // Get latest environmental info
-                Services.BleHub.RequestEnvironmentalInfo();
-            }
+                if (BluetoothConnected)
+                {
+                    // Get latest environmental info
+                    Services.BleHub.RequestEnvironmentalInfo();
+                    RefreshStatus();
+                }
 
-            RefreshStatus();
+            }
+            else
+            {
+                BluetoothCheckCount = 0; // Reset
+            }
         }
+
+        //private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    if (BluetoothConnected)
+        //    {
+        //        // Get latest environmental info
+        //        Services.BleHub.RequestEnvironmentalInfo();
+        //    }
+
+        //    RefreshStatus();
+        //}
 
         private bool CheckDeviceConnection()
         {
