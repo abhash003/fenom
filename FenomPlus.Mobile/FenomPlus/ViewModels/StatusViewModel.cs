@@ -108,13 +108,14 @@ namespace FenomPlus.ViewModels
             // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             {
+                Debug.WriteLine($"Device is connected = {m.Value}");
                 BluetoothStatusTimer.Stop();
 
                 // Force an update
 
                 BluetoothCheck(null, null);
 
-                BluetoothCheckCount = 0;
+                BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
                 BluetoothStatusTimer.Start();
             });
         }
@@ -188,12 +189,6 @@ namespace FenomPlus.ViewModels
         //    BluetoothViewModel.Value = string.Empty;
         //}
 
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
-            RefreshStatus();
-        }
-
         private int BluetoothCheckCount = 0;
 
         private bool CheckDeviceConnection()
@@ -211,7 +206,7 @@ namespace FenomPlus.ViewModels
 
             BluetoothConnected = CheckDeviceConnection();
 
-            if (BluetoothCheckCount == 15)
+            if (BluetoothCheckCount == 10)
             {
                 if (BluetoothConnected)
                 {
