@@ -311,7 +311,7 @@ namespace FenomPlus.ViewModels
             }
 
             BatteryViewModel.Value = $"{value}%";
-            BatteryViewModel.ButtonText = "Order";
+            BatteryViewModel.ButtonText = "Info";
 
             BatteryBarIconVisible = true; // Always visible when device is connected
 
