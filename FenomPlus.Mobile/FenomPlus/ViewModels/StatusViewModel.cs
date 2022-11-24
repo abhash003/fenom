@@ -58,6 +58,8 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _firmwareVersion;
 
+        [ObservableProperty] private bool _batteryBarIconVisible;
+
         [ObservableProperty]
         private bool _sensorBarIconVisible;
 
@@ -97,7 +99,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            UpdateBluetoothStatus();
+            RefreshStatus();
 
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
@@ -112,72 +114,74 @@ namespace FenomPlus.ViewModels
             //});
         }
 
-        private void SetDisconnectedDefaults()
-        {
-            SerialNumber = string.Empty;
-            FirmwareVersion = string.Empty;
+        //private void SetDisconnectedDefaults()
+        //{
+        //    SerialNumber = string.Empty;
+        //    FirmwareVersion = string.Empty;
 
-            SensorBarIcon = "wo_sensor_red.png";
-            SensorBarIconVisible = false;
+        //    BatteryBarIconVisible = false;
 
-            SensorViewModel.ImagePath = "sensor_red.png";
-            SensorViewModel.Color = Color.Red;
-            SensorViewModel.Label = string.Empty;
-            SensorViewModel.Value = string.Empty;
+        //    SensorBarIcon = "wo_sensor_red.png";
+        //    SensorBarIconVisible = false;
 
-            DeviceBarIcon = "wo_device_red.png";
-            DeviceBarIconVisible = false;
+        //    SensorViewModel.ImagePath = "sensor_red.png";
+        //    SensorViewModel.Color = Color.Red;
+        //    SensorViewModel.Label = string.Empty;
+        //    SensorViewModel.Value = string.Empty;
 
-            DeviceViewModel.ImagePath = "device_red.png";
-            DeviceViewModel.Color = Color.Red;
-            DeviceViewModel.Label = string.Empty;
-            DeviceViewModel.Value = string.Empty;
+        //    DeviceBarIcon = "wo_device_red.png";
+        //    DeviceBarIconVisible = false;
 
-            QcBarIcon = "wo_quality_control_red.png";
-            QcBarIconVisible = false;
+        //    DeviceViewModel.ImagePath = "device_red.png";
+        //    DeviceViewModel.Color = Color.Red;
+        //    DeviceViewModel.Label = string.Empty;
+        //    DeviceViewModel.Value = string.Empty;
 
-            QualityControlViewModel.ImagePath = "quality_control_red.png";
-            QualityControlViewModel.Color = Color.Red;
-            QualityControlViewModel.Label = string.Empty;
-            QualityControlViewModel.Value = string.Empty;
+        //    QcBarIcon = "wo_quality_control_red.png";
+        //    QcBarIconVisible = false;
 
-            HumidityBarIcon = "wo_humidity_red.png";
-            HumidityBarIconVisible = false;
+        //    QualityControlViewModel.ImagePath = "quality_control_red.png";
+        //    QualityControlViewModel.Color = Color.Red;
+        //    QualityControlViewModel.Label = string.Empty;
+        //    QualityControlViewModel.Value = string.Empty;
 
-            HumidityViewModel.ImagePath = "humidity_red.png";
-            HumidityViewModel.Color = Color.Red;
-            HumidityViewModel.Label = string.Empty;
-            HumidityViewModel.Value = string.Empty;
+        //    HumidityBarIcon = "wo_humidity_red.png";
+        //    HumidityBarIconVisible = false;
 
-            PressureBarIcon = "wo_pressure_red.png";
-            PressureBarIconVisible = false;
+        //    HumidityViewModel.ImagePath = "humidity_red.png";
+        //    HumidityViewModel.Color = Color.Red;
+        //    HumidityViewModel.Label = string.Empty;
+        //    HumidityViewModel.Value = string.Empty;
 
-            PressureViewModel.ImagePath = "pressure_red.png";
-            PressureViewModel.Color = Color.Red;
-            PressureViewModel.Label = string.Empty;
-            PressureViewModel.Value = string.Empty;
+        //    PressureBarIcon = "wo_pressure_red.png";
+        //    PressureBarIconVisible = false;
 
-            TemperatureBarIcon = "wo_temperature_red.png";
-            TemperatureBarIconVisible = false;
+        //    PressureViewModel.ImagePath = "pressure_red.png";
+        //    PressureViewModel.Color = Color.Red;
+        //    PressureViewModel.Label = string.Empty;
+        //    PressureViewModel.Value = string.Empty;
 
-            TemperatureViewModel.ImagePath = "temperature_red.png";
-            TemperatureViewModel.Color = Color.Red;
-            TemperatureViewModel.Label = string.Empty;
-            TemperatureViewModel.Value = string.Empty;
+        //    TemperatureBarIcon = "wo_temperature_red.png";
+        //    TemperatureBarIconVisible = false;
 
-            BatteryBarIcon = "wo_battery_red.png";
+        //    TemperatureViewModel.ImagePath = "temperature_red.png";
+        //    TemperatureViewModel.Color = Color.Red;
+        //    TemperatureViewModel.Label = string.Empty;
+        //    TemperatureViewModel.Value = string.Empty;
 
-            BatteryViewModel.ImagePath = "battery_red.png";
-            BatteryViewModel.Color = Color.Red;
-            BatteryViewModel.Label = string.Empty;
-            BatteryViewModel.Value = string.Empty;
+        //    BatteryBarIcon = "wo_battery_red.png";
 
-            BluetoothBarIcon = "wo_bluetooth_red.png";
-            BluetoothViewModel.ImagePath = "bluetooth_red.png";
-            BluetoothViewModel.Color = Color.Red;
-            BluetoothViewModel.Label = "Disconnected";
-            BluetoothViewModel.Value = string.Empty;
-        }
+        //    BatteryViewModel.ImagePath = "battery_red.png";
+        //    BatteryViewModel.Color = Color.Red;
+        //    BatteryViewModel.Label = string.Empty;
+        //    BatteryViewModel.Value = string.Empty;
+
+        //    BluetoothBarIcon = "wo_bluetooth_red.png";
+        //    BluetoothViewModel.ImagePath = "bluetooth_red.png";
+        //    BluetoothViewModel.Color = Color.Red;
+        //    BluetoothViewModel.Label = "Disconnected";
+        //    BluetoothViewModel.Value = string.Empty;
+        //}
 
         public override void OnAppearing()
         {
@@ -190,7 +194,9 @@ namespace FenomPlus.ViewModels
         private void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
             // Note:  All device status parameters are conditional on the bluetooth connection
-            UpdateBluetoothStatus();
+
+            UpdateVersionNumbers();
+            UpdateBluetooth();
 
             BluetoothCheckCount++;
 
@@ -202,11 +208,12 @@ namespace FenomPlus.ViewModels
                 {
                     // Get latest environmental info
                     Services.BleHub.RequestEnvironmentalInfo();
+
+                    // Update all properties
                     RefreshStatus();
                 }
 
                 BluetoothCheckCount = 0; // Reset
-
             }
         }
 
@@ -216,40 +223,38 @@ namespace FenomPlus.ViewModels
             return Services is { BleHub: { BleDevice: { Connected: true } } };
         }
 
-        public void UpdateBluetoothStatus()
-        {
-            // Note:  All device status parameters are conditional on the bluetooth connection
-            BluetoothConnected = CheckDeviceConnection(); //connected;
+        //public void UpdateBluetoothStatus()
+        //{
+        //    // Note:  All device status parameters are conditional on the bluetooth connection
+        //    BluetoothConnected = CheckDeviceConnection(); //connected;
 
-            BluetoothViewModel.ButtonText = "Settings";
 
-            if (BluetoothConnected)
-            {
-                SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
-                FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
 
-                BluetoothBarIcon = "wo_bluetooth_green.png";
-                BluetoothViewModel.ImagePath = "bluetooth_green.png";
-                BluetoothViewModel.Color = Color.Green;
-                BluetoothViewModel.Label = "Connected";
-                BluetoothViewModel.Value = string.Empty;
-            }
-            else
-            {
-                SerialNumber = string.Empty;
-                FirmwareVersion = string.Empty;
+        //    if (BluetoothConnected)
+        //    {
+        //        SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
+        //        FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
 
-                BluetoothBarIcon = "wo_bluetooth_red.png";
-                BluetoothViewModel.ImagePath = "bluetooth_red.png";
-                BluetoothViewModel.Color = Color.Red;
-                BluetoothViewModel.Label = "Disconnected";
-                BluetoothViewModel.Value = string.Empty;
+        //        BluetoothBarIcon = "wo_bluetooth_green.png";
+        //        BluetoothViewModel.ImagePath = "bluetooth_green.png";
+        //        BluetoothViewModel.Color = Color.Green;
+        //        BluetoothViewModel.Label = "Connected";
+        //        BluetoothViewModel.Value = string.Empty;
+        //    }
+        //    else
+        //    {
+        //        SerialNumber = string.Empty;
+        //        FirmwareVersion = string.Empty;
 
-                SetDisconnectedDefaults();
-            }
+        //        BluetoothBarIcon = "wo_bluetooth_red.png";
+        //        BluetoothViewModel.ImagePath = "bluetooth_red.png";
+        //        BluetoothViewModel.Color = Color.Red;
+        //        BluetoothViewModel.Label = "Disconnected";
+        //        BluetoothViewModel.Value = string.Empty;
+        //    }
 
-            RefreshStatus();
-        }
+        //    RefreshStatus();
+        //}
 
         public void RefreshStatus()
         {
@@ -259,7 +264,9 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            // If this isn't called each time the app crashes????????
+            UpdateVersionNumbers();
+
+            UpdateBluetooth();
 
             UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
@@ -279,6 +286,42 @@ namespace FenomPlus.ViewModels
             Debug.WriteLine("Note: Status icons updated!");
         }
 
+        public void UpdateVersionNumbers()
+        {
+            if (BluetoothConnected)
+            {
+                SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
+                FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
+            }
+            else
+            {
+                SerialNumber = string.Empty;
+                FirmwareVersion = string.Empty;
+            }
+        }
+
+        public void UpdateBluetooth()
+        {
+            if (BluetoothConnected)
+            {
+                BluetoothBarIcon = "wo_bluetooth_green.png";
+                BluetoothViewModel.ImagePath = "bluetooth_green.png";
+                BluetoothViewModel.Color = Color.Green;
+                BluetoothViewModel.Label = "Connected";
+                BluetoothViewModel.Value = string.Empty;
+                BluetoothViewModel.ButtonText = "Settings";
+            }
+            else
+            {
+                BluetoothBarIcon = "wo_bluetooth_red.png";
+                BluetoothViewModel.ImagePath = "bluetooth_red.png";
+                BluetoothViewModel.Color = Color.Red;
+                BluetoothViewModel.Label = "Disconnected";
+                BluetoothViewModel.Value = string.Empty;
+                BluetoothViewModel.ButtonText = string.Empty;
+            }
+        }
+
         public const int BatteryCritical = 3;
         public const int BatteryWarning = 20;
         public const int Battery50 = 50;
@@ -289,11 +332,20 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                BatteryBarIconVisible = false;
+
+                BatteryViewModel.ImagePath = "battery_red.png";
+                BatteryViewModel.Color = Color.Red;
+                BatteryViewModel.Label = string.Empty;
+                BatteryViewModel.Value = string.Empty;
+                BatteryViewModel.ButtonText = string.Empty;
                 return;
             }
 
             BatteryViewModel.Value = $"{value}%";
             BatteryViewModel.ButtonText = "Order";
+
+            BatteryBarIconVisible = true; // Always visible when device is connected
 
             if (value > Battery75)
             {
@@ -339,13 +391,20 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                SensorBarIconVisible = false;
+
+                SensorViewModel.ImagePath = "sensor_red.png";
+                SensorViewModel.Color = Color.Red;
+                SensorViewModel.Label = string.Empty;
+                SensorViewModel.Value = string.Empty;
+                SensorViewModel.ButtonText = string.Empty;
                 return;
             }
 
+            SensorBarIconVisible = true;
             SensorViewModel.Value = $"{(int)((value < 365) ? value : value / 365)}";
             SensorViewModel.Label = "Days Left";
             SensorViewModel.ButtonText = "Order";
-
 
             if (value <= SensorLow)
             {
@@ -363,10 +422,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                // full
-                SensorBarIcon = "wo_sensor_green";
-                SensorViewModel.ImagePath = "sensor_green";
-                SensorViewModel.Color = Color.Green;
+                SensorBarIconVisible = false;
             }
         }
 
@@ -378,6 +434,13 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                QcBarIconVisible = false;
+
+                QualityControlViewModel.ImagePath = "quality_control_red.png";
+                QualityControlViewModel.Color = Color.Red;
+                QualityControlViewModel.Label = string.Empty;
+                QualityControlViewModel.Value = string.Empty;
+                QualityControlViewModel.ButtonText = string.Empty;
                 return;
             }
 
@@ -387,24 +450,21 @@ namespace FenomPlus.ViewModels
 
             if (value <= QualityControlExpirationLow)
             {
-                // low
+                QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.Color = Color.Red;
             }
             else if (value <= QualityControlExpirationWarning)
             {
-                // warning
+                QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_yellow.png";
                 QualityControlViewModel.ImagePath = "quality_control_yellow.png";
                 QualityControlViewModel.Color = Color.Yellow;
             }
             else
             {
-                // full
-                QcBarIcon = "wo_quality_control_green.png";
-                QualityControlViewModel.ImagePath = "quality_control_green.png";
-                QualityControlViewModel.Color = Color.Green;
+                QcBarIconVisible = false;
             }
         }
 
@@ -416,6 +476,13 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                DeviceBarIconVisible = false;
+
+                DeviceViewModel.ImagePath = "device_red.png";
+                DeviceViewModel.Color = Color.Red;
+                DeviceViewModel.Label = string.Empty;
+                DeviceViewModel.Value = string.Empty;
+                DeviceViewModel.ButtonText = string.Empty;
                 return;
             }
 
@@ -425,24 +492,21 @@ namespace FenomPlus.ViewModels
 
             if (value <= DeviceLow)
             {
-                // low
+                DeviceBarIconVisible = true;
                 DeviceBarIcon = "wo_device_red.png";
                 DeviceViewModel.ImagePath = "device_red.png";
                 DeviceViewModel.Color = Color.Red;
             }
             else if (value <= DeviceWarning)
             {
-                // warning
+                DeviceBarIconVisible = true;
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
                 DeviceViewModel.ImagePath = "_3x_device_yellow.png";
                 DeviceViewModel.Color = Color.Yellow;
             }
             else
             {
-                // full
-                DeviceBarIcon = "wo_device_green_100.png";
-                DeviceViewModel.ImagePath = "device_green_100.png";
-                DeviceViewModel.Color = Color.Green;
+                DeviceBarIconVisible = false;
             }
         }
 
@@ -454,6 +518,13 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                HumidityBarIconVisible = false;
+
+                HumidityViewModel.ImagePath = "humidity_red.png";
+                HumidityViewModel.Color = Color.Red;
+                HumidityViewModel.Label = string.Empty;
+                HumidityViewModel.Value = string.Empty;
+                HumidityViewModel.ButtonText = string.Empty;
                 return;
             }
 
@@ -462,7 +533,7 @@ namespace FenomPlus.ViewModels
 
             if (value <= RelativeHumidityLow)
             {
-                // low
+                HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
                 HumidityViewModel.ImagePath = "humidity_red.png";
                 HumidityViewModel.Color = Color.Red;
@@ -470,7 +541,7 @@ namespace FenomPlus.ViewModels
             }
             else if (value <= RelativeHumidityWarning)
             {
-                // warning
+                HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_yellow.png";
                 HumidityViewModel.ImagePath = "humidity_yellow.png";
                 HumidityViewModel.Color = Color.Yellow;
@@ -478,11 +549,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                // full
-                HumidityBarIcon = "wo_humidity_green.png";
-                HumidityViewModel.ImagePath = "humidity_green.png";
-                HumidityViewModel.Color = Color.Green;
-                HumidityViewModel.Label = "In Range";
+                HumidityBarIconVisible = false;
             }
         }
 
@@ -494,6 +561,13 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                TemperatureBarIconVisible = false;
+
+                TemperatureViewModel.ImagePath = "temperature_red.png";
+                TemperatureViewModel.Color = Color.Red;
+                TemperatureViewModel.Label = string.Empty;
+                TemperatureViewModel.Value = string.Empty;
+                TemperatureViewModel.ButtonText = string.Empty;
                 return;
             }
 
@@ -502,7 +576,7 @@ namespace FenomPlus.ViewModels
 
             if (value <= TemperatureLow)
             {
-                // low
+                TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_red.png";
                 TemperatureViewModel.ImagePath = "temperature_red.png";
                 TemperatureViewModel.Color = Color.Red;
@@ -510,7 +584,7 @@ namespace FenomPlus.ViewModels
             }
             else if (value <= TemperatureWarning)
             {
-                // warning
+                TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_yellow.png";
                 TemperatureViewModel.ImagePath = "temperature_yellow.png";
                 TemperatureViewModel.Color = Color.Yellow;
@@ -518,11 +592,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                // full
-                TemperatureBarIcon = "wo_temperature_green.png";
-                TemperatureViewModel.ImagePath = "temperature_green.png";
-                TemperatureViewModel.Color = Color.Green;
-                TemperatureViewModel.Label = "In Range";
+                TemperatureBarIconVisible = false;
             }
         }
 
@@ -534,6 +604,12 @@ namespace FenomPlus.ViewModels
         {
             if (!BluetoothConnected)
             {
+                PressureBarIconVisible = false;
+                PressureViewModel.ImagePath = "pressure_red.png";
+                PressureViewModel.Color = Color.Red;
+                PressureViewModel.Label = string.Empty;
+                PressureViewModel.Value = string.Empty;
+                PressureViewModel.ButtonText = string.Empty;
                 return;
             }
 
@@ -542,7 +618,7 @@ namespace FenomPlus.ViewModels
 
             if (value <= PressureLow)
             {
-                // low
+                PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_red.png";
                 PressureViewModel.ImagePath = "pressure_red.png";
                 PressureViewModel.Color = Color.Red;
@@ -550,7 +626,7 @@ namespace FenomPlus.ViewModels
             }
             else if (value <= PressureWarning)
             {
-                // warning
+                PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_yellow.png";
                 PressureViewModel.ImagePath = "pressure_yellow.png";
                 PressureViewModel.Color = Color.Yellow;
@@ -558,11 +634,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                // full
-                PressureBarIcon = "wo_pressure_green.png";
-                PressureViewModel.ImagePath = "pressure_green.png";
-                PressureViewModel.Color = Color.Green;
-                PressureViewModel.Label = "In Range";
+                PressureBarIconVisible = false;
             }
         }
 

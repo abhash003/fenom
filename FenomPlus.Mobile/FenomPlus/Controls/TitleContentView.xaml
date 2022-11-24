@@ -85,7 +85,7 @@
 
                 <ImageButton Source="{Binding BatteryBarIcon}" 
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding BatteryBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <!--Always Displayed-->
