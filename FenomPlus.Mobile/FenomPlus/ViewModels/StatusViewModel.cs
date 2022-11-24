@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -81,7 +82,7 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _bluetoothConnected;
 
-        private readonly Timer BluetoothStatusTimer = new Timer(2000);
+        private readonly Timer BluetoothStatusTimer = new Timer(1000);
 
         public StatusViewModel()
         {
@@ -104,14 +105,18 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
 
-            //DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
-            //DeviceStatusTimer.Start();
+            // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
+            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
+            {
+                BluetoothStatusTimer.Stop();
 
-            //// Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
-            //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
-            //{
-            //    UpdateBluetoothStatus(Services.BleHub.IsConnected());
-            //});
+                // Force an update
+
+                BluetoothCheck(null, null);
+
+                BluetoothCheckCount = 0;
+                BluetoothStatusTimer.Start();
+            });
         }
 
         //private void SetDisconnectedDefaults()
@@ -191,70 +196,34 @@ namespace FenomPlus.ViewModels
 
         private int BluetoothCheckCount = 0;
 
-        private void BluetoothCheck(object sender, ElapsedEventArgs e)
-        {
-            // Note:  All device status parameters are conditional on the bluetooth connection
-
-            UpdateVersionNumbers();
-            UpdateBluetooth();
-
-            BluetoothCheckCount++;
-
-            Debug.WriteLine($"Counter = {BluetoothCheckCount}");
-
-            if (BluetoothCheckCount == 15)
-            {
-                if (BluetoothConnected)
-                {
-                    // Get latest environmental info
-                    Services.BleHub.RequestEnvironmentalInfo();
-
-                    // Update all properties
-                    RefreshStatus();
-                }
-
-                BluetoothCheckCount = 0; // Reset
-            }
-        }
-
         private bool CheckDeviceConnection()
         {
             // More robust way to determine if bluetooth device is connected
             return Services is { BleHub: { BleDevice: { Connected: true } } };
         }
 
-        //public void UpdateBluetoothStatus()
-        //{
-        //    // Note:  All device status parameters are conditional on the bluetooth connection
-        //    BluetoothConnected = CheckDeviceConnection(); //connected;
+        private async void BluetoothCheck(object sender, ElapsedEventArgs e)
+        {
+            // Note:  All device status parameters are conditional on the bluetooth connection
 
+            BluetoothCheckCount++;
+            Debug.WriteLine($"Counter = {BluetoothCheckCount}");
 
+            BluetoothConnected = CheckDeviceConnection();
 
-        //    if (BluetoothConnected)
-        //    {
-        //        SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
-        //        FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
+            if (BluetoothCheckCount == 15)
+            {
+                if (BluetoothConnected)
+                {
+                    // Get latest environmental info
+                    await Services.BleHub.RequestEnvironmentalInfo();
+                }
 
-        //        BluetoothBarIcon = "wo_bluetooth_green.png";
-        //        BluetoothViewModel.ImagePath = "bluetooth_green.png";
-        //        BluetoothViewModel.Color = Color.Green;
-        //        BluetoothViewModel.Label = "Connected";
-        //        BluetoothViewModel.Value = string.Empty;
-        //    }
-        //    else
-        //    {
-        //        SerialNumber = string.Empty;
-        //        FirmwareVersion = string.Empty;
+                BluetoothCheckCount = 0; // Reset
+            }
 
-        //        BluetoothBarIcon = "wo_bluetooth_red.png";
-        //        BluetoothViewModel.ImagePath = "bluetooth_red.png";
-        //        BluetoothViewModel.Color = Color.Red;
-        //        BluetoothViewModel.Label = "Disconnected";
-        //        BluetoothViewModel.Value = string.Empty;
-        //    }
-
-        //    RefreshStatus();
-        //}
+            Device.BeginInvokeOnMainThread(RefreshStatus);
+        }
 
         public void RefreshStatus()
         {
@@ -263,6 +232,10 @@ namespace FenomPlus.ViewModels
                 // Don't update environmental properties during test
                 return;
             }
+
+            // To early to get status
+            if (Cache == null || Cache.EnvironmentalInfo == null)
+                return;
 
             UpdateVersionNumbers();
 
