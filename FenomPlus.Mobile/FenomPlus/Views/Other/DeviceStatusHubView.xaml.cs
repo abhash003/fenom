@@ -13,11 +13,11 @@ using Xamarin.Forms.Xaml;
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class DeviceHubView : BaseContentPage
+    public partial class DeviceStatusHubView : BaseContentPage
     {
         private readonly StatusViewModel StatusViewModel;
 
-        public DeviceHubView()
+        public DeviceStatusHubView()
         {
             InitializeComponent();
             BindingContext = StatusViewModel = new StatusViewModel();
@@ -36,6 +36,7 @@ namespace FenomPlus.Views
 
         protected override void OnAppearing()
         {
+            StatusViewModel.RefreshStatus();
             base.OnAppearing();
             StatusViewModel.OnAppearing();
         }

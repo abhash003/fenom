@@ -108,6 +108,9 @@
     <Compile Update="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Other\DeviceStatusHubView.xaml.cs">
+      <DependentUpon>DeviceStatusHubView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Other\StatusDeviceInfoView.xaml.cs">
       <DependentUpon>StatusDeviceInfoView.xaml</DependentUpon>
     </Compile>

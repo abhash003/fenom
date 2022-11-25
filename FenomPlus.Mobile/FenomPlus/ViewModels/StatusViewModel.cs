@@ -12,19 +12,20 @@ using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.Services;
 using FenomPlus.ViewModels;
+using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
-// Note: Shared by DeviceHubView and TitleContentView
+// Note: Shared by DeviceStatusHubView and TitleContentView
 
 namespace FenomPlus.ViewModels
 {
     public partial class StatusViewModel : BaseViewModel
     {
-        private const int TimerIntervalMilliseconds = 1000;
-        private const int RequestNewStatusInterval = 20;
+        private const int TimerIntervalMilliseconds = 2000;
+        private const int RequestNewStatusInterval = 10;
 
         public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
@@ -112,8 +113,8 @@ namespace FenomPlus.ViewModels
             // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             {
-                Debug.WriteLine($"Device is connected = {m.Value}");
-                BluetoothStatusTimer.Stop();
+                //Debug.WriteLine($"Device is connected = {m.Value}");
+                BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
 
                 // Force an update
 
@@ -126,10 +127,11 @@ namespace FenomPlus.ViewModels
 
         private bool CheckDeviceConnection()
         {
-            // More robust way to determine if bluetooth device is connected
-            //return Services is { BleHub: { BleDevice: { Connected: true } } };
+            if (Services == null || Services.BleHub == null || Services.BleHub.BleDevice == null)
+                return false;
 
-            return Services.BleHub.IsConnected();
+            // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
+            return Services.BleHub.BleDevice.Connected;
         }
 
         private int BluetoothCheckCount = 0;
@@ -142,14 +144,14 @@ namespace FenomPlus.ViewModels
 
             BluetoothConnected = CheckDeviceConnection();
 
-            Debug.WriteLine($"Bluetooth: CheckCount={BluetoothCheckCount} Connected = {BluetoothConnected}");
+            //Debug.WriteLine($"Bluetooth: CheckCount={BluetoothCheckCount} Connected = {BluetoothConnected}");
 
             if (BluetoothCheckCount == RequestNewStatusInterval)
             {
                 if (BluetoothConnected)
                 {
                     // Get latest environmental info
-                    Debug.WriteLine("Getting new environmental Info");
+                    //Debug.WriteLine("Getting new environmental Info");
                     await Services.BleHub.RequestEnvironmentalInfo();
                 }
 
@@ -190,7 +192,7 @@ namespace FenomPlus.ViewModels
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
 
-            Debug.WriteLine("Note: Status icons updated!");
+            //Debug.WriteLine("Note: Status icons updated!");
         }
 
         public void UpdateVersionNumbers()
