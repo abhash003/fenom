@@ -419,9 +419,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int RelativeHumidityLow = 0;
-        public const int RelativeHumidityWarning = 80;
-        public const int RelativeHumidityFull = 100;
+        public const int RelativeHumidityLow = 23;
+        public const int RelativeHumidityWarning = 92;
 
         public void UpdateRelativeHumidity(int value)
         {
@@ -462,9 +461,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int TemperatureLow = 0;
-        public const int TemperatureWarning = 80;
-        public const int TemperatureFull = 100;
+        public const int TemperatureLow = 15;
+        public const int TemperatureWarning = 35;
 
         public void UpdateTemperature(int value)
         {
@@ -505,9 +503,9 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int PressureLow = 0;
-        public const int PressureWarning = 80;
-        public const int PressureFull = 100;
+        public const int PressureLow = 75;
+        //public const int PressureWarning = 80;
+        //public const int PressureFull = 100;
 
         public void UpdatePressure(int value)
         {
@@ -533,14 +531,14 @@ namespace FenomPlus.ViewModels
                 PressureViewModel.Color = Color.Red;
                 PressureViewModel.Label = "Out of Range";
             }
-            else if (value <= PressureWarning)
-            {
-                PressureBarIconVisible = true;
-                PressureBarIcon = "wo_pressure_yellow.png";
-                PressureViewModel.ImagePath = "pressure_yellow.png";
-                PressureViewModel.Color = Color.Yellow;
-                PressureViewModel.Label = "Warning Range";
-            }
+            //else if (value <= PressureWarning)
+            //{
+            //    PressureBarIconVisible = true;
+            //    PressureBarIcon = "wo_pressure_yellow.png";
+            //    PressureViewModel.ImagePath = "pressure_yellow.png";
+            //    PressureViewModel.Color = Color.Yellow;
+            //    PressureViewModel.Label = "Warning Range";
+            //}
             else
             {
                 PressureBarIconVisible = false;
