@@ -23,6 +23,9 @@ namespace FenomPlus.ViewModels
 {
     public partial class StatusViewModel : BaseViewModel
     {
+        private const int TimerIntervalMilliseconds = 1000;
+        private const int RequestNewStatusInterval = 20;
+
         public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel QualityControlViewModel = new StatusButtonViewModel();
@@ -82,7 +85,7 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _bluetoothConnected;
 
-        private readonly Timer BluetoothStatusTimer = new Timer(1000);
+        private readonly Timer BluetoothStatusTimer;
 
         public StatusViewModel()
         {
@@ -102,6 +105,7 @@ namespace FenomPlus.ViewModels
             BluetoothConnected = false;
             RefreshStatus();
 
+            BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
 
@@ -120,97 +124,32 @@ namespace FenomPlus.ViewModels
             });
         }
 
-        //private void SetDisconnectedDefaults()
-        //{
-        //    SerialNumber = string.Empty;
-        //    FirmwareVersion = string.Empty;
-
-        //    BatteryBarIconVisible = false;
-
-        //    SensorBarIcon = "wo_sensor_red.png";
-        //    SensorBarIconVisible = false;
-
-        //    SensorViewModel.ImagePath = "sensor_red.png";
-        //    SensorViewModel.Color = Color.Red;
-        //    SensorViewModel.Label = string.Empty;
-        //    SensorViewModel.Value = string.Empty;
-
-        //    DeviceBarIcon = "wo_device_red.png";
-        //    DeviceBarIconVisible = false;
-
-        //    DeviceViewModel.ImagePath = "device_red.png";
-        //    DeviceViewModel.Color = Color.Red;
-        //    DeviceViewModel.Label = string.Empty;
-        //    DeviceViewModel.Value = string.Empty;
-
-        //    QcBarIcon = "wo_quality_control_red.png";
-        //    QcBarIconVisible = false;
-
-        //    QualityControlViewModel.ImagePath = "quality_control_red.png";
-        //    QualityControlViewModel.Color = Color.Red;
-        //    QualityControlViewModel.Label = string.Empty;
-        //    QualityControlViewModel.Value = string.Empty;
-
-        //    HumidityBarIcon = "wo_humidity_red.png";
-        //    HumidityBarIconVisible = false;
-
-        //    HumidityViewModel.ImagePath = "humidity_red.png";
-        //    HumidityViewModel.Color = Color.Red;
-        //    HumidityViewModel.Label = string.Empty;
-        //    HumidityViewModel.Value = string.Empty;
-
-        //    PressureBarIcon = "wo_pressure_red.png";
-        //    PressureBarIconVisible = false;
-
-        //    PressureViewModel.ImagePath = "pressure_red.png";
-        //    PressureViewModel.Color = Color.Red;
-        //    PressureViewModel.Label = string.Empty;
-        //    PressureViewModel.Value = string.Empty;
-
-        //    TemperatureBarIcon = "wo_temperature_red.png";
-        //    TemperatureBarIconVisible = false;
-
-        //    TemperatureViewModel.ImagePath = "temperature_red.png";
-        //    TemperatureViewModel.Color = Color.Red;
-        //    TemperatureViewModel.Label = string.Empty;
-        //    TemperatureViewModel.Value = string.Empty;
-
-        //    BatteryBarIcon = "wo_battery_red.png";
-
-        //    BatteryViewModel.ImagePath = "battery_red.png";
-        //    BatteryViewModel.Color = Color.Red;
-        //    BatteryViewModel.Label = string.Empty;
-        //    BatteryViewModel.Value = string.Empty;
-
-        //    BluetoothBarIcon = "wo_bluetooth_red.png";
-        //    BluetoothViewModel.ImagePath = "bluetooth_red.png";
-        //    BluetoothViewModel.Color = Color.Red;
-        //    BluetoothViewModel.Label = "Disconnected";
-        //    BluetoothViewModel.Value = string.Empty;
-        //}
-
-        private int BluetoothCheckCount = 0;
-
         private bool CheckDeviceConnection()
         {
             // More robust way to determine if bluetooth device is connected
-            return Services is { BleHub: { BleDevice: { Connected: true } } };
+            //return Services is { BleHub: { BleDevice: { Connected: true } } };
+
+            return Services.BleHub.IsConnected();
         }
+
+        private int BluetoothCheckCount = 0;
 
         private async void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
             // Note:  All device status parameters are conditional on the bluetooth connection
 
             BluetoothCheckCount++;
-            Debug.WriteLine($"Counter = {BluetoothCheckCount}");
 
             BluetoothConnected = CheckDeviceConnection();
 
-            if (BluetoothCheckCount == 10)
+            Debug.WriteLine($"Bluetooth: CheckCount={BluetoothCheckCount} Connected = {BluetoothConnected}");
+
+            if (BluetoothCheckCount == RequestNewStatusInterval)
             {
                 if (BluetoothConnected)
                 {
                     // Get latest environmental info
+                    Debug.WriteLine("Getting new environmental Info");
                     await Services.BleHub.RequestEnvironmentalInfo();
                 }
 
