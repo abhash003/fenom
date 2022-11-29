@@ -27,23 +27,16 @@ namespace FenomPlus.ViewModels
                 // input message. Using the recipient passed as input makes it so that
                 // the lambda expression doesn't capture "this", improving performance.
 
-                bool isConnected = (bool)m.Value;
+                // Do not use value, may have changed already
+                //bool isConnected1 = (bool)m.Value;
 
-                if (isConnected) // Todo: We shouldn't need both but trying to resolve weak connections
+                if (Services.BleHub.BleDevice.Connected)
                 {
+                    //if (App.GetCurrentPage() == null)
+                    //    return;
 
-                    if (!Services.BleHub.BleDevice.Connected)
-                    {
-                        // ToDo: Remove - This is a double check
-                    }
-
-                    Debug.WriteLine("********* Device Connected!");
-
-                    if (App.GetCurrentPage() == null)
-                        return;
-
-                    if (App.GetCurrentPage() is DashboardView)
-                        return;
+                    //if (App.GetCurrentPage() is DashboardView)
+                    //    return;
 
                     if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
                     {
@@ -52,10 +45,7 @@ namespace FenomPlus.ViewModels
                     }
 
                 }
-                else
-                {
-                    Debug.WriteLine("********* Device Disconnected!");
-                }
+
 
             });
         }

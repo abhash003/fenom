@@ -21,7 +21,7 @@ namespace FenomPlus.SDK.Core
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
 
-        private LoggingManager _loggingMaager;
+        private LoggingManager _loggingManager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
         public readonly IBleRadioService BleRadio;
@@ -41,7 +41,7 @@ namespace FenomPlus.SDK.Core
             BleRadio = new BleRadioService();
             BleRadio.DeviceConnected += BleRadioOnDeviceConnected;
             BleRadio.DeviceConnectionLost += DeviceConnectionLost;
-            _loggingMaager = LoggingManager.GetInstance;
+            _loggingManager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
 
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
@@ -52,20 +52,14 @@ namespace FenomPlus.SDK.Core
 
         private void BleRadioOnDeviceConnected(object sender, DeviceEventArgs e)
         {
-            // Send message
+            // Send message - Caution, not reliable lag of about 5 seconds
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
-            Debug.WriteLine("!!!!!  Device Connected");
-
-            //DialogService.ShowToast("Bluetooth connected", 4);
         }
 
         private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
-            // Send message
+            // Send message - Caution, not reliable lag of about 5 seconds
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
-            Debug.WriteLine("!!!!!  Device Lost connection");
-
-            //DialogService.ShowToast("Bluetooth connection was lost...", 4);
         }
 
         public IFenomHubSystem FenomHubSystem
@@ -76,7 +70,7 @@ namespace FenomPlus.SDK.Core
 
         public void SetLoggerFactory(ILoggerFactory loggerFactory)
         {
-            _loggingMaager.SetLoggingFactory(loggerFactory);
+            _loggingManager.SetLoggingFactory(loggerFactory);
         }
 
         public bool IsScanning => BleRadio.IsScanning;

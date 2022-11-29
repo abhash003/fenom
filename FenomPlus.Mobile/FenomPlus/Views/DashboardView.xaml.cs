@@ -20,6 +20,11 @@ namespace FenomPlus.Views
         {
             if (DashboardViewModel.BleHub.IsNotConnectedRedirect())
             {
+                if (!DeviceEnvironmentalWarning())
+                {
+                    return;
+                }
+
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
                     DeviceNotReadyWarning1();
@@ -46,6 +51,50 @@ namespace FenomPlus.Views
                 await DashboardViewModel.BleHub.StartTest(BreathTestEnum.Start6Second);
                 await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
+        }
+
+        private bool DeviceEnvironmentalWarning()
+        {
+            //if (!DashboardViewModel.BleHub.ReadyForTest)
+            //{
+            //    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+            //    DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
+            //}
+
+            return true;
+
+
+            // Get the latest environmental info - updates Cache
+            DashboardViewModel.BleHub.RequestEnvironmentalInfo();
+
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Humidity < Constants.RelativeHumidityLow ||
+                DashboardViewModel.Cache.EnvironmentalInfo.Humidity > Constants.RelativeHumidityWarning)
+            {
+                DashboardViewModel.Dialogs.ShowToast($"Humidity Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Humidity}", 5);
+                return false;
+            }
+
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow ||
+                DashboardViewModel.Cache.EnvironmentalInfo.Pressure > Constants.PressureWarning)
+            {
+                DashboardViewModel.Dialogs.ShowToast($"Pressure Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Pressure}", 5);
+                return false;
+            }
+
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow ||
+                DashboardViewModel.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureWarning)
+            {
+                DashboardViewModel.Dialogs.ShowToast($"Temperature Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Temperature}", 5);
+                return false;
+            }
+
+            if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical)
+            {
+                DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
+                return false;
+            }
+
+            return true;
         }
 
         private void DeviceNotReadyWarning1()

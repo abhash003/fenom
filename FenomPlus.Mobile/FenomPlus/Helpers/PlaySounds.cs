@@ -65,18 +65,18 @@ namespace FenomPlus.Helpers
 
         private static SoundsEnum CurrentSound = SoundsEnum.none;
 
-        public static void PlaySound(float guageData)
+        public static void PlaySound(float gaugeData)
         {
             InitSound();
 
             // play none
-            if ((guageData <= BreathGuageValues.White1Top) || (guageData >= BreathGuageValues.Red4Top))
+            if ((gaugeData <= BreathGaugeValues.White1Top) || (gaugeData >= BreathGaugeValues.Red4Top))
             {
                 StopAll();
                 CurrentSound = SoundsEnum.none;
             }
             // play red_low
-            else if (guageData <= BreathGuageValues.Red2Top)
+            else if (gaugeData <= BreathGaugeValues.Red2Top)
             {
                 PlaySound(SoundsEnum.red_low, 100);
                 if (CurrentSound != SoundsEnum.red_low)
@@ -84,7 +84,7 @@ namespace FenomPlus.Helpers
                 CurrentSound = SoundsEnum.red_low;
             }
             // play yellow_low
-            else if (guageData <= BreathGuageValues.Yellow1Top)
+            else if (gaugeData <= BreathGaugeValues.Yellow1Top)
             {
                 PlaySound(SoundsEnum.yellow_low, 100);
                 if (CurrentSound != SoundsEnum.yellow_low)
@@ -92,7 +92,7 @@ namespace FenomPlus.Helpers
                 CurrentSound = SoundsEnum.yellow_low;
             }
             // play green_low
-            else if (guageData <= BreathGuageValues.Green1Top)
+            else if (gaugeData <= BreathGaugeValues.Green1Top)
             {
                 PlaySound(SoundsEnum.green_low, 100);
                 if (CurrentSound != SoundsEnum.green_low)
@@ -100,7 +100,7 @@ namespace FenomPlus.Helpers
                 CurrentSound = SoundsEnum.green_low;
             }
             // play red_high
-            else if (guageData >= BreathGuageValues.Yellow2Top)
+            else if (gaugeData >= BreathGaugeValues.Yellow2Top)
             {
                 PlaySound(SoundsEnum.red_high, 100);
                 if (CurrentSound != SoundsEnum.red_high)
@@ -108,7 +108,7 @@ namespace FenomPlus.Helpers
                 CurrentSound = SoundsEnum.red_high;
             }            
             // play yellow_high
-            else if (guageData >= BreathGuageValues.Green3Top)
+            else if (gaugeData >= BreathGaugeValues.Green3Top)
             {
                 PlaySound(SoundsEnum.yellow_high, 100);
                 if (CurrentSound != SoundsEnum.yellow_high)
@@ -116,7 +116,7 @@ namespace FenomPlus.Helpers
                 CurrentSound = SoundsEnum.yellow_high;
             }
             // play green_high
-            else if (guageData >= BreathGuageValues.Green2Top)
+            else if (gaugeData >= BreathGaugeValues.Green2Top)
             {
                 PlaySound(SoundsEnum.green_high, 100);
                 if (CurrentSound != SoundsEnum.green_high)

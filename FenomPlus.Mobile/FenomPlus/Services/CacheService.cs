@@ -149,7 +149,8 @@ namespace FenomPlus.Services
                     FenomReady = false;
                     ReadyForTest = true;
                     DeviceConnectedStatus = "Ready For Test";
-                } else if (BreathManeuver.TimeRemaining == 0xfe) 
+                } 
+                else if (BreathManeuver.TimeRemaining == 0xfe) 
                 {
                     ReadyForTest = false;
                     FenomReady = true;

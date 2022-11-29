@@ -25,7 +25,7 @@ namespace FenomPlus.ViewModels
             if (TutorialIndex > 6)
                 TutorialIndex = 6;
 
-            if (TutorialIndex == 5) // Page with Breath Guage
+            if (TutorialIndex == 5) // Page with Breath Gauge
             {
                 BleHub.StartTest(BreathTestEnum.Training);
                 Services.BleHub.IsNotConnectedRedirect();
@@ -34,7 +34,7 @@ namespace FenomPlus.ViewModels
                 // start timer to read measure constantly
                 Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
                 {
-                    GuageData = Cache.BreathFlow;
+                    GaugeData = Cache.BreathFlow;
                     return !Stop;
                 });
             }
@@ -55,7 +55,7 @@ namespace FenomPlus.ViewModels
         private bool _illustrationVisible;
 
         [ObservableProperty]
-        private bool _breathGuageVisible;
+        private bool _breathGaugeVisible;
 
         [ObservableProperty]
         private bool _successPanelVisible;
@@ -70,11 +70,12 @@ namespace FenomPlus.ViewModels
         private string _illustrationSource;
 
         [ObservableProperty]
-        private bool _showGuage;
+        private bool _showGauge;
 
         [ObservableProperty]
-        private float _guageData;
-        partial void OnGuageDataChanged(float value)
+        private float _gaugeData;
+
+        partial void OnGaugeDataChanged(float value)
         {
             if ((Stop == false) && (TutorialIndex == 5))
             {
@@ -120,7 +121,7 @@ namespace FenomPlus.ViewModels
                 case 1:
                     InstructionsVisible = true;
                     IllustrationVisible = true;
-                    BreathGuageVisible = false;
+                    BreathGaugeVisible = false;
                     SuccessPanelVisible = false;
 
                     ShowBack = false;
@@ -134,7 +135,7 @@ namespace FenomPlus.ViewModels
                 case 2:
                     InstructionsVisible = true;
                     IllustrationVisible = true;
-                    BreathGuageVisible = false;
+                    BreathGaugeVisible = false;
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
@@ -148,7 +149,7 @@ namespace FenomPlus.ViewModels
                 case 3:
                     InstructionsVisible = true;
                     IllustrationVisible = true;
-                    BreathGuageVisible = false;
+                    BreathGaugeVisible = false;
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
@@ -162,7 +163,7 @@ namespace FenomPlus.ViewModels
                 case 4:
                     InstructionsVisible = true;
                     IllustrationVisible = true;
-                    BreathGuageVisible = false;
+                    BreathGaugeVisible = false;
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
@@ -176,21 +177,21 @@ namespace FenomPlus.ViewModels
                 case 5:
                     InstructionsVisible = true;
                     IllustrationVisible = false;
-                    BreathGuageVisible = true;
+                    BreathGaugeVisible = true;
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
                     ShowNext = true;
 
                     StepTitle = "Step 5";
-                    IllustrationSource = "TutStep5";
+                    IllustrationSource = "Adult"; //"TutStep5";
                     InstructionsText = "Exhale into the device now\n\nPractice pointing the needle at the star";
                     break;
 
                 case 6: // success Page
                     InstructionsVisible = false;
                     IllustrationVisible = false;
-                    BreathGuageVisible = false;
+                    BreathGaugeVisible = false;
                     SuccessPanelVisible = true;
 
                     ShowBack = true;
@@ -217,7 +218,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnDisappearing();
 
-            // Must stop sound and guage if we were on Index = 5
+            // Must stop sound and gauge if we were on Index = 5
             Stop = true;
             BleHub.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
@@ -226,7 +227,7 @@ namespace FenomPlus.ViewModels
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            GuageData = Cache.BreathFlow;
+            GaugeData = Cache.BreathFlow;
         }
 
         [RelayCommand]

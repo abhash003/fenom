@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
@@ -22,14 +23,9 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            if (Cache.TestType == TestTypeEnum.Standard)
-            {
-                TestType = "10-second Test Result";
-            }
-            else
-            {
-                TestType = "6-second Test Result";
-            }
+
+            TestType = Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
+
             Seconds = Config.TestResultReadyWait;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
@@ -50,11 +46,13 @@ namespace FenomPlus.ViewModels
         private bool TimerCallback()
         {
             if (Seconds > 0) Seconds--;
-            if (Cache.FenomReady == true)
+            //if (Cache.FenomReady == true)
             {
                 var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
 
                 ResultsRepo.Insert(model);
+
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Cache.BreathManeuver.StatusCode}");
 
                 if (Cache.BreathManeuver.StatusCode != 0x00)
                 {

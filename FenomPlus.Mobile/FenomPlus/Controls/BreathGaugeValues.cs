@@ -15,7 +15,7 @@ namespace FenomPlus.Controls
     // 5 to 6	            337.5 to 360	        White(Blank)
     // ------------------------------------------------------------------------------------------------------------------------
 
-    public static class BreathGuageValues
+    public static class BreathGaugeValues
     {
         public static float White1      = 0.0f;
         public static float White1Top   = 1.0f;

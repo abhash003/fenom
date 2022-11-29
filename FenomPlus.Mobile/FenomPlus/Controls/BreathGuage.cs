@@ -1,50 +1,54 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Syncfusion.XlsIO.Parser.Biff_Records.ObjRecords;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace FenomPlus.Controls
 {
-    public class BreathGuage : SKCanvasView
+    public class BreathGauge : SKCanvasView
     {
-        public static float White1     = BreathGuageValues.White1;
-        public static float White1Top  = BreathGuageValues.White1Top;
-        public static float Red1       = BreathGuageValues.Red1;
-        public static float Red1Top    = BreathGuageValues.Red1Top;
-        public static float Red2       = BreathGuageValues.Red2;
-        public static float Red2Top    = BreathGuageValues.Red2Top;
-        public static float Yellow1    = BreathGuageValues.Yellow1;
-        public static float Yellow1Top = BreathGuageValues.Yellow1Top;
-        public static float Green1     = BreathGuageValues.Green1;
-        public static float Green1Top  = BreathGuageValues.Green3Top;
-        public static float Yellow2    = BreathGuageValues.Yellow2;
-        public static float Yellow2Top = BreathGuageValues.Yellow2Top;
-        public static float Red3       = BreathGuageValues.Red3;
-        public static float Red3Top    = BreathGuageValues.Red3Top;
-        public static float Red4       = BreathGuageValues.Red4;
-        public static float Red4Top    = BreathGuageValues.Red4Top;
-        public static float White2     = BreathGuageValues.White2;
-        public static float White2Top  = BreathGuageValues.White2Top;
+        public static float White1     = BreathGaugeValues.White1;
+        public static float White1Top  = BreathGaugeValues.White1Top;
+        public static float Red1       = BreathGaugeValues.Red1;
+        public static float Red1Top    = BreathGaugeValues.Red1Top;
+        public static float Red2       = BreathGaugeValues.Red2;
+        public static float Red2Top    = BreathGaugeValues.Red2Top;
+        public static float Yellow1    = BreathGaugeValues.Yellow1;
+        public static float Yellow1Top = BreathGaugeValues.Yellow1Top;
+        public static float Green1     = BreathGaugeValues.Green1;
+        public static float Green1Top  = BreathGaugeValues.Green3Top;
+        public static float Yellow2    = BreathGaugeValues.Yellow2;
+        public static float Yellow2Top = BreathGaugeValues.Yellow2Top;
+        public static float Red3       = BreathGaugeValues.Red3;
+        public static float Red3Top    = BreathGaugeValues.Red3Top;
+        public static float Red4       = BreathGaugeValues.Red4;
+        public static float Red4Top    = BreathGaugeValues.Red4Top;
+        public static float White2     = BreathGaugeValues.White2;
+        public static float White2Top  = BreathGaugeValues.White2Top;
 
 
         public static readonly BindableProperty SizeProperty =
-            BindableProperty.Create(nameof(Size), typeof(float), typeof(BreathGuage));
+            BindableProperty.Create(nameof(Size), typeof(float), typeof(BreathGauge));
 
-        public static readonly BindableProperty GuageSizeProperty =
-            BindableProperty.Create(nameof(GuageSize), typeof(float), typeof(BreathGuage));
+        public static readonly BindableProperty GaugeSizeProperty =
+            BindableProperty.Create(nameof(GaugeSize), typeof(float), typeof(BreathGauge));
 
-        public static readonly BindableProperty GuageDataProperty =
-            BindableProperty.Create(nameof(GuageData), typeof(float), typeof(BreathGuage));
+        public static readonly BindableProperty GaugeDataProperty =
+            BindableProperty.Create(nameof(GaugeData), typeof(float), typeof(BreathGauge));
 
         public static readonly BindableProperty ValueProperty =
-            BindableProperty.Create(nameof(Value), typeof(string), typeof(BreathGuage), "");
+            BindableProperty.Create(nameof(Value), typeof(string), typeof(BreathGauge), "");
 
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(BreathGuage), "");
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(BreathGauge), "");
 
         public static readonly BindableProperty IsShowStepProperty =
-            BindableProperty.Create(nameof(IsShowStep), typeof(bool), typeof(BreathGuage));
+            BindableProperty.Create(nameof(IsShowStep), typeof(bool), typeof(BreathGauge));
 
         public bool IsShowStep
         {
@@ -58,16 +62,16 @@ namespace FenomPlus.Controls
             set => SetValue(SizeProperty, value);
         }
 
-        public float GuageSize
+        public float GaugeSize
         {
-            get => (float)GetValue(GuageSizeProperty);
-            set => SetValue(GuageSizeProperty, value);
+            get => (float)GetValue(GaugeSizeProperty);
+            set => SetValue(GaugeSizeProperty, value);
         }
 
-        public float GuageData
+        public float GaugeData
         {
-            get => (float)GetValue(GuageDataProperty);
-            set => SetValue(GuageDataProperty, value);
+            get => (float)GetValue(GaugeDataProperty);
+            set => SetValue(GaugeDataProperty, value);
         }
 
         public string Value
@@ -83,25 +87,25 @@ namespace FenomPlus.Controls
         }
 
 
-        SKColor hardShadowColor = new SKColor(0, 0, 0, 50);
+        readonly SKColor hardShadowColor = new SKColor(0, 0, 0, 50);
 
-        float guageStrokeThickness = 20;
+        readonly float gaugeStrokeThickness = 20;
 
-        SKPaint backgroundCirclePaint;
-        SKPaint guagestickPaint;
-        SKPaint guagestickcutPaint;
-        SKPaint dangerArcPaint;
-        SKPaint warningArcPaint;
-        SKPaint safeArcPaint;
-        SKPaint arrowPaint;
+        readonly SKPaint backgroundCirclePaint;
+        readonly SKPaint gaugeStickPaint;
+        readonly SKPaint gaugeStickCutPaint;
+        readonly SKPaint dangerArcPaint;
+        readonly SKPaint warningArcPaint;
+        readonly SKPaint safeArcPaint;
+        readonly SKPaint arrowPaint;
 
-        public BreathGuage()
+        public BreathGauge()
         {
 
             backgroundCirclePaint = new SKPaint()
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColor.Parse("ffffff"),
+                Color = SKColor.Parse("#FFFFFF"),
                 IsAntialias = true,
                 ImageFilter = SKImageFilter.CreateDropShadow(0, 0, 8, 8, hardShadowColor)
             };
@@ -110,7 +114,7 @@ namespace FenomPlus.Controls
             {
                 Style = SKPaintStyle.Stroke,
                 Color = SKColor.Parse("#F25C5C"),
-                StrokeWidth = guageStrokeThickness,
+                StrokeWidth = gaugeStrokeThickness,
                 IsAntialias = true
             };
 
@@ -118,26 +122,28 @@ namespace FenomPlus.Controls
             {
                 Style = SKPaintStyle.Stroke,
                 Color = SKColor.Parse("#F2C744"),
-                StrokeWidth = guageStrokeThickness,
+                StrokeWidth = gaugeStrokeThickness,
                 IsAntialias = true
             };
 
+
+            // Green Zone
             safeArcPaint = new SKPaint()
             {
                 Style = SKPaintStyle.Stroke,
                 Color = SKColor.Parse("#6CBF60"),
-                StrokeWidth = guageStrokeThickness,
+                StrokeWidth = gaugeStrokeThickness,
                 IsAntialias = true
             };
 
-            guagestickPaint = new SKPaint()
+            gaugeStickPaint = new SKPaint()
             {
                 Style = SKPaintStyle.Fill,
                 Color = SKColor.Parse("#606063"),
                 IsAntialias = true
             };
 
-            guagestickcutPaint = new SKPaint()
+            gaugeStickCutPaint = new SKPaint()
             {
                 Style = SKPaintStyle.Fill,
                 Color = SKColor.Parse("#ffffff"),
@@ -151,19 +157,44 @@ namespace FenomPlus.Controls
                 IsAntialias = true,
                 StrokeWidth = 4
             };
+
+            StartStarAnimation();
+        }
+
+        private SKCanvas canvas;
+        private readonly bool AnimateStar = true;
+        private float scale; // ranges from 0.5 to 1 to 0.5
+        readonly Stopwatch Stopwatch = new Stopwatch();
+
+        async Task StartStarAnimation()
+        {
+            Stopwatch.Start();
+
+            while (AnimateStar)
+            {
+                double cycleTime = 3;
+                double t = Stopwatch.Elapsed.TotalSeconds % cycleTime / cycleTime;
+                scale = (1 + (float)Math.Sin(2 * Math.PI * t)) / 2;
+                InvalidateSurface();
+
+                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
+            }
+
+            Stopwatch.Stop();
         }
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
             base.OnPaintSurface(e);
-            if (GuageSize > 0)
+
+            if (GaugeSize > 0)
             {
-                WidthRequest = HeightRequest = GuageSize;
+                WidthRequest = HeightRequest = GaugeSize;
             }
 
             SKImageInfo info = e.Info;
             SKSurface surface = e.Surface;
-            SKCanvas canvas = surface.Canvas;
+            canvas = surface.Canvas;
 
             canvas.Clear();
 
@@ -179,18 +210,18 @@ namespace FenomPlus.Controls
 
             canvas.DrawCircle(center, 105, backgroundCirclePaint);
 
-            SKPath dangerpath = new SKPath();
-            dangerpath.AddArc(bounds, 112.5f, 315);
+            SKPath dangerPath = new SKPath();
+            dangerPath.AddArc(bounds, 112.5f, 315);
 
-            SKPath warningpath = new SKPath();
-            warningpath.AddArc(bounds, 202.5f, 135);
+            SKPath warningPath = new SKPath();
+            warningPath.AddArc(bounds, 202.5f, 135);
 
-            SKPath safepath = new SKPath();
-            safepath.AddArc(bounds, 225, 90);
+            SKPath safePath = new SKPath();
+            safePath.AddArc(bounds, 225, 90);
 
-            canvas.DrawPath(dangerpath, dangerArcPaint);
-            canvas.DrawPath(warningpath, warningArcPaint);
-            canvas.DrawPath(safepath, safeArcPaint);
+            canvas.DrawPath(dangerPath, dangerArcPaint);
+            canvas.DrawPath(warningPath, warningArcPaint);
+            canvas.DrawPath(safePath, safeArcPaint);
 
             var arrow = new SKPath();
 
@@ -202,7 +233,9 @@ namespace FenomPlus.Controls
                     Color = SKColor.Parse("#FFFFFF").WithAlpha(100),
                     IsAntialias = true
                 };
+
                 arrow.AddArc(bounds, 112.5f, 153f);
+
                 //Arrow headpath
                 SKPath arrowhead = new SKPath();
                 arrowhead.RMoveTo(arrow.LastPoint);
@@ -213,56 +246,97 @@ namespace FenomPlus.Controls
                 canvas.DrawPath(arrowhead, arrowheadPaint);
             }
 
+
+
+            // ------------------------  Star Symbol drawn here! ---------------------------------
+
+            //canvas.Save();
+
+            //// Star Symbol
+            ////canvas.Scale(0.5f);
+            //canvas.Scale(scale);
+            //canvas.Translate(0, -180);
+            //SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
+            
+            
+            //canvas.DrawPath(starPath, new SKPaint()
+            //{
+            //    Color = SKColors.White,
+            //    Style = SKPaintStyle.Fill,
+            //    IsAntialias = true
+            //});
+
+
+            DrawStar(canvas, GaugeData);
+
+
+
+            // --------------------------------------------------------------------------------------
+
+
+
+
+            DrawNeedle(canvas, GaugeData);
+
+            //SKPaint textPaint = gaugeStickPaint;
+
+            //string UnitsText = Text;
+            //float ValueFontSize = 20;
+
+            //float textWidth = textPaint.MeasureText(UnitsText);
+            //textPaint.TextSize = 9f;
+
+            //SKRect textBounds = SKRect.Empty;
+            //textPaint.MeasureText(UnitsText, ref textBounds);
+
+            //float xText = -1 * textBounds.MidX;
+            //float yText = 60 - textBounds.Height;
+
+            //// And draw the text
+            //canvas.DrawText(UnitsText, xText, yText, textPaint);
+
+            //// Draw the Value on the display
+            //var valueText = Value.ToString();
+            //float valueTextWidth = textPaint.MeasureText(valueText);
+            //textPaint.TextSize = ValueFontSize;
+
+            //textPaint.MeasureText(valueText, ref textBounds);
+
+            //xText = -1 * textBounds.MidX;
+            //yText = 75 - textBounds.Height;
+
+            //// And draw the text
+            //canvas.DrawText(valueText, xText, yText, textPaint);
+            //canvas.Restore();
+        }
+
+        void DrawStar(SKCanvas canvas, float value)
+        {
+
             canvas.Save();
-            canvas.Scale(0.5f);
-            canvas.Translate(0, -180);
-                SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
-                canvas.DrawPath(starPath, new SKPaint()
-                {
-                    Color = SKColors.White,
-                    Style = SKPaintStyle.Fill,
-                    IsAntialias = true
-                });
 
-            canvas.Restore();
+            // Star Symbol
+            //canvas.Scale(0.5f);
+            canvas.Scale(0.8f);
+            //canvas.Translate(0, -180);
 
-            DrawNeedle(canvas, GuageData);
+            float offset = (float)(Height / 2.0f);
+            canvas.Translate(0, -offset);
+            SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
 
-            SKPaint textPaint = guagestickPaint;
 
-            string UnitsText = Text;
-            float ValueFontSize = 20;
+            canvas.DrawPath(starPath, new SKPaint()
+            {
+                Color = SKColors.White,
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
+            });
 
-            float textWidth = textPaint.MeasureText(UnitsText);
-            textPaint.TextSize = 9f;
-
-            SKRect textBounds = SKRect.Empty;
-            textPaint.MeasureText(UnitsText, ref textBounds);
-
-            float xText = -1 * textBounds.MidX;
-            float yText = 60 - textBounds.Height;
-
-            // And draw the text
-            canvas.DrawText(UnitsText, xText, yText, textPaint);
-
-            // Draw the Value on the display
-            var valueText = Value.ToString();
-            float valueTextWidth = textPaint.MeasureText(valueText);
-            textPaint.TextSize = ValueFontSize;
-
-            textPaint.MeasureText(valueText, ref textBounds);
-
-            xText = -1 * textBounds.MidX;
-            yText = 75 - textBounds.Height;
-
-            // And draw the text
-            canvas.DrawText(valueText, xText, yText, textPaint);
             canvas.Restore();
         }
 
         void DrawNeedle(SKCanvas canvas, float value)
         {
-
             float startangle = -180;
             float angle = 0f;
 
@@ -279,7 +353,7 @@ namespace FenomPlus.Controls
             canvas.Save();
             canvas.RotateDegrees(angle);
 
-            SKPaint paint = guagestickPaint;
+            SKPaint paint = gaugeStickPaint;
 
             float needleWidth = 6f;
             float needleHeight = 90f;
@@ -295,7 +369,7 @@ namespace FenomPlus.Controls
             canvas.DrawPath(needleRightPath, paint);
 
             canvas.DrawCircle(0, 0, 6f, paint);
-            canvas.DrawCircle(0, 0, 3f, guagestickcutPaint);
+            canvas.DrawCircle(0, 0, 3f, gaugeStickCutPaint);
             canvas.Restore();
         }
 
@@ -303,13 +377,12 @@ namespace FenomPlus.Controls
         {
             base.OnPropertyChanged(propertyName);
 
-            if (propertyName == GuageDataProperty.PropertyName
+            if (propertyName == GaugeDataProperty.PropertyName
                 || propertyName == TextProperty.PropertyName
                 || propertyName == ValueProperty.PropertyName)
             {
                 InvalidateSurface();
             }
         }
-
     }
 }

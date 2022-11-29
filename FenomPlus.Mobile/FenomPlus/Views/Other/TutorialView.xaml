@@ -64,15 +64,15 @@
 
             <!--OR-->
 
-            <controls:BreathGuage x:Name="BreathGuage"
-                                  IsVisible="{Binding BreathGuageVisible}"
+            <controls:BreathGauge x:Name="BreathGuage"
+                                  IsVisible="{Binding BreathGaugeVisible}"
                                   Grid.Row="0"
                                   Grid.Column="2"
                                   VerticalOptions="FillAndExpand" 
                                   HorizontalOptions="FillAndExpand"
                                   Text=""
                                   Value=""
-                                  GuageData="{Binding GuageData}"/>
+                                  GaugeData="{Binding GaugeData}"/>
 
 
             <StackLayout x:Name="SuccessPanel" 

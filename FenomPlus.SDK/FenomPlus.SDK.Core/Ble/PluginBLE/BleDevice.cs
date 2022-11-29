@@ -85,7 +85,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            int mtuActual = await Device.RequestMtuAsync(164);
+                            int mtuActual = await Device.RequestMtuAsync(160);
                         }
                         catch (Exception e)
                         {

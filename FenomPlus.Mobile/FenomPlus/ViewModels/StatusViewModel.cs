@@ -110,19 +110,18 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
 
-            // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
-            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
-            {
-                //Debug.WriteLine($"Device is connected = {m.Value}");
-                BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
+            // Received whenever a Bluetooth connect or disconnect occurs - Problem code because this message lags the actual event by seconds
+            //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
+            //{
+            //    BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
 
-                // Force an update
+            //    // Force an update
 
-                BluetoothCheck(null, null);
+            //    BluetoothCheck(null, null);
 
-                BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
-                BluetoothStatusTimer.Start();
-            });
+            //    BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
+            //    BluetoothStatusTimer.Start();
+            //});
         }
 
         private bool CheckDeviceConnection()
@@ -130,8 +129,11 @@ namespace FenomPlus.ViewModels
             if (Services == null || Services.BleHub == null || Services.BleHub.BleDevice == null)
                 return false;
 
+            bool deviceIsConnected = Services.BleHub.BleDevice.Connected;
+            Debug.WriteLine($"Device is connected: {deviceIsConnected}");
+
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
-            return Services.BleHub.BleDevice.Connected;
+            return deviceIsConnected;
         }
 
         private int BluetoothCheckCount = 0;
@@ -144,14 +146,12 @@ namespace FenomPlus.ViewModels
 
             BluetoothConnected = CheckDeviceConnection();
 
-            //Debug.WriteLine($"Bluetooth: CheckCount={BluetoothCheckCount} Connected = {BluetoothConnected}");
-
             if (BluetoothCheckCount == RequestNewStatusInterval)
             {
                 if (BluetoothConnected)
                 {
                     // Get latest environmental info
-                    //Debug.WriteLine("Getting new environmental Info");
+                    Debug.WriteLine("Getting new environmental Info");
                     await Services.BleHub.RequestEnvironmentalInfo();
                 }
 
@@ -182,7 +182,7 @@ namespace FenomPlus.ViewModels
             int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
             UpdateDevice(daysRemaining);
 
-            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
+             UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
 
             UpdateQualityControlExpiration(0); // ToDo:  Need value here
 
@@ -191,8 +191,6 @@ namespace FenomPlus.ViewModels
             UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
-
-            //Debug.WriteLine("Note: Status icons updated!");
         }
 
         public void UpdateVersionNumbers()
@@ -231,11 +229,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int BatteryCritical = 3;
-        public const int BatteryWarning = 20;
-        public const int Battery50 = 50;
-        public const int Battery75 = 75;
-        public const int Battery100 = 100;
+
 
         public void UpdateBattery(int value)
         {
@@ -256,28 +250,28 @@ namespace FenomPlus.ViewModels
 
             BatteryBarIconVisible = true; // Always visible when device is connected
 
-            if (value > Battery75)
+            if (value > Constants.Battery75)
             {
                 BatteryBarIcon = "wo_battery_green_100.png";
                 BatteryViewModel.ImagePath = "battery_green_100.png";
                 BatteryViewModel.Color = Color.Green;
                 BatteryViewModel.Label = "Charge";
             }
-            else if (value > Battery50)
+            else if (value > Constants.Battery50)
             {
                 BatteryBarIcon = "wo_battery_green_75.png";
                 BatteryViewModel.ImagePath = "battery_green_75.png";
                 BatteryViewModel.Color = Color.Green;
                 BatteryViewModel.Label = "Charge";
             }
-            else if (value > BatteryWarning)
+            else if (value > Constants.BatteryWarning)
             {
                 BatteryBarIcon = "wo_battery_green_50.png";
                 BatteryViewModel.ImagePath = "battery_green_50.png";
                 BatteryViewModel.Color = Color.Green;
                 BatteryViewModel.Label = "Charge";
             }
-            else if (value > BatteryCritical)
+            else if (value > Constants.BatteryCritical)
             {
                 BatteryBarIcon = "wo_battery_charge_yellow.png";
                 BatteryViewModel.ImagePath = "battery_charge_yellow.png";
@@ -292,9 +286,6 @@ namespace FenomPlus.ViewModels
                 BatteryViewModel.Label = "Low";
             }
         }
-
-        public const int SensorLow = 0;
-        public const int SensorWarning = 60;
 
         public void UpdateSensor(int value)
         {
@@ -315,14 +306,14 @@ namespace FenomPlus.ViewModels
             SensorViewModel.Label = "Days Left";
             SensorViewModel.ButtonText = "Order";
 
-            if (value <= SensorLow)
+            if (value <= Constants.SensorLow)
             {
                 // low
                 SensorBarIcon = "wo_sensor_red.png";
                 SensorViewModel.ImagePath = "sensor_red.png";
                 SensorViewModel.Color = Color.Red;
             }
-            else if (value <= SensorWarning)
+            else if (value <= Constants.SensorWarning)
             {
                 // warning
                 SensorBarIcon = "wo_sensor_yellow.png";
@@ -335,9 +326,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int QualityControlExpirationLow = 0;
-        public const int QualityControlExpirationWarning = 1;
-        public const int QualityControlExpirationFull = 7;
+
 
         public void UpdateQualityControlExpiration(int value)
         {
@@ -357,14 +346,14 @@ namespace FenomPlus.ViewModels
             QualityControlViewModel.Label = "Days Left";
             QualityControlViewModel.ButtonText = "Settings";
 
-            if (value <= QualityControlExpirationLow)
+            if (value <= Constants.QualityControlExpirationLow)
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.Color = Color.Red;
             }
-            else if (value <= QualityControlExpirationWarning)
+            else if (value <= Constants.QualityControlExpirationWarning)
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_yellow.png";
@@ -377,9 +366,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int DeviceLow = 0;
-        public const int DeviceWarning = 60;
-        public const int DeviceFull = 1 * 365 + 10;
+
 
         public void UpdateDevice(int value)
         {
@@ -399,14 +386,14 @@ namespace FenomPlus.ViewModels
             DeviceViewModel.ButtonText = "Order";
             DeviceViewModel.Label = "Days Left";
 
-            if (value <= DeviceLow)
+            if (value <= Constants.DeviceLow)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "wo_device_red.png";
                 DeviceViewModel.ImagePath = "device_red.png";
                 DeviceViewModel.Color = Color.Red;
             }
-            else if (value <= DeviceWarning)
+            else if (value >= Constants.DeviceWarning)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
@@ -419,8 +406,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int RelativeHumidityLow = 23;
-        public const int RelativeHumidityWarning = 92;
+
 
         public void UpdateRelativeHumidity(int value)
         {
@@ -439,7 +425,7 @@ namespace FenomPlus.ViewModels
             HumidityViewModel.Value = $"{value}%";
             HumidityViewModel.ButtonText = "Info";
 
-            if (value <= RelativeHumidityLow)
+            if (value <= Constants.RelativeHumidityLow)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
@@ -447,7 +433,7 @@ namespace FenomPlus.ViewModels
                 HumidityViewModel.Color = Color.Red;
                 HumidityViewModel.Label = "Out of Range";
             }
-            else if (value <= RelativeHumidityWarning)
+            else if (value >= Constants.RelativeHumidityWarning)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_yellow.png";
@@ -461,8 +447,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int TemperatureLow = 15;
-        public const int TemperatureWarning = 35;
+
 
         public void UpdateTemperature(int value)
         {
@@ -481,7 +466,7 @@ namespace FenomPlus.ViewModels
             TemperatureViewModel.Value = $"{value} °C";
             TemperatureViewModel.ButtonText = "Info";
 
-            if (value <= TemperatureLow)
+            if (value <= Constants.TemperatureLow)
             {
                 TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_red.png";
@@ -489,7 +474,7 @@ namespace FenomPlus.ViewModels
                 TemperatureViewModel.Color = Color.Red;
                 TemperatureViewModel.Label = "Out of Range";
             }
-            else if (value <= TemperatureWarning)
+            else if (value >= Constants.TemperatureWarning)
             {
                 TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_yellow.png";
@@ -503,9 +488,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public const int PressureLow = 75;
-        //public const int PressureWarning = 80;
-        //public const int PressureFull = 100;
+
 
         public void UpdatePressure(int value)
         {
@@ -523,7 +506,7 @@ namespace FenomPlus.ViewModels
             PressureViewModel.Value = $"{value} kPa";
             PressureViewModel.ButtonText = "Info";
 
-            if (value <= PressureLow)
+            if (value <= Constants.PressureLow)
             {
                 PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_red.png";
@@ -531,14 +514,14 @@ namespace FenomPlus.ViewModels
                 PressureViewModel.Color = Color.Red;
                 PressureViewModel.Label = "Out of Range";
             }
-            //else if (value <= PressureWarning)
-            //{
-            //    PressureBarIconVisible = true;
-            //    PressureBarIcon = "wo_pressure_yellow.png";
-            //    PressureViewModel.ImagePath = "pressure_yellow.png";
-            //    PressureViewModel.Color = Color.Yellow;
-            //    PressureViewModel.Label = "Warning Range";
-            //}
+            else if (value >= Constants.PressureWarning)
+            {
+                PressureBarIconVisible = true;
+                PressureBarIcon = "wo_pressure_yellow.png";
+                PressureViewModel.ImagePath = "pressure_yellow.png";
+                PressureViewModel.Color = Color.Yellow;
+                PressureViewModel.Label = "Warning Range";
+            }
             else
             {
                 PressureBarIconVisible = false;
