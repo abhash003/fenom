@@ -1,6 +1,5 @@
 ﻿using Plugin.BLE.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
-using FenomPlus.SDK.Core.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading;

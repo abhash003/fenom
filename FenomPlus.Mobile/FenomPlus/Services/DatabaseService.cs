@@ -11,6 +11,7 @@ namespace FenomPlus.Services
     public class DatabaseService : BaseService, IDatabaseService
     {
         public static string DBName = "database.db";
+        private IAppServices Services => IOC.Services;
 
         /// <summary>
         /// 
@@ -42,7 +43,7 @@ namespace FenomPlus.Services
         public string DatabasePath(string dbFile)
         {
             var path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), dbFile);
-            Console.WriteLine("DB:" + path);
+            Services.LogCat.Print("DB:" + path);
             return path;
         }
 
