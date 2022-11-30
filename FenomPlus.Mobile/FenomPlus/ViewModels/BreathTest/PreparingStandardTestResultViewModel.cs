@@ -22,7 +22,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            if (Cache.TestType == TestTypeEnum.Standard)
+            if (Services.Cache.TestType == TestTypeEnum.Standard)
             {
                 TestType = "10-second Test Result";
             }
@@ -50,15 +50,15 @@ namespace FenomPlus.ViewModels
         private bool TimerCallback()
         {
             if (Seconds > 0) Seconds--;
-            if (Cache.FenomReady == true)
+            if (Services.Cache.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(Services.Cache.BreathManeuver);
 
                 ResultsRepo.Insert(model);
 
-                if (Cache.BreathManeuver.StatusCode != 0x00)
+                if (Services.Cache.BreathManeuver.StatusCode != 0x00)
                 {
-                    var errorModel = BreathManeuverErrorDBModel.Create(Cache.BreathManeuver);
+                    var errorModel = BreathManeuverErrorDBModel.Create(Services.Cache.BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
@@ -70,7 +70,7 @@ namespace FenomPlus.ViewModels
                     Services.Navigation.TestResultsView();
                 }
             }
-            return (Cache.FenomReady == false);
+            return (Services.Cache.FenomReady == false);
         }
 
         /// <summary>

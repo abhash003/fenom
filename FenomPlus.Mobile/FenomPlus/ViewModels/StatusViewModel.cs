@@ -175,20 +175,20 @@ namespace FenomPlus.ViewModels
             }
 
 
-            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
+            int daysRemaining = (Services.Cache.SensorExpireDate > DateTime.Now) ? (int)(Services.Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
             UpdateDevice(daysRemaining);
 
-            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
+            UpdateSensor((Services.Cache.SensorExpireDate > DateTime.Now) ? (int)(Services.Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
 
             UpdateQualityControlExpiration(0); // ToDo:  Need value here
 
-            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
+            UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
 
-            UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
+            UpdateRelativeHumidity(Services.Cache.EnvironmentalInfo.Humidity);
 
-            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+            UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
 
             Debug.WriteLine("Note: Status icons updated!");
         }
