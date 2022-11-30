@@ -1,5 +1,4 @@
 ﻿using System;
-using FenomPlus.Controls;
 using FenomPlus.Interfaces;
 using FenomPlus.ViewModels;
 using TinyIoC;

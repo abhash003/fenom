@@ -28,12 +28,6 @@ namespace FenomPlus.Services
 
             ReadyForTest = true;
 
-            FenomHubSystemDiscovery.DeviceDisconnected += (object sender, DeviceEventArgs e) =>
-            {
-                //if (AppShell.Current.CurrentPage)
-                //_ = Services.Navigation.DevicePowerOnView();
-            };
-
             FenomHubSystemDiscovery.DeviceConnectionLost += (object sender, DeviceErrorEventArgs e) =>
             {
                 //if (AppShell.Current.CurrentPage)
@@ -89,11 +83,7 @@ namespace FenomPlus.Services
                 {
                     fenomHubSystemDiscovery = new FenomHubSystemDiscovery();
                     fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
-
-                    fenomHubSystemDiscovery.DeviceConnected += (object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e) =>
-                    {
-                        System.Console.WriteLine("******************************************* fenomHubSystemDiscovery.DeviceConnected");
-                    };
+                    
                 }
                 return fenomHubSystemDiscovery;
             }
@@ -179,12 +169,12 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsConnected(bool devicePowerOn = false)
         {
-            System.Console.WriteLine("******** IsConnected: devicePowerOn: {0}", devicePowerOn);
+            Services.LogCat.Print("******** IsConnected: devicePowerOn: {0}", devicePowerOn.ToString());
 
             // do we have a device
             if (BleDevice != null)
             {
-                System.Console.WriteLine("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected);
+                Services.LogCat.Print("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected.ToString());
 
                 // if disconnected try to re-connect
                 if ((BleDevice.Connected == false) && (devicePowerOn == false))

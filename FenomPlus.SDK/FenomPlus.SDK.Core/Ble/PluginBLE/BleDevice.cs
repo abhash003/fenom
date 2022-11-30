@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using FenomPlus.SDK.Core.Utils;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Exceptions;
-using FenomPlus.SDK.Core.Models;
+using FenomPlus.Interfaces;
+using FenomPlus.Services;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
 {
@@ -16,6 +17,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         // need Adapter
         private static readonly IBluetoothLE Ble = CrossBluetoothLE.Current;
         private static readonly IAdapter Adapter = Ble.Adapter;
+        private static IAppServices Services => IOC.Services;
         private Logger _logger = new Logger(nameof(BleDevice));
         /// <summary>
         /// 
@@ -89,7 +91,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
+                            Services.LogCat.Print(e);
                         }
 
                         Device.UpdateConnectionInterval(ConnectionInterval.Normal);
@@ -108,13 +110,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (DeviceConnectionException ex)
             {
-                Console.WriteLine("BleDevice.DeviceConnectionException(): " + ex.Message);
+                Services.LogCat.Print("BleDevice.DeviceConnectionException(): " + ex.Message);
                 _logger.LogException(ex);
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BleDevice.ConnectAsync(): " + ex.Message);
+                Services.LogCat.Print("BleDevice.ConnectAsync(): " + ex.Message);
                 _logger.LogException(ex);
                 return false;
             }

@@ -9,13 +9,14 @@ namespace FenomPlus.Services
         {
         }
 
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="msg"></param>
-        public void Print(string msg)
+        public void Print(string msg, string exception = "")
         {
-            Console.Write(msg);
+            Console.WriteLine(msg, exception);
         }
 
         /// <summary>
