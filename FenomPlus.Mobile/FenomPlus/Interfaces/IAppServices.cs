@@ -4,6 +4,7 @@ namespace FenomPlus.Interfaces
     public interface IAppServices
     {
         IConfigService Config { get; }
+        IFenomDeviceService FenomDeviceService { get; }
         IBleHubService BleHub { get; }
         ICacheService Cache { get; }
         IDialogService Dialogs { get; }
@@ -11,6 +12,5 @@ namespace FenomPlus.Interfaces
         IDebugLogFileService DebugLogFile { get; }
         ILogCatService LogCat { get; }
         INavigationService Navigation { get; }
-        IUsbDeviceService Usb { get; }
     }
 }

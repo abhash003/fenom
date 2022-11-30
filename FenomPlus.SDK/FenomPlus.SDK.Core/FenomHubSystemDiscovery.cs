@@ -30,8 +30,8 @@ namespace FenomPlus.SDK.Core
         private readonly IBleRadioService _bleRadio;
 
         #region Delegates
-        private EventHandler<DeviceEventArgs> _deviceAdvertised;
-        private EventHandler<DeviceEventArgs> _deviceDiscovered;
+        //private EventHandler<DeviceEventArgs> _deviceAdvertised;
+        //private EventHandler<DeviceEventArgs> _deviceDiscovered;
         private EventHandler<DeviceEventArgs> _deviceConnected;
         private EventHandler<DeviceEventArgs> _deviceDisconnected;
         private EventHandler<DeviceErrorEventArgs> _deviceConnectionLost;

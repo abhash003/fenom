@@ -12,8 +12,8 @@ namespace FenomPlus.ViewModels
     public partial class BaseViewModel : ObservableObject, IBaseServices
     {
         public IAppServices Services => IOC.Services;
-        public IBleHubService BleHub => Services.BleHub;
-        public ICacheService Cache => Services.Cache;
+        //public IBleHubService BleHub => Services.BleHub;
+        //public ICacheService Cache => Services.Cache;
         public IConfigService Config => Services.Config;
         public IDialogService Dialogs => Services.Dialogs;
 

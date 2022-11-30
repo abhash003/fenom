@@ -15,7 +15,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            if (Cache.TestType == TestTypeEnum.Standard)
+            if (Services.Cache.TestType == TestTypeEnum.Standard)
             {
                 TestType = "10-second";
             }
@@ -24,11 +24,11 @@ namespace FenomPlus.ViewModels
                 TestType = "6-second";
             }
 
-            TestResult = (Cache.FenomValue) < 5 ? "< 5" :
-                        (Cache.FenomValue) > 300 ? "> 300":
-                        Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
+            TestResult = (Services.Cache.FenomValue) < 5 ? "< 5" :
+                        (Services.Cache.FenomValue) > 300 ? "> 300":
+                        Services.Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
 
-            BleHub.ReadyForTest = false;
+            Services.BleHub.ReadyForTest = false;
         }
 
         /// <summary>

@@ -75,10 +75,10 @@ namespace FenomPlus.ViewModels
         {
             Seconds = 30;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-            _ = BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
+            _ = Services.BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
                         {
                 if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await BleHub.StopScan();
+                await Services.BleHub.StopScan();
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     if (await Services.BleHub.Connect(bleDevice) == false) return;
@@ -98,7 +98,7 @@ namespace FenomPlus.ViewModels
         public async Task FoundDevice(IBleDevice bleDevice)
         {
             Stop = true;
-            Cache.DeviceInfo = null;
+            Services.Cache.DeviceInfo = null;
             await Services.BleHub.RequestDeviceInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
 
@@ -110,8 +110,8 @@ namespace FenomPlus.ViewModels
         /// <returns></returns>
         public bool DeviceInfoTimer()
         {
-            if (Cache.DeviceInfo == null) return true;
-            Cache.EnvironmentalInfo = null;
+            if (Services.Cache.DeviceInfo == null) return true;
+            Services.Cache.EnvironmentalInfo = null;
             Services.BleHub.RequestEnvironmentalInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
@@ -123,7 +123,7 @@ namespace FenomPlus.ViewModels
         /// <returns></returns>
         public bool EnvironmentalInfo()
         {
-            if (Cache.EnvironmentalInfo == null) return true;
+            if (Services.Cache.EnvironmentalInfo == null) return true;
             //Services.Navigation.DashboardView();
             return false;
         }

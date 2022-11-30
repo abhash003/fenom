@@ -27,21 +27,21 @@ namespace FenomPlus.ViewModels
 
             if (TutorialIndex == 5) // Page with Breath Guage
             {
-                BleHub.StartTest(BreathTestEnum.Training);
+                Services.BleHub.StartTest(BreathTestEnum.Training);
                 Services.BleHub.IsNotConnectedRedirect();
                 Stop = false;
 
                 // start timer to read measure constantly
                 Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
                 {
-                    GuageData = Cache.BreathFlow;
+                    GuageData = Services.Cache.BreathFlow;
                     return !Stop;
                 });
             }
             else if (TutorialIndex == 4 || TutorialIndex == 6)
             {
                 Stop = true;
-                BleHub.StartTest(BreathTestEnum.Stop);
+                Services.BleHub.StartTest(BreathTestEnum.Stop);
                 PlaySounds.StopAll();
             }
 
@@ -219,21 +219,21 @@ namespace FenomPlus.ViewModels
 
             // Must stop sound and guage if we were on Index = 5
             Stop = true;
-            BleHub.StartTest(BreathTestEnum.Stop);
+            Services.BleHub.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            GuageData = Cache.BreathFlow;
+            GuageData = Services.Cache.BreathFlow;
         }
 
         [RelayCommand]
         private void Next()
         {
             // Need only check on the next button event
-            if (TutorialIndex == 4 && !BleHub.ReadyForTest)
+            if (TutorialIndex == 4 && !Services.BleHub.ReadyForTest)
             {
                 DeviceNotReadyWarning();
                 return;
@@ -250,9 +250,9 @@ namespace FenomPlus.ViewModels
 
         private void DeviceNotReadyWarning()
         {
-            if (!BleHub.ReadyForTest)
+            if (!Services.BleHub.ReadyForTest)
             {
-                int secondsRemaining = BleHub.DeviceReadyCountDown;
+                int secondsRemaining = Services.BleHub.DeviceReadyCountDown;
                 Dialogs.ShowToast($"{secondsRemaining} seconds required before next breath test. This message disappears when device is ready...", secondsRemaining);
             }
         }

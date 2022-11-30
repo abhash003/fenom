@@ -13,18 +13,18 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             TestTime = 10;
-            TestSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
-            Cache.BreathFlow = 0;
+            TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
+            Services.Cache.BreathFlow = 0;
             Stop = false;
 
-            Device.StartTimer(TimeSpan.FromMilliseconds(Cache.BreathFlowTimer), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
                 TestSeconds--;
-                TestTime = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    BleHub.StopTest();
-                    if (Cache.BreathFlow <= 0)
+                    Services.BleHub.StopTest();
+                    if (Services.Cache.BreathFlow <= 0)
                     {
                         Services.Navigation.NegativeControlPassView();
                     }

@@ -17,16 +17,16 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             TestTime = 10;
-            Cache.BreathFlow = 0;
-            TestSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
+            Services.Cache.BreathFlow = 0;
+            TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
 
-            Device.StartTimer(TimeSpan.FromMilliseconds(Cache.BreathFlowTimer), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
                 TestSeconds--;
-                TestTime = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
-                GuageData = Cache.BreathFlow;
+                GuageData = Services.Cache.BreathFlow;
 
                 if (GuageData < Config.GaugeDataLow)
                 {
@@ -42,13 +42,13 @@ namespace FenomPlus.ViewModels
                 }
 
                 // return contiune of below the time
-                GuageSeconds = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                GuageSeconds = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    BleHub.StopTest();
+                    Services.BleHub.StopTest();
 
-                    Cache.HumanControlResult = GuageData;
+                    Services.Cache.HumanControlResult = GuageData;
                     Services.Navigation.HumanControlPreparingView();
                 }
                 return (TestSeconds > 0) && (Stop == false);

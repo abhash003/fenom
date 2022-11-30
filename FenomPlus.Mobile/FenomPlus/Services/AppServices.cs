@@ -10,11 +10,19 @@ namespace FenomPlus.Services
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
 
+        ///*
         protected IBleHubService _BleHub;
         public IBleHubService BleHub
         {
             get => _BleHub ??= Container.Resolve<IBleHubService>();
             set => _BleHub = value;
+        }
+        //*/
+        protected IFenomDeviceService _fenomDeviceService;
+        public IFenomDeviceService FenomDeviceService
+        {
+            get => _fenomDeviceService ??= Container.Resolve<IFenomDeviceService>();
+            set => _fenomDeviceService = value;
         }
 
         protected IConfigService _Config;
@@ -23,14 +31,14 @@ namespace FenomPlus.Services
             get => _Config ??= Container.Resolve<IConfigService>();
             set => _Config = value;
         }
-
+//#if false
         protected ICacheService _Cache;
         public ICacheService Cache
         {
             get => _Cache ??= Container.Resolve<ICacheService>();
             set => _Cache = value;
         }
-
+//#endif
         protected IDialogService _Dialogs;
         public IDialogService Dialogs
         {
@@ -66,13 +74,6 @@ namespace FenomPlus.Services
             set => _Navigation = value;
         }
 
-        protected IUsbDeviceService _Usb;
-        public IUsbDeviceService Usb
-        {
-            get => _Usb ??= Container.Resolve<IUsbDeviceService>();
-            set => _Usb = value;
-        }
-
         public AppServices()
         {
             try
@@ -84,8 +85,6 @@ namespace FenomPlus.Services
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
                 Container.Register<IDebugLogFileService, DebugLogFileService>().AsSingleton();
                 Container.Register<ILogCatService, LogCatService>().AsSingleton();
-                Container.Register<IUsbDeviceService, UsbDeviceService>().AsSingleton();
-
 
                 // We only want one instance of this - includes its own timer
                 Container.Register<StatusViewModel>().AsSingleton();
