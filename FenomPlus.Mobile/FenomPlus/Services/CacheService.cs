@@ -171,8 +171,11 @@ namespace FenomPlus.Services
                     // get the noscores
                     NOScore = BreathManeuver.NOScore;
                 }
+
                 NotifyViews();
+
                 NotifyViewModels();
+
             } finally { }
             return BreathManeuver;
         }

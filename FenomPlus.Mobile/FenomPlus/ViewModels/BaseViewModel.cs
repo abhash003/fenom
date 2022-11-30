@@ -99,7 +99,6 @@ namespace FenomPlus.ViewModels
         {
             //RefreshStatus();
             DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-
             Firmware = Services.Cache.Firmware;
         }
     }

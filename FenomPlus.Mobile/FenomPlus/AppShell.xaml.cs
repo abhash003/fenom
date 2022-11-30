@@ -15,6 +15,7 @@ namespace FenomPlus
         public void NotifyViews()
         {
             if (Current?.CurrentPage == null) return;
+
             try
             {
                 ((BaseContentPage)Current.CurrentPage).NewGlobalData();

@@ -61,8 +61,6 @@ namespace FenomPlus.Views
             //    DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
             //}
 
-            return true;
-
 
             // Get the latest environmental info - updates Cache
             DashboardViewModel.BleHub.RequestEnvironmentalInfo();
@@ -88,11 +86,12 @@ namespace FenomPlus.Views
                 return false;
             }
 
-            if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical)
-            {
-                DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
-                return false;
-            }
+            // ToDo: maybe add this back in when unit has battery?
+            //if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical)
+            //{
+            //    DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
+            //    return false;
+            //}
 
             return true;
         }

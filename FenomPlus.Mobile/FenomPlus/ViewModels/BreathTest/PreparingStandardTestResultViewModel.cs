@@ -9,17 +9,11 @@ namespace FenomPlus.ViewModels
 {
     public class PreparingStandardTestResultViewModel : BaseViewModel
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public PreparingStandardTestResultViewModel()
         {
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -30,24 +24,18 @@ namespace FenomPlus.ViewModels
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         private bool TimerCallback()
         {
             if (Seconds > 0) Seconds--;
             //if (Cache.FenomReady == true)
             {
+                bool isReady = Cache.FenomReady; // ToDo: Just for debugging purposes
+
                 var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
 
                 ResultsRepo.Insert(model);
@@ -68,12 +56,10 @@ namespace FenomPlus.ViewModels
                     Services.Navigation.TestResultsView();
                 }
             }
+
             return (Cache.FenomReady == false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private int seconds;
         public int Seconds
         {
@@ -96,9 +82,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();

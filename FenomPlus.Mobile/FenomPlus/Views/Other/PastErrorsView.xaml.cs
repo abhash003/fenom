@@ -3,6 +3,7 @@ using FenomPlus.ViewModels;
 using System;
 using Syncfusion.SfDataGrid.XForms;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
@@ -10,6 +11,7 @@ namespace FenomPlus.Views
     // Documentation:  https://help.syncfusion.com/xamarin/datagrid/export-to-pdf
     // Documentation:  https://help.syncfusion.com/xamarin/pdf-viewer/printing-pdf-files
 
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PastErrorsView : BaseContentPage
     {
         private readonly PastErrorsViewModel PastErrorsViewModel;

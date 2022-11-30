@@ -1,7 +1,9 @@
 ﻿using FenomPlus.ViewModels;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DevicePowerOnView : BaseContentPage
     {
         private DevicePowerOnViewModel DevicePowerOnViewModel;

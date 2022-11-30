@@ -28,7 +28,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             //PerformanceLogger.EndLog(typeof(BleDevice), "BleDevice");
         }
 
-        // get device here injected from constuctor
+        // get device here injected from constructor
         private IDevice Device { get; set; }
         public object NativeDevice => Device.NativeDevice;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using FenomPlus.Database.Tables;
 using FenomPlus.Models;
@@ -76,6 +77,8 @@ namespace FenomPlus.Database.Adapters
             {
                 prettyDateTime = input.DateOfTest;
             }
+
+            Debug.WriteLine($"TestResult = {input.TestResult}");
 
             return new BreathManeuverResultDataModel()
             { _id = input._id,
