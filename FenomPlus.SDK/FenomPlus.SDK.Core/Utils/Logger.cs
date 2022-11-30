@@ -32,23 +32,6 @@ namespace FenomPlus.SDK.Core.Utils
             return m_Logger.IsEnabled(logLevel);
         }
 
-        private LogLevel GetLogLevel()
-        {
-            if (m_Logger is null)
-            {
-                Console.WriteLine("Logger.GetLogLevel() - logger is null for category " + m_Category);
-            }
-
-            var levels = new[] { LogLevel.Critical, LogLevel.Error, LogLevel.Warning, LogLevel.Information, LogLevel.Debug, LogLevel.Trace };
-            foreach (var level in levels)
-            {
-                if (m_Logger.IsEnabled(level))
-                    return level;
-            }
-
-            return LogLevel.None;
-        }
-
         public void LogInformation(string Message, params object[] Args)
         {
             if (CheckLogger(LogLevel.Information))
