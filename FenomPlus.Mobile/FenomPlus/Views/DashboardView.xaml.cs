@@ -3,9 +3,11 @@ using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Enums;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DashboardView : BaseContentPage
     {
         private readonly DashboardViewModel DashboardViewModel;
