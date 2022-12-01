@@ -57,10 +57,9 @@ namespace FenomPlus.Views
         {
             base.OnAppearing();
 
-            // Chunk of code is for optimization
-            PastResultsDataGrid.Columns.Suspend(); 
             PastResultsViewModel.UpdatePastResultsDataCommand.Execute(null);
-            PastResultsDataGrid.Columns.Resume();
+
+            DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
         }
 

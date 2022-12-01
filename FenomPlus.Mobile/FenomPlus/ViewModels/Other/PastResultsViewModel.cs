@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Net.Http.Headers;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
-using FenomPlus.Helpers;
 using FenomPlus.Models;
+using Syncfusion.Data.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace FenomPlus.ViewModels
 {
@@ -29,7 +28,9 @@ namespace FenomPlus.ViewModels
 
             IEnumerable<BreathManeuverResultTb> records = ResultsRepo.SelectAll();
 
-            foreach (BreathManeuverResultTb record in records)
+            var sortedRecords = records.OrderByDescending(c => c.DateOfTest);
+
+            foreach (BreathManeuverResultTb record in sortedRecords)
             {
                 PastResultsData.Add(record.ConvertForGrid());
             }
@@ -68,7 +69,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            UpdatePastResultsData();
+            //UpdatePastResultsData();
         }
 
         public override void OnDisappearing()

@@ -53,10 +53,9 @@ namespace FenomPlus.Views
             base.OnAppearing();
             PastErrorsViewModel.OnAppearing();
 
-            // Chunk of code is for optimization
-            RecentErrorsDataGrid.Columns.Suspend();
             PastErrorsViewModel.UpdateRecentErrorsDataCommand.Execute(null);
-            RecentErrorsDataGrid.Columns.Resume();
+
+            DataPager.Refresh();
             RecentErrorsDataGrid.RefreshColumns();
         }
 

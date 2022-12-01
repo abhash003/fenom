@@ -46,6 +46,7 @@
                                        AllowSorting="False"
                                        NavigationMode="Row"
                                        SelectionMode="Single"
+                                       ResizingMode=""
                                        AutoExpandGroups="False"
                                        AllowGroupExpandCollapse="False"
                                        ColumnSizer="Star"
@@ -71,10 +72,6 @@
                             <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
 
                         </sfgrid:SfDataGrid.Columns>
-
-                        <sfgrid:SfDataGrid.SortColumnDescriptions>
-                            <sfgrid:SortColumnDescription ColumnName="DateError" SortDirection="Descending" />
-                        </sfgrid:SfDataGrid.SortColumnDescriptions>
 
                     </sfgrid:SfDataGrid>
 
