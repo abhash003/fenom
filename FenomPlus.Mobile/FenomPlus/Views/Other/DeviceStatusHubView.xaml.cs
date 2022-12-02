@@ -36,7 +36,6 @@ namespace FenomPlus.Views
 
         protected override void OnAppearing()
         {
-            StatusViewModel.RefreshStatus();
             base.OnAppearing();
             StatusViewModel.OnAppearing();
         }

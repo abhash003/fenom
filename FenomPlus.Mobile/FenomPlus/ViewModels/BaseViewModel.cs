@@ -6,6 +6,7 @@ using FenomPlus.Interfaces;
 using FenomPlus.Services;
 using System.Threading.Tasks;
 using FenomPlus.Models;
+using Xamarin.Essentials;
 
 namespace FenomPlus.ViewModels
 {
@@ -31,10 +32,13 @@ namespace FenomPlus.ViewModels
         private string _title = string.Empty;
 
         [ObservableProperty]
+        private string _appSoftwareVersion;
+
+        [ObservableProperty]
         private string _deviceSerialNumber;
 
         [ObservableProperty]
-        private string _firmware;
+        private string _deviceFirmwareVersion;
 
         [ObservableProperty]
         private string _deviceConnectedStatus;
@@ -55,24 +59,9 @@ namespace FenomPlus.ViewModels
 
         public BaseViewModel()
         {
-            //DeviceStatus = new DeviceStatus();
-            //RefreshStatus();
+            AppSoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
             ShowAllMenus = true;
         }
-
-        //public void RefreshStatus()
-        //{
-        //    int BatteryLevel = Cache.BatteryLevel;
-        //    int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
-
-        //    DeviceStatus.UpdateBattery(BatteryLevel);
-        //    DeviceStatus.UpdateDevice(daysRemaining);
-        //    DeviceStatus.UpdateSensor(daysRemaining);
-        //    DeviceStatus.UpdateQualityControlExpiration(0);
-        //    DeviceStatus.UpdatePressure(0);
-        //    DeviceStatus.UpdateRelativeHumidity(0);
-        //    DeviceStatus.UpdateTemperature(0);
-        //}
 
         [RelayCommand]
         public async Task ExitToDashboard()
@@ -97,9 +86,9 @@ namespace FenomPlus.ViewModels
 
         public virtual void NewGlobalData()
         {
-            //RefreshStatus();
-            DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-            Firmware = Services.Cache.Firmware;
+            //StatusViewModel.RefreshStatus();
+            //DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
+            //Firmware = Services.Cache.Firmware;
         }
     }
 }

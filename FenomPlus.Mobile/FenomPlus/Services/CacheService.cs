@@ -21,8 +21,8 @@ namespace FenomPlus.Services
             BreathBuffer = new RingBuffer(Services.Config.RingBufferSample, Services.Config.RingBufferTimeout);
 
             BreathFlowTimer = Services.Config.BreathFlowTimeout;
-            DeviceSerialNumber = "F150-??????";
-            Firmware = "Firmware ?.?.?";
+            DeviceSerialNumber = string.Empty;
+            Firmware = string.Empty;
             FenomReady = true;
 
             Logger = LoggerFactory.Create(builder =>

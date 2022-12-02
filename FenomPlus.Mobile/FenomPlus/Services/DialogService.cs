@@ -49,14 +49,14 @@ namespace FenomPlus.Services
 
         public void ShowToast(string message, int seconds)
         {
-            TimeSpan timeSpan = new TimeSpan(0,0, seconds);
-            UserDialogs.Instance.Toast(message, timeSpan);
+            //TimeSpan timeSpan = new TimeSpan(0,0, seconds);
+            //UserDialogs.Instance.Toast(message, timeSpan);
 
 
-            //ToastConfig toastConfig = new ToastConfig("Toast");
-            //toastConfig.SetDuration(seconds * 1000);
-            //toastConfig.SetBackgroundColor(Color.DimGray);
-            //UserDialogs.Instance.Toast(toastConfig);
+            ToastConfig toastConfig = new ToastConfig("Toast");
+            toastConfig.SetDuration(seconds * 1000);
+            toastConfig.SetBackgroundColor(Xamarin.Forms.Color.Transparent);
+            UserDialogs.Instance.Toast(toastConfig);
         }
 
         public async Task DatePromptAsync(string message, DateTime defaultDateTime)

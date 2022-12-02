@@ -19,6 +19,10 @@ namespace FenomPlus.Services
         {
             Intent bluetoothPicker = new Intent("android.bluetooth.devicepicker.action.LAUNCH");
             Forms.Context.StartActivity(bluetoothPicker);
+            await Task.Delay(1000);
+
+            // ToDo: Create our own bluetooth connection and pairing view
+            //await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(PairingView)}"), false);
         }
 
         public async Task BreathManeuverFeedbackView()

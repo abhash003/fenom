@@ -71,10 +71,6 @@
 
                         </sfgrid:SfDataGrid.Columns>
 
-                        <!--<sfgrid:SfDataGrid.SortColumnDescriptions>
-                            <sfgrid:SortColumnDescription ColumnName="DateOfTest" SortDirection="Descending" />
-                        </sfgrid:SfDataGrid.SortColumnDescriptions>-->
-
                     </sfgrid:SfDataGrid>
 
                 </border:SfBorder>

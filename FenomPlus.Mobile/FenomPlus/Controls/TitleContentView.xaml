@@ -49,19 +49,14 @@
 
                 <!--Following items are only displayed when out of range-->
 
-                <ImageButton Source="{Binding SensorBarIcon}"                             
-                             Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding SensorBarIconVisible}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
-
                 <ImageButton Source="{Binding DeviceBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              IsVisible="{Binding DeviceBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding QcBarIcon}"                             
+                <ImageButton Source="{Binding SensorBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding QcBarIconVisible}"
+                             IsVisible="{Binding SensorBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
 
@@ -70,16 +65,20 @@
                              IsVisible="{Binding PressureBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding HumidityBarIcon}"                             
-                             Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding HumidityBarIconVisible}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
-
                 <ImageButton Source="{Binding TemperatureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
                              IsVisible="{Binding TemperatureBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
+                <ImageButton Source="{Binding HumidityBarIcon}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding HumidityBarIconVisible}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
+                
+                <ImageButton Source="{Binding QcBarIcon}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding QcBarIconVisible}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <!--Always Displayed when device is connected-->
 

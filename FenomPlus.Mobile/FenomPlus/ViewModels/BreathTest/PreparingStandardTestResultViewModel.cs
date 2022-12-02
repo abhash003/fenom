@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
@@ -7,8 +8,14 @@ using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class PreparingStandardTestResultViewModel : BaseViewModel
+    public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
+        [ObservableProperty]
+        private int _seconds;
+
+        [ObservableProperty]
+        private string _testType;
+
         public PreparingStandardTestResultViewModel()
         {
 
@@ -31,8 +38,10 @@ namespace FenomPlus.ViewModels
 
         private bool TimerCallback()
         {
-            if (Seconds > 0) Seconds--;
-            //if (Cache.FenomReady == true)
+            if (Seconds > 0) 
+                Seconds--;
+
+            if (Cache.FenomReady == true)
             {
                 bool isReady = Cache.FenomReady; // ToDo: Just for debugging purposes
 
@@ -60,27 +69,7 @@ namespace FenomPlus.ViewModels
             return (Cache.FenomReady == false);
         }
 
-        private int seconds;
-        public int Seconds
-        {
-            get => seconds;
-            set
-            {
-                seconds = value;
-                OnPropertyChanged("Seconds");
-            }
-        }
 
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
 
         public override void NewGlobalData()
         {

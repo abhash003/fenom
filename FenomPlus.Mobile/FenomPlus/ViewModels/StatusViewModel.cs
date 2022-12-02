@@ -24,8 +24,8 @@ namespace FenomPlus.ViewModels
 {
     public partial class StatusViewModel : BaseViewModel
     {
-        private const int TimerIntervalMilliseconds = 2000;
-        private const int RequestNewStatusInterval = 10;
+        private const int TimerIntervalMilliseconds = 1000;     // Bluetooth Check every one second
+        private const int RequestNewStatusInterval = 15;        // New DeviceInfo and EnvironmentInfo every 15 seconds
 
         public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
@@ -53,15 +53,6 @@ namespace FenomPlus.ViewModels
         public string _temperatureBarIcon;
         [ObservableProperty]
         public string _batteryBarIcon;
-
-        [ObservableProperty]
-        private string _softwareVersion;
-
-        [ObservableProperty]
-        private string _serialNumber;
-
-        [ObservableProperty]
-        private string _firmwareVersion;
 
         [ObservableProperty] private bool _batteryBarIconVisible;
 
@@ -92,8 +83,6 @@ namespace FenomPlus.ViewModels
         {
             VersionTracking.Track();
 
-            SoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
-
             BluetoothViewModel.Header = "Bluetooth";
             SensorViewModel.Header = "Sensor";
             DeviceViewModel.Header = "Device";
@@ -104,7 +93,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            RefreshStatus();
+            RefreshStatusAsync(true);
 
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
@@ -136,6 +125,15 @@ namespace FenomPlus.ViewModels
             return deviceIsConnected;
         }
 
+        private async Task UpdateDeviceAndEnvironmentalInfoAsync()
+        {
+            if (BluetoothConnected)
+            {
+                await Services.BleHub.RequestDeviceInfo();
+                await Services.BleHub.RequestEnvironmentalInfo();
+            }
+        }
+
         private int BluetoothCheckCount = 0;
 
         private async void BluetoothCheck(object sender, ElapsedEventArgs e)
@@ -144,24 +142,22 @@ namespace FenomPlus.ViewModels
 
             BluetoothCheckCount++;
 
+            bool priorBluetoothConnection = BluetoothConnected;
+
             BluetoothConnected = CheckDeviceConnection();
 
-            if (BluetoothCheckCount == RequestNewStatusInterval)
+            if ((BluetoothConnected && !priorBluetoothConnection) || (BluetoothCheckCount == RequestNewStatusInterval))
             {
-                if (BluetoothConnected)
-                {
-                    // Get latest environmental info
-                    Debug.WriteLine("Getting new environmental Info");
-                    await Services.BleHub.RequestEnvironmentalInfo();
-                }
+                await UpdateDeviceAndEnvironmentalInfoAsync();
 
                 BluetoothCheckCount = 0; // Reset
             }
 
-            Device.BeginInvokeOnMainThread(RefreshStatus);
+            //Device.BeginInvokeOnMainThread(RefreshStatus);
+            await RefreshStatusAsync();
         }
 
-        public void RefreshStatus()
+        public async Task RefreshStatusAsync(bool forceRefresh = false)
         {
             if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
@@ -173,6 +169,11 @@ namespace FenomPlus.ViewModels
             if (Cache == null || Cache.EnvironmentalInfo == null)
                 return;
 
+            if (forceRefresh)
+            {
+                await UpdateDeviceAndEnvironmentalInfoAsync();
+            }
+
             UpdateVersionNumbers();
 
             UpdateBluetooth();
@@ -182,7 +183,7 @@ namespace FenomPlus.ViewModels
             int daysRemaining = (Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0;
             UpdateDevice(daysRemaining);
 
-             UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
+            UpdateSensor((Cache.SensorExpireDate > DateTime.Now) ? (int)(Cache.SensorExpireDate - DateTime.Now).TotalDays : 0);
 
             UpdateQualityControlExpiration(0); // ToDo:  Need value here
 
@@ -197,13 +198,13 @@ namespace FenomPlus.ViewModels
         {
             if (BluetoothConnected)
             {
-                SerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
-                FirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
+                DeviceSerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
+                DeviceFirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
             }
             else
             {
-                SerialNumber = string.Empty;
-                FirmwareVersion = string.Empty;
+                DeviceSerialNumber = string.Empty;
+                DeviceFirmwareVersion = string.Empty;
             }
         }
 
@@ -228,8 +229,6 @@ namespace FenomPlus.ViewModels
                 BluetoothViewModel.ButtonText = string.Empty;
             }
         }
-
-
 
         public void UpdateBattery(int value)
         {
@@ -326,8 +325,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
-
         public void UpdateQualityControlExpiration(int value)
         {
             if (!BluetoothConnected)
@@ -365,7 +362,6 @@ namespace FenomPlus.ViewModels
                 QcBarIconVisible = false;
             }
         }
-
 
 
         public void UpdateDevice(int value)
@@ -406,8 +402,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
-
         public void UpdateRelativeHumidity(int value)
         {
             if (!BluetoothConnected)
@@ -447,8 +441,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
-
         public void UpdateTemperature(int value)
         {
             if (!BluetoothConnected)
@@ -487,8 +479,6 @@ namespace FenomPlus.ViewModels
                 TemperatureBarIconVisible = false;
             }
         }
-
-
 
         public void UpdatePressure(int value)
         {
@@ -573,8 +563,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
-
         [RelayCommand]
         private void ShowHumidityDetails()
         {
@@ -628,9 +616,10 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        private void NavigateToStatusPage()
+        private async Task NavigateToStatusPageAsync()
         {
-            Services.Navigation.DeviceStatusView();
+            await RefreshStatusAsync(true);
+            await Services.Navigation.DeviceStatusView();
         }
 
     }

@@ -46,7 +46,6 @@
                                        AllowSorting="False"
                                        NavigationMode="Row"
                                        SelectionMode="Single"
-                                       ResizingMode=""
                                        AutoExpandGroups="False"
                                        AllowGroupExpandCollapse="False"
                                        ColumnSizer="Star"
