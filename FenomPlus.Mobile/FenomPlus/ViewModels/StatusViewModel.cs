@@ -152,10 +152,12 @@ namespace FenomPlus.ViewModels
             bool priorBluetoothConnection = BluetoothConnected;
 
             BluetoothConnected = CheckDeviceConnection();
+            Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
             if ((BluetoothConnected && !priorBluetoothConnection) || (BluetoothCheckCount == RequestNewStatusInterval))
             {
                 await UpdateDeviceAndEnvironmentalInfoAsync();
+                Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
 
                 BluetoothCheckCount = 0; // Reset
             }
@@ -164,12 +166,12 @@ namespace FenomPlus.ViewModels
             await RefreshStatusAsync();
         }
 
-        private bool RefreshInProgress = false;
+        //private bool RefreshInProgress = false;
 
         public async Task RefreshStatusAsync(bool forceRefresh = false)
         {
-            if (RefreshInProgress) // Prevents a collison of requests
-                return;
+            //if (RefreshInProgress) // Prevents a collison of requests
+            //    return;
 
             if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
@@ -181,7 +183,7 @@ namespace FenomPlus.ViewModels
             if (Cache == null || Cache.EnvironmentalInfo == null)
                 return;
 
-            RefreshInProgress = true;
+            //RefreshInProgress = true;
 
             if (forceRefresh)
             {
@@ -214,7 +216,7 @@ namespace FenomPlus.ViewModels
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
 
-            RefreshInProgress = false;
+            //RefreshInProgress = false;
         }
 
         public void UpdateVersionNumbers()
@@ -258,7 +260,6 @@ namespace FenomPlus.ViewModels
             if (!BluetoothConnected)
             {
                 BatteryBarIconVisible = false;
-
                 BatteryViewModel.ImagePath = "battery_red.png";
                 BatteryViewModel.Color = Color.Red;
                 BatteryViewModel.Label = string.Empty;
