@@ -12,6 +12,7 @@ using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using FenomPlus.Services;
 using FenomPlus.ViewModels;
+using FenomPlus.Views;
 using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -93,23 +94,23 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            RefreshStatusAsync(true);
+            _ = RefreshStatusAsync(true);
 
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
 
-            // Received whenever a Bluetooth connect or disconnect occurs - Problem code because this message lags the actual event by seconds
+            //Received whenever a Bluetooth connect or disconnect occurs -Problem code because this message lags the actual event by seconds
             //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             //{
-            //    BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
+            //    //BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
 
-            //    // Force an update
+            //    //// Force an update
 
-            //    BluetoothCheck(null, null);
+            //    //BluetoothCheck(null, null);
 
-            //    BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
-            //    BluetoothStatusTimer.Start();
+            //    //BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
+            //    //BluetoothStatusTimer.Start();
             //});
         }
 
@@ -120,6 +121,12 @@ namespace FenomPlus.ViewModels
 
             bool deviceIsConnected = Services.BleHub.BleDevice.Connected;
             Debug.WriteLine($"Device is connected: {deviceIsConnected}");
+
+            if (App.GetCurrentPage() is DevicePowerOnView && deviceIsConnected)  // ToDo: Only needed because viewmodels never die
+            {
+                // Only navigate if during startup
+                Services.Navigation.DashboardView();
+            }
 
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
             return deviceIsConnected;
@@ -157,8 +164,13 @@ namespace FenomPlus.ViewModels
             await RefreshStatusAsync();
         }
 
+        private bool RefreshInProgress = false;
+
         public async Task RefreshStatusAsync(bool forceRefresh = false)
         {
+            if (RefreshInProgress) // Prevents a collison of requests
+                return;
+
             if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
                 // Don't update environmental properties during test
@@ -169,9 +181,18 @@ namespace FenomPlus.ViewModels
             if (Cache == null || Cache.EnvironmentalInfo == null)
                 return;
 
+            RefreshInProgress = true;
+
             if (forceRefresh)
             {
+                // Stop the timer so we don't get a clash of requests
+                BluetoothStatusTimer.Stop();
+                BluetoothConnected = CheckDeviceConnection();
                 await UpdateDeviceAndEnvironmentalInfoAsync();
+
+                //Make sure to resart the timer
+                BluetoothCheckCount = 0;
+                BluetoothStatusTimer.Start();
             }
 
             UpdateVersionNumbers();
@@ -192,6 +213,8 @@ namespace FenomPlus.ViewModels
             UpdateRelativeHumidity(Cache.EnvironmentalInfo.Humidity);
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+
+            RefreshInProgress = false;
         }
 
         public void UpdateVersionNumbers()
@@ -322,6 +345,8 @@ namespace FenomPlus.ViewModels
             else
             {
                 SensorBarIconVisible = false;
+                SensorViewModel.ImagePath = "sensor_green.png";
+                SensorViewModel.Color = Color.Green;
             }
         }
 
@@ -360,6 +385,8 @@ namespace FenomPlus.ViewModels
             else
             {
                 QcBarIconVisible = false;
+                QualityControlViewModel.ImagePath = "quality_control_green.png";
+                QualityControlViewModel.Color = Color.Green;
             }
         }
 
@@ -393,12 +420,14 @@ namespace FenomPlus.ViewModels
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
-                DeviceViewModel.ImagePath = "_3x_device_yellow.png";
+                DeviceViewModel.ImagePath = "device_yellow.png";
                 DeviceViewModel.Color = Color.Yellow;
             }
             else
             {
                 DeviceBarIconVisible = false;
+                DeviceViewModel.ImagePath = "device_green.png";
+                DeviceViewModel.Color = Color.Green;
             }
         }
 
@@ -438,6 +467,8 @@ namespace FenomPlus.ViewModels
             else
             {
                 HumidityBarIconVisible = false;
+                HumidityViewModel.ImagePath = "humidity_green.png";
+                HumidityViewModel.Color = Color.Green;
             }
         }
 
@@ -477,6 +508,8 @@ namespace FenomPlus.ViewModels
             else
             {
                 TemperatureBarIconVisible = false;
+                TemperatureViewModel.ImagePath = "temperature_green.png";
+                TemperatureViewModel.Color = Color.Green;
             }
         }
 
@@ -515,6 +548,8 @@ namespace FenomPlus.ViewModels
             else
             {
                 PressureBarIconVisible = false;
+                PressureViewModel.ImagePath = "pressure_green.png";
+                PressureViewModel.Color = Color.Green;
             }
         }
 

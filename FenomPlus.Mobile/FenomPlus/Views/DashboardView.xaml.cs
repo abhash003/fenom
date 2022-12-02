@@ -43,6 +43,11 @@ namespace FenomPlus.Views
         {
             if (DashboardViewModel.Services.BleHub.IsNotConnectedRedirect())
             {
+                if (!DeviceEnvironmentalWarning())
+                {
+                    return;
+                }
+
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
                     DeviceNotReadyWarning2();                   
