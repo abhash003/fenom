@@ -43,11 +43,10 @@ namespace FenomPlus.ViewModels
 
             if (Cache.FenomReady == true)
             {
-                bool isReady = Cache.FenomReady; // ToDo: Just for debugging purposes
-
                 var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
-
                 ResultsRepo.Insert(model);
+
+                var str = ResultsRepo.ToString();
 
                 Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Cache.BreathManeuver.StatusCode}");
 

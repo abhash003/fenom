@@ -22,7 +22,7 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        public void UpdatePastResultsData()
+        public void RefreshPastResults()
         {
             PastResultsData.Clear();
 
@@ -69,7 +69,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            UpdatePastResultsData();
+            RefreshPastResults();
         }
 
         public override void OnDisappearing()
