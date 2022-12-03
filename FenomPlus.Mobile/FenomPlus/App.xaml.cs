@@ -28,10 +28,27 @@ namespace FenomPlus
 
         protected override void OnSleep()
         {
+            base.OnSleep();
+
+            var services = IOC.Services;
+
+            if (services == null)
+                return;
+
+            if (App.GetCurrentPage() is TestErrorView)
+            {
+                services.Navigation.DashboardView();
+            }
+
+            if (App.GetCurrentPage() is TestFailedView)
+            {
+                services.Navigation.DashboardView();
+            }
         }
 
         protected override void OnResume()
         {
+            base.OnResume();
         }
 
         public static void NotifyViews()
@@ -42,9 +59,6 @@ namespace FenomPlus
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public static void NotifyViewModels()
         {
             if (AppShell != null)
@@ -53,10 +67,6 @@ namespace FenomPlus
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public static Page GetCurrentPage()
         {
             Page page = null;

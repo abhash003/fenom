@@ -316,10 +316,13 @@ namespace FenomPlus.Controls
             // Star Symbol
             //canvas.Scale(0.5f);
             canvas.Scale(0.5f);
-            //canvas.Translate(0, -180);
 
-            float offset = (float)(Height / 2.0f);
-            canvas.Translate(0, -offset);
+
+
+            canvas.Translate(0, -180);
+
+            //float offset = (float)(Height / 2.0f);
+            //canvas.Translate(0, -offset);
 
             SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
 
