@@ -28,8 +28,13 @@ namespace FenomPlus.Droid
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
+            AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
 
             LoadApplication(new App());
+
+            // start device service
+            AppServices.Container.Resolve<IDeviceService>().Start();
+
             //CheckPermissions();
         }
 

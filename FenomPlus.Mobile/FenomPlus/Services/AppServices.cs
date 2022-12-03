@@ -8,20 +8,12 @@ namespace FenomPlus.Services
     public class AppServices : IAppServices
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
-
-        ///*
+        
         protected IBleHubService _BleHub;
         public IBleHubService BleHub
         {
             get => _BleHub ??= Container.Resolve<IBleHubService>();
             set => _BleHub = value;
-        }
-        //*/
-        protected IFenomDeviceService _fenomDeviceService;
-        public IFenomDeviceService FenomDeviceService
-        {
-            get => _fenomDeviceService ??= Container.Resolve<IFenomDeviceService>();
-            set => _fenomDeviceService = value;
         }
 
         protected IConfigService _Config;
@@ -30,14 +22,14 @@ namespace FenomPlus.Services
             get => _Config ??= Container.Resolve<IConfigService>();
             set => _Config = value;
         }
-//#if false
+
         protected ICacheService _Cache;
         public ICacheService Cache
         {
             get => _Cache ??= Container.Resolve<ICacheService>();
             set => _Cache = value;
         }
-//#endif
+
         protected IDialogService _Dialogs;
         public IDialogService Dialogs
         {
@@ -71,6 +63,13 @@ namespace FenomPlus.Services
         {
             get => _Navigation ??= Container.Resolve<INavigationService>();
             set => _Navigation = value;
+        }
+
+        protected IDeviceService _Device;
+        public IDeviceService Device
+        {
+            get => _Device ??= Container.Resolve<IDeviceService>();
+            set => _Device = value;
         }
 
         public AppServices()
