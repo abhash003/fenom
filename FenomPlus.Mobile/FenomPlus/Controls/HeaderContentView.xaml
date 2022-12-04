@@ -29,6 +29,7 @@
 
             <Image Source="TitleIcon.png"
                    HeightRequest="25"
+                   Margin="15,0,0,0"
                    Grid.Column="0"
                    Grid.Row="0"
                    HorizontalOptions="Start"

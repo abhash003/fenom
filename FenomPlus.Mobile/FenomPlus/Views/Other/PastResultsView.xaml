@@ -19,80 +19,88 @@
 
     <ContentPage.Content>
 
-        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20">
+        <Grid VerticalOptions="Fill" HorizontalOptions="Fill" Margin="20">
              
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" Margin="0" Padding="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                <!--<SearchBar Placeholder="ID" TextChanged="SearchBar_OnTextChanged" />-->
+            <border:SfBorder 
+                BorderColor="LightGray"
+                BackgroundColor="Transparent" 
+                HorizontalOptions="Fill" 
+                VerticalOptions="Fill"
+                BorderWidth="1"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,0,0,0"
+                Padding="0">
 
-                <border:SfBorder 
-                    BorderColor="LightGray"
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="FillAndExpand"
-                    BorderWidth="1">
+                <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
+                                    ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                    VerticalOptions="Fill"
+                                    HorizontalOptions="Fill"
+                                    AllowResizingColumn="False"
+                                    AutoGenerateColumns="False"
+                                    AllowEditing="False"
+                                    AllowSorting="False"
+                                    NavigationMode="Row"
+                                    SelectionMode="Single"
+                                    AutoExpandGroups="False"
+                                    AllowGroupExpandCollapse="False"
+                                    ColumnSizer="Star"
+                                    VerticalScrollBarVisibility="False"
+                                    HorizontalScrollBarVisibility="False"
+                                    VerticalOverScrollMode="None"
+                                    AllowPullToRefresh="False"
+                                    Margin="0,0,1,0">
 
-                    <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
-                                       ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
-                                       VerticalOptions="FillAndExpand"
-                                       HorizontalOptions="FillAndExpand"
-                                       AllowResizingColumn="False"
-                                       AutoGenerateColumns="False"
-                                       AllowEditing="False"
-                                       AllowSorting="False"
-                                       NavigationMode="Row"
-                                       SelectionMode="Single"
-                                       AutoExpandGroups="False"
-                                       AllowGroupExpandCollapse="False"
-                                       ColumnSizer="Star"
-                                       VerticalScrollBarVisibility="False"
-                                       HorizontalScrollBarVisibility="False"
-                                       VerticalOverScrollMode="None"
-                                       AllowPullToRefresh="False">
+                    <sfgrid:SfDataGrid.Columns>
 
-                        <sfgrid:SfDataGrid.Columns>
+                        <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
 
-                            <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
+                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
 
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
+                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
 
-                            <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
+                        <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType"/>
 
-                            <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType"/>
+                        <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus"/>
 
-                            <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus"/>
+                        <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult"/>
 
-                            <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult"/>
+                    </sfgrid:SfDataGrid.Columns>
 
-                        </sfgrid:SfDataGrid.Columns>
+                </sfgrid:SfDataGrid>
 
-                    </sfgrid:SfDataGrid>
+            </border:SfBorder>
 
-                </border:SfBorder>
-
-                <sfPager:SfDataPager x:Name ="DataPager"
-                                     PageSize="5" 
-                                     NumericButtonCount="14"
-                                     AutoEllipsisMode="None"
-                                     Source="{Binding PastResultsData}"
-                                     HorizontalOptions="FillAndExpand"
-                                     HeightRequest="50"
-                                     Margin="0,0,0,4"
-                                     IsTabStop="False"/>
-
-            </StackLayout>
+            <sfPager:SfDataPager x:Name ="DataPager"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    PageSize="7" 
+                    NumericButtonCount="14"
+                    AutoEllipsisMode="None"
+                    Source="{Binding PastResultsData}"
+                    HorizontalOptions="StartAndExpand"
+                    HeightRequest="50"
+                    Margin="0,26,80,0"
+                    IsTabStop="False"/>
 
             <Button Text="Exit"
                     Grid.Row="1"
+                    Grid.Column="1"
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToDashboardCommand }"
                     HorizontalOptions="End"
-                    Margin="0,0,40,0"/>
+                    Margin="0,26,40,0"/>
 
         </Grid>
 
