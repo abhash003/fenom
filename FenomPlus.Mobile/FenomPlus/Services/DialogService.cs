@@ -20,7 +20,7 @@ namespace FenomPlus.Services
 
         public async Task ShowSecondsProgress(string message, int seconds)
         {
-            IProgressDialog secondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.Gradient);
+            IProgressDialog secondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
             double increment = Convert.ToDouble(100 / seconds);
 
