@@ -29,7 +29,7 @@ namespace FenomPlus.Views
 
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    DeviceNotReadyWarning2();
+                    DeviceNotReadyWarningProgress();
                     return;
                 }
 
@@ -50,7 +50,7 @@ namespace FenomPlus.Views
 
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    DeviceNotReadyWarning2();                   
+                    DeviceNotReadyWarningProgress();                   
                     return;
                 }
 
@@ -62,13 +62,6 @@ namespace FenomPlus.Views
 
         private bool DeviceEnvironmentalWarning()
         {
-            //if (!DashboardViewModel.BleHub.ReadyForTest)
-            //{
-            //    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-            //    DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
-            //}
-
-
             // Get the latest environmental info - updates Cache
             DashboardViewModel.BleHub.RequestEnvironmentalInfo();
 
@@ -103,21 +96,21 @@ namespace FenomPlus.Views
             return true;
         }
 
-        private void DeviceNotReadyWarning1()
+        private void DeviceNotReadyWarningToast()
         {
             if (!DashboardViewModel.BleHub.ReadyForTest)
             {
                 int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
+                DashboardViewModel.Dialogs.ShowToast($"Device purging, please wait...", secondsRemaining);
             }
         }
 
-        private void DeviceNotReadyWarning2()
+        private void DeviceNotReadyWarningProgress()
         {
             if (!DashboardViewModel.BleHub.ReadyForTest)
             {
                 int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
+                DashboardViewModel.Dialogs.ShowSecondsProgress($"Device purging..", secondsRemaining);
             }
         }
 

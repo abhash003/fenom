@@ -42,12 +42,12 @@ namespace FenomPlus.Services
             }
         }
 
-        private bool SecondsProgressDialogShowing()
+        public bool SecondsProgressDialogShowing()
         {
             return SecondsProgressDialog.IsShowing;
         }
 
-        private void DismissSecondsProgressDialog()
+        public void DismissSecondsProgressDialog()
         {
             SecondsProgressDialog.Dispose();
         }
