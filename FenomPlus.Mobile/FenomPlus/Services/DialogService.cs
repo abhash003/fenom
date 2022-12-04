@@ -1,4 +1,5 @@
-﻿using Acr.UserDialogs;
+﻿
+using Acr.UserDialogs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,25 +19,37 @@ namespace FenomPlus.Services
             return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
         }
 
+        private IProgressDialog SecondsProgressDialog;
+
         public async Task ShowSecondsProgress(string message, int seconds)
         {
-            IProgressDialog secondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
+            SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
             double increment = Convert.ToDouble(100 / seconds);
 
             for (int i = 0; i < 100; i++)
             {
-                secondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+                SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
 
-                if (secondsProgressDialog.PercentComplete >= 99)
+                if (SecondsProgressDialog.PercentComplete >= 99)
                 {
-                    secondsProgressDialog.Dispose();
+                    SecondsProgressDialog.Dispose();
                 }
                 else
                 {
                     await Task.Delay(1000);
                 }
             }
+        }
+
+        private bool SecondsProgressDialogShowing()
+        {
+            return SecondsProgressDialog.IsShowing;
+        }
+
+        private void DismissSecondsProgressDialog()
+        {
+            SecondsProgressDialog.Dispose();
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)
