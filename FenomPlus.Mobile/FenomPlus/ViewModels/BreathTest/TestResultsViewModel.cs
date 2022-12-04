@@ -9,9 +9,6 @@ namespace FenomPlus.ViewModels
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -31,17 +28,11 @@ namespace FenomPlus.ViewModels
             BleHub.ReadyForTest = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private string _TestType;
         public string TestType
         {
@@ -53,9 +44,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private string testResult;
         public string TestResult
         {
@@ -67,9 +55,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
