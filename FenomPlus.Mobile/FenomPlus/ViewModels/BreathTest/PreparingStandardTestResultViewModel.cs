@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
@@ -11,9 +12,6 @@ namespace FenomPlus.ViewModels
     public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private int _seconds;
-
-        [ObservableProperty]
         private string _testType;
 
         public PreparingStandardTestResultViewModel()
@@ -21,26 +19,29 @@ namespace FenomPlus.ViewModels
 
         }
 
+        private Timer CalculationsTimer;
+
         public override void OnAppearing()
         {
             base.OnAppearing();
 
             TestType = Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
 
-            Seconds = Config.TestResultReadyWait;
-            Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
+            CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
+            CalculationsTimer.Elapsed += (sender, e) => CalculationsCompleted();
+            CalculationsTimer.Start();
         }
 
         public override void OnDisappearing()
         {
+            CalculationsTimer.Start(); // Just in case
+            CalculationsTimer.Dispose();
+
             base.OnDisappearing();
         }
 
-        private bool TimerCallback()
+        private bool CalculationsCompleted()
         {
-            if (Seconds > 0) 
-                Seconds--;
-
             if (Cache.FenomReady == true)
             {
                 var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
@@ -67,8 +68,6 @@ namespace FenomPlus.ViewModels
 
             return (Cache.FenomReady == false);
         }
-
-
 
         public override void NewGlobalData()
         {
