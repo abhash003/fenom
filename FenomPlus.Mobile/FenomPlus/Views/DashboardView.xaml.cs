@@ -29,7 +29,7 @@ namespace FenomPlus.Views
 
                 if (!DashboardViewModel.BleHub.ReadyForTest)
                 {
-                    DeviceNotReadyWarning1();
+                    DeviceNotReadyWarning2();
                     return;
                 }
 
