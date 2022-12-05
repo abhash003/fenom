@@ -98,20 +98,14 @@ namespace FenomPlus.Views
 
         private void DeviceNotReadyWarningToast()
         {
-            if (!DashboardViewModel.BleHub.ReadyForTest)
-            {
-                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowToast($"Device purging, please wait...", secondsRemaining);
-            }
+            int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+            DashboardViewModel.Dialogs.ShowToast($"Device purging, please wait...", secondsRemaining);
         }
 
         private void DeviceNotReadyWarningProgress()
         {
-            if (!DashboardViewModel.BleHub.ReadyForTest)
-            {
                 int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
                 DashboardViewModel.Dialogs.ShowSecondsProgress($"Device purging..", secondsRemaining);
-            }
         }
 
         private async void OnTutorial(object sender, EventArgs e)

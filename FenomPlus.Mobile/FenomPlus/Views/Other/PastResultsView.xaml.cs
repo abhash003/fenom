@@ -62,7 +62,6 @@ namespace FenomPlus.Views
             DataPager.Source = PastResultsViewModel.PastResultsData;
             PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
             DataPager.TabIndex = 0;
-
             DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
         }
