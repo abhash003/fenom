@@ -44,7 +44,10 @@ namespace FenomPlus.Services
 
         public bool SecondsProgressDialogShowing()
         {
-            return SecondsProgressDialog.IsShowing;
+            if (SecondsProgressDialog != null)
+                return SecondsProgressDialog.IsShowing;
+            else
+                return false;
         }
 
         public void DismissSecondsProgressDialog()

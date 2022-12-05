@@ -94,7 +94,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            _ = RefreshStatusAsync(true);
+            _ = RefreshStatusAsync();
 
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
@@ -166,12 +166,15 @@ namespace FenomPlus.ViewModels
             await RefreshStatusAsync();
         }
 
-        //private bool RefreshInProgress = false;
+        private bool RefreshInProgress = false;
 
-        public async Task RefreshStatusAsync(bool forceRefresh = false)
+        public async Task RefreshStatusAsync()
         {
-            //if (RefreshInProgress) // Prevents a collison of requests
-            //    return;
+            if (RefreshInProgress) // Prevents a collison of requests
+            {
+                await Task.Delay(1);
+                return;
+            }
 
             if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
             {
@@ -183,19 +186,7 @@ namespace FenomPlus.ViewModels
             if (Cache == null || Cache.EnvironmentalInfo == null)
                 return;
 
-            //RefreshInProgress = true;
-
-            if (forceRefresh)
-            {
-                // Stop the timer so we don't get a clash of requests
-                BluetoothStatusTimer.Stop();
-                BluetoothConnected = CheckDeviceConnection();
-                await UpdateDeviceAndEnvironmentalInfoAsync();
-
-                //Make sure to resart the timer
-                BluetoothCheckCount = 0;
-                BluetoothStatusTimer.Start();
-            }
+            RefreshInProgress = true;
 
             UpdateVersionNumbers();
 
@@ -216,7 +207,7 @@ namespace FenomPlus.ViewModels
 
             UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
 
-            //RefreshInProgress = false;
+            RefreshInProgress = false;
         }
 
         public void UpdateVersionNumbers()
@@ -654,7 +645,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
-            await RefreshStatusAsync(true);
+            await RefreshStatusAsync();
             await Services.Navigation.DeviceStatusView();
         }
 
