@@ -5,6 +5,7 @@ using System;
 using Xamarin.Forms;
 using Syncfusion.SfDataGrid.XForms;
 using Xamarin.Forms.Xaml;
+using Syncfusion.SfDataGrid.XForms.Exporting;
 
 namespace FenomPlus.Views
 {
@@ -25,8 +26,6 @@ namespace FenomPlus.Views
             PastResultsDataGrid.GridStyle = new CustomGridStyle();
 
             PastResultsDataGrid.Focus();
-
-            //PastResultsDataGrid.ExportToPdf or ExportToPdfGrid
         }
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -36,17 +35,33 @@ namespace FenomPlus.Views
 
         private void PDFExport_Clicked(object sender, EventArgs e)
         {
-            //PastResultsDataGrid
+            SaveAsPdf();
+        }
 
+        private void SaveAsPdf()
+        {
+            DataGridPdfExportingController pdfExport = new DataGridPdfExportingController();
 
-            //DataGridPdfExportingController pdfExport = new DataGridPdfExportingController();
-            //MemoryStream stream = new MemoryStream();
-            //var exportToPdf = pdfExport.ExportToPdf(this.dataGrid, new DataGridPdfExportOption()
-            //{
-            //    FitAllColumnsInOnePage = true,
-            //});
-            //exportToPdf.Save(stream);
-            //exportToPdf.Close(true);
+            DataGridPdfExportOption option = new DataGridPdfExportOption();
+            option.ExportAllPages = true;
+            option.GridLineType = GridLineType.Horizontal;
+            option.FitAllColumnsInOnePage = true;
+
+            MemoryStream stream = new MemoryStream();
+            var exportToPdf = pdfExport.ExportToPdf(PastResultsDataGrid, option);
+
+            exportToPdf.Save(stream);
+            exportToPdf.Close(true);
+
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "FenomPlus Past Results.pdf");
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            File.WriteAllBytes(filePath, stream.ToArray());
+
             //if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows)
             //    Xamarin.Forms.DependencyService.Get<ISaveWindowsPhone>().Save("DataGrid.pdf", "application/pdf", stream);
             //else

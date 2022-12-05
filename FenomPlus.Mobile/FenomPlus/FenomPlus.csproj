@@ -9,10 +9,10 @@
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.DataGridExport" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="20.3.0.57" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.DataGridExport" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="20.3.0.59" />
     <PackageReference Include="TinySvgHelper" Version="1.0.266" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />  
@@ -24,11 +24,11 @@
     <PackageReference Include="SkiaSharp" Version="2.88.3" />
     <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
     <PackageReference Include="Xam.Plugins.Settings" Version="5.0.0-beta" />
-    <PackageReference Include="Syncfusion.Xamarin.SfDataGrid" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Licensing" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericTextBox" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Xamarin.SfBusyIndicator" Version="20.3.0.57" />
+    <PackageReference Include="Syncfusion.Xamarin.SfDataGrid" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericTextBox" Version="20.3.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.SfBusyIndicator" Version="20.3.0.59" />
     <PackageReference Include="Xamarin.Forms.Svg" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>

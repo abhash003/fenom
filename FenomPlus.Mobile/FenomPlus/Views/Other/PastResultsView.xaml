@@ -45,6 +45,7 @@
 
                 <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
                                     ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                    LiveDataUpdateMode="AllowDataShaping"
                                     VerticalOptions="Fill"
                                     HorizontalOptions="Fill"
                                     AllowResizingColumn="False"

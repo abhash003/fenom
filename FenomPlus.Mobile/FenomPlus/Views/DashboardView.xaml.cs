@@ -104,8 +104,8 @@ namespace FenomPlus.Views
 
         private void DeviceNotReadyWarningProgress()
         {
-                int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowSecondsProgress($"Device purging..", secondsRemaining);
+            int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
+            DashboardViewModel.Dialogs.ShowSecondsProgress($"Device purging..", secondsRemaining);
         }
 
         private async void OnTutorial(object sender, EventArgs e)
