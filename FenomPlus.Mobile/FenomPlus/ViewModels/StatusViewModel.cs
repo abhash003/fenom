@@ -149,12 +149,10 @@ namespace FenomPlus.ViewModels
 
             BluetoothCheckCount++;
 
-            bool priorBluetoothConnection = BluetoothConnected;
-
             BluetoothConnected = CheckDeviceConnection();
             Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
-            if ((BluetoothConnected && !priorBluetoothConnection) || (BluetoothCheckCount == RequestNewStatusInterval))
+            if (BluetoothCheckCount == RequestNewStatusInterval)
             {
                 await UpdateDeviceAndEnvironmentalInfoAsync();
                 Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");

@@ -53,9 +53,16 @@ namespace FenomPlus.Views
             base.OnAppearing();
             PastErrorsViewModel.OnAppearing();
 
-            PastErrorsViewModel.UpdateRecentErrorsDataCommand.Execute(null);
+            PastErrorsViewModel.RefreshRecentErrorsCommand.Execute(null);
 
-            DataPager.Refresh();
+            // Trying to resolve an issue where datagrid doesn't show updated data
+            DataPager.Source = null;
+            DataPager.Source = PastErrorsViewModel.RecentErrorsData;
+
+            RecentErrorsDataGrid.ItemsSource = null;
+            RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
+
+            //DataPager.Refresh();
             RecentErrorsDataGrid.RefreshColumns();
         }
 

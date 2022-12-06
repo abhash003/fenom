@@ -6,6 +6,7 @@ using FenomPlus.Models;
 using Syncfusion.Data.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
@@ -14,11 +15,11 @@ namespace FenomPlus.ViewModels
     public partial class PastResultsViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private List<BreathManeuverResultDataModel> _pastResultsData;
+        private ObservableCollection<BreathManeuverResultDataModel> _pastResultsData;
 
         public PastResultsViewModel()
         {
-            PastResultsData = new List<BreathManeuverResultDataModel>();
+            PastResultsData = new ObservableCollection<BreathManeuverResultDataModel>();
         }
 
         [RelayCommand]

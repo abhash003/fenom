@@ -5,6 +5,7 @@ using FenomPlus.Database.Tables;
 using FenomPlus.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
@@ -13,16 +14,15 @@ namespace FenomPlus.ViewModels
     public partial class PastErrorsViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private List<BreathManeuverErrorDataModel> _recentErrorsData;
+        private ObservableCollection<BreathManeuverErrorDataModel> _recentErrorsData;
 
         public PastErrorsViewModel()
         {
-            RecentErrorsData = new List<BreathManeuverErrorDataModel>();
-            UpdateRecentErrorsData();
+            RecentErrorsData = new ObservableCollection<BreathManeuverErrorDataModel>();
         }
 
         [RelayCommand]
-        public void UpdateRecentErrorsData()
+        public void RefreshRecentErrors()
         {
             RecentErrorsData.Clear();
 
@@ -72,7 +72,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            //UpdateRecentErrorsData();
+            RefreshRecentErrors();
         }
 
         public override void OnDisappearing()

@@ -71,13 +71,18 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            PastResultsViewModel.OnAppearing();
 
             PastResultsViewModel.RefreshPastResultsCommand.Execute(null);
 
+            // Trying to resolve an issue where datagrid doesn't show updated data
+            DataPager.Source = null;
             DataPager.Source = PastResultsViewModel.PastResultsData;
+
+            PastResultsDataGrid.ItemsSource = null;
             PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
-            DataPager.TabIndex = 0;
-            DataPager.Refresh();
+
+            //DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
         }
 
