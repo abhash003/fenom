@@ -25,7 +25,9 @@ namespace FenomPlus.Views
             BindingContext = PastResultsViewModel = new PastResultsViewModel();
             PastResultsDataGrid.GridStyle = new CustomGridStyle();
 
-            PastResultsDataGrid.Focus();
+            // Trying to resolve an issue where datagrid doesn't show updated data
+            DataPager.Source = PastResultsViewModel.PastResultsData;
+            PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
         }
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -75,23 +77,19 @@ namespace FenomPlus.Views
 
             PastResultsViewModel.RefreshPastResultsCommand.Execute(null);
 
-            // Trying to resolve an issue where datagrid doesn't show updated data
-            DataPager.Source = null;
-            DataPager.Source = PastResultsViewModel.PastResultsData;
+            //// Trying to resolve an issue where datagrid doesn't show updated data
+            //DataPager.Source = PastResultsViewModel.PastResultsData;
+            //PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
 
-            PastResultsDataGrid.ItemsSource = null;
-            PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
-
-            //DataPager.Refresh();
+            DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
+
+            ExitButton.Focus();
         }
-
-
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            PastResultsViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()

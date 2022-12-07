@@ -23,7 +23,7 @@ namespace FenomPlus.Controls
         private string _label;
 
         [ObservableProperty]
-        private string _description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim.";
+        private string _description;
 
         [ObservableProperty]
         private string _buttonText;

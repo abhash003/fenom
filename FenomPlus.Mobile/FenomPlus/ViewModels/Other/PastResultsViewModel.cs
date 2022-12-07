@@ -14,8 +14,7 @@ namespace FenomPlus.ViewModels
 {
     public partial class PastResultsViewModel : BaseViewModel
     {
-        [ObservableProperty]
-        private ObservableCollection<BreathManeuverResultDataModel> _pastResultsData;
+        public ObservableCollection<BreathManeuverResultDataModel> PastResultsData;
 
         public PastResultsViewModel()
         {
@@ -70,7 +69,6 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            RefreshPastResults();
         }
 
         public override void OnDisappearing()

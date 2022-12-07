@@ -95,7 +95,8 @@
                     Margin="0,26,80,0"
                     IsTabStop="False"/>
 
-            <Button Text="Exit"
+            <Button x:Name="ExitButton" 
+                    Text="Exit"
                     Grid.Row="1"
                     Grid.Column="1"
                     Style="{StaticResource defaultButton}"

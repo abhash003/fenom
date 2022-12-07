@@ -699,5 +699,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\bar_chart.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\wo_battery_charge_green.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

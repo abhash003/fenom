@@ -47,6 +47,9 @@ namespace FenomPlus.Services
         public ILoggerFactory Logger { get; set; }
 
         public int BatteryLevel { get; set; }
+
+        public DateTime DeviceExpireDate { get; set; }
+
         public DateTime SensorExpireDate { get; set; }
 
         public TestTypeEnum TestType { get; set; }
