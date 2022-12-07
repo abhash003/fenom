@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
+using Plugin.BLE;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
@@ -158,10 +159,13 @@ namespace FenomPlus.ViewModels
 
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            // Get latest environmental info
-            Services.BleHub.RequestEnvironmentalInfo();
+            if (CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count > 0)
+            {
+                // Get latest environmental info
+                Services.BleHub.RequestEnvironmentalInfo();
 
-            RefreshIconStatus();
+                RefreshIconStatus();
+            }
         }
 
         public void RefreshIconStatus()

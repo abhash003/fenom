@@ -34,6 +34,7 @@ namespace FenomPlus.ViewModels
 
                     if (!Services.BleHub.BleDevice.Connected)
                     {
+                        //Services.BleHub.BleDevice.Connected = true;
                         // ToDo: Remove - This is a double check
                     }
 

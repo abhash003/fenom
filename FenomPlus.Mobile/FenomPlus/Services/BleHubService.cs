@@ -169,7 +169,7 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsConnected(bool devicePowerOn = false)
         {
-            Services.LogCat.Print("******** IsConnected: devicePowerOn: {0}", devicePowerOn.ToString());
+            //Services.LogCat.Print("******** IsConnected: devicePowerOn: {0}", devicePowerOn.ToString());
 
             // do we have a device
             if (BleDevice != null)

@@ -8,6 +8,9 @@ using System.Linq;
 using Android;
 using Acr.UserDialogs;
 using TinySvgHelper;
+using System.Runtime.InteropServices;
+
+using FenomPlus.Services.NewArch;
 
 namespace FenomPlus.Droid
 {
@@ -28,14 +31,21 @@ namespace FenomPlus.Droid
 
             // register the navigation here
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
-            AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
+            //AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
+            AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
 
             LoadApplication(new App());
 
             // start device service
-            AppServices.Container.Resolve<IDeviceService>().Start();
+            //AppServices.Container.Resolve<IDeviceService>().Start();
+            var svc = AppServices.Container.Resolve<FenomPlus.Services.NewArch.IDeviceService>();
 
             //CheckPermissions();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
         }
 
         /// <summary>
