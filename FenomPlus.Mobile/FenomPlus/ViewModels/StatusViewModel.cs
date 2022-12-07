@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
+using FenomPlus.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
@@ -71,7 +72,7 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            UpdateBluetooth(BluetoothConnected);
+            RefreshIconStatus(isBluetoothConnected: BluetoothConnected);
 
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
@@ -79,7 +80,15 @@ namespace FenomPlus.ViewModels
             // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             {
-                UpdateBluetooth(Services.BleHub.IsConnected());
+                bool isBluetoothConnected = m.Value;
+                if (isBluetoothConnected)
+                {
+                    if (App.GetCurrentPage() is DevicePowerOnView)
+                    {
+                        Services.Navigation.DashboardView();
+                    }
+                }
+                RefreshIconStatus(isBluetoothConnected);
             });
         }
 
@@ -164,9 +173,16 @@ namespace FenomPlus.ViewModels
             RefreshIconStatus();
         }
 
-        public void RefreshIconStatus()
+        public void RefreshIconStatus(bool isBluetoothConnected = false)
         {
-            BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+            if (!isBluetoothConnected)
+            {
+                BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+            }
+            else
+            {
+                BluetoothConnected = isBluetoothConnected;
+            }
 
             if (Services.BleHub.BreathTestInProgress)
             {
@@ -189,6 +205,8 @@ namespace FenomPlus.ViewModels
             UpdateRelativeHumidity(Services.Cache.EnvironmentalInfo.Humidity);
 
             UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
+
+            UpdateBluetooth(BluetoothConnected);
 
             Debug.WriteLine("Note: Status icons updated!");
         }
@@ -227,7 +245,7 @@ namespace FenomPlus.ViewModels
                 SetDefaults();
             }
 
-            RefreshIconStatus();
+            
         }
 
         public const int BatteryCritical = 3;
