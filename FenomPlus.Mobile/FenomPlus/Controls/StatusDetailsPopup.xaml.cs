@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
@@ -27,8 +28,27 @@ namespace FenomPlus.Controls
 
         private async void MoreHelpButton_OnClicked(object sender, EventArgs e)
         {
-            Uri uri = new Uri(StatusButtonViewModel.HelpLink);
-            await Browser.OpenAsync(uri);
+            var current = Connectivity.NetworkAccess;
+            var profiles = Connectivity.ConnectionProfiles;
+
+            await StatusButtonViewModel.Services.Dialogs.ShowAlertAsync("Internet connection currently not available.",
+                "Connection Error", "Exit");
+
+
+            return;
+
+            if (current == NetworkAccess.Internet)
+            {
+                Uri uri = new Uri(StatusButtonViewModel.HelpLink);
+                await Browser.OpenAsync(uri);
+            }
+            else
+            {
+                await StatusButtonViewModel.Services.Dialogs.ShowAlertAsync(
+                    "Internet connection currently not available.",
+                    "Connection Error",
+                    "Exit");
+            }
         }
     }
 }

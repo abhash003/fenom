@@ -9,31 +9,28 @@ namespace FenomPlus
         public static string DateTimeFormatString = "O"; // Sortable e.g. “2016-12-20T10:34:37.3456”
         public static string PrettyTimeFormatString = "MMMM d, yyyy h:mm tt"; // e.g. “November 10, 2022 3:08 PM”
 
-        public static int BatteryCritical = 3;
-        public static int BatteryWarning = 20;
-        public static int Battery50 = 50;
-        public static int Battery75 = 75;
-        public static int Battery100 = 100;
+        public static int DeviceExpired = 0;
+        public static int DeviceWarning60Days = 60;
 
-        public static int SensorLow = 0;
-        public static int SensorWarning = 60;
+        public static int SensorExpired = 0;
+        public static int SensorWarning60Days = 60;
 
-        public static int QualityControlExpirationLow = 0;
+        public static int QualityControlExpired = 0;
         public static int QualityControlExpirationWarning = 1;
-        public static int QualityControlExpirationFull = 7;
 
-        public static int DeviceLow = 0;
-        public static int DeviceWarning = 60;
-        public static int DeviceFull = 1 * 365 + 10;
+        public static double PressureLow75 = 75.35;
+        public static double PressureHigh110 = 110.65;
 
-        public static int RelativeHumidityLow = 18;
-        public static int RelativeHumidityWarning = 92;
+        public static double TemperatureLow15 = 15;
+        public static double TemperatureHigh35 = 35;
 
-        public static int TemperatureLow = 15;
-        public static int TemperatureWarning = 35;
+        public static double HumidityLow18 = 18;
+        public static double HumidityWarning25 = 25;
+        public static double HumidityHigh90 = 90;
 
-        public static int PressureLow = 75;
-        public static int PressureWarning = 110;
-        //public static int PressureFull = 100;
+        public static int BatteryCritical3 = 3;
+        public static int BatteryWarning20 = 20;
+        public static int BatteryLevel50 = 50;
+        public static int BatteryLevel75 = 75;
     }
 }

@@ -72,11 +72,11 @@
             <Label x:Name="Header"
                     Grid.Row="0"
                     Text="{Binding Header}"
+                    TextColor="#333" 
                     VerticalOptions="Center" 
                     VerticalTextAlignment="Center" 
                     HorizontalOptions="Center" 
                     Margin="0,5,0,0" 
-                    TextColor="#333" 
                     FontSize="16"/>
 
             <Image x:Name="Image"
@@ -88,25 +88,25 @@
             <Label x:Name="Value"
                     Grid.Row="2" 
                     Text="{Binding Value}"
+                    TextColor="{Binding ValueColor}" 
                     VerticalOptions="Center" 
                     VerticalTextAlignment="Start" 
                     HorizontalOptions="Center" 
-                    TextColor="Red" 
                     FontSize="20"/>
 
             <Label x:Name="Label"
                     Grid.Row="3" 
                     Text="{Binding Label}"
+                    TextColor="#333" 
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" 
-                    TextColor="#333" 
                     FontSize="12"/>
 
             <Label x:Name="ButtonText"
                     Grid.Row="4" 
                     Text="{Binding ButtonText}"
-                    FontSize="16"
                     TextColor="#077DCD" 
+                    FontSize="16"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Margin="0,5,0,5"/>

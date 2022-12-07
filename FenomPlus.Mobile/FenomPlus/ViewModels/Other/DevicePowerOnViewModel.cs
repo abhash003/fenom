@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Views;
 using Plugin.BLE.Abstractions;
+using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Forms;
 using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
@@ -55,19 +56,29 @@ namespace FenomPlus.ViewModels
             Seconds = 30;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
             _ = BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, true, async (IBleDevice bleDevice) =>
-                        {
-                if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await BleHub.StopScan();
-                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    if (await Services.BleHub.Connect(bleDevice) == false) return;
-                    await FoundDevice(bleDevice);
+                    if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) 
+                        return;
+
+                    await BleHub.StopScan();
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        if (await Services.BleHub.Connect(bleDevice) == false)
+                        {
+                            return;
+                        }
+
+                            
+                        await FoundDevice(bleDevice);
+                    });
+
+                }, async (IEnumerable<IBleDevice> bleDevices) =>
+                {
+                    await Services.Navigation.DashboardView();
+                    await Services.Dialogs.ShowAlertAsync("Bluetooth could not connect to device", 
+                        "No Device found",
+                        "Exit");
                 });
-
-            }, (IEnumerable<IBleDevice> bleDevices) =>
-            {
-
-            });
         }
 
         /// <summary>

@@ -19,6 +19,9 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private string _value;
 
+        [ObservableProperty] 
+        private Color _valueColor;
+
         [ObservableProperty]
         private string _label;
 
@@ -29,20 +32,11 @@ namespace FenomPlus.Controls
         private string _buttonText;
 
         [ObservableProperty]
-        private Color _color;
-
-        [ObservableProperty]
         private string _helpLink = "https://www.caireinc.com/";
 
         public StatusButtonViewModel()
         {
-            
         }
 
-        //[RelayCommand]
-        //private void ButtonPress()
-        //{
-
-        //}
     }
 }

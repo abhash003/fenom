@@ -148,7 +148,7 @@
             <Label Text="Copyright © 2022 Caire Diagnostics - All rights reserved" 
                Grid.Row="1"
                Grid.Column="0"
-               FontSize="Small"
+               FontSize="12"
                HorizontalOptions="Center"
                VerticalOptions="Center"/>
 
