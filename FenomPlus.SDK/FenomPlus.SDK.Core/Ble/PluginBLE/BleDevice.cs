@@ -87,7 +87,8 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            int mtuActual = await Device.RequestMtuAsync(164);
+                            // TODO: jac: disabled because it causes a disconnect
+                            //int mtuActual = await Device.RequestMtuAsync(164);
                         }
                         catch (Exception e)
                         {
