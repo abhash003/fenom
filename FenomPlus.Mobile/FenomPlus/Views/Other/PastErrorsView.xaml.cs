@@ -23,10 +23,10 @@ namespace FenomPlus.Views
             BindingContext = PastErrorsViewModel = new PastErrorsViewModel();
             RecentErrorsDataGrid.GridStyle = new CustomGridStyle();
 
-            RecentErrorsDataGrid.Focus();
-
-            //RecentErrorsDataGrid.ExportToPdf or ExportToPdfGrid
+            DataPager.Source = PastErrorsViewModel.RecentErrorsData;
+            RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
         }
+
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             //throw new NotImplementedException();
@@ -55,15 +55,10 @@ namespace FenomPlus.Views
 
             PastErrorsViewModel.RefreshRecentErrorsCommand.Execute(null);
 
-            // Trying to resolve an issue where datagrid doesn't show updated data
-            DataPager.Source = null;
-            DataPager.Source = PastErrorsViewModel.RecentErrorsData;
-
-            RecentErrorsDataGrid.ItemsSource = null;
-            RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
-
-            //DataPager.Refresh();
+            DataPager.Refresh();
             RecentErrorsDataGrid.RefreshColumns();
+
+            ExitButton.Focus();
         }
 
         protected override void OnDisappearing()

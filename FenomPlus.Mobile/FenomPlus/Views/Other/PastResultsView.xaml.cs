@@ -25,7 +25,6 @@ namespace FenomPlus.Views
             BindingContext = PastResultsViewModel = new PastResultsViewModel();
             PastResultsDataGrid.GridStyle = new CustomGridStyle();
 
-            // Trying to resolve an issue where datagrid doesn't show updated data
             DataPager.Source = PastResultsViewModel.PastResultsData;
             PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
         }
@@ -76,10 +75,6 @@ namespace FenomPlus.Views
             PastResultsViewModel.OnAppearing();
 
             PastResultsViewModel.RefreshPastResultsCommand.Execute(null);
-
-            //// Trying to resolve an issue where datagrid doesn't show updated data
-            //DataPager.Source = PastResultsViewModel.PastResultsData;
-            //PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
 
             DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();

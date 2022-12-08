@@ -172,7 +172,7 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
-            if (RefreshInProgress) // Prevents a collison of requests
+            if (RefreshInProgress) // Prevents a collision of requests
             {
                 await Task.Delay(1);
                 return;
@@ -410,7 +410,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            PressureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} kPa";
+            PressureViewModel.Value = $"{value} kPa";
             PressureViewModel.ButtonText = "Info";
 
             if (value <= Constants.PressureLow75)
@@ -455,7 +455,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            TemperatureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} °C";
+            TemperatureViewModel.Value = $"{value} °C";
             TemperatureViewModel.ButtonText = "Info";
 
             if (value <= Constants.TemperatureLow15)
@@ -500,7 +500,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            HumidityViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)}%";
+            HumidityViewModel.Value = $"{value}%";
             HumidityViewModel.ButtonText = "Info";
 
             if (value <= Constants.HumidityLow18)

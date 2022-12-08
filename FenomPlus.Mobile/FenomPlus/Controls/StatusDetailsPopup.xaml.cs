@@ -28,16 +28,7 @@ namespace FenomPlus.Controls
 
         private async void MoreHelpButton_OnClicked(object sender, EventArgs e)
         {
-            var current = Connectivity.NetworkAccess;
-            var profiles = Connectivity.ConnectionProfiles;
-
-            await StatusButtonViewModel.Services.Dialogs.ShowAlertAsync("Internet connection currently not available.",
-                "Connection Error", "Exit");
-
-
-            return;
-
-            if (current == NetworkAccess.Internet)
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 Uri uri = new Uri(StatusButtonViewModel.HelpLink);
                 await Browser.OpenAsync(uri);

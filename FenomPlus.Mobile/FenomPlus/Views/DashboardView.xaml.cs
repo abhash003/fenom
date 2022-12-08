@@ -86,12 +86,11 @@ namespace FenomPlus.Views
                 return false;
             }
 
-            // ToDo: maybe add this back in when unit has battery?
-            //if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
-            //{
-            //    DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
-            //    return false;
-            //}
+            if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            {
+                DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
+                return false;
+            }
 
             return true;
         }
