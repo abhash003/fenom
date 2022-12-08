@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Forms;
+using FenomPlus.SDK.Core.Ble.PluginBLE;
 
 namespace FenomPlus.ViewModels
 {
     public partial class DevicePowerOnViewModel : BaseViewModel
     {
-
         private bool Stop;
 
         [ObservableProperty]
@@ -51,29 +51,66 @@ namespace FenomPlus.ViewModels
 
         public void StartScan()
         {
-            Seconds = 30;
-            Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-            _ = BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, true, async (IBleDevice bleDevice) =>
-            {
-                if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await BleHub.StopScan();
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    if (await Services.BleHub.Connect(bleDevice) == false) return;
-                    await FoundDevice(bleDevice);
-                });
 
-            }, (IEnumerable<IBleDevice> bleDevices) =>
+            Device.StartTimer(TimeSpan.FromSeconds(1), ScanTimerCallback);
+
+            Seconds = 30;
+            TimeSpan timeSpan = new TimeSpan(0,0,0,Seconds);
+            BleHub.Scan(timeSpan, true, true, DeviceFoundCallback, (IEnumerable<IBleDevice> bleDevices) =>
             {
 
             });
         }
+
+        private async void DeviceFoundCallback(IBleDevice bleDevice)
+        {
+            if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
+
+            _ = await BleHub.StopScan();
+
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (await Services.BleHub.Connect(bleDevice) == false)
+                {
+                    return;
+                }
+
+                await FoundDevice(bleDevice);
+            });
+        }
+
+        private bool ScanTimerCallback()
+        {
+            Seconds--;
+
+            if (Seconds <= 0)
+            {
+                _ = Services.BleHub.Disconnect();
+                StopScan();
+                StartScan();
+                return false;
+            }
+
+            return ((Seconds >= 0) && (Stop == false));
+        }
+
+        //private Task async DeviceFoundCallback()
+        //{
+        //    if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
+        //    await BleHub.StopScan();
+        //    Device.BeginInvokeOnMainThread(async () =>
+        //    {
+        //        if (await Services.BleHub.Connect(bleDevice) == false) return;
+        //        await FoundDevice(bleDevice);
+        //    });
+        //}
 
         public async Task FoundDevice(IBleDevice bleDevice)
         {
             Stop = true;
             Cache.DeviceInfo = null;
             await Services.BleHub.RequestDeviceInfo();
+
             Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
 
         }
@@ -92,20 +129,6 @@ namespace FenomPlus.ViewModels
             if (Cache.EnvironmentalInfo == null) return true;
             //Services.Navigation.DashboardView();
             return false;
-        }
-
-        private bool TimerCallback()
-        {
-            Seconds--;
-            if (Seconds <= 0)
-            {
-                _ = Services.BleHub.Disconnect();
-                StopScan();
-                StartScan();
-                return false;
-            }
-
-            return ((Seconds >= 0) && (Stop == false));
         }
 
         public override void OnAppearing()

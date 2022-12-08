@@ -1,22 +1,23 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class StopExhalingViewModel : BaseViewModel
+    public partial class StopExhalingViewModel : BaseViewModel
     {
+        private bool Stop;
+
+        [ObservableProperty]
+        private int _seconds;
+
         public StopExhalingViewModel()
         {
 
         }
 
-        private bool Stop;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -25,23 +26,18 @@ namespace FenomPlus.ViewModels
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnDisappearing()
         {
             base.OnDisappearing();
             Stop = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         private bool TimerCallback()
         {
             Seconds--;
-            if (Stop == true) seconds = 0;
+            if (Stop == true) 
+                Seconds = 0;
+
             if ((Seconds <= 0) && (Stop == false))
             {
                 if (Cache.BreathManeuver.StatusCode != 0x00)
@@ -57,26 +53,11 @@ namespace FenomPlus.ViewModels
                     Services.Navigation.PreparingStandardTestResultView();
                 }
             }
+
             return Seconds > 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private int seconds;
-        public int Seconds
-        {
-            get => seconds;
-            set
-            {
-                seconds = value;
-                OnPropertyChanged("Seconds");
-            }
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();

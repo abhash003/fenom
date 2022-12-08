@@ -15,9 +15,6 @@ namespace FenomPlus.Views
             BindingContext = DevicePowerOnViewModel = new DevicePowerOnViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -25,18 +22,12 @@ namespace FenomPlus.Views
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             DevicePowerOnViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();

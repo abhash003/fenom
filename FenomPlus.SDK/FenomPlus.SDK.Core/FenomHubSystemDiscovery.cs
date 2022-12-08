@@ -88,7 +88,9 @@ namespace FenomPlus.SDK.Core
                     return null;
                 }
 
-                await BleRadio.Scan(scanTime.TotalMilliseconds, scanBondedDevices, scanBleDevices,
+                await BleRadio.Scan(scanTime.TotalMilliseconds, 
+                    scanBondedDevices, 
+                    scanBleDevices, 
                     ((IBleDevice bleDevice) =>
                     {
                         if ((bleDevice != null) && (!string.IsNullOrEmpty(bleDevice.Name)))

@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FenomPlus.Controls;
+using FenomPlus.Views;
+using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using FenomPlus.Controls;
-using FenomPlus.Interfaces;
-using FenomPlus.Models;
-using FenomPlus.Services;
-using FenomPlus.ViewModels;
-using FenomPlus.Views;
-using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Svg;
-using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
 // Note: Shared by DeviceStatusHubView and TitleContentView
 
@@ -413,7 +401,7 @@ namespace FenomPlus.ViewModels
             PressureViewModel.Value = $"{value} kPa";
             PressureViewModel.ButtonText = "Info";
 
-            if (value <= Constants.PressureLow75)
+            if (value < Constants.PressureLow76)
             {
                 PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_red.png";
@@ -422,7 +410,16 @@ namespace FenomPlus.ViewModels
                 PressureViewModel.Label = "Out of Range";
                 PressureViewModel.Description = "The ambient pressure is too low. FeNO testing is disabled until the pressure is higher.";
             }
-            else if (value >= Constants.PressureHigh110)
+            else if (value < Constants.PressureWarning78)
+            {
+                PressureBarIconVisible = true;
+                PressureBarIcon = "wo_pressure_yellow.png";
+                HumidityViewModel.ImagePath = "pressure_yellow.png";
+                PressureViewModel.ValueColor = Color.FromHex("#333");
+                PressureViewModel.Label = "Warning Range";
+                PressureViewModel.Description = "The ambient pressure is near low limit.";
+            }
+            else if (value > Constants.PressureHigh110)
             {
                 PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_red.png";
@@ -430,6 +427,15 @@ namespace FenomPlus.ViewModels
                 PressureViewModel.ValueColor = Color.Red;
                 PressureViewModel.Label = "Out of Range";
                 PressureViewModel.Description = "The ambient pressure is too high. FeNO testing is disabled until the pressure is lower.";
+            }
+            else if (value > Constants.PressureWarning108)
+            {
+                PressureBarIconVisible = true;
+                PressureBarIcon = "wo_pressure_yellow.png";
+                HumidityViewModel.ImagePath = "pressure_yellow.png";
+                PressureViewModel.ValueColor = Color.FromHex("#333");
+                PressureViewModel.Label = "Warning Range";
+                PressureViewModel.Description = "The ambient pressure is near high limit.";
             }
             else
             {
@@ -458,7 +464,7 @@ namespace FenomPlus.ViewModels
             TemperatureViewModel.Value = $"{value} °C";
             TemperatureViewModel.ButtonText = "Info";
 
-            if (value <= Constants.TemperatureLow15)
+            if (value < Constants.TemperatureLow15)
             {
                 TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_red.png";
@@ -467,7 +473,7 @@ namespace FenomPlus.ViewModels
                 TemperatureViewModel.Label = "Out of Range";
                 TemperatureViewModel.Description = "The device is too cold. Move the device to a warmer location. FeNO testing is disabled until it has warmed up.";
             }
-            else if (value >= Constants.TemperatureHigh35)
+            else if (value > Constants.TemperatureHigh35)
             {
                 TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_red.png";
@@ -503,7 +509,7 @@ namespace FenomPlus.ViewModels
             HumidityViewModel.Value = $"{value}%";
             HumidityViewModel.ButtonText = "Info";
 
-            if (value <= Constants.HumidityLow18)
+            if (value < Constants.HumidityLow20)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
@@ -512,7 +518,7 @@ namespace FenomPlus.ViewModels
                 HumidityViewModel.Label = "Out of Range";
                 HumidityViewModel.Description = "The ambient humidity is too low. Move the device to a more humid location. FeNO testing is disabled until the humidity is higher.";
             }
-            else if (value <= Constants.HumidityWarning25)
+            else if (value < Constants.HumidityWarning25)
             {
                 HumidityBarIconVisible = true; 
                 HumidityBarIcon = "wo_humidity_yellow.png";
@@ -521,7 +527,7 @@ namespace FenomPlus.ViewModels
                 HumidityViewModel.Label = "Warning Range";
                 HumidityViewModel.Description = "The ambient humidity is low. Move the device to a more humid location.";
             }
-            else if (value >= Constants.HumidityHigh90)
+            else if (value > Constants.HumidityHigh90)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
@@ -529,6 +535,15 @@ namespace FenomPlus.ViewModels
                 HumidityViewModel.ValueColor = Color.Red;
                 HumidityViewModel.Label = "Out of Range";
                 HumidityViewModel.Description = "The ambient humidity is too high. Move the device to a drier location. FeNO testing is disabled until the humidity is lower.";
+            }
+            else if (value > Constants.HumidityWarning85)
+            {
+                HumidityBarIconVisible = true;
+                HumidityBarIcon = "wo_humidity_yellow.png";
+                HumidityViewModel.ImagePath = "humidity_yellow.png";
+                HumidityViewModel.ValueColor = Color.FromHex("#333");
+                HumidityViewModel.Label = "Warning Range";
+                HumidityViewModel.Description = "The ambient humidity is high. Move the device to a less humid location.";
             }
             else
             {

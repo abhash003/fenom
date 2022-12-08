@@ -17,6 +17,7 @@ namespace FenomPlus.ViewModels
 
         [ObservableProperty]
         private int _tutorialIndex = 1;
+
         partial void OnTutorialIndexChanged(int value)
         {
             if (TutorialIndex < 1)

@@ -18,14 +18,17 @@ namespace FenomPlus
         public static int QualityControlExpired = 0;
         public static int QualityControlExpirationWarning = 1;
 
-        public static double PressureLow75 = 75.35;
-        public static double PressureHigh110 = 110.65;
+        public static double PressureLow76 = 76; 
+        public static double PressureWarning78 = 78;
+        public static double PressureWarning108 = 108;
+        public static double PressureHigh110 = 110;
 
         public static double TemperatureLow15 = 15;
         public static double TemperatureHigh35 = 35;
 
-        public static double HumidityLow18 = 18;
+        public static double HumidityLow20 = 20;
         public static double HumidityWarning25 = 25;
+        public static double HumidityWarning85 = 85;
         public static double HumidityHigh90 = 90;
 
         public static int BatteryCritical3 = 3;

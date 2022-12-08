@@ -1,10 +1,17 @@
 ﻿using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 
 namespace FenomPlus.ViewModels
 {
-    public class TestResultsViewModel : BaseViewModel
+    public partial class TestResultsViewModel : BaseViewModel
     {
+        [ObservableProperty]
+        private string _testType;
+
+        [ObservableProperty]
+        private string _testResult;
+
         public TestResultsViewModel()
         {
         }
@@ -31,28 +38,6 @@ namespace FenomPlus.ViewModels
         public override void OnDisappearing()
         {
             base.OnDisappearing();
-        }
-
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
-
-        private string testResult;
-        public string TestResult
-        {
-            get => testResult;
-            set
-            {
-                testResult = value;
-                OnPropertyChanged("TestResult");
-            }
         }
 
         public override void NewGlobalData()
