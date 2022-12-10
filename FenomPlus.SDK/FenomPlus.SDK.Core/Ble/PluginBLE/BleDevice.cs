@@ -45,7 +45,9 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         public string PairSerialNumber { get; set; }
         public bool IsBonded { get; set; }
 
-        public bool Connected => Device.State == DeviceState.Connected;
+
+        //public bool Connected => Device.State == DeviceState.Connected */ // after on connected event this is FALSE! WHY!!!;
+        public bool Connected => (CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count > 0); 
 
         public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
         public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
@@ -87,7 +89,6 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            // TODO: jac: disabled because it causes a disconnect
                             //int mtuActual = await Device.RequestMtuAsync(164);
                         }
                         catch (Exception e)

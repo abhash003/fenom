@@ -167,10 +167,13 @@ namespace FenomPlus.ViewModels
 
         private void DeviceStatusTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            // Get latest environmental info
-            Services.BleHub.RequestEnvironmentalInfo();
+            if (CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count > 0)
+            {
+                // Get latest environmental info
+                Services.BleHub.RequestEnvironmentalInfo();
 
-            RefreshIconStatus();
+                RefreshIconStatus();
+            }
         }
 
         public void RefreshIconStatus(bool isBluetoothConnected = false)
