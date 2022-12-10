@@ -113,7 +113,8 @@ namespace FenomPlus.ViewModels
         {
             if (Services.Cache.DeviceInfo == null) return true;
             Services.Cache.EnvironmentalInfo = null;
-            Services.BleHub.RequestEnvironmentalInfo();
+            // jac: do not request, this is updated by the device
+            //Services.BleHub.RequestEnvironmentalInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }

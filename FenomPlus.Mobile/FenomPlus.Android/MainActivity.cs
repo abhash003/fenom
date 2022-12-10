@@ -46,7 +46,7 @@ namespace FenomPlus.Droid
             var svc = AppServices.Container.Resolve<FenomPlus.Services.NewArch.IDeviceService>();
 
             // wait for the service to connect to the first FENOM device it sees
-            new System.Threading.Tasks.Task(() =>
+            new System.Threading.Tasks.Task(async () =>
             {
                 IDevice device = null;
 
@@ -56,20 +56,34 @@ namespace FenomPlus.Droid
 
                 try
                 {
-                    // device might become disconencted, who know, better to watch out for edge cases
                     device.OnConnected += (object sender, EventArgs e) =>
                     {
                         if (device.Connected)
                         {
-                            var _string = "connected";
+                            System.Console.WriteLine("Device.OnConnected: passed");
                         }
                         else
                         {
-                            var _string = "not connected";
+                            System.Console.WriteLine("Device.OnConnected: failed");
                         }
                     };
 
-                    device.ConnectAsync();
+                    device.OnDisconnected += (object sender, EventArgs e) =>
+                    {
+                        if (!device.Connected)
+                        {
+                            System.Console.WriteLine("Device.OnDisconnected: passed");
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("Device.OnDisconnected: failed");
+                        }
+                    };
+
+                    await device.ConnectAsync();
+
+                    //device.Disconnect();
+
                 }
                 catch (Exception ex)
                 {
