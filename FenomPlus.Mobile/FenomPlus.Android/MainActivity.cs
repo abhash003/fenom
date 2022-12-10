@@ -11,6 +11,9 @@ using TinySvgHelper;
 using System.Runtime.InteropServices;
 
 using FenomPlus.Services.NewArch;
+using Java.IO;
+
+using System;
 
 namespace FenomPlus.Droid
 {
@@ -34,13 +37,47 @@ namespace FenomPlus.Droid
             //AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
             AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
 
+            CheckPermissions();
+
             LoadApplication(new App());
 
             // start device service
             //AppServices.Container.Resolve<IDeviceService>().Start();
             var svc = AppServices.Container.Resolve<FenomPlus.Services.NewArch.IDeviceService>();
 
-            //CheckPermissions();
+            // wait for the service to connect to the first FENOM device it sees
+            new System.Threading.Tasks.Task(() =>
+            {
+                IDevice device = null;
+
+                // wait until the service selects a device
+                while ((device = svc.CurrentDevice) == null)
+                {}
+
+                try
+                {
+                    // device might become disconencted, who know, better to watch out for edge cases
+                    device.OnConnected += (object sender, EventArgs e) =>
+                    {
+                        if (device.Connected)
+                        {
+                            var _string = "connected";
+                        }
+                        else
+                        {
+                            var _string = "not connected";
+                        }
+                    };
+
+                    device.ConnectAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new NotImplementedException();
+                }
+
+            }).Start();
+
         }
 
         protected override void OnStop()
