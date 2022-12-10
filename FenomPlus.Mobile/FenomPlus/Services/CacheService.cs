@@ -75,7 +75,7 @@ namespace FenomPlus.Services
 
         public DeviceStatusInfo DeviceStatusInfo { get; set; }
 
-        public BreathManeuver BreathManeuver { get; set; }
+        //public Breath BreathManeuver { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
 
