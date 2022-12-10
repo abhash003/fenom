@@ -65,21 +65,21 @@ namespace FenomPlus.Views
             // Get the latest environmental info - updates Cache
             DashboardViewModel.BleHub.RequestEnvironmentalInfo();
 
-            if (DashboardViewModel.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow20 ||
-                DashboardViewModel.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh90)
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                DashboardViewModel.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
             {
                 DashboardViewModel.Dialogs.ShowToast($"Humidity Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Humidity}", 5);
                 return false;
             }
 
-            if (DashboardViewModel.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow76 ||
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
                 DashboardViewModel.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
             {
                 DashboardViewModel.Dialogs.ShowToast($"Pressure Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Pressure}", 5);
                 return false;
             }
 
-            if (DashboardViewModel.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow15 ||
+            if (DashboardViewModel.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
                 DashboardViewModel.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
             {
                 DashboardViewModel.Dialogs.ShowToast($"Temperature Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Temperature}", 5);

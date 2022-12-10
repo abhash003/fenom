@@ -69,9 +69,13 @@ namespace FenomPlus.Services
         
         public EnvironmentalInfo EnvironmentalInfo { get; set; }
 
-        public BreathManeuver BreathManeuver { get; set; }
-
         public DeviceInfo DeviceInfo { get; set; }
+
+        public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
+        public DeviceStatusInfo DeviceStatusInfo { get; set; }
+
+        public BreathManeuver BreathManeuver { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
 
@@ -122,10 +126,7 @@ namespace FenomPlus.Services
         {
             try
             {
-                if (EnvironmentalInfo == null)
-                {
-                    EnvironmentalInfo = new EnvironmentalInfo();
-                }
+                EnvironmentalInfo ??= new EnvironmentalInfo();
                 EnvironmentalInfo.Decode(data);
 
                 BatteryLevel = EnvironmentalInfo.BatteryLevel;
@@ -136,14 +137,70 @@ namespace FenomPlus.Services
             return EnvironmentalInfo;
         }
 
+        public DeviceInfo DecodeDeviceInfo(byte[] data)
+        {
+            try
+            {
+                DeviceInfo ??= new DeviceInfo();
+
+                DeviceInfo.Decode(data);
+
+                // setup serial number
+                if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
+                {
+                    DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
+
+                    // update the database
+                    Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
+                }
+
+                // setup firmware version
+                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
+
+                // get SensorExpireDate
+                SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return DeviceInfo;
+        }
+
+        public ErrorStatusInfo DecodeErrorStatusInfo(byte[] data)
+        {
+            try
+            {
+                ErrorStatusInfo ??= new ErrorStatusInfo();
+                ErrorStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return ErrorStatusInfo;
+        }
+
+        public DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data)
+        {
+            try
+            {
+                DeviceStatusInfo ??= new DeviceStatusInfo();
+                DeviceStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return DeviceStatusInfo;
+        }
+
         public BreathManeuver DecodeBreathManeuver(byte[] data)
         {
             try
             {
-                if (BreathManeuver == null)
-                {
-                    BreathManeuver = new BreathManeuver();
-                }
+                BreathManeuver ??= new BreathManeuver();
 
                 BreathManeuver.Decode(data);
 
@@ -183,47 +240,11 @@ namespace FenomPlus.Services
             return BreathManeuver;
         }
 
-        public DeviceInfo DecodeDeviceInfo(byte[] data)
-        {
-            try
-            {
-                if (DeviceInfo == null)
-                {
-                    DeviceInfo = new DeviceInfo();
-                }
-
-                DeviceInfo.Decode(data);
-
-                // setup serial number
-                if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
-                {
-                    DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
-                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
-
-                    // update the database
-                    Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
-                }
-
-                // setup firmware version
-                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
-
-                // get SensorExpireDate
-                SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
-
-                NotifyViews();
-                NotifyViewModels();
-            } finally { }
-            return DeviceInfo;
-        }
-
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
             try
             {
-                if (DebugMsg == null)
-                {
-                    DebugMsg = new DebugMsg();
-                }
+                DebugMsg ??= new DebugMsg();
 
                 DebugMsg.Decode(data);
 

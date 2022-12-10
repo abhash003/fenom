@@ -11,12 +11,13 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Ble\" />
     <Folder Include="$(MSBuildThisFileDirectory)Features\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
     <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
     <Folder Include="$(MSBuildThisFileDirectory)Ble\Interface\" />
     <Folder Include="$(MSBuildThisFileDirectory)Ble\PluginBLE\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DeviceStatusInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ErrorStatusInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\AsyncHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Logger.cs" />

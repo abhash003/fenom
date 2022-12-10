@@ -27,8 +27,10 @@ namespace FenomPlus.Interfaces
         Task<bool> StopTest();
         Task<bool> RequestDeviceInfo();
         Task<bool> RequestEnvironmentalInfo();
+        Task<bool> RequestErrorStatusInfo();
+        Task<bool> RequestDeviceStatusInfo();
         Task<bool> SendMessage(MESSAGE message);
-        Task<bool> SendSerialNumber(string SerailNumber);
+        Task<bool> SendSerialNumber(string SerialNumber);
         Task<bool> SendDateTime(string date, string time);
         Task<bool> SendCalibration(double cal1, double cal2, double cal3);
         Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3);

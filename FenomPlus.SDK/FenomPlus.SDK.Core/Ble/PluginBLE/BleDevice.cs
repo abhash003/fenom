@@ -94,7 +94,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         Device.UpdateConnectionInterval(ConnectionInterval.Normal);
 
-                        _ = await GetCharacterasticsAync();
+                        _ = await GetCharacteristicsAsync();
 
                         return true;
                     }
@@ -160,7 +160,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<IGattCharacteristic>> GetCharacterasticsAync()
+        public async Task<IEnumerable<IGattCharacteristic>> GetCharacteristicsAsync()
         {
             try
             {
@@ -221,7 +221,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             if(gattCharacteristics.Count <= 0)
             {
-                _ = await GetCharacterasticsAync();
+                _ = await GetCharacteristicsAsync();
                 gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             }
             foreach (IGattCharacteristic item in gattCharacteristics)

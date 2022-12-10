@@ -267,6 +267,24 @@ namespace FenomPlus.Services
             return false;
         }
 
+        public async Task<bool> RequestErrorStatusInfo()
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.ERRORSTATUSINFO();
+            }
+            return false;
+        }
+
+        public async Task<bool> RequestDeviceStatusInfo()
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.DEVICESTATUSINFO();
+            }
+            return false;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -284,13 +302,13 @@ namespace FenomPlus.Services
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="serialNumber"></param>
+        /// <param name="SerialNumber"></param>
         /// <returns></returns>
-        public async Task<bool> SendSerialNumber(string serialNumber)
+        public async Task<bool> SendSerialNumber(string SerialNumber)
         {
             if (IsConnected())
             {
-                return await BleDevice.SERIALNUMBER(serialNumber);
+                return await BleDevice.SERIALNUMBER(SerialNumber);
             }
             return false;
         }

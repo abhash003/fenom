@@ -34,6 +34,8 @@ namespace FenomPlus.Interfaces
         BreathManeuver DecodeBreathManeuver(byte[] data);
         DeviceInfo DecodeDeviceInfo(byte[] data);
         DebugMsg DecodeDebugMsg(byte[] data);
+        ErrorStatusInfo DecodeErrorStatusInfo(byte[] data);
+        DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data);
 
         bool ReadyForTest { get; set; }
         bool FenomReady { get; set; }

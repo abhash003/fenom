@@ -49,6 +49,28 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             Characteristic.StartUpdatesAsync();
                         }
                     }
+
+
+
+                    else if (Uuid.ToString().ToUpper() == Constants.ErrorStatusCharacteristic.ToUpper())
+                    {
+                        Characteristic.ValueUpdated += ErrorStatusInfoHandler;
+                        if (Characteristic.CanUpdate)
+                        {
+                            Characteristic.StartUpdatesAsync();
+                        }
+                    }
+                    else if (Uuid.ToString().ToUpper() == Constants.DeviceStatusCharacteristic.ToUpper())
+                    {
+                        Characteristic.ValueUpdated += DeviceStatusInfoHandler;
+                        if (Characteristic.CanUpdate)
+                        {
+                            Characteristic.StartUpdatesAsync();
+                        }
+                    }
+
+
+
                     else if (Uuid.ToString().ToUpper() == Constants.BreathManeuverCharacteristic.ToUpper())
                     {
                         Characteristic.ValueUpdated += BreathManeuverHandler;
@@ -259,6 +281,43 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             {
                 _lock.Release();
                 //PerformanceLogger.EndLog(typeof(GattCharacteristic), "EnvironmentalInfoHandler");
+            }
+        }
+
+        private void ErrorStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
+        {
+            _lock.Wait();
+            try
+            {
+                Cache.DecodeErrorStatusInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** ErrorInfoHandler called: ErrorInfo Updated in Cache");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _lock.Release();
+                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "EnvironmentalInfoHandler");
+            }
+        }
+
+        private void DeviceStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
+        {
+            _lock.Wait();
+            try
+            {
+                Cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** StatusInfoHandler called: StatusInfo Updated in Cache");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 

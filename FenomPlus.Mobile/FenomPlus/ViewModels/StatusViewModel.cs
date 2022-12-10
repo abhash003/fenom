@@ -4,6 +4,7 @@ using FenomPlus.Controls;
 using FenomPlus.Views;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Essentials;
@@ -398,10 +399,10 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            PressureViewModel.Value = $"{value} kPa";
+            PressureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} kPa";
             PressureViewModel.ButtonText = "Info";
 
-            if (value < Constants.PressureLow76)
+            if (value < Constants.PressureLow75)
             {
                 PressureBarIconVisible = true;
                 PressureBarIcon = "wo_pressure_red.png";
@@ -461,10 +462,10 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            TemperatureViewModel.Value = $"{value} °C";
+            TemperatureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} °C";
             TemperatureViewModel.ButtonText = "Info";
 
-            if (value < Constants.TemperatureLow15)
+            if (value < Constants.TemperatureLow14)
             {
                 TemperatureBarIconVisible = true;
                 TemperatureBarIcon = "wo_temperature_red.png";
@@ -506,10 +507,10 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            HumidityViewModel.Value = $"{value}%";
+            HumidityViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)}%";
             HumidityViewModel.ButtonText = "Info";
 
-            if (value < Constants.HumidityLow20)
+            if (value < Constants.HumidityLow18)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
@@ -527,7 +528,7 @@ namespace FenomPlus.ViewModels
                 HumidityViewModel.Label = "Warning Range";
                 HumidityViewModel.Description = "The ambient humidity is low. Move the device to a more humid location.";
             }
-            else if (value > Constants.HumidityHigh90)
+            else if (value > Constants.HumidityHigh92)
             {
                 HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_red.png";
