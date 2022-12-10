@@ -29,8 +29,10 @@ namespace FenomPlus.SDK.Core.Ble.Interface
 
 
         Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
+
         Task<bool> ERRORSTATUSINFO();
         Task<bool> DEVICESTATUSINFO();
+
         //Task<bool> BREATHMANUEVER();
         //Task<bool> TRAININGMODE();
 

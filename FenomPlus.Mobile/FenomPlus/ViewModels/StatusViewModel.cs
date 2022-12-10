@@ -90,19 +90,6 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
-
-            //Received whenever a Bluetooth connect or disconnect occurs -Problem code because this message lags the actual event by seconds
-            //WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
-            //{
-            //    //BluetoothStatusTimer.Stop(); // Stop the timer so we don't crash with it
-
-            //    //// Force an update
-
-            //    //BluetoothCheck(null, null);
-
-            //    //BluetoothCheckCount = 10; // Start on advanced count to get more instantaneous feedback
-            //    //BluetoothStatusTimer.Start();
-            //});
         }
 
         private bool CheckDeviceConnection()
