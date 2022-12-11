@@ -276,36 +276,36 @@ namespace FenomPlus.Controls
 
             DrawNeedle(canvas, GaugeData);
 
-            //SKPaint textPaint = gaugeStickPaint;
+            SKPaint textPaint = gaugeStickPaint;
 
-            //string UnitsText = Text;
-            //float ValueFontSize = 20;
+            string UnitsText = Text;
+            float ValueFontSize = 20;
 
-            //float textWidth = textPaint.MeasureText(UnitsText);
-            //textPaint.TextSize = 9f;
+            float textWidth = textPaint.MeasureText(UnitsText);
+            textPaint.TextSize = 9f;
 
-            //SKRect textBounds = SKRect.Empty;
-            //textPaint.MeasureText(UnitsText, ref textBounds);
+            SKRect textBounds = SKRect.Empty;
+            textPaint.MeasureText(UnitsText, ref textBounds);
 
-            //float xText = -1 * textBounds.MidX;
-            //float yText = 60 - textBounds.Height;
+            float xText = -1 * textBounds.MidX;
+            float yText = 60 - textBounds.Height;
 
-            //// And draw the text
-            //canvas.DrawText(UnitsText, xText, yText, textPaint);
+            // And draw the text
+            canvas.DrawText(UnitsText, xText, yText, textPaint);
 
-            //// Draw the Value on the display
-            //var valueText = Value.ToString();
-            //float valueTextWidth = textPaint.MeasureText(valueText);
-            //textPaint.TextSize = ValueFontSize;
+            // Draw the Value on the display
+            var valueText = Value.ToString();
+            float valueTextWidth = textPaint.MeasureText(valueText);
+            textPaint.TextSize = ValueFontSize;
 
-            //textPaint.MeasureText(valueText, ref textBounds);
+            textPaint.MeasureText(valueText, ref textBounds);
 
-            //xText = -1 * textBounds.MidX;
-            //yText = 75 - textBounds.Height;
+            xText = -1 * textBounds.MidX;
+            yText = 75 - textBounds.Height;
 
-            //// And draw the text
-            //canvas.DrawText(valueText, xText, yText, textPaint);
-            //canvas.Restore();
+            // And draw the text
+            canvas.DrawText(valueText, xText, yText, textPaint);
+            canvas.Restore();
         }
 
         void DrawStar(SKCanvas canvas, float value)
@@ -339,18 +339,18 @@ namespace FenomPlus.Controls
 
         void DrawNeedle(SKCanvas canvas, float value)
         {
-            float startangle = -180;
+            float startAngle = -180;
             float angle = 0f;
 
-                 if (value >= 0.0        && value < White1Top)  angle = startangle + 22.5f;
-            else if (value >= White1Top  && value < Red1Top)    angle = startangle + 22.5f  + ((value - White1Top)  * (67.5f - 0) / (Red1Top    - White1Top))  + 0;
-            else if (value >= Red1Top    && value < Red2Top)    angle = startangle + 90f    + ((value - Red1Top)    * (22.5f - 0) / (Red2Top    - Red1Top))    + 0;
-            else if (value >= Red2Top    && value < Yellow1Top) angle = startangle + 112.5f + ((value - Red2Top)    * (22.5f - 0) / (Yellow1Top - Red2Top))    + 0;
-            else if (value >= Yellow1Top && value < Green1Top)  angle = startangle + 135f   + ((value - Yellow1Top) * (90f - 0)   / (Green1Top  - Yellow1Top)) + 0;
-            else if (value >= Green1Top  && value < Yellow2Top) angle = startangle + 225f   + ((value - Green1Top)  * (22.5f - 0) / (Yellow2Top - Green1Top))  + 0;
-            else if (value >= Yellow2Top && value < Red3Top)    angle = startangle + 247.5f + ((value - Yellow2Top) * (22.5f - 0) / (Red3Top    - Yellow2Top)) + 0;
-            else if (value >= Red3Top    && value < Red4Top)    angle = startangle + 270f   + ((value - Red3Top)    * (67.5f - 0) / (Red4Top    - Red3Top))    + 0;
-            else if (value >= Red4Top    && value <= White2Top) angle = startangle + 337.5f;
+                 if (value >= 0.0        && value < White1Top)  angle = startAngle + 22.5f;
+            else if (value >= White1Top  && value < Red1Top)    angle = startAngle + 22.5f  + ((value - White1Top)  * (67.5f - 0) / (Red1Top    - White1Top))  + 0;
+            else if (value >= Red1Top    && value < Red2Top)    angle = startAngle + 90f    + ((value - Red1Top)    * (22.5f - 0) / (Red2Top    - Red1Top))    + 0;
+            else if (value >= Red2Top    && value < Yellow1Top) angle = startAngle + 112.5f + ((value - Red2Top)    * (22.5f - 0) / (Yellow1Top - Red2Top))    + 0;
+            else if (value >= Yellow1Top && value < Green1Top)  angle = startAngle + 135f   + ((value - Yellow1Top) * (90f - 0)   / (Green1Top  - Yellow1Top)) + 0;
+            else if (value >= Green1Top  && value < Yellow2Top) angle = startAngle + 225f   + ((value - Green1Top)  * (22.5f - 0) / (Yellow2Top - Green1Top))  + 0;
+            else if (value >= Yellow2Top && value < Red3Top)    angle = startAngle + 247.5f + ((value - Yellow2Top) * (22.5f - 0) / (Red3Top    - Yellow2Top)) + 0;
+            else if (value >= Red3Top    && value < Red4Top)    angle = startAngle + 270f   + ((value - Red3Top)    * (67.5f - 0) / (Red4Top    - Red3Top))    + 0;
+            else if (value >= Red4Top    && value <= White2Top) angle = startAngle + 337.5f;
 
             canvas.Save();
             canvas.RotateDegrees(angle);

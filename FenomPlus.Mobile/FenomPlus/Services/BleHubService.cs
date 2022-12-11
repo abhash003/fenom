@@ -212,31 +212,21 @@ namespace FenomPlus.Services
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="breathTestEnum"></param>
-        /// <returns></returns>
         public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
         {
             if(IsConnected())
             {
                 BreathTestInProgress = true;
-                return await BleDevice.BREATHTEST(breathTestEnum);
+                return await BleDevice.BREATHMANUEVER(breathTestEnum);
             }
             return false;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public async Task<bool> StopTest()
         {
             if (IsConnected())
             {
                 BreathTestInProgress = false;
-                return await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+                return await BleDevice.BREATHMANUEVER(BreathTestEnum.Stop);
             }
             return false;
         }

@@ -21,35 +21,23 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             return await WRITEREQUEST(message,1);
         }
 
-        public async Task<bool> ERRORSTATUSINFO()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_ERRORSTATUSINFO);
-            return await WRITEREQUEST(message, 1);
-        }
-
         public async Task<bool> DEVICESTATUSINFO()
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICESTATUSINFO);
             return await WRITEREQUEST(message, 1);
         }
 
-        public async Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
+        public async Task<bool> ERRORSTATUSINFO()
         {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHTEST, (Byte)breathTestEnum);
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_ERRORSTATUSINFO);
             return await WRITEREQUEST(message, 1);
         }
 
-        //public async Task<bool> TRAININGMODE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
-        //    return await WRITEREQUEST(message,1);
-        //}
-
-        //public async Task<bool> BREATHMANUEVER()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER);
-        //    return await WRITEREQUEST(message,1);
-        //}
+        public async Task<bool> BREATHMANUEVER(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
+        {
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER, (byte)breathTestEnum);
+            return await WRITEREQUEST(message, 1);
+        }
 
         public async Task<bool> DEBUGMSG()
         {
@@ -57,11 +45,11 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             return await WRITEREQUEST(message,1);
         }
 
-        public async Task<bool> DEBUGMANUEVERTYPE()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
-            return await WRITEREQUEST(message,1);
-        }
+        //public async Task<bool> DEBUGMANUEVERTYPE()
+        //{
+        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
+        //    return await WRITEREQUEST(message,1);
+        //}
 
         public async Task<bool> MESSAGE(MESSAGE message)
         {

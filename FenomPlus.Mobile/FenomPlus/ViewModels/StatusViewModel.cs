@@ -148,21 +148,16 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
-            if (RefreshInProgress) // Prevents a collision of requests
+            // To early to get status or don't update environmental properties during test
+            if (!BluetoothConnected || 
+                RefreshInProgress || 
+                Services?.BleHub == null || 
+                Services.BleHub.BreathTestInProgress || 
+                Cache?.EnvironmentalInfo == null)
             {
                 await Task.Delay(1);
                 return;
             }
-
-            if (BluetoothConnected && Services.BleHub.BreathTestInProgress)
-            {
-                // Don't update environmental properties during test
-                return;
-            }
-
-            // To early to get status
-            if (Cache == null || Cache.EnvironmentalInfo == null)
-                return;
 
             RefreshInProgress = true;
 

@@ -26,19 +26,13 @@ namespace FenomPlus.SDK.Core.Ble.Interface
 
         Task<bool> DEVICEINFO();
         Task<bool> ENVIROMENTALINFO();
-
-
-        Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
-
+        Task<bool> BREATHMANUEVER(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
         Task<bool> ERRORSTATUSINFO();
         Task<bool> DEVICESTATUSINFO();
-
-        //Task<bool> BREATHMANUEVER();
-        //Task<bool> TRAININGMODE();
-
-
         Task<bool> DEBUGMSG();
-        Task<bool> DEBUGMANUEVERTYPE();
+
+        //Task<bool> DEBUGMANUEVERTYPE();
+
         Task<bool> MESSAGE(MESSAGE message);
         Task<bool> SERIALNUMBER(string SerialNumber);   
         Task<bool> DATETIME(string date, string time);
