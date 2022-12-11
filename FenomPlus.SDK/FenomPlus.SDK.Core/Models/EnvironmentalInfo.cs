@@ -7,12 +7,20 @@ namespace FenomPlus.SDK.Core.Models
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class EnvironmentalInfo : BaseCharacteristic
     {
-        public static int Min = 13;
+        // ToDo: New Code
+        //public static int Min = 13;
+        public static int Min = 4;
 
-        public float Temperature;
-        public float Humidity;
-        public float Pressure;
-        public byte BatteryLevel;       // new version
+        // ToDo: New Code
+        //public float Temperature;
+        //public float Humidity;
+        //public float Pressure;
+        //public byte BatteryLevel;
+
+        public byte Temperature;
+        public byte Humidity;
+        public byte Pressure;
+        public byte BatteryLevel;
 
         public static EnvironmentalInfo Create(byte[] data)
         {
@@ -26,13 +34,21 @@ namespace FenomPlus.SDK.Core.Models
             {
                 Data = data;
 
+                // ToDo: New Code
+                //if ((data != null) && (data.Length >= Min))
+                //{
+                //    Temperature = System.BitConverter.ToSingle(data, 0);
+                //    Humidity = System.BitConverter.ToSingle(data, 4);
+                //    Pressure = System.BitConverter.ToSingle(data, 8);
+                //    BatteryLevel = Data[12];
+                //}
+
                 if ((data != null) && (data.Length >= Min))
                 {
-                    Temperature = System.BitConverter.ToSingle(data, 0);
-                    Humidity = System.BitConverter.ToSingle(data, 4);
-                    Pressure = System.BitConverter.ToSingle(data, 8);
-                    BatteryLevel = Data[12];
-
+                    Temperature = Data[0];
+                    Humidity = Data[1];
+                    Pressure = Data[2];
+                    BatteryLevel = Data[3];
                 }
             }
             finally { }
