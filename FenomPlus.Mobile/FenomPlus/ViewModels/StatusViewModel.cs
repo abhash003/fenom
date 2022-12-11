@@ -87,6 +87,12 @@ namespace FenomPlus.ViewModels
                     {
                         Services.Navigation.DashboardView();
                     }
+
+                    if (App.GetCurrentPage() == null)
+                        return;
+
+                    if (App.GetCurrentPage() is DashboardView)
+                        return;
                 }
                 RefreshIconStatus(isBluetoothConnected);
             });

@@ -16,51 +16,7 @@ namespace FenomPlus.ViewModels
 
         private bool Stop;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public DevicePowerOnViewModel()
-        {
-            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
-            {
-                // Handle the message here, with r being the recipient and m being the
-                // input message. Using the recipient passed as input makes it so that
-                // the lambda expression doesn't capture "this", improving performance.
-
-                bool isConnected = (bool)m.Value;
-
-                if (isConnected) // Todo: We shouldn't need both but trying to resolve weak connections
-                {
-
-                    if (!Services.BleHub.BleDevice.Connected)
-                    {
-                        //Services.BleHub.BleDevice.Connected = true;
-                        // ToDo: Remove - This is a double check
-                    }
-
-                    Debug.WriteLine("********* Device Connected!");
-
-                    if (App.GetCurrentPage() == null)
-                        return;
-
-                    if (App.GetCurrentPage() is DashboardView)
-                        return;
-
-                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
-                    {
-                        // Only navigate if during startup
-                        Services.Navigation.DashboardView();
-                    }
-
-                }
-                else
-                {
-                    Debug.WriteLine("********* Device Disconnected!");
-                }
-
-            });
-        }
-
+        
         /// <summary>
         /// 
         /// </summary>
