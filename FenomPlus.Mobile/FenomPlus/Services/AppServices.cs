@@ -1,5 +1,6 @@
 ﻿using System;
 using FenomPlus.Interfaces;
+using FenomPlus.Services.NewArch;
 using FenomPlus.ViewModels;
 using TinyIoC;
 

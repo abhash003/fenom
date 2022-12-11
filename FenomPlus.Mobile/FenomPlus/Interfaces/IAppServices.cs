@@ -1,4 +1,6 @@
 ﻿
+using FenomPlus.Services.NewArch;
+
 namespace FenomPlus.Interfaces
 {
     public interface IAppServices

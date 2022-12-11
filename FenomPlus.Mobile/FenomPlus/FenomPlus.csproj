@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
+    <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
