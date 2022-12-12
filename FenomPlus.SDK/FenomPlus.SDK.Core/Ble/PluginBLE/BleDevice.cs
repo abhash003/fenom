@@ -226,11 +226,6 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             }
 
-            if (!Connected)
-            {
-                Throwexception
-            }
-
             foreach (IGattCharacteristic item in gattCharacteristics)
             {
                 if (!item.Uuid.Equals(guid)) continue;

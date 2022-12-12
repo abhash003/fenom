@@ -189,7 +189,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         
         private static readonly Object m_Lock = new Object();
         
-        /
+        
         public async Task<bool> Scan(double scanTime, bool scanBondedDevices, bool scanBleDevices, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null, Action scanTimeoutCallback = null)
         {
             try
