@@ -18,50 +18,50 @@ namespace FenomPlus.Views
 
         private async void OnStandardTest(object sender, EventArgs e)
         {
-            if (DashboardViewModel.Services.BleHub.IsNotConnectedRedirect())
+            if (DashboardViewModel.Services.Device.IsNotConnectedRedirect())
             {
-                if (!DashboardViewModel.Services.BleHub.ReadyForTest)
+                if (!DashboardViewModel.Services.Device.ReadyForTest)
                 {
                     DeviceNotReadyWarning1();
                     return;
                 }
 
                 DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Standard;
-                await DashboardViewModel.Services.BleHub.StartTest(BreathTestEnum.Start10Second);
+                await DashboardViewModel.Services.Device.StartTest(BreathTestEnum.Start10Second);
                 await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
 
         private async void OnShortTest(object sender, EventArgs e)
         {
-            if (DashboardViewModel.Services.BleHub.IsNotConnectedRedirect())
+            if (DashboardViewModel.Services.Device.IsNotConnectedRedirect())
             {
-                if (!DashboardViewModel.Services.BleHub.ReadyForTest)
+                if (!DashboardViewModel.Services.Device.ReadyForTest)
                 {
                     DeviceNotReadyWarning2();                   
                     return;
                 }
 
                 DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Short;
-                await DashboardViewModel.Services.BleHub.StartTest(BreathTestEnum.Start6Second);
+                await DashboardViewModel.Services.Device.StartTest(BreathTestEnum.Start6Second);
                 await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
 
         private void DeviceNotReadyWarning1()
         {
-            if (!DashboardViewModel.Services.BleHub.ReadyForTest)
+            if (!DashboardViewModel.Services.Device.ReadyForTest)
             {
-                int secondsRemaining = DashboardViewModel.Services.BleHub.DeviceReadyCountDown;
+                int secondsRemaining = DashboardViewModel.Services.Device.DeviceReadyCountDown;
                 DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
             }
         }
 
         private void DeviceNotReadyWarning2()
         {
-            if (!DashboardViewModel.Services.BleHub.ReadyForTest)
+            if (!DashboardViewModel.Services.Device.ReadyForTest)
             {
-                int secondsRemaining = DashboardViewModel.Services.BleHub.DeviceReadyCountDown;
+                int secondsRemaining = DashboardViewModel.Services.Device.DeviceReadyCountDown;
                 DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
             }
         }

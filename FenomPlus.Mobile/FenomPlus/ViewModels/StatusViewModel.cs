@@ -177,7 +177,7 @@ namespace FenomPlus.ViewModels
             {
                 // Get latest environmental info
                 // jac: do not request on timer, this is updated by the device
-                //Services.BleHub.RequestEnvironmentalInfo();
+                //Services.Device.RequestEnvironmentalInfo();
 
                 RefreshIconStatus();
             }
@@ -187,14 +187,14 @@ namespace FenomPlus.ViewModels
         {
             if (!isBluetoothConnected)
             {
-                BluetoothConnected = Services.BleHub.IsConnected(); // Update just in case
+                BluetoothConnected = Services.Device.IsConnected; // Update just in case
             }
             else
             {
                 BluetoothConnected = isBluetoothConnected;
             }
 
-            if (Services.BleHub.BreathTestInProgress)
+            if (Services.Device.BreathTestInProgress)
             {
                 // Don't update during test
                 return;

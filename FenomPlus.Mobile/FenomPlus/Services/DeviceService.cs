@@ -28,6 +28,14 @@ using PluginBleIDevice = Plugin.BLE.Abstractions.Contracts.IDevice;
 using System.Dynamic;
 using Plugin.Settings;
 using Syncfusion.Data;
+using FenomPlus.SDK.Abstractions;
+using FenomPlus.SDK.Core.Ble.Interface;
+using FenomPlus.SDK.Core.Features;
+using FenomPlus.SDK.Core.Models;
+using FenomPlus.SDK.Core;
+using System.Diagnostics;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 #endregion
 
@@ -81,11 +89,28 @@ namespace FenomPlus.Services.NewArch
         abstract IDevice CurrentDevice { get; }
         #endregion
 
-        //Task ConnectAsync(IDevice device);
-        //Task DisconnectAsync(IDevice device);
+        int DeviceReadyCountDown { get; set; }
+        bool ReadyForTest { get; set; }
 
-        //private EventHandler<EventArgs> _onConnected;
-        //public event EventHandler<EventArgs> OnConnected;
+        Task<bool> Connect(IBleDevice bleDevice);
+        Task<bool> Disconnect();
+
+        //bool IsConnected(bool devicePowerOn = false);
+        bool IsNotConnectedRedirect(bool devicePowerOn = false);
+
+        bool BreathTestInProgress { get; set; }
+        Task<bool> StartTest(BreathTestEnum breathTestEnum);
+        Task<bool> StopTest();
+        Task<bool> RequestDeviceInfo();
+        Task<bool> RequestEnvironmentalInfo();
+        Task<bool> SendMessage(MESSAGE message);
+        Task<bool> SendSerialNumber(string SerailNumber);
+        Task<bool> SendDateTime(string date, string time);
+        Task<bool> SendCalibration(double cal1, double cal2, double cal3);
+        Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
+
+        Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null);
+        Task<bool> StopScan();
     }
 
     /// <summary>
@@ -93,15 +118,7 @@ namespace FenomPlus.Services.NewArch
     /// </summary>
     public class DeviceService : BaseService, IDeviceService, IDisposable
     {
-        /*
-        private EventHandler<EventArgs> _onConnected;
-        public event EventHandler<EventArgs> OnConnected
-        {
-            add { _onConnected += value; }
-            remove { _onConnected -= value; }
-        }
-        */
-
+        readonly IDialogService DialogService;
         #region Creation / Disposal
 
         public DeviceService()
@@ -109,6 +126,11 @@ namespace FenomPlus.Services.NewArch
             SetupBLE();
             SetupUSB();
             StartMonitor();
+            DialogService = Container.Resolve<IDialogService>();
+
+            ReadyForTest = true;
+            DeviceReadyTimer = new Timer(1000);
+            DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
         }
 
         public void Dispose()
@@ -121,7 +143,335 @@ namespace FenomPlus.Services.NewArch
         #region Fields
         bool _scanningBLE;
         bool _scanningUSB;
+        private readonly Timer DeviceReadyTimer;
         #endregion
+
+        public int DeviceReadyCountDown { get; set; }
+
+        
+        private bool _readyForTest;
+        public bool ReadyForTest
+        {
+            get => _readyForTest;
+            set
+            {
+                _readyForTest = value;
+
+                if (_readyForTest == false)
+                {
+                    DeviceReadyCountDown = 32;
+                    DeviceReadyTimer.Start();
+                }
+            }
+        }
+
+        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            DeviceReadyCountDown -= 1;
+
+            if (DeviceReadyCountDown <= 0)
+            {
+                ReadyForTest = true;
+                DeviceReadyTimer.Stop();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IBleDevice BleDevice { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private IFenomHubSystemDiscovery fenomHubSystemDiscovery;
+        public IFenomHubSystemDiscovery FenomHubSystemDiscovery
+        {
+            get
+            {
+                if (fenomHubSystemDiscovery == null)
+                {
+                    fenomHubSystemDiscovery = new FenomHubSystemDiscovery();
+                    fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
+
+                }
+                return fenomHubSystemDiscovery;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Connecting { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> StopScan()
+        {
+            return await FenomHubSystemDiscovery.StopScan();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="scanTime"></param>
+        /// <param name="deviceFoundCallback"></param>
+        /// <param name="scanCompletedCallback"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = false, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
+        {
+            return await FenomHubSystemDiscovery.Scan(scanTime, scanBondedDevices, scanBleDevices, deviceFoundCallback, scanCompletedCallback);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bleDevice"></param>
+        /// <returns></returns>
+        public async Task<bool> Connect(IBleDevice bleDevice)
+        {
+            if (bleDevice.Connected)
+            {
+                BleDevice = bleDevice;
+                return true;
+            }
+            else
+            {
+                // disconnect from existing if different device
+                if (BleDevice != bleDevice)
+                {
+                    // disconnect from BleDevice
+                    await Disconnect();
+
+                    // connect to bleDevice (notice capitalization)
+                    BleDevice = bleDevice;
+                }
+            }
+
+            return await bleDevice.ConnectAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bleDevice"></param>
+        /// <returns></returns>
+        public async Task<bool> Disconnect()
+        {
+            if (BleDevice != null)
+            {
+                if (BleDevice.Connected == true)
+                {
+                    await BleDevice.DisconnectAsync();
+                    BleDevice = null;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bleDevice"></param>
+        /// <param name="completed"></param>
+        /// <returns></returns>
+        //public bool IsConnected(bool devicePowerOn = false)
+        //{
+        //    //Services.LogCat.Print("******** IsConnected: devicePowerOn: {0}", devicePowerOn.ToString());
+
+        //    // do we have a device
+        //    if (BleDevice != null)
+        //    {
+        //        Services.LogCat.Print("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected.ToString());
+
+        //        // if disconnected try to re-connect
+        //        if ((BleDevice.Connected == false) && (devicePowerOn == false))
+        //        {
+        //            Debug.WriteLine("Error: Trying to reconnect...");
+        //            // try to connect
+        //            BleDevice.ConnectAsync();
+        //        }
+
+        //        return BleDevice.Connected;
+        //    }
+        //    return false;
+        //}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="devicePowerOn"></param>
+        /// <returns></returns>
+        public bool IsNotConnectedRedirect(bool devicePowerOn = false)
+        {
+            if (IsConnected)
+            {
+                return true;
+            }
+            Services.Navigation.DevicePowerOnView();
+            return false;
+        }
+
+        //public async Task<bool> ReadyForTest()
+        //{
+        //    if (IsConnected)
+        //    {
+        //        Stopwatch stopwatch = new Stopwatch();
+        //        stopwatch.Start();
+
+        //        await Services.Device.RequestDeviceInfo();
+
+        //        var status = Services.Cache.DeviceInfo.DeviceStatus;
+
+
+        //        //_ = await BleDevice.BREATHTEST(BreathTestEnum.Start6Second);
+        //        //bool isReady = Services.Cache.FenomReady;
+        //        //_ = await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+
+        //        stopwatch.Stop();
+        //        var milliseconds = stopwatch.ElapsedMilliseconds;
+
+        //        bool isReady = true;
+        //        return isReady;
+        //    }
+
+        //    return false;
+        //}
+
+
+        public bool BreathTestInProgress
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="breathTestEnum"></param>
+        /// <returns></returns>
+        public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
+        {
+            if (IsConnected)
+            {
+                BreathTestInProgress = true;
+                return await BleDevice.BREATHTEST(breathTestEnum);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> StopTest()
+        {
+            if (IsConnected)
+            {
+                BreathTestInProgress = false;
+                return await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> RequestDeviceInfo()
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.DEVICEINFO();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> RequestEnvironmentalInfo()
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.ENVIROMENTALINFO();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task<bool> SendMessage(MESSAGE message)
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.MESSAGE(message);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serialNumber"></param>
+        /// <returns></returns>
+        public async Task<bool> SendSerialNumber(string serialNumber)
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.SERIALNUMBER(serialNumber);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public async Task<bool> SendDateTime(string date, string time)
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.DATETIME(date, time);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iD_SUB"></param>
+        /// <param name="cal1"></param>
+        /// <returns></returns>
+        public async Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
+        {
+            if (IsConnected)
+            {
+                return await BleDevice.CALIBRATION(iD_SUB, cal1, cal2, cal3);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cal1"></param>
+        /// <param name="cal2"></param>
+        /// <param name="cal3"></param>
+        /// <returns></returns>
+        public async Task<bool> SendCalibration(double cal1, double cal2, double cal3)
+        {
+            bool result = true;
+            await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
+            return result;
+        }
 
         #region Properties: Operational
         List<IDevice> _availableDevices = new List<IDevice>();
@@ -326,6 +676,9 @@ namespace FenomPlus.Services.NewArch
                 WriteDeviceConnectionState(e.Device);
                 WriteDebug("BLE adapter DeviceConnectionLost: " + e.Device.Name + " : RSSI: " + e.Device.Rssi + " : " + e.ErrorMessage);
                 WriteDebug(String.Format("End DeviceConnectionLost: State == {0}", _state));
+
+                // TODO : is this needed?
+                Services.Navigation.DisplayAlert("Alert", "You have been alerted", "OK");
 
                 if (_currentDevice.Connected == true)
                 {

@@ -22,7 +22,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StopScan()
         {
-            Services.BleHub.StopScan();
+            Services.Device.StopScan();
         }
 
         /// <summary>
@@ -32,13 +32,13 @@ namespace FenomPlus.ViewModels
         {
             Seconds = 30;
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-            _ = Services.BleHub.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
+            _ = Services.Device.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
                         {
                 if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await Services.BleHub.StopScan();
+                await Services.Device.StopScan();
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    if (await Services.BleHub.Connect(bleDevice) == false) return;
+                    if (await Services.Device.Connect(bleDevice) == false) return;
                     await FoundDevice(bleDevice);
                 });
 
@@ -56,7 +56,7 @@ namespace FenomPlus.ViewModels
         {
             Stop = true;
             Services.Cache.DeviceInfo = null;
-            await Services.BleHub.RequestDeviceInfo();
+            await Services.Device.RequestDeviceInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
 
         }
@@ -70,7 +70,7 @@ namespace FenomPlus.ViewModels
             if (Services.Cache.DeviceInfo == null) return true;
             Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device
-            //Services.BleHub.RequestEnvironmentalInfo();
+            //Services.Device.RequestEnvironmentalInfo();
             Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }
@@ -95,7 +95,7 @@ namespace FenomPlus.ViewModels
             Seconds--;
             if (Seconds <= 0)
             {
-                _ = Services.BleHub.Disconnect();
+                _ = Services.Device.Disconnect();
                 StopScan();
                 StartScan();
                 return false;

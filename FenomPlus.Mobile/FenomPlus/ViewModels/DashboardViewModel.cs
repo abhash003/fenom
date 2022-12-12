@@ -11,7 +11,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsConnected();
+            //Services.Device.IsConnected();
         }
 
         public override void OnDisappearing()

@@ -28,7 +28,7 @@ namespace FenomPlus.ViewModels
                         (Services.Cache.FenomValue) > 300 ? "> 300":
                         Services.Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
 
-            Services.BleHub.ReadyForTest = false;
+            Services.Device.ReadyForTest = false;
         }
 
         /// <summary>

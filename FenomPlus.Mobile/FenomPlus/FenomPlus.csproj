@@ -74,10 +74,12 @@
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
+    <Compile Remove="Interfaces\IBleHubService.cs" />
     <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
+    <Compile Remove="Services\BleHubService.cs" />
     <Compile Remove="Services\DeviceStatusService.cs" />
     <Compile Remove="ViewModels\BreathTest\StartTestViewModel.cs" />
     <Compile Remove="ViewModels\MainViewModel.cs" />
