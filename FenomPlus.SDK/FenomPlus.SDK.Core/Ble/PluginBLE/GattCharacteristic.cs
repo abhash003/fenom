@@ -15,7 +15,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
     {
         private IAppServices Services => IOC.Services;
         private ICacheService Cache => Services.Cache;
-        private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private Plugin.BLE.Abstractions.Contracts.ICharacteristic Characteristic { get; }
         public Guid Uuid => Characteristic.Id;
 

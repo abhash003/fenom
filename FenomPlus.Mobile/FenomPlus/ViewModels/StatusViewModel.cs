@@ -124,7 +124,7 @@ namespace FenomPlus.ViewModels
                 if (BluetoothCheckCount == 0)
                 {
                     await Services.BleHub.RequestDeviceInfo();
-                    await Services.BleHub.RequestEnvironmentalInfo();
+                    //await Services.BleHub.RequestEnvironmentalInfo();
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
                 }
