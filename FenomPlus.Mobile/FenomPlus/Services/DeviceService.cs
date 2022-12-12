@@ -33,6 +33,37 @@ using Syncfusion.Data;
 
 namespace FenomPlus.Services.NewArch
 {
+    /// <summary>
+    /// Supported transportation types - BLE, USB, ...
+    /// 
+    /// This should be implemented in an extensible OOP construct.
+    /// </summary>
+    #region Enumerations (enums)
+    public enum TransportType
+    {
+        BLE,
+        USB
+    }
+
+    public enum RssiQualifiedValue
+    {
+        Bad,
+        Good,
+        Excellent
+    }
+    #endregion
+
+    /// <summary>
+    /// Helper classes
+    /// </summary>
+    public struct Helpers
+    {
+        public static readonly Helpers Instance;
+    }
+
+    /// <summary>
+    /// IDeviceService interface
+    /// </summary>
     public interface IDeviceService
     {
         #region Properties: Configuration
@@ -57,6 +88,9 @@ namespace FenomPlus.Services.NewArch
         //public event EventHandler<EventArgs> OnConnected;
     }
 
+    /// <summary>
+    /// DeviceService - IDeviceService implementation
+    /// </summary>
     public class DeviceService : BaseService, IDeviceService, IDisposable
     {
         /*
@@ -326,7 +360,7 @@ namespace FenomPlus.Services.NewArch
                 return true;
             }
 
-            _ble.Adapter.DeviceDiscovered += async (object sender, DeviceEventArgs e) =>
+            _ble.Adapter.DeviceDiscovered += (object sender, DeviceEventArgs e) =>
             {
                 WriteDebug(String.Format("DeviceDiscovered: State == {0}", _state));
 
@@ -434,29 +468,37 @@ namespace FenomPlus.Services.NewArch
 
         }
 
-        protected async void ScanUsbDevices()
+        protected void ScanUsbDevices()
         {
         }
 #endregion
     }
 
+    /// <summary>
+    /// IDevice interface
+    /// </summary>
     public interface IDevice
     {
-#region Enumerations (enums)
-        enum TransportTypes
-        {
-            None,
-            BLE,
-            USB
-        }
-#endregion
-
-#region Properties
-
+        // properties
+        TransportType TransportType { get; }
         object TransportDevice { get; }
-        TransportTypes TransportType { get; }
+
+        Guid Id { get; }
+        string Name { get; }
+
+        RssiQualifiedValue Rssi { get; }
+
+        string Manufacturer { get; }
+        string SerialNumber { get; }
 
         bool Connected { get; set; }
+        // bool Bonded { get; }
+
+        string HardwareVersion { get; }
+        string FirmwareVersion { get; }
+        string ModelVersion { get; }
+
+
 
 #if false
         int Humidity { get; }
@@ -472,24 +514,29 @@ namespace FenomPlus.Services.NewArch
          Pressure;
          BatteryLevel; 
         */
+#endif
 
-#region Event Handlers
+
+#if false
+        #region Event Handlers
         void OnDeviceInfo();
         void OnEnvironmentInfo();
         void OnBreathManeuver();
-#endregion
 
-#region Operations
+        #endregion
+#endif
 
+#if false
+        #region Operations
         void StartTest();
         void StopTest();
         //... etc
 
         void SendMessage();
-#endregion
+
+        #endregion
 #endif
 
-#endregion
         Task ConnectAsync();
         void Disconnect();
 
@@ -500,24 +547,33 @@ namespace FenomPlus.Services.NewArch
         event EventHandler<EventArgs> OnDisconnected;
         
         //event EventHandler<EventArgs> OnConnectionLost;
+        
+        
         //event EventHandler<EventArgs> OnDeviceInfo;
     }
 
     public abstract class Device : IDevice
     {
-#region Fields
-#endregion
+        // properties and backing fields
 
-#region Properties
+        protected TransportType? _transportType = null;
+        public abstract TransportType TransportType { get; }
 
         protected object _transportDevice = null;
         public virtual object TransportDevice { get => _transportDevice; }
 
-        protected IDevice.TransportTypes _transportType = IDevice.TransportTypes.None;
-        public abstract IDevice.TransportTypes TransportType { get; }
+        protected Guid _id = Guid.Empty;
+        public Guid Id { get => _id; }
+
+        protected RssiQualifiedValue _rssi;
+        public abstract RssiQualifiedValue Rssi { get; set; }
+
+        public virtual string Manufacturer { get => "Caire"; }
+
+        protected string _serialNumber;
+        public virtual string SerialNumber { get => _serialNumber; }
 
         protected bool _connected = false;
-
         public bool Connected
         {
             get => _connected;
@@ -527,18 +583,33 @@ namespace FenomPlus.Services.NewArch
 
                 if (value == true)
                 {
+                    // InvokeConnected()
                     _onConnected?.Invoke(this, null);
                 }
                 else
                 {
+                    // InvokeDisconnected()
                     _onDisconnected?.Invoke(this, null);
                 }
             }
         }
 
-#endregion
+        protected string _name = null;
+        public string Name { get => _name; }
 
-#region Events
+        public string HardwareVersion => throw new NotImplementedException();
+
+        public string FirmwareVersion => throw new NotImplementedException();
+
+        public string ModelVersion => throw new NotImplementedException();
+
+
+        #region Properties
+
+
+        #endregion
+
+        #region Events
 
         private EventHandler<EventArgs> _onConnected;
         public event EventHandler<EventArgs> OnConnected
@@ -578,15 +649,20 @@ namespace FenomPlus.Services.NewArch
         public BleDevice(PluginBleIDevice device)
         {
             _transportDevice = device;
+            _name = device.Name;
         }
 #endregion
 
 #region Properties:
-        public override IDevice.TransportTypes TransportType { get => IDevice.TransportTypes.BLE; }
+        public override TransportType TransportType { get => TransportType.BLE; }
 
-#endregion
+        public override RssiQualifiedValue Rssi { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-#region Operations
+        public override string SerialNumber => throw new NotImplementedException();
+
+        #endregion
+
+        #region Operations
 
         public override async Task ConnectAsync()
         {
@@ -606,11 +682,11 @@ namespace FenomPlus.Services.NewArch
 
     public class UsbDevice : Device
     {
-#region Properties
-        
-        public override IDevice.TransportTypes TransportType => (_transportDevice == null) ? IDevice.TransportTypes.None : IDevice.TransportTypes.USB;
+        #region Properties
+        public override TransportType TransportType { get => TransportType.USB; }
+        public override RssiQualifiedValue Rssi { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-#endregion
+        #endregion
 
         public override Task ConnectAsync() => throw new NotImplementedException();
         public override void Disconnect() => throw new NotImplementedException();
