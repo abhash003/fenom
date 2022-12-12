@@ -26,7 +26,7 @@ namespace FenomPlus.ViewModels
         {
             PastResultsData.Clear();
 
-            IEnumerable<BreathManeuverResultTb> records = ResultsRepo.SelectAll();
+            List<BreathManeuverResultTb> records = ResultsRepo.SelectAll().ToList();
 
             var sortedRecords = records.OrderByDescending(c => c.DateOfTest);
 

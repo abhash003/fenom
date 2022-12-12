@@ -184,7 +184,8 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 foreach (var service in services)
                 {
                     // add service here
-                    gattService.Add(service);
+                    if (gattService != null) 
+                        gattService.Add(service);
 
                     var characteristics = await service.GetCharacteristicsAsync();
                     foreach (var characteristic in characteristics)
@@ -224,6 +225,12 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 _ = await GetCharacteristicsAsync();
                 gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             }
+
+            if (!Connected)
+            {
+                Throwexception
+            }
+
             foreach (IGattCharacteristic item in gattCharacteristics)
             {
                 if (!item.Uuid.Equals(guid)) continue;

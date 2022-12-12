@@ -25,7 +25,7 @@ namespace FenomPlus.ViewModels
         {
             RecentErrorsData.Clear();
 
-            IEnumerable<BreathManeuverErrorTb> records = ErrorsRepo.SelectAll();
+            List<BreathManeuverErrorTb> records = ErrorsRepo.SelectAll().ToList();
 
             var sortedRecords = records.OrderByDescending(c => c.DateError);
 

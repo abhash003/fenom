@@ -99,12 +99,6 @@ namespace FenomPlus.ViewModels
 
             bool deviceIsConnected = Services.BleHub.BleDevice.Connected;
 
-            if (App.GetCurrentPage() is DevicePowerOnView && deviceIsConnected)  // ToDo: Only needed because viewmodels never die
-            {
-                // Only navigate if during startup
-                Services.Navigation.DashboardView();
-            }
-
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
             return deviceIsConnected;
         }
@@ -120,11 +114,16 @@ namespace FenomPlus.ViewModels
 
             if (BluetoothConnected)
             {
+                if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                {
+                    // Only navigate if during startup
+                    await Services.Navigation.DashboardView();
+                }
 
                 if (BluetoothCheckCount == 0)
                 {
                     await Services.BleHub.RequestDeviceInfo();
-                    //await Services.BleHub.RequestEnvironmentalInfo();
+                    await Services.BleHub.RequestEnvironmentalInfo();
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
                 }
