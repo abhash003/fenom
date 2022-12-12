@@ -23,7 +23,7 @@ namespace FenomPlus.ViewModels
                 TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.BleHub.StopTest();
+                    Services.Device.StopTest();
                     if (Services.Cache.BreathFlow <= 0)
                     {
                         Services.Navigation.NegativeControlPassView();

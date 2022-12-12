@@ -87,7 +87,7 @@ namespace FenomPlus.Droid
                 }
                 catch (Exception ex)
                 {
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(ex.Message);                    
                 }
 
             }).Start();

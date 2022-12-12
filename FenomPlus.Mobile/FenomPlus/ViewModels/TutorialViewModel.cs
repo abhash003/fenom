@@ -27,8 +27,8 @@ namespace FenomPlus.ViewModels
 
             if (TutorialIndex == 5) // Page with Breath Guage
             {
-                Services.BleHub.StartTest(BreathTestEnum.Training);
-                Services.BleHub.IsNotConnectedRedirect();
+                Services.Device.StartTest(BreathTestEnum.Training);
+                Services.Device.IsNotConnectedRedirect();
                 Stop = false;
 
                 // start timer to read measure constantly
@@ -41,7 +41,7 @@ namespace FenomPlus.ViewModels
             else if (TutorialIndex == 4 || TutorialIndex == 6)
             {
                 Stop = true;
-                Services.BleHub.StartTest(BreathTestEnum.Stop);
+                Services.Device.StartTest(BreathTestEnum.Stop);
                 PlaySounds.StopAll();
             }
 
@@ -219,7 +219,7 @@ namespace FenomPlus.ViewModels
 
             // Must stop sound and guage if we were on Index = 5
             Stop = true;
-            Services.BleHub.StartTest(BreathTestEnum.Stop);
+            Services.Device.StartTest(BreathTestEnum.Stop);
             PlaySounds.StopAll();
         }
 
@@ -233,7 +233,7 @@ namespace FenomPlus.ViewModels
         private void Next()
         {
             // Need only check on the next button event
-            if (TutorialIndex == 4 && !Services.BleHub.ReadyForTest)
+            if (TutorialIndex == 4 && !Services.Device.ReadyForTest)
             {
                 DeviceNotReadyWarning();
                 return;
@@ -250,9 +250,9 @@ namespace FenomPlus.ViewModels
 
         private void DeviceNotReadyWarning()
         {
-            if (!Services.BleHub.ReadyForTest)
+            if (!Services.Device.ReadyForTest)
             {
-                int secondsRemaining = Services.BleHub.DeviceReadyCountDown;
+                int secondsRemaining = Services.Device.DeviceReadyCountDown;
                 Dialogs.ShowToast($"{secondsRemaining} seconds required before next breath test. This message disappears when device is ready...", secondsRemaining);
             }
         }

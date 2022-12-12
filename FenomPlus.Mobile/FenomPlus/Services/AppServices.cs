@@ -10,11 +10,11 @@ namespace FenomPlus.Services
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
         
-        protected IBleHubService _BleHub;
-        public IBleHubService BleHub
+        protected IDeviceService _device;
+        public IDeviceService Device
         {
-            get => _BleHub ??= Container.Resolve<IBleHubService>();
-            set => _BleHub = value;
+            get => _device ??= Container.Resolve<IDeviceService>();
+            set => _device = value;
         }
 
         protected IConfigService _Config;
@@ -66,19 +66,14 @@ namespace FenomPlus.Services
             set => _Navigation = value;
         }
 
-        protected IDeviceService _Device;
-        public IDeviceService Device
-        {
-            get => _Device ??= Container.Resolve<IDeviceService>();
-            set => _Device = value;
-        }
+        
 
         public AppServices()
         {
             try
             {
                 Container.Register<IConfigService, ConfigService>().AsSingleton();
-                Container.Register<IBleHubService, BleHubService>().AsSingleton();
+                Container.Register<IDeviceService, DeviceService>().AsSingleton();
                 Container.Register<ICacheService, CacheService>().AsSingleton();
                 Container.Register<IDialogService, DialogService>().AsSingleton();
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();

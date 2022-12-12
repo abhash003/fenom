@@ -46,7 +46,7 @@ namespace FenomPlus.ViewModels
 
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.BleHub.StopTest();
+                    Services.Device.StopTest();
 
                     Services.Cache.HumanControlResult = GuageData;
                     Services.Navigation.HumanControlPreparingView();
