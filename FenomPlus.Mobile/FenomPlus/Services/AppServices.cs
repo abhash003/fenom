@@ -1,6 +1,6 @@
 ﻿using System;
 using FenomPlus.Interfaces;
-using FenomPlus.Services.NewArch;
+using FenomPlus.Services.NewArch.R2;
 using FenomPlus.ViewModels;
 using TinyIoC;
 
@@ -10,11 +10,11 @@ namespace FenomPlus.Services
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
         
-        protected IDeviceService _device;
-        public IDeviceService Device
+        protected IDeviceService _deviceService;
+        public IDeviceService DeviceService
         {
-            get => _device ??= Container.Resolve<IDeviceService>();
-            set => _device = value;
+            get => _deviceService ??= Container.Resolve<IDeviceService>();
+            set => _deviceService = value;
         }
 
         protected IConfigService _Config;

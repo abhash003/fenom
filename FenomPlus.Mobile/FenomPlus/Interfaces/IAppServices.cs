@@ -1,5 +1,5 @@
 ﻿
-using FenomPlus.Services.NewArch;
+using FenomPlus.Services.NewArch.R2;
 
 namespace FenomPlus.Interfaces
 {
@@ -13,6 +13,6 @@ namespace FenomPlus.Interfaces
         IDebugLogFileService DebugLogFile { get; }
         ILogCatService LogCat { get; }
         INavigationService Navigation { get; }
-        IDeviceService Device { get; }
+        IDeviceService DeviceService { get; }
     }
 }

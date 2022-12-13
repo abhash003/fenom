@@ -28,7 +28,7 @@ namespace FenomPlus.ViewModels
                         (Services.Cache.FenomValue) > 300 ? "> 300":
                         Services.Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
 
-            Services.Device.ReadyForTest = false;
+            Services.DeviceService.Current.ReadyForTest = false;
         }
 
         /// <summary>

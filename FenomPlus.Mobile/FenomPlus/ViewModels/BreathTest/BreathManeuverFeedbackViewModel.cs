@@ -43,7 +43,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.Device.IsNotConnectedRedirect();
+            Services.DeviceService.Current.IsNotConnectedRedirect();
             if (Services.Cache.TestType == TestTypeEnum.Standard)
             {
                 TestType = "10-second Test";
@@ -103,7 +103,7 @@ namespace FenomPlus.ViewModels
                 {
                     if ((TestGuageSeconds <= 0) && (Stop == false))
                     {
-                        Services.Device.StopTest();
+                        Services.DeviceService.Current.StopTest();
                         Services.Navigation.StopExhalingView();
                     }
                 }

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.Controls;
+using FenomPlus.Services;
 using FenomPlus.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -77,6 +78,7 @@ namespace FenomPlus.ViewModels
             DeviceStatusTimer.Elapsed += DeviceStatusTimerOnElapsed;
             DeviceStatusTimer.Start();
 
+            // TODO: jac: this code can go away now
             // Received whenever a Bluetooth connect or disconnect occurs - Bluetooth not updated through timer
             WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>(this, (r, m) =>
             {
@@ -96,6 +98,49 @@ namespace FenomPlus.ViewModels
                 }
                 RefreshIconStatus(isBluetoothConnected);
             });
+
+            //Services.DeviceService.DeviceConnected += DeviceService_DeviceConnected;
+            //Services.DeviceService.DeviceConnectionLost += DeviceService_DeviceConnectionLost;
+            //Services.DeviceService.DeviceDisconnected += DeviceService_DeviceDisconnected;
+
+            //Console.WriteLine("{0} {1} {2}");
+        }
+
+        private void DeviceService_DeviceConnected(object sender, EventArgs e)
+        {
+            OnConnected(true);
+        }
+        private void DeviceService_DeviceConnectionLost(object sender, EventArgs e)
+        {
+            OnConnected(false);
+        }
+
+        private void DeviceService_DeviceDisconnected(object sender, EventArgs e)
+        {
+            OnConnected(false);
+        }
+
+        public void OnConnected(bool connected)
+        {
+            bool isBluetoothConnected = connected;
+
+            RefreshIconStatus(isBluetoothConnected);
+
+            if (isBluetoothConnected)
+            {
+                if (App.GetCurrentPage() is DevicePowerOnView)
+                {
+                    Services.Navigation.DashboardView();
+                }
+                else if (App.GetCurrentPage() == null)
+                {
+                    return;
+                }
+                else if (App.GetCurrentPage() is DashboardView)
+                {
+                    return;
+                }
+            }
         }
 
         private void SetDefaults()
@@ -187,14 +232,14 @@ namespace FenomPlus.ViewModels
         {
             if (!isBluetoothConnected)
             {
-                BluetoothConnected = Services.Device.IsConnected; // Update just in case
+                BluetoothConnected = (Services.DeviceService.Current != null); // Update just in case
             }
             else
             {
                 BluetoothConnected = isBluetoothConnected;
             }
 
-            if (Services.Device.BreathTestInProgress)
+            if ((Services.DeviceService.Current != null) && Services.DeviceService.Current.BreathTestInProgress)
             {
                 // Don't update during test
                 return;

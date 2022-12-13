@@ -19,6 +19,7 @@ namespace FenomPlus.Services
         {
             using (Intent bluetoothPicker = new Intent("android.bluetooth.devicepicker.action.LAUNCH"))
             {
+                bluetoothPicker.SetFlags(Android.Content.ActivityFlags.NewTask);
                 AndroidApplication.Context.StartActivity(bluetoothPicker);
             }                
         }

@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
+using FenomPlus.Services;
+using FenomPlus.Services.NewArch.R2;
 using FenomPlus.Views;
 using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
@@ -16,13 +18,33 @@ namespace FenomPlus.ViewModels
 
         private bool Stop;
 
-        
+        public DevicePowerOnViewModel()
+        {
+            Services.DeviceService.DeviceConnected += (object sender, EventArgs e) =>
+            {
+                AppServices.Container.Resolve<StatusViewModel>().OnConnected(true);
+                // if we lose the connection, start scanning again ...
+                //Stop = false;
+                //StopScan();
+                //StartScan();
+            };
+
+            Services.DeviceService.DeviceConnectionLost += (object sender, EventArgs e) =>
+            {
+                AppServices.Container.Resolve<StatusViewModel>().OnConnected(false);
+                // if we lose the connection, start scanning again ...
+                Stop = false;
+                StopScan();
+                StartScan();
+            };
+        }
+
         /// <summary>
         /// 
         /// </summary>
         public void StopScan()
         {
-            Services.Device.StopScan();
+            Services.DeviceService.StopDiscovery();
         }
 
         /// <summary>
@@ -31,14 +53,39 @@ namespace FenomPlus.ViewModels
         public void StartScan()
         {
             Seconds = 30;
-            Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-            _ = Services.Device.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
+            Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
+
+            Services.DeviceService.StartDiscovery(async (FenomPlus.Services.NewArch.R2.IDevice device) =>
+            {
+                try
+                {
+                    if (device.Name != null)
+                    {
+                        if (device.Name.ToLower().Contains("fenom"))
+                        {
+                            Stop = true;
+                            await device.ConnectAsync();
+                            FoundDevice(device);
+                        }
+                    }
+
+                    Console.WriteLine("id: {0} name: {1}", device.Id, (device.Name != null) ? device.Name : "<null>");
+                }
+
+                catch(Exception ex)
+                {
+                    Console.WriteLine("exception: {0}", ex.Message);
+                }
+            });
+
+#if false
+            _ = Services.DeviceService.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
                         {
                 if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await Services.Device.StopScan();
+                await Services.DeviceService.StopScan();
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    if (await Services.Device.Connect(bleDevice) == false) return;
+                    if (await Services.DeviceService.Connect(bleDevice) == false) return;
                     await FoundDevice(bleDevice);
                 });
 
@@ -46,6 +93,7 @@ namespace FenomPlus.ViewModels
             {
 
             });
+#endif
         }
 
         /// <summary>
@@ -55,10 +103,18 @@ namespace FenomPlus.ViewModels
         public async Task FoundDevice(IBleDevice bleDevice)
         {
             Stop = true;
+            Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
             Services.Cache.DeviceInfo = null;
-            await Services.Device.RequestDeviceInfo();
-            Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
+            // jac: do not request, this is updated by the device
+            await Services.DeviceService.Current.RequestDeviceInfo();
+            Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
+        }
 
+        public void FoundDevice(IDevice device)
+        {
+            Stop = true;
+            Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
+            return;
         }
 
         /// <summary>
@@ -68,10 +124,11 @@ namespace FenomPlus.ViewModels
         public bool DeviceInfoTimer()
         {
             if (Services.Cache.DeviceInfo == null) return true;
-            Services.Cache.EnvironmentalInfo = null;
+            Services.Cache.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
+            //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device
-            //Services.Device.RequestEnvironmentalInfo();
-            Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
+            Services.DeviceService.Current.RequestEnvironmentalInfo();
+            Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }
 
@@ -95,7 +152,7 @@ namespace FenomPlus.ViewModels
             Seconds--;
             if (Seconds <= 0)
             {
-                _ = Services.Device.Disconnect();
+                //_ = Services.DeviceService.Current.DisconnectAsync();
                 StopScan();
                 StartScan();
                 return false;

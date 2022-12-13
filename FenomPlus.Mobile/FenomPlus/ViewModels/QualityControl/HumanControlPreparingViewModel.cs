@@ -18,7 +18,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.Device.IsNotConnectedRedirect();
+            Services.DeviceService.Current.IsNotConnectedRedirect();
             TestTime = 10;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
