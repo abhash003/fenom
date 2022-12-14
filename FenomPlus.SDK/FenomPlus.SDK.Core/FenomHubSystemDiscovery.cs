@@ -95,10 +95,15 @@ namespace FenomPlus.SDK.Core
                     {
                         if ((bleDevice != null) && (!string.IsNullOrEmpty(bleDevice.Name)))
                         {
-                            if (bleDevice.Name.ToUpper().StartsWith("FENOM"))
+                            bleDevice.Manufacturer
+                            bleDevice.Uuid
+
+                            if (bleDevice.Name.ToUpper().StartsWith("FP") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
                             {
                                 deviceFoundCallback?.Invoke(bleDevice);
                             }
+
+
                         }
                     }),
                     ((IEnumerable<IBleDevice> bleDevices) =>
