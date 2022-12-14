@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
 {
@@ -247,7 +248,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     {
                         if (string.IsNullOrEmpty(e.Device?.Name))
                         {
-                            //return;
+                            return;
                         }
 
                         try
@@ -255,13 +256,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
 
-                            //if (e.Device != null && e.Device.Name.ToUpper().Contains("FENOM"))
-                            //{
+                            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("FP") || e.Device.Name.ToUpper().StartsWith("FENOM")))
+                            {
                                 // create ble device and push to caller
                                 BleDevice bleDevice = new BleDevice(e.Device);
                                 _devices.Add(bleDevice);
                                 deviceFoundCallback?.Invoke(bleDevice);
-                            //}
+                            }
 
                         }
                         finally
