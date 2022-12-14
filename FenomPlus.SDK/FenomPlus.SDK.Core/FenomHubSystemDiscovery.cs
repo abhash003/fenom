@@ -95,8 +95,8 @@ namespace FenomPlus.SDK.Core
                     {
                         if ((bleDevice != null) && (!string.IsNullOrEmpty(bleDevice.Name)))
                         {
-                            bleDevice.Manufacturer
-                            bleDevice.Uuid
+                            //bleDevice.Manufacturer
+                            //bleDevice.Uuid
 
                             if (bleDevice.Name.ToUpper().StartsWith("FP") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
                             {

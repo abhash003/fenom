@@ -222,10 +222,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                             try
                             {
-                                //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
-                                BleDevice bleDevice = new BleDevice(device);
-                                _bondeddevices.Add(bleDevice);
-                                deviceFoundCallback?.Invoke(bleDevice);
+                                // New name check
+                                if (device.Name.ToUpper().StartsWith("FP") || device.Name.ToUpper().StartsWith("FENOM"))
+                                {
+                                    //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                                    BleDevice bleDevice = new BleDevice(device);
+                                    _bondeddevices.Add(bleDevice);
+                                    deviceFoundCallback?.Invoke(bleDevice);
+                                }
                             }
                             finally
                             {
