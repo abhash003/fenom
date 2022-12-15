@@ -116,6 +116,8 @@ namespace FenomPlus.ViewModels
         {
             bool isBluetoothConnected = connected;
 
+            BluetoothConnected = connected;
+
             _ = RefreshStatusAsync();
 
             if (isBluetoothConnected)
@@ -196,6 +198,7 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
+#if _BREAKING_CHANGES_
             // To early to get status or don't update environmental properties during test
             if (!BluetoothConnected || 
                 RefreshInProgress ||
@@ -206,7 +209,7 @@ namespace FenomPlus.ViewModels
                 await Task.Delay(1);
                 return;
             }
-
+#endif
             RefreshInProgress = true;
 
             UpdateVersionNumbers();
@@ -396,6 +399,7 @@ namespace FenomPlus.ViewModels
         {
             if (BluetoothConnected)
             {
+
                 BluetoothBarIcon = "wo_bluetooth_green.png";
                 BluetoothViewModel.ImagePath = "bluetooth_green.png";
                 BluetoothViewModel.ValueColor = Color.Black;

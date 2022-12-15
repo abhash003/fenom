@@ -484,12 +484,21 @@ namespace FenomPlus.Services.NewArch.R2
                 _deviceService.Current = null;
             //_deviceService.HandleDeviceDisconnected(_deviceService.Devices.First(d => d.Id == e.Device.Id));
         }
-        private void Adapter_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
+        private async void Adapter_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {
             if (_deviceService.Current != null && e.Device.Id == _deviceService.Current.Id)
                 _deviceService.Current = null;
 
-            _deviceService.HandleDeviceConnectionLost(_deviceService.Devices.First(d => d.Id == e.Device.Id));
+            bool handleLostConnection = true;
+
+            if (handleLostConnection)
+            {
+                _deviceService.HandleDeviceConnectionLost(_deviceService.Devices.First(d => d.Id == e.Device.Id));
+            }
+            else
+            {
+                await _deviceService.Current.ConnectAsync();
+            }
         }
     }
 
