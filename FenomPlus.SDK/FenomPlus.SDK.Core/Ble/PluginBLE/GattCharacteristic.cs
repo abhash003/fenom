@@ -14,24 +14,17 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
     {
         private IAppServices Services => IOC.Services;
         private ICacheService Cache => Services.Cache;
-        private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private Plugin.BLE.Abstractions.Contracts.ICharacteristic Characteristic { get; }
         public Guid Uuid => Characteristic.Id;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="characteristic"></param>
         public GattCharacteristic(Plugin.BLE.Abstractions.Contracts.ICharacteristic characteristic)
         {
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "GattCharacteristic");
                 Characteristic = characteristic;
                 try
                 {
-                    //PerformanceLogger.StartLog(typeof(GattCharacteristic), "GattCharacteristic");
-
                     if (Uuid.ToString().ToUpper() == Constants.DeviceInfoCharacteristic.ToUpper())
                     {
                         Characteristic.ValueUpdated += DeviceInfoHandler;
@@ -43,6 +36,22 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     else if (Uuid.ToString().ToUpper() == Constants.EnvironmentalInfoCharacteristic.ToUpper())
                     {
                         Characteristic.ValueUpdated += EnvironmentalInfoHandler;
+                        if (Characteristic.CanUpdate)
+                        {
+                            Characteristic.StartUpdatesAsync();
+                        }
+                    }
+                    else if (Uuid.ToString().ToUpper() == Constants.ErrorStatusCharacteristic.ToUpper())
+                    {
+                        Characteristic.ValueUpdated += ErrorStatusInfoHandler;
+                        if (Characteristic.CanUpdate)
+                        {
+                            Characteristic.StartUpdatesAsync();
+                        }
+                    }
+                    else if (Uuid.ToString().ToUpper() == Constants.DeviceStatusCharacteristic.ToUpper())
+                    {
+                        Characteristic.ValueUpdated += DeviceStatusInfoHandler;
                         if (Characteristic.CanUpdate)
                         {
                             Characteristic.StartUpdatesAsync();
@@ -69,33 +78,19 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 {
                     Services.LogCat.Print(ex.Message);
                 }
-                finally
-                {
-                    //PerformanceLogger.EndLog(typeof(GattCharacteristic), "GattCharacteristic");
-                }
             }
             catch (Exception ex)
             {
                 Services.LogCat.Print(ex.Message);
             }
-            finally
-            {
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "GattCharacteristic");
-            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public async Task<byte[]> ReadAsync()
         {
             await _lock.WaitAsync();
 
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "ReadAsync");
-
                 if (!Characteristic.CanRead)
                 {
                     throw new Exception("Characteristic cannot be read");
@@ -111,23 +106,15 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "ReadAsync");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public async Task<bool> WriteAsync(byte[] value)
         {
             await _lock.WaitAsync();
 
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "WriteAsync");
-
                 if (!Characteristic.CanWrite)
                 {
                     throw new Exception("Characteristic cannot be written");
@@ -145,21 +132,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "WriteAsync");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public async Task<bool> WriteWithoutResponseAsyncFast(byte[] value)
         {
             await _lock.WaitAsync();
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "WriteWithoutResponseAsync(" + value.Length + ")");
                 Characteristic.WriteType = CharacteristicWriteType.WithoutResponse;
                 await Characteristic.WriteAsync(value);
                 return true;
@@ -172,23 +152,15 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "WriteWithoutResponseAsync");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public async Task<bool> WriteWithoutResponseAsync(byte[] value)
         {
             await _lock.WaitAsync();
 
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "WriteWithoutResponseAsync");
-
                 if (!Characteristic.CanWrite)
                 {
                     throw new Exception("Characteristic cannot be written");
@@ -207,21 +179,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "WriteWithoutResponseAsync");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void DeviceInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
             _lock.Wait();
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "DeviceInfoHandler");
                 Cache.DecodeDeviceInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** DeviceInfoHandler called: DeviceInfo Updated in Cache");
             }
@@ -232,21 +197,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "DeviceInfoHandler");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void EnvironmentalInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
             _lock.Wait();
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "EnvironmentalInfoHandler");
                 Cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** EnvironmentalInfoHandler called: EnvironmentalInfo Updated in Cache");
             }
@@ -257,21 +215,50 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "EnvironmentalInfoHandler");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        private void ErrorStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
+        {
+            _lock.Wait();
+            try
+            {
+                Cache.DecodeErrorStatusInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** ErrorInfoHandler called: ErrorInfo Updated in Cache");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _lock.Release();
+            }
+        }
+
+        private void DeviceStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
+        {
+            _lock.Wait();
+            try
+            {
+                Cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
+                Debug.WriteLine("***** StatusInfoHandler called: StatusInfo Updated in Cache");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _lock.Release();
+            }
+        }
+
         private void BreathManeuverHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
             _lock.Wait();
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "BreathManeuverHandler");
                 Cache.DecodeBreathManeuver(e.Characteristic.Value);
             }
             catch (Exception ex)
@@ -281,21 +268,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "BreathManeuverHandler");
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void DebugMsgHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
             _lock.Wait();
             try
             {
-                //PerformanceLogger.StartLog(typeof(GattCharacteristic), "DebugMsgHandler");
                 Cache.DecodeDebugMsg(e.Characteristic.Value);
             }
             catch (Exception ex)
@@ -305,7 +285,6 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             finally
             {
                 _lock.Release();
-                //PerformanceLogger.EndLog(typeof(GattCharacteristic), "DebugMsgHandler");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Plugin.BLE;
+using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using FenomPlus.SDK.Core.Ble.Interface;
 using System;
@@ -9,6 +9,7 @@ using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Exceptions;
 using FenomPlus.Interfaces;
 using FenomPlus.Services;
+using FenomPlus.SDK.Core.Models;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
 {
@@ -30,7 +31,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             //PerformanceLogger.EndLog(typeof(BleDevice), "BleDevice");
         }
 
-        // get device here injected from constuctor
+        // get device here injected from constructor
         private IDevice Device { get; set; }
         public object NativeDevice => Device.NativeDevice;
 
@@ -188,7 +189,8 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 foreach (var service in services)
                 {
                     // add service here
-                    gattService.Add(service);
+                    if (gattService != null) 
+                        gattService.Add(service);
 
                     var characteristics = await service.GetCharacteristicsAsync();
                     foreach (var characteristic in characteristics)

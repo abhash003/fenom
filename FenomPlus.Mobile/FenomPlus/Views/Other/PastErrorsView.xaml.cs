@@ -3,6 +3,7 @@ using FenomPlus.ViewModels;
 using System;
 using Syncfusion.SfDataGrid.XForms;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
@@ -10,6 +11,7 @@ namespace FenomPlus.Views
     // Documentation:  https://help.syncfusion.com/xamarin/datagrid/export-to-pdf
     // Documentation:  https://help.syncfusion.com/xamarin/pdf-viewer/printing-pdf-files
 
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PastErrorsView : BaseContentPage
     {
         private readonly PastErrorsViewModel PastErrorsViewModel;
@@ -21,10 +23,10 @@ namespace FenomPlus.Views
             BindingContext = PastErrorsViewModel = new PastErrorsViewModel();
             RecentErrorsDataGrid.GridStyle = new CustomGridStyle();
 
-            RecentErrorsDataGrid.Focus();
-
-            //RecentErrorsDataGrid.ExportToPdf or ExportToPdfGrid
+            DataPager.Source = PastErrorsViewModel.RecentErrorsData;
+            RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
         }
+
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             //throw new NotImplementedException();
@@ -51,11 +53,12 @@ namespace FenomPlus.Views
             base.OnAppearing();
             PastErrorsViewModel.OnAppearing();
 
-            // Chunk of code is for optimization
-            RecentErrorsDataGrid.Columns.Suspend();
-            PastErrorsViewModel.UpdateRecentErrorsDataCommand.Execute(null);
-            RecentErrorsDataGrid.Columns.Resume();
+            PastErrorsViewModel.RefreshRecentErrorsCommand.Execute(null);
+
+            DataPager.Refresh();
             RecentErrorsDataGrid.RefreshColumns();
+
+            ExitButton.Focus();
         }
 
         protected override void OnDisappearing()

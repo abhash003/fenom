@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using FenomPlus.Controls;
 using FenomPlus.Models;

@@ -21,8 +21,8 @@ namespace FenomPlus.Services
             BreathBuffer = new RingBuffer(Services.Config.RingBufferSample, Services.Config.RingBufferTimeout);
 
             BreathFlowTimer = Services.Config.BreathFlowTimeout;
-            DeviceSerialNumber = "F150-??????";
-            Firmware = "Firmware ?.?.?";
+            DeviceSerialNumber = string.Empty;
+            Firmware = string.Empty;
             FenomReady = true;
 
             Logger = LoggerFactory.Create(builder =>
@@ -47,6 +47,9 @@ namespace FenomPlus.Services
         public ILoggerFactory Logger { get; set; }
 
         public int BatteryLevel { get; set; }
+
+        public DateTime DeviceExpireDate { get; set; }
+
         public DateTime SensorExpireDate { get; set; }
 
         public TestTypeEnum TestType { get; set; }
@@ -66,9 +69,13 @@ namespace FenomPlus.Services
         
         public EnvironmentalInfo EnvironmentalInfo { get; set; }
 
-        public BreathManeuver BreathManeuver { get; set; }
-
         public DeviceInfo DeviceInfo { get; set; }
+
+        public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
+        public DeviceStatusInfo DeviceStatusInfo { get; set; }
+
+        public BreathManeuver BreathManeuver { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
 
@@ -119,10 +126,7 @@ namespace FenomPlus.Services
         {
             try
             {
-                if (EnvironmentalInfo == null)
-                {
-                    EnvironmentalInfo = new EnvironmentalInfo();
-                }
+                EnvironmentalInfo ??= new EnvironmentalInfo();
                 EnvironmentalInfo.Decode(data);
 
                 BatteryLevel = EnvironmentalInfo.BatteryLevel;
@@ -133,57 +137,11 @@ namespace FenomPlus.Services
             return EnvironmentalInfo;
         }
 
-        public BreathManeuver DecodeBreathManeuver(byte[] data)
-        {
-            try
-            {
-                if (BreathManeuver == null)
-                {
-                    BreathManeuver = new BreathManeuver();
-                }
-
-                BreathManeuver.Decode(data);
-
-                if (BreathManeuver.TimeRemaining == 0xff)
-                {
-                    FenomReady = false;
-                    ReadyForTest = true;
-                    DeviceConnectedStatus = "Ready For Test";
-                } else if (BreathManeuver.TimeRemaining == 0xfe) 
-                {
-                    ReadyForTest = false;
-                    FenomReady = true;
-                    FenomValue = BreathManeuver.NOScore;
-                } 
-                else if (BreathManeuver.TimeRemaining == 0xf0) 
-                {
-                    // log ??
-                } 
-                else 
-                {
-                    DeviceConnectedStatus = "Processing Test";
-                    FenomReady = false;
-
-                    // add new value and average it
-                    BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
-
-                    // get the noscores
-                    NOScore = BreathManeuver.NOScore;
-                }
-                NotifyViews();
-                NotifyViewModels();
-            } finally { }
-            return BreathManeuver;
-        }
-
         public DeviceInfo DecodeDeviceInfo(byte[] data)
         {
             try
             {
-                if (DeviceInfo == null)
-                {
-                    DeviceInfo = new DeviceInfo();
-                }
+                DeviceInfo ??= new DeviceInfo();
 
                 DeviceInfo.Decode(data);
 
@@ -205,18 +163,88 @@ namespace FenomPlus.Services
 
                 NotifyViews();
                 NotifyViewModels();
-            } finally { }
+            }
+            finally { }
             return DeviceInfo;
+        }
+
+        public ErrorStatusInfo DecodeErrorStatusInfo(byte[] data)
+        {
+            try
+            {
+                ErrorStatusInfo ??= new ErrorStatusInfo();
+                ErrorStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return ErrorStatusInfo;
+        }
+
+        public DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data)
+        {
+            try
+            {
+                DeviceStatusInfo ??= new DeviceStatusInfo();
+                DeviceStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return DeviceStatusInfo;
+        }
+
+        public BreathManeuver DecodeBreathManeuver(byte[] data)
+        {
+            try
+            {
+                BreathManeuver ??= new BreathManeuver();
+
+                BreathManeuver.Decode(data);
+
+                if (BreathManeuver.TimeRemaining == 0xff)
+                {
+                    FenomReady = false;
+                    ReadyForTest = true;
+                    DeviceConnectedStatus = "Ready For Test";
+                } 
+                else if (BreathManeuver.TimeRemaining == 0xfe) 
+                {
+                    ReadyForTest = false;
+                    FenomReady = true;
+                    FenomValue = BreathManeuver.NOScore;
+                } 
+                else if (BreathManeuver.TimeRemaining == 0xf0) 
+                {
+                    // log ??
+                } 
+                else 
+                {
+                    DeviceConnectedStatus = "Processing Test";
+                    FenomReady = false;
+
+                    // add new value and average it
+                    BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
+
+                    // get the noscores
+                    NOScore = BreathManeuver.NOScore;
+                }
+
+                NotifyViews();
+
+                NotifyViewModels();
+
+            } finally { }
+            return BreathManeuver;
         }
 
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
             try
             {
-                if (DebugMsg == null)
-                {
-                    DebugMsg = new DebugMsg();
-                }
+                DebugMsg ??= new DebugMsg();
 
                 DebugMsg.Decode(data);
 

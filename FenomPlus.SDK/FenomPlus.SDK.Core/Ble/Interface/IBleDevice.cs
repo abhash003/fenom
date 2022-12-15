@@ -12,9 +12,9 @@ namespace FenomPlus.SDK.Core.Ble.Interface
         int? Rssi { get; }
         string Manufacturer { get; }
         string Model { get; }
-        string HardwareVersion { get; }
-        string SoftwareVersion { get; }
-        string SerialNumber { get; }
+        //string HardwareVersion { get; }
+        //string SoftwareVersion { get; }
+        //string SerialNumber { get; }
         object NativeDevice { get; }
         Guid Uuid { get; }
         bool IsBonded { get; }
@@ -26,13 +26,15 @@ namespace FenomPlus.SDK.Core.Ble.Interface
 
         Task<bool> DEVICEINFO();
         Task<bool> ENVIROMENTALINFO();
-        Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
-        Task<bool> BREATHMANUEVER();
-        Task<bool> TRAININGMODE();
+        Task<bool> BREATHMANUEVER(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
+        Task<bool> ERRORSTATUSINFO();
+        Task<bool> DEVICESTATUSINFO();
         Task<bool> DEBUGMSG();
-        Task<bool> DEBUGMANUEVERTYPE();
+
+        //Task<bool> DEBUGMANUEVERTYPE();
+
         Task<bool> MESSAGE(MESSAGE message);
-        Task<bool> SERIALNUMBER(string SerailNumber);   
+        Task<bool> SERIALNUMBER(string SerialNumber);   
         Task<bool> DATETIME(string date, string time);
         Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
     }

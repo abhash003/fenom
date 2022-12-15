@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
@@ -6,6 +6,7 @@ using FenomPlus.Enums;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DashboardView : BaseContentPage
     {
         private readonly DashboardViewModel DashboardViewModel;
@@ -79,6 +80,11 @@ namespace FenomPlus.Views
 
         protected override void OnDisappearing()
         {
+            if (DashboardViewModel.Dialogs.SecondsProgressDialogShowing())
+            {
+                DashboardViewModel.Dialogs.DismissSecondsProgressDialog();
+            }
+
             base.OnDisappearing();
             DashboardViewModel.OnDisappearing();
         }

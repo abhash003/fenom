@@ -25,79 +25,85 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" Margin="0" Padding="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                <!--<SearchBar Placeholder="ID" TextChanged="SearchBar_OnTextChanged" />-->
+            <border:SfBorder 
+                BorderColor="LightGray"
+                BackgroundColor="Transparent" 
+                HorizontalOptions="Fill" 
+                VerticalOptions="Fill"
+                BorderWidth="1"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,0,0,0"
+                Padding="0">
 
-                <border:SfBorder 
-                    BorderColor="LightGray"
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="FillAndExpand"
-                    BorderWidth="1">
+                <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
+                                    ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                    LiveDataUpdateMode="AllowDataShaping"
+                                    VerticalOptions="Fill"
+                                    HorizontalOptions="Fill"
+                                    AllowResizingColumn="False"
+                                    AutoGenerateColumns="False"
+                                    AllowEditing="False"
+                                    AllowSorting="False"
+                                    NavigationMode="Row"
+                                    SelectionMode="Single"
+                                    AutoExpandGroups="False"
+                                    AllowGroupExpandCollapse="False"
+                                    ColumnSizer="Star"
+                                    VerticalScrollBarVisibility="False"
+                                    HorizontalScrollBarVisibility="False"
+                                    VerticalOverScrollMode="None"
+                                    AllowPullToRefresh="False"
+                                   Margin="0,0,1,0">
 
-                    <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
-                                       ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
-                                       VerticalOptions="FillAndExpand"
-                                       HorizontalOptions="FillAndExpand"
-                                       AllowResizingColumn="False"
-                                       AutoGenerateColumns="False"
-                                       AllowEditing="False"
-                                       AllowSorting="False"
-                                       NavigationMode="Row"
-                                       SelectionMode="Single"
-                                       AutoExpandGroups="False"
-                                       AllowGroupExpandCollapse="False"
-                                       ColumnSizer="Star"
-                                       VerticalScrollBarVisibility="False"
-                                       HorizontalScrollBarVisibility="False"
-                                       VerticalOverScrollMode="None"
-                                       AllowPullToRefresh="False">
+                    <sfgrid:SfDataGrid.Columns>
 
-                        <sfgrid:SfDataGrid.Columns>
+                        <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
 
-                            <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
+                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" ColumnSizer="Auto"/>
 
-                            <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" ColumnSizer="Auto"/>
-                            
-                            <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
-                            
-                            <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity"/>
-                            
-                            <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
-                            
-                            <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware"/>
-                            
-                            <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
+                        <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
 
-                        </sfgrid:SfDataGrid.Columns>
+                        <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity"/>
 
-                        <sfgrid:SfDataGrid.SortColumnDescriptions>
-                            <sfgrid:SortColumnDescription ColumnName="DateError" SortDirection="Descending" />
-                        </sfgrid:SfDataGrid.SortColumnDescriptions>
+                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
 
-                    </sfgrid:SfDataGrid>
+                        <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware"/>
 
-                </border:SfBorder>
+                        <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
 
-                <sfPager:SfDataPager x:Name ="DataPager"
-                                     PageSize="5" 
-                                     NumericButtonCount="14"
-                                     AutoEllipsisMode="None"
-                                     Source="{Binding RecentErrorsData}"
-                                     HorizontalOptions="FillAndExpand"
-                                     HeightRequest="50"
-                                     Margin="0,0,0,4"
-                                     IsTabStop="False"/>
+                    </sfgrid:SfDataGrid.Columns>
 
-            </StackLayout>
+                </sfgrid:SfDataGrid>
 
-            <Button Text="Exit"
+            </border:SfBorder>
+
+            <sfPager:SfDataPager x:Name ="DataPager"
                     Grid.Row="1"
+                    Grid.Column="0"
+                    PageSize="7"
+                    NumericButtonCount="14"
+                    AutoEllipsisMode="None"
+                    Source="{Binding RecentErrorsData}"
+                    HorizontalOptions="StartAndExpand"
+                    HeightRequest="50"
+                    Margin="0,26,80,0"
+                    IsTabStop="False"/>
+
+            <Button x:Name="ExitButton"
+                    Text="Exit"
+                    Grid.Row="1"
+                    Grid.Column="1"
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToDashboardCommand }"
                     HorizontalOptions="End"
-                    Margin="0,0,40,0"/>
+                    Margin="0,26,40,0"/>
 
         </Grid>
 

@@ -36,15 +36,9 @@ namespace FenomPlus.Database.Tables
             }
         }
 
-        public string TestDateTime
-        {
-            get
-            {
-                //var dateInfo = DateOfTest.Split('T');
-                //return $"{dateInfo[0]}  {dateInfo[1]}";
-                return DateOfTest.Replace("T", "   ");
-            }
-        }
-
+        public string TestDateTime =>
+            //var dateInfo = DateOfTest.Split('T');
+            //return $"{dateInfo[0]}  {dateInfo[1]}";
+            DateOfTest.Replace("T", "   ");
     }
 }

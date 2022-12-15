@@ -27,8 +27,10 @@
 
                 <Label Text="Test Error" Style="{StaticResource Header}"/>
 
+                <!--Deleted during switch-->
                 <Label Text="{Binding ErrorCode}" Style="{StaticResource Important}"/>
 
+                <!--Deleted during switch-->
                 <Label Text="{Binding ErrorMessage}" Style="{StaticResource Notice}"/>
 
                 <Label Text="You can test again or follow the tutorial." Style="{StaticResource Notice}" Margin="0,0,0,20"/>

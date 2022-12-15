@@ -19,30 +19,24 @@ namespace FenomPlus.Controls
         [ObservableProperty]
         private string _value;
 
+        [ObservableProperty] 
+        private Color _valueColor;
+
         [ObservableProperty]
         private string _label;
 
         [ObservableProperty]
-        private string _description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim.";
+        private string _description;
 
         [ObservableProperty]
         private string _buttonText;
-
-        [ObservableProperty]
-        private Color _color;
 
         [ObservableProperty]
         private string _helpLink = "https://www.caireinc.com/";
 
         public StatusButtonViewModel()
         {
-            
         }
 
-        //[RelayCommand]
-        //private void ButtonPress()
-        //{
-
-        //}
     }
 }

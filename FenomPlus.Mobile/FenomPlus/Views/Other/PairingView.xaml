@@ -16,12 +16,18 @@
 
     <ContentPage.Content>
 
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20" BackgroundColor="Yellow">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+
+            <Label Text="Comng Soon!" 
+                   Grid.Row="1" 
+                   Grid.RowSpan="2" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center"/>
 
             <Button Text="Exit"
                     Grid.Row="1"

@@ -20,7 +20,7 @@ namespace FenomPlus.SDK.Core
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
         private IAppServices Services => IOC.Services;
 
-        private LoggingManager _loggingMaager;
+        private LoggingManager _loggingManager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
 
@@ -107,7 +107,6 @@ namespace FenomPlus.SDK.Core
         }
         #endregion
 
-
         public IFenomHubSystem FenomHubSystem
         {
             get => _FenomHubSystem;
@@ -116,7 +115,7 @@ namespace FenomPlus.SDK.Core
 
         public void SetLoggerFactory(ILoggerFactory loggerFactory)
         {
-            _loggingMaager.SetLoggingFactory(loggerFactory);
+            _loggingManager.SetLoggingFactory(loggerFactory);
         }
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace FenomPlus.SDK.Core
                     {
                         if ((bleDevice != null) && (!string.IsNullOrEmpty(bleDevice.Name)))
                         {
-                            if (bleDevice.Name.ToUpper().StartsWith("FENOM"))
+                            if (bleDevice.Name.ToUpper().StartsWith("FP") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
                             {
                                 deviceFoundCallback?.Invoke(bleDevice);
                             }

@@ -47,42 +47,47 @@
                          Margin="0,0,10,0">
 
 
-                <ImageButton Source="{Binding SensorBarIcon}"                             
-                             Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
+                <!--Following items are only displayed when out of range-->
 
                 <ImageButton Source="{Binding DeviceBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding DeviceBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
-                <ImageButton Source="{Binding QcBarIcon}"                             
+                <ImageButton Source="{Binding SensorBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding SensorBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
 
                 <ImageButton Source="{Binding PressureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
-                             Command="{Binding NavigateToStatusPageCommand}"/>
-
-                <ImageButton Source="{Binding HumidityBarIcon}"                             
-                             Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding PressureBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
                 <ImageButton Source="{Binding TemperatureBarIcon}"                             
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding TemperatureBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
 
+                <ImageButton Source="{Binding HumidityBarIcon}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding HumidityBarIconVisible}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
+                
+                <ImageButton Source="{Binding QcBarIcon}"                             
+                             Style="{StaticResource StatusBarButton}"
+                             IsVisible="{Binding QcBarIconVisible}"
+                             Command="{Binding NavigateToStatusPageCommand}"/>
+
+                <!--Always Displayed when device is connected-->
 
                 <ImageButton Source="{Binding BatteryBarIcon}" 
                              Style="{StaticResource StatusBarButton}"
-                             IsVisible="{Binding BluetoothConnected}"
+                             IsVisible="{Binding BatteryBarIconVisible}"
                              Command="{Binding NavigateToStatusPageCommand}"/>
+
+                <!--Always Displayed-->
 
                 <ImageButton Source="{Binding BluetoothBarIcon}" 
                              Style="{StaticResource StatusBarButton}"

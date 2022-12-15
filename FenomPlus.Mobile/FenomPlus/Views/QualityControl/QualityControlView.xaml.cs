@@ -4,9 +4,11 @@ using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Enums;
 using FenomPlus.Controls;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QualityControlView : BaseContentPage
     {
         private readonly QualityControlViewModel QualityControlViewModel;

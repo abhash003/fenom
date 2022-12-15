@@ -1,4 +1,5 @@
-﻿using Acr.UserDialogs;
+﻿
+using Acr.UserDialogs;
 using System;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
@@ -12,25 +13,40 @@ namespace FenomPlus.Services
             return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
         }
 
+        private IProgressDialog SecondsProgressDialog;
+
         public async Task ShowSecondsProgress(string message, int seconds)
         {
-            IProgressDialog secondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.Gradient);
+            SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
             double increment = Convert.ToDouble(100 / seconds);
 
             for (int i = 0; i < 100; i++)
             {
-                secondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+                SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
 
-                if (secondsProgressDialog.PercentComplete >= 99)
+                if (SecondsProgressDialog.PercentComplete >= 99)
                 {
-                    secondsProgressDialog.Dispose();
+                    SecondsProgressDialog.Dispose();
                 }
                 else
                 {
                     await Task.Delay(1000);
                 }
             }
+        }
+
+        public bool SecondsProgressDialogShowing()
+        {
+            if (SecondsProgressDialog != null)
+                return SecondsProgressDialog.IsShowing;
+            else
+                return false;
+        }
+
+        public void DismissSecondsProgressDialog()
+        {
+            SecondsProgressDialog.Dispose();
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)
@@ -43,14 +59,14 @@ namespace FenomPlus.Services
 
         public void ShowToast(string message, int seconds)
         {
-            TimeSpan timeSpan = new TimeSpan(0,0, seconds);
-            UserDialogs.Instance.Toast(message, timeSpan);
+            //TimeSpan timeSpan = new TimeSpan(0,0, seconds);
+            //UserDialogs.Instance.Toast(message, timeSpan);
 
 
-            //ToastConfig toastConfig = new ToastConfig("Toast");
-            //toastConfig.SetDuration(seconds * 1000);
-            //toastConfig.SetBackgroundColor(Color.DimGray);
-            //UserDialogs.Instance.Toast(toastConfig);
+            ToastConfig toastConfig = new ToastConfig("Toast");
+            toastConfig.SetDuration(seconds * 1000);
+            toastConfig.SetBackgroundColor(Xamarin.Forms.Color.Transparent);
+            UserDialogs.Instance.Toast(toastConfig);
         }
 
         public async Task DatePromptAsync(string message, DateTime defaultDateTime)

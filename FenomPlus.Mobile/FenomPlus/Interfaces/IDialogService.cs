@@ -13,6 +13,10 @@ namespace FenomPlus.Interfaces
 
         Task ShowSecondsProgress(string message, int seconds);
 
+        bool SecondsProgressDialogShowing();
+
+        void DismissSecondsProgressDialog();
+
         Task ShowLoadingAsync(string message, int seconds);
 
         void ShowToast(string message, int seconds);

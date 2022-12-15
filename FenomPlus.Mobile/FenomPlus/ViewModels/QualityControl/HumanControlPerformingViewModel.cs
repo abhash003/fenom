@@ -90,7 +90,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 guageSeconds = value;
-                OnPropertyChanged("GuageSeconds");
+                OnPropertyChanged("GaugeSeconds");
             }
         }
 
@@ -104,7 +104,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 guageData = value;
-                OnPropertyChanged("GuageData");
+                OnPropertyChanged("GaugeData");
                 if (!Stop) PlaySounds.PlaySound(GuageData);
             }
         }
@@ -119,7 +119,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 guageStatus = value;
-                OnPropertyChanged("GuageStatus");
+                OnPropertyChanged("GaugeStatus");
             }
         }
 

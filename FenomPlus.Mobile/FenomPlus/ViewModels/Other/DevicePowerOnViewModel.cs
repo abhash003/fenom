@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,10 +13,19 @@ using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
 namespace FenomPlus.ViewModels
 {
-    public class DevicePowerOnViewModel : BaseViewModel
+    public partial class DevicePowerOnViewModel : BaseViewModel
     {
 
         private bool Stop;
+		
+		[ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(Message))]
+        private int _seconds;
+
+        partial void OnSecondsChanged(int value)
+        {
+            Message = string.Format("Scanning for Device Please Wait...", value);
+        }
 
         public DevicePowerOnViewModel()
         {
@@ -91,6 +100,10 @@ namespace FenomPlus.ViewModels
 
             }, (IEnumerable<IBleDevice> bleDevices) =>
             {
+				await Services.Navigation.DashboardView();
+				await Services.Dialogs.ShowAlertAsync("Bluetooth could not connect to device", 
+                        "No Device found",
+                        "Exit");
 
             });
 #endif

@@ -5,6 +5,7 @@ using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
 using FenomPlus.Services;
@@ -186,6 +187,10 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// <param name="devicesFoundCallback"></param>
         /// <param name="scanTimeoutCallback"></param>
         /// <returns></returns>
+        
+        private static readonly Object m_Lock = new Object();
+        
+        
         public async Task<bool> Scan(double scanTime, bool scanBondedDevices, bool scanBleDevices, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null, Action scanTimeoutCallback = null)
         {
             try
@@ -205,25 +210,28 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 if(scanBondedDevices == true)
                 {
                     _bondeddevices.Clear();
-
                     IReadOnlyList<IDevice> bondedDevices = Adapter.GetSystemConnectedOrPairedDevices(null);
-                    foreach (var device in bondedDevices)
-                    {
-                        if (string.IsNullOrEmpty(device?.Name))
-                        {
-                            //return;
-                        }
 
-                        try
+                    lock (m_Lock)
+                    {
+                        foreach (var device in bondedDevices)
                         {
-                            //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
-                            BleDevice bleDevice = new BleDevice(device);
-                            _bondeddevices.Add(bleDevice);
-                            deviceFoundCallback?.Invoke(bleDevice);
-                        }
-                        finally
-                        {
-                            //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            if (string.IsNullOrEmpty(device?.Name))
+                            {
+                                continue;
+                            }
+
+                            try
+                            {
+                                //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                                BleDevice bleDevice = new BleDevice(device);
+                                _bondeddevices.Add(bleDevice);
+                                deviceFoundCallback?.Invoke(bleDevice);
+                            }
+                            finally
+                            {
+                                //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                            }
                         }
                     }
                 }

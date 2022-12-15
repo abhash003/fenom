@@ -33,13 +33,13 @@
                            HorizontalTextAlignment="Center" />
 
 
-                <controls:BreathGuage GuageSize="350"
-                                  GuageData="{Binding GuageData}"
+                <controls:BreathGauge GaugeSize="350"
+                                  GaugeData="{Binding GaugeData}"
                                   Text=""
                                   IsShowStep="false"
-                                  Value="{Binding GuageSeconds}" />
+                                  Value="{Binding GaugeSeconds}" />
 
-                <Label Text="{Binding GuageStatus}"
+                <Label Text="{Binding GaugeStatus}"
                            FontSize="16"
                            TextColor="#333"
                            HorizontalTextAlignment="Center"/>

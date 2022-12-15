@@ -119,23 +119,6 @@
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"/>
 
-                        <!--<buttons:SfButton x:Name="Other" 
-                                          Grid.Row="1" 
-                                          Grid.Column="3"
-                                          HasShadow="True" 
-                                          BackgroundColor="Transparent"
-                                          BorderColor="#E7E7E7" 
-                                          BorderWidth="1" 
-                                          EnableRippleEffect="True"
-                                          Margin="10,10,10,0">
-
-                            <Image Source="TutStep2"
-                                   BackgroundColor="Transparent"
-                                   VerticalOptions="CenterAndExpand"
-                                   Aspect="AspectFit"/>
-
-                        </buttons:SfButton>-->
-
                         <controls:ImageButtonView 
                                 x:Name="ImageButton"
                                 Grid.Row="1" 

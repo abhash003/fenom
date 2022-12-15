@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Timers;
@@ -9,7 +10,8 @@ using FenomPlus.SDK.Core;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
-using Plugin.BLE.Abstractions.EventArgs;
+using FenomPlus.Views;
+using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
@@ -27,14 +29,6 @@ namespace FenomPlus.Services
             DialogService = Container.Resolve<IDialogService>();
 
             ReadyForTest = true;
-
-            FenomHubSystemDiscovery.DeviceConnectionLost += (object sender, DeviceErrorEventArgs e) =>
-            {
-                //if (AppShell.Current.CurrentPage)
-                //_ = Services.Navigation.DevicePowerOnView();
-
-                Services.Navigation.DisplayAlert("Alert", "You have been alerted", "OK");
-            };
         }
 
         public int DeviceReadyCountDown { get; set; }
@@ -75,7 +69,7 @@ namespace FenomPlus.Services
         /// 
         /// </summary>
         private IFenomHubSystemDiscovery fenomHubSystemDiscovery;
-        public IFenomHubSystemDiscovery FenomHubSystemDiscovery
+        public  IFenomHubSystemDiscovery FenomHubSystemDiscovery
         {
             get
             {
@@ -83,7 +77,6 @@ namespace FenomPlus.Services
                 {
                     fenomHubSystemDiscovery = new FenomHubSystemDiscovery();
                     fenomHubSystemDiscovery.SetLoggerFactory(Services.Cache.Logger);
-                    
                 }
                 return fenomHubSystemDiscovery;
             }
@@ -110,7 +103,7 @@ namespace FenomPlus.Services
         /// <param name="deviceFoundCallback"></param>
         /// <param name="scanCompletedCallback"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = false, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
+        public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
         {
             return await FenomHubSystemDiscovery.Scan(scanTime, scanBondedDevices, scanBleDevices, deviceFoundCallback, scanCompletedCallback);
         }
@@ -122,24 +115,8 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public async Task<bool> Connect(IBleDevice bleDevice)
         {
-            if (bleDevice.Connected)
-            {
-                BleDevice = bleDevice;
-                return true;
-            }
-            else
-            {
-                // disconnect from existing if different device
-                if (BleDevice != bleDevice)
-                {
-                    // disconnect from BleDevice
-                    await Disconnect();
-
-                    // connect to bleDevice (notice capitalization)
-                    BleDevice = bleDevice;
-                }
-            }
-
+            await Disconnect();
+            BleDevice = bleDevice;
             return await bleDevice.ConnectAsync();
         }
 
@@ -169,17 +146,15 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsConnected(bool devicePowerOn = false)
         {
-            //Services.LogCat.Print("******** IsConnected: devicePowerOn: {0}", devicePowerOn.ToString());
-
             // do we have a device
-            if (BleDevice != null)
+            if(BleDevice != null)
             {
-                Services.LogCat.Print("******** IsConnected -> BleDevice.Connected: {0}", BleDevice.Connected.ToString());
-
                 // if disconnected try to re-connect
-                if ((BleDevice.Connected == false) && (devicePowerOn == false))
+                if((BleDevice.Connected == false) && (devicePowerOn == false))
                 {
                     Debug.WriteLine("Error: Trying to reconnect...");
+                    
+                    //DialogService.ShowToast("Error: Trying to reconnect...", 4);
                     // try to connect
                     BleDevice.ConnectAsync();
                 }
@@ -196,8 +171,8 @@ namespace FenomPlus.Services
         /// <returns></returns>
         public bool IsNotConnectedRedirect(bool devicePowerOn = false)
         {
-            if (IsConnected(devicePowerOn))
-            {
+            //return true;
+            if(IsConnected(devicePowerOn)) {
                 return true;
             }
             Services.Navigation.DevicePowerOnView();
@@ -237,31 +212,21 @@ namespace FenomPlus.Services
             set;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="breathTestEnum"></param>
-        /// <returns></returns>
         public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
         {
-            if (IsConnected())
+            if(IsConnected())
             {
                 BreathTestInProgress = true;
-                return await BleDevice.BREATHTEST(breathTestEnum);
+                return await BleDevice.BREATHMANUEVER(breathTestEnum);
             }
             return false;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public async Task<bool> StopTest()
         {
             if (IsConnected())
             {
                 BreathTestInProgress = false;
-                return await BleDevice.BREATHTEST(BreathTestEnum.Stop);
+                return await BleDevice.BREATHMANUEVER(BreathTestEnum.Stop);
             }
             return false;
         }
@@ -292,6 +257,24 @@ namespace FenomPlus.Services
             return false;
         }
 
+        public async Task<bool> RequestErrorStatusInfo()
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.ERRORSTATUSINFO();
+            }
+            return false;
+        }
+
+        public async Task<bool> RequestDeviceStatusInfo()
+        {
+            if (IsConnected())
+            {
+                return await BleDevice.DEVICESTATUSINFO();
+            }
+            return false;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -309,13 +292,13 @@ namespace FenomPlus.Services
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="serialNumber"></param>
+        /// <param name="SerialNumber"></param>
         /// <returns></returns>
-        public async Task<bool> SendSerialNumber(string serialNumber)
+        public async Task<bool> SendSerialNumber(string SerialNumber)
         {
             if (IsConnected())
             {
-                return await BleDevice.SERIALNUMBER(serialNumber);
+                return await BleDevice.SERIALNUMBER(SerialNumber);
             }
             return false;
         }

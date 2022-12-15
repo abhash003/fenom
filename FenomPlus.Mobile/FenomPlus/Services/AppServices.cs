@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FenomPlus.Interfaces;
 using FenomPlus.Services.NewArch.R2;
 using FenomPlus.ViewModels;
@@ -82,6 +82,8 @@ namespace FenomPlus.Services
 
                 // We only want one instance of this - includes its own timer
                 Container.Register<StatusViewModel>().AsSingleton();
+				
+				Container.Register<PastResultsViewModel>();
             }
             catch (Exception ex)
             {

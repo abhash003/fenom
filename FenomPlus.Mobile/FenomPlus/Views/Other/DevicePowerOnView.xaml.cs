@@ -1,43 +1,37 @@
 ﻿using FenomPlus.ViewModels;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DevicePowerOnView : BaseContentPage
     {
-        private DevicePowerOnViewModel model;
+        private DevicePowerOnViewModel DevicePowerOnViewModel;
 
         public DevicePowerOnView()
         {
             InitializeComponent();
 
-            BindingContext = model = new DevicePowerOnViewModel();
+            BindingContext = DevicePowerOnViewModel = new DevicePowerOnViewModel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
+            DevicePowerOnViewModel.OnAppearing();
+
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
+            DevicePowerOnViewModel.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
+            DevicePowerOnViewModel.NewGlobalData();
         }
     }
 }

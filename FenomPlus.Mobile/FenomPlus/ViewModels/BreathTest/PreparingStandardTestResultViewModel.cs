@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Timers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
@@ -6,55 +9,47 @@ using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class PreparingStandardTestResultViewModel : BaseViewModel
+    public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        [ObservableProperty]
+        private string _testType;
+
         public PreparingStandardTestResultViewModel()
         {
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private Timer CalculationsTimer;
+
         public override void OnAppearing()
         {
             base.OnAppearing();
-            if (Services.Cache.TestType == TestTypeEnum.Standard)
-            {
-                TestType = "10-second Test Result";
-            }
-            else
-            {
-                TestType = "6-second Test Result";
-            }
-            Seconds = Config.TestResultReadyWait;
-            Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
+
+            TestType = Services.Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
+
+            CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
+            CalculationsTimer.Elapsed += (sender, e) => CalculationsCompleted();
+            CalculationsTimer.Start();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnDisappearing()
         {
+            CalculationsTimer.Start(); // Just in case
+            CalculationsTimer.Dispose();
+
             base.OnDisappearing();
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private bool TimerCallback()
+        private bool CalculationsCompleted()
         {
-            if (Seconds > 0) Seconds--;
-            if (Services.Cache.FenomReady == true)
+            if (Cache.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Services.Cache.BreathManeuver);
-
+                var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
                 ResultsRepo.Insert(model);
+
+                var str = ResultsRepo.ToString();
+
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Cache.BreathManeuver.StatusCode}");
 
                 if (Services.Cache.BreathManeuver.StatusCode != 0x00)
                 {
@@ -70,41 +65,13 @@ namespace FenomPlus.ViewModels
                     Services.Navigation.TestResultsView();
                 }
             }
+
             return (Services.Cache.FenomReady == false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private int seconds;
-        public int Seconds
-        {
-            get => seconds;
-            set
-            {
-                seconds = value;
-                OnPropertyChanged("Seconds");
-            }
-        }
-
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void NewGlobalData()
         {
             base.NewGlobalData();
         }
     }
 }
-

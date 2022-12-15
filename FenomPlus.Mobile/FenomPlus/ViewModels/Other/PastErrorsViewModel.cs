@@ -1,35 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
-using FenomPlus.Helpers;
 using FenomPlus.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 
 namespace FenomPlus.ViewModels
 {
     public partial class PastErrorsViewModel : BaseViewModel
     {
-        [ObservableProperty]
-        private List<BreathManeuverErrorDataModel> _recentErrorsData;
+        public ObservableCollection<BreathManeuverErrorDataModel> RecentErrorsData;
 
         public PastErrorsViewModel()
         {
-            RecentErrorsData = new List<BreathManeuverErrorDataModel>();
-            UpdateRecentErrorsData();
+            RecentErrorsData = new ObservableCollection<BreathManeuverErrorDataModel>();
         }
 
-
         [RelayCommand]
-        public void UpdateRecentErrorsData()
+        public void RefreshRecentErrors()
         {
             RecentErrorsData.Clear();
 
-            IEnumerable<BreathManeuverErrorTb> records = ErrorsRepo.SelectAll();
+            List<BreathManeuverErrorTb> records = ErrorsRepo.SelectAll().ToList();
 
-            foreach (BreathManeuverErrorTb record in records)
+            var sortedRecords = records.OrderByDescending(c => c.DateError);
+
+            foreach (BreathManeuverErrorTb record in sortedRecords)
             {
                 RecentErrorsData.Add(record.ConvertForGrid());
             }
@@ -71,7 +71,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            UpdateRecentErrorsData();
+            RefreshRecentErrors();
         }
 
         public override void OnDisappearing()

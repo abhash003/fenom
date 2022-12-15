@@ -7,7 +7,7 @@ namespace FenomPlus.Models
     public class DebugLog
     {
         public DateTime DateTime { get; set; }
-        public string FormatedDateTime => DateTime.ToString("yyyymmdd HH:mm:ss:ffff");
+        public string FormattedDateTime => DateTime.ToString("yyyymmdd HH:mm:ss:ffff");
         public string Msg { get; set; }
         public string HexMsg { get; set; }
         public byte[] RawMsg { get; set; }

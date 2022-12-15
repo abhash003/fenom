@@ -10,7 +10,7 @@ namespace FenomPlus.Models
         public string Info { get; set; }
         public string Illustration { get; set; }
         public bool ShowImage { get { return (!ShowStep); } }
-        public bool ShowGuage { get { return (ShowStep); } }
+        public bool ShowGauge { get { return (ShowStep); } }
         public bool ShowStep { get; set; }
     }
 }

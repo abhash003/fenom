@@ -24,7 +24,7 @@ namespace FenomPlus.Services
             GaugeDataHigh = 3.2f;
             BatteryLevelLow = 10;           // %
             DaysRemaining = 60;             // days
-            TestResultReadyWait = 22;       // seconds
+            TestResultReadyWait = 23;       // seconds
             StopExhalingReadyWait = 3;      // seconds
         }
     }
