@@ -49,7 +49,7 @@ namespace FenomPlus.SDK.Core
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
 
             _bleRadio = new BleRadioService();
-            _loggingMaager = LoggingManager.GetInstance;
+            _loggingManager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
             _bleRadio.DeviceConnected += _bleRadio_DeviceConnected;
             _bleRadio.DeviceDisconnected += _bleRadio_DeviceDisconnected;

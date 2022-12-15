@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Services;
@@ -172,21 +173,6 @@ namespace FenomPlus.ViewModels
             }
 
             return ((Seconds >= 0) && (Stop == false));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int seconds;
-        public int Seconds
-        {
-            get => seconds;
-            set
-            {
-                seconds = value;
-                Message = string.Format("Scanning for Device Please Wait {0} seconds...", seconds);
-                OnPropertyChanged("Seconds");
-            }
         }
 
         /// <summary>

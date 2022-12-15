@@ -116,7 +116,7 @@ namespace FenomPlus.ViewModels
         {
             bool isBluetoothConnected = connected;
 
-            RefreshIconStatus(isBluetoothConnected);
+            _ = RefreshStatusAsync();
 
             if (isBluetoothConnected)
             {
@@ -137,10 +137,10 @@ namespace FenomPlus.ViewModels
 
         private bool CheckDeviceConnection()
         {
-            if (Services == null || Services.BleHub == null || Services.Device.BleDevice == null)
+            if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
                 return false;
 
-            bool deviceIsConnected = Services.Device.IsConnected;
+            bool deviceIsConnected = Services.DeviceService.Current.Connected;
 
             // Don't use Services.Device.IsConnected() or it will try to reconnect - we just want current connection status
             return deviceIsConnected;
@@ -171,8 +171,8 @@ namespace FenomPlus.ViewModels
 
                 if (BluetoothCheckCount == 0)
                 {
-                    await Services.Device.RequestDeviceInfo();
-                    await Services.Device.RequestEnvironmentalInfo();
+                    await Services.DeviceService.Current.RequestDeviceInfo();
+                    await Services.DeviceService.Current.RequestEnvironmentalInfo();
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
                 }
@@ -198,10 +198,10 @@ namespace FenomPlus.ViewModels
         {
             // To early to get status or don't update environmental properties during test
             if (!BluetoothConnected || 
-                RefreshInProgress || 
-                Services?.BleHub == null || 
-                Services.Device.BreathTestInProgress || 
-                Cache?.EnvironmentalInfo == null)
+                RefreshInProgress ||
+                Services.DeviceService.Current != null ||
+                Services.DeviceService.Current.BreathTestInProgress || 
+                Services.Cache?.EnvironmentalInfo == null)
             {
                 await Task.Delay(1);
                 return;
@@ -213,17 +213,17 @@ namespace FenomPlus.ViewModels
 
             UpdateBluetooth();
 
-            UpdateDevice(Cache.DeviceExpireDate);
+            UpdateDevice(Services.Cache.DeviceExpireDate);
 
-            UpdateSensor(Cache.SensorExpireDate);
+            UpdateSensor(Services.Cache.SensorExpireDate);
 
-            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
+            UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
 
-            UpdateHumidity(Cache.EnvironmentalInfo.Humidity);
+            UpdateHumidity(Services.Cache.EnvironmentalInfo.Humidity);
 
-            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+            UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
 
             UpdateQualityControlExpiration(7); // ToDo:  Need value here
 

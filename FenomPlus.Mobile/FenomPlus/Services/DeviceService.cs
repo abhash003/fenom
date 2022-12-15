@@ -825,7 +825,7 @@ namespace FenomPlus.Services.NewArch.R2
         /// <returns></returns>
         public async Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
         {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHTEST, (Byte)breathTestEnum);
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER, (Byte)breathTestEnum);
             return await WRITEREQUEST(message, 1);
         }
 
@@ -840,15 +840,15 @@ namespace FenomPlus.Services.NewArch.R2
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> TRAININGMODE()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
-            return await WRITEREQUEST(message, 1);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <returns></returns>
+        //public async Task<bool> TRAININGMODE()
+        //{
+        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
+        //    return await WRITEREQUEST(message, 1);
+        //}
 
         /// <summary>
         /// 
@@ -860,15 +860,15 @@ namespace FenomPlus.Services.NewArch.R2
             return await WRITEREQUEST(message, 1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> DEBUGMANUEVERTYPE()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
-            return await WRITEREQUEST(message, 1);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <returns></returns>
+        //public async Task<bool> DEBUGMANUEVERTYPE()
+        //{
+        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
+        //    return await WRITEREQUEST(message, 1);
+        //}
 
         /// <summary>
         /// 

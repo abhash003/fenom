@@ -1,11 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
-using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -42,14 +40,14 @@ namespace FenomPlus.ViewModels
 
         private bool CalculationsCompleted()
         {
-            if (Cache.FenomReady == true)
+            if (Services.Cache.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(Services.Cache.BreathManeuver);
                 ResultsRepo.Insert(model);
 
                 var str = ResultsRepo.ToString();
 
-                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Cache.BreathManeuver.StatusCode}");
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.Cache.BreathManeuver.StatusCode}");
 
                 if (Services.Cache.BreathManeuver.StatusCode != 0x00)
                 {

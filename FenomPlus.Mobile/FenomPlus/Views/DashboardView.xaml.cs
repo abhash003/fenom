@@ -3,6 +3,7 @@ using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Enums;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
