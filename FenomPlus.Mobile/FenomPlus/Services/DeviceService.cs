@@ -43,6 +43,7 @@ using Plugin.BLE.Abstractions.Exceptions;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
 using System.ComponentModel;
 using FenomPlus.SDK.Core.Utils;
+using Xamarin.Forms;
 
 #endregion
 
@@ -428,7 +429,7 @@ namespace FenomPlus.Services.NewArch.R2
             await _ble.Adapter.StartScanningForDevicesAsync(
                 deviceFilter: (PluginBleIDevice d) =>
                 {
-                    if (d.Name != null && d.Name.ToLower().Contains("fenom"))
+                    if (d.Name != null && (d.Name.ToLower().Contains("fenom") || d.Name.ToLower().StartsWith("fp")))
                         return true; 
 
                     return false;   
@@ -447,7 +448,7 @@ namespace FenomPlus.Services.NewArch.R2
         {
             Console.WriteLine(" ... Adapter_DeviceDiscovered ... ");
 
-            if ((e.Device.Name == null) || (e.Device.Name != null && !e.Device.Name.ToLower().Contains("fenom")))
+            if ((e.Device.Name == null) || (e.Device.Name != null && (!e.Device.Name.ToLower().Contains("fenom") && !e.Device.Name.ToLower().StartsWith("fp"))))
                 return;
 
             bool exists = _deviceService.Devices.Any(d => d.Id == e.Device.Id);
@@ -470,8 +471,9 @@ namespace FenomPlus.Services.NewArch.R2
             _deviceService.Current = _deviceService.Devices.First(d => d.Id == e.Device.Id);
             if (_deviceService.Current != null)
             {
+                //Thread.SpinWait(1000);
                 //_deviceService.StopDiscovery();
-                //await _ble.Adapter.StopScanningForDevicesAsync();
+                //_ble.Adapter.StopScanningForDevicesAsync();
             }
 
             _deviceService.HandleDeviceConnected(_deviceService.Devices.First(d => d.Id == e.Device.Id));
@@ -480,7 +482,7 @@ namespace FenomPlus.Services.NewArch.R2
         {
             if (e.Device.Id == _deviceService.Current.Id)
                 _deviceService.Current = null;
-            _deviceService.HandleDeviceDisconnected(_deviceService.Devices.First(d => d.Id == e.Device.Id));
+            //_deviceService.HandleDeviceDisconnected(_deviceService.Devices.First(d => d.Id == e.Device.Id));
         }
         private void Adapter_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
         {

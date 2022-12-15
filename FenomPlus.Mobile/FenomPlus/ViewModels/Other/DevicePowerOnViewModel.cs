@@ -25,7 +25,7 @@ namespace FenomPlus.ViewModels
 
         partial void OnSecondsChanged(int value)
         {
-            Message = string.Format("Scanning for Device Please Wait...", value);
+            Message = string.Format("Scanning for Device Please Wait... {0}", value);
         }
 
         public DevicePowerOnViewModel()
@@ -71,7 +71,7 @@ namespace FenomPlus.ViewModels
                 {
                     if (device.Name != null)
                     {
-                        if (device.Name.ToLower().Contains("fenom"))
+                        if (device.Name.ToLower().Contains("fenom") || device.Name.ToLower().StartsWith("fp"))
                         {
                             Stop = true;
                             await device.ConnectAsync();
