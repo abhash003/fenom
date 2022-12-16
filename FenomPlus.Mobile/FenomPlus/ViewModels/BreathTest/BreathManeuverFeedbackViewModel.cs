@@ -1,45 +1,46 @@
 ﻿using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
-    public class BreathManeuverFeedbackViewModel : BaseViewModel
+    public partial class BreathManeuverFeedbackViewModel : BaseViewModel
     {
         private bool StartMeasure;
+        private int TestGaugeSeconds;
+
+        private bool Stop;
+        public int GaugeSecondsCountdown;
+
+        [ObservableProperty]
+        private string _testType;
+
+        [ObservableProperty]
+        private int _testTime;
+
+
+        [ObservableProperty]
+        private int _gaugeSeconds;
+
+        [ObservableProperty]
+        private float _gaugeData;
+
+        partial void OnGaugeDataChanged(float value)
+        {
+            if (!Stop)
+                PlaySounds.PlaySound(GaugeData);
+        }
+
+        [ObservableProperty]
+        private string _gaugeStatus;
 
         public BreathManeuverFeedbackViewModel()
         {
         }
 
-        private bool Stop;
 
-        private string _TestType;
-        public string TestType
-        {
-            get => _TestType;
-            set
-            {
-                _TestType = value;
-                OnPropertyChanged("TestType");
-            }
-        }
-
-        private int _TestTime;
-        public int TestTime
-        {
-            get => _TestTime;
-            set
-            {
-                _TestTime = value;
-                OnPropertyChanged("TestTime");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -58,57 +59,57 @@ namespace FenomPlus.ViewModels
             Stop = false;
             StartMeasure = false;
 
-            GuageData = 0;
+            GaugeData = 0;
             Services.Cache.BreathFlow = 0;
-            TestGuageSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
+            TestGaugeSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
 
             // setup our count down
-            GuageSecondsCountdown = TestGuageSeconds;
-            GuageSeconds = GuageSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
-            GuageStatus = "Start Blowing";
+            GaugeSecondsCountdown = TestGaugeSeconds;
+            GaugeSeconds = GaugeSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
+            GaugeStatus = "Start Blowing";
 
             // start timer
             Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
-                GuageData = Services.Cache.BreathFlow;
-                if ((GuageData <= 0.0f) && (StartMeasure == false))
+                GaugeData = Services.Cache.BreathFlow;
+                if ((GaugeData <= 0.0f) && (StartMeasure == false))
                 {
                     // return continue of below the time
-                    
-                    GuageStatus = "Start Blowing";
+
+                    GaugeStatus = "Start Blowing";
                 }
                 else
                 {
-                    TestGuageSeconds = Services.Cache.BreathManeuver.TimeRemaining;
+                    TestGaugeSeconds = Services.Cache.BreathManeuver.TimeRemaining;
 
-                    if (GuageSecondsCountdown > 0) GuageSecondsCountdown--;
-                    GuageSeconds = GuageSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
+                    if (GaugeSecondsCountdown > 0) GaugeSecondsCountdown--;
+                    GaugeSeconds = GaugeSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
                     StartMeasure = true;
-                    if (GuageData < Config.GaugeDataLow)
+                    if (GaugeData < Config.GaugeDataLow)
                     {
-                        GuageStatus = "Exhale Harder";
+                        GaugeStatus = "Exhale Harder";
                     }
-                    else if (GuageData > Config.GaugeDataHigh)
+                    else if (GaugeData > Config.GaugeDataHigh)
                     {
-                        GuageStatus = "Exhale Softer";
+                        GaugeStatus = "Exhale Softer";
                     }
                     else
                     {
-                        GuageStatus = "Good Job!";
+                        GaugeStatus = "Good Job!";
                     }
                 }
 
                 // have we started the Measure yet?
                 if (StartMeasure == true)
                 {
-                    if ((TestGuageSeconds <= 0) && (Stop == false))
+                    if ((TestGaugeSeconds <= 0) && (Stop == false))
                     {
                         Services.DeviceService.Current.StopTest();
                         Services.Navigation.StopExhalingView();
                     }
                 }
 
-                return (TestGuageSeconds > 0) && (Stop == false);
+                return (TestGaugeSeconds > 0) && (Stop == false);
             });
         }
 
@@ -120,53 +121,6 @@ namespace FenomPlus.ViewModels
             base.OnDisappearing();
             Stop = true;
             PlaySounds.StopAll();
-        }
-
-        private int TestGuageSeconds;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int guageSeconds;
-        public int GuageSeconds
-        {
-            get => guageSeconds;
-            set
-            {
-                guageSeconds = value;
-                OnPropertyChanged("GuageSeconds");
-            }
-        }
-
-        public int GuageSecondsCountdown;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private float guageData;
-        public float GuageData
-        {
-            get => guageData;
-            set
-            {
-                guageData = value;
-                OnPropertyChanged("GuageData");
-                if(!Stop) PlaySounds.PlaySound(GuageData);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private string guageStatus;
-        public string GuageStatus
-        {
-            get => guageStatus;
-            set
-            {
-                guageStatus = value;
-                OnPropertyChanged("GuageStatus");
-            }
         }
 
         public override void NewGlobalData()

@@ -29,7 +29,7 @@ namespace FenomPlus.Views
                 }
 
                 DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Standard;
-                DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                await DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
                 await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }
@@ -45,7 +45,7 @@ namespace FenomPlus.Views
                 }
 
                 DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Short;
-                DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
+                await DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
                 await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
             }
         }

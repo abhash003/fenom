@@ -41,7 +41,22 @@ namespace FenomPlus.ViewModels
             else if (TutorialIndex == 4 || TutorialIndex == 6)
             {
                 Stop = true;
-                Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
+                if (Services.DeviceService.Current != null)
+                {
+                    Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
+                }
+                else
+                {
+                    if (Services.DeviceService.Devices.Count > 0)
+                    {
+                        Services.DeviceService.Devices[0].ConnectAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("####Devices not found####");
+                    }
+                }
+                
                 PlaySounds.StopAll();
             }
 
