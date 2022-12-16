@@ -87,9 +87,9 @@ namespace FenomPlus.ViewModels
             BluetoothConnected = false;
             _ = RefreshStatusAsync();
 
-            BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
-            BluetoothStatusTimer.Elapsed += BluetoothCheck;
-            BluetoothStatusTimer.Start();
+            //BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
+            //BluetoothStatusTimer.Elapsed += BluetoothCheck;
+            //BluetoothStatusTimer.Start();
 			
 			//Services.DeviceService.DeviceConnected += DeviceService_DeviceConnected;
             //Services.DeviceService.DeviceConnectionLost += DeviceService_DeviceConnectionLost;

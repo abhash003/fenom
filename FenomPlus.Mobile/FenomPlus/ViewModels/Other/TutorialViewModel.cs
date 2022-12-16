@@ -35,6 +35,7 @@ namespace FenomPlus.ViewModels
                 Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
                 {
                     GaugeData = Services.Cache.BreathFlow;
+                    Console.WriteLine("BreathFlowTimer: {0}", GaugeData);
                     return !Stop;
                 });
             }
