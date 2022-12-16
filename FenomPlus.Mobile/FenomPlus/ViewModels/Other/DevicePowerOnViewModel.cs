@@ -110,11 +110,7 @@ namespace FenomPlus.ViewModels
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bleDevice"></param>
-        public async Task FoundDevice(IBleDevice bleDevice)
+        public async Task FoundDevice(IDevice device)
         {
             Stop = true;
             Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
@@ -122,13 +118,6 @@ namespace FenomPlus.ViewModels
             // jac: do not request, this is updated by the device
             await Services.DeviceService.Current.RequestDeviceInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
-        }
-
-        public void FoundDevice(IDevice device)
-        {
-            Stop = true;
-            Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
-            return;
         }
 
         /// <summary>
