@@ -71,7 +71,7 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer;
 
-        public StatusViewModel()
+        public StatusViewModel() : base()
         {
             VersionTracking.Track();
 
@@ -91,9 +91,9 @@ namespace FenomPlus.ViewModels
             //BluetoothStatusTimer.Elapsed += BluetoothCheck;
             //BluetoothStatusTimer.Start();
 			
-			//Services.DeviceService.DeviceConnected += DeviceService_DeviceConnected;
-            //Services.DeviceService.DeviceConnectionLost += DeviceService_DeviceConnectionLost;
-            //Services.DeviceService.DeviceDisconnected += DeviceService_DeviceDisconnected;
+			Services.DeviceService.DeviceConnected += DeviceService_DeviceConnected;
+            Services.DeviceService.DeviceConnectionLost += DeviceService_DeviceConnectionLost;
+            Services.DeviceService.DeviceDisconnected += DeviceService_DeviceDisconnected;
 
             //Console.WriteLine("{0} {1} {2}");
         }
@@ -133,6 +133,13 @@ namespace FenomPlus.ViewModels
                 else if (App.GetCurrentPage() is DashboardView)
                 {
                     return;
+                }
+            }
+            else
+            {
+                if (!(App.GetCurrentPage() is DevicePowerOnView))
+                {
+                    Services.Navigation.DevicePowerOnView();
                 }
             }
         }

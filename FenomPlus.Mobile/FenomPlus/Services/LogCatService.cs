@@ -9,14 +9,13 @@ namespace FenomPlus.Services
         {
         }
 
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="msg"></param>
         public void Print(string msg, string exception = "")
         {
-            Console.WriteLine(msg, exception);
+            Console.WriteLine(String.Format("[com.caire.fenomplus]: Message: {0} {1}", msg, (exception == "") ? "" : " - Exception: " + exception));
         }
 
         /// <summary>
@@ -25,6 +24,7 @@ namespace FenomPlus.Services
         /// <param name="ex"></param>
         public void Print(Exception ex)
         {
+
             Print(ex.ToString());
         }
     }

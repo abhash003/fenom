@@ -1,4 +1,5 @@
 ﻿using FenomPlus.Controls;
+using FenomPlus.Services;
 using FenomPlus.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace FenomPlus.Views
         public DeviceStatusHubView()
         {
             InitializeComponent();
-            BindingContext = StatusViewModel = new StatusViewModel();
+            BindingContext = StatusViewModel = AppServices.Container.Resolve<StatusViewModel>();
 
             SensorInfo.BindingContext = StatusViewModel.SensorViewModel;
             DeviceInfo.BindingContext = StatusViewModel.DeviceViewModel;
