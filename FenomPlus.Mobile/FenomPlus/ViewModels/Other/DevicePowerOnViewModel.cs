@@ -10,7 +10,6 @@ using FenomPlus.Services.NewArch.R2;
 using FenomPlus.Views;
 using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
-using static FenomPlus.SDK.Core.FenomHubSystemDiscovery;
 
 namespace FenomPlus.ViewModels
 {
@@ -18,8 +17,8 @@ namespace FenomPlus.ViewModels
     {
 
         private bool Stop;
-		
-		[ObservableProperty]
+
+        [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(Message))]
         private int _seconds;
 
@@ -30,23 +29,51 @@ namespace FenomPlus.ViewModels
 
         public DevicePowerOnViewModel()
         {
-            Services.DeviceService.DeviceConnected += (object sender, EventArgs e) =>
-            {
-                AppServices.Container.Resolve<StatusViewModel>().OnConnected(true);
-                // if we lose the connection, start scanning again ...
-                //Stop = false;
-                //StopScan();
-                //StartScan();
-            };
+        }
 
-            Services.DeviceService.DeviceConnectionLost += (object sender, EventArgs e) =>
-            {
-                AppServices.Container.Resolve<StatusViewModel>().OnConnected(false);
-                // if we lose the connection, start scanning again ...
-                Stop = false;
-                StopScan();
-                StartScan();
-            };
+        void DeviceConnectedHandler(object sender, EventArgs e)
+        {
+            Helper.WriteDebug("Device connected.");
+            //AppServices.Container.Resolve<StatusViewModel>().OnConnected(true);
+            // if we lose the connection, start scanning again ...
+            //Stop = false;
+            //StopScan();
+            //StartScan();
+        }
+
+        void DeviceConnectionLostHandler(object sender, EventArgs e)
+        {
+            Helper.WriteDebug("Device connection lost.");
+            //AppServices.Container.Resolve<StatusViewModel>().OnConnected(false);
+            // if we lose the connection, start scanning again ...
+            //Stop = false;
+            //StopScan();
+            //StartScan();
+            Services.Navigation.DevicePowerOnView();
+        }
+
+        void DeviceDiscoveredHandler(object sender, EventArgs e)
+        {
+            Services.DeviceService.StopDiscovery();
+
+            var ea = (DeviceServiceEventArgs)e;
+            Helper.WriteDebug("Device discovered.");
+            ea.Device.ConnectAsync();
+            FoundDevice(ea.Device);
+        }
+
+        private void WireEventHandlers()
+        {
+            Services.DeviceService.DeviceConnected += DeviceConnectedHandler;
+            Services.DeviceService.DeviceConnectionLost += DeviceConnectionLostHandler;
+            Services.DeviceService.DeviceDiscovered += DeviceDiscoveredHandler;
+        }
+
+        private void UnwireEventHandlers()
+        {
+            Services.DeviceService.DeviceConnected -= DeviceConnectedHandler;
+            Services.DeviceService.DeviceConnectionLost -= DeviceConnectionLostHandler;
+            Services.DeviceService.DeviceDiscovered -= DeviceDiscoveredHandler;
         }
 
         /// <summary>
@@ -75,7 +102,7 @@ namespace FenomPlus.ViewModels
                         {
                             Stop = true;
                             await device.ConnectAsync();
-                            FoundDevice(device);
+                            await FoundDevice(device);
                         }
                     }
 
@@ -87,37 +114,20 @@ namespace FenomPlus.ViewModels
                     Console.WriteLine("exception: {0}", ex.Message);
                 }
             });
-
-#if false
-            _ = Services.DeviceService.Scan(new TimeSpan(0, 0, 0, Seconds), true, false, async (IBleDevice bleDevice) =>
-                        {
-                if ((bleDevice == null) || string.IsNullOrEmpty(bleDevice.Name)) return;
-                await Services.DeviceService.StopScan();
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    if (await Services.DeviceService.Connect(bleDevice) == false) return;
-                    await FoundDevice(bleDevice);
-                });
-
-            }, (IEnumerable<IBleDevice> bleDevices) =>
-            {
-				await Services.Navigation.DashboardView();
-				await Services.Dialogs.ShowAlertAsync("Bluetooth could not connect to device", 
-                        "No Device found",
-                        "Exit");
-
-            });
-#endif
         }
 
         public async Task FoundDevice(IDevice device)
         {
+            Helper.WriteDebug("enter: FoundDevice()");
+
             Stop = true;
             Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
-            Services.Cache.DeviceInfo = null;
             // jac: do not request, this is updated by the device
             await Services.DeviceService.Current.RequestDeviceInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
+
+            _ = Services.Navigation.DashboardView();
+            Helper.WriteDebug("exit:FoundDevice()");
         }
 
         /// <summary>
@@ -183,6 +193,14 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public override void OnAppearing()
         {
+            WireEventHandlers();
+
+            if (Services.DeviceService.Current != null)
+            {
+                //FoundDevice(Services.DeviceService.Current);
+                Services.Navigation.DashboardView();
+            }
+
             Stop = false;
             StopScan();
             StartScan();
@@ -193,8 +211,13 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public override void OnDisappearing()
         {
-            Stop = true;
-            StopScan();
+            UnwireEventHandlers();
+
+            //if (Stop == false && Services.DeviceService.Discovering)
+            {
+                Stop = true;
+                StopScan();
+            }
         }
 
         /// <summary>

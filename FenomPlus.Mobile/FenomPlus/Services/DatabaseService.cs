@@ -11,7 +11,6 @@ namespace FenomPlus.Services
     public class DatabaseService : BaseService, IDatabaseService
     {
         public static string DBName = "database.db";
-        private IAppServices Services => IOC.Services;
 
         /// <summary>
         /// 
