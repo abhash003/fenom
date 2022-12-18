@@ -5,6 +5,7 @@ using FenomPlus.Views;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Essentials;
@@ -100,19 +101,19 @@ namespace FenomPlus.ViewModels
 		
 		private void DeviceService_DeviceConnected(object sender, EventArgs e)
         {
-            OnConnected(true);
+            _ = OnConnectedAsync(true);
         }
         private void DeviceService_DeviceConnectionLost(object sender, EventArgs e)
         {
-            OnConnected(false);
+            _ = OnConnectedAsync(false);
         }
 
         private void DeviceService_DeviceDisconnected(object sender, EventArgs e)
         {
-            OnConnected(false);
+            _ = OnConnectedAsync(false);
         }
 		
-		public void OnConnected(bool connected)
+		public async Task OnConnectedAsync(bool connected)
         {
             bool isBluetoothConnected = connected;
 
@@ -124,7 +125,7 @@ namespace FenomPlus.ViewModels
             {
                 if (App.GetCurrentPage() is DevicePowerOnView)
                 {
-                    Services.Navigation.DashboardView();
+                    await Services.Navigation.DashboardView();
                 }
                 else if (App.GetCurrentPage() == null)
                 {
@@ -139,7 +140,39 @@ namespace FenomPlus.ViewModels
             {
                 if (!(App.GetCurrentPage() is DevicePowerOnView))
                 {
-                    Services.Navigation.DevicePowerOnView();
+                    // Check for Bonded Devices
+                    var bleFenomdevice = Services.DeviceService.GetBondedOrPairedFenomDevices();
+                    if (bleFenomdevice != null && bleFenomdevice.Id != Guid.Empty && bleFenomdevice.Connected == false)
+                    {
+                        try
+                        {
+                            await bleFenomdevice.ConnectToKnownDeviceAsync(bleFenomdevice.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.Message.Contains("133") || ex.Message.Contains("61"))
+                            {
+                                _ = RefreshStatusAsync();
+                                if (App.GetCurrentPage() is DevicePowerOnView)
+                                {
+                                    await Services.Navigation.DashboardView();
+                                }
+                                else if (App.GetCurrentPage() == null)
+                                {
+                                    return;
+                                }
+                                else if (App.GetCurrentPage() is DashboardView)
+                                {
+                                    await Services.Navigation.DevicePowerOnView();
+                                }
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        await Services.Navigation.DevicePowerOnView();
+                    }                    
                 }
             }
         }

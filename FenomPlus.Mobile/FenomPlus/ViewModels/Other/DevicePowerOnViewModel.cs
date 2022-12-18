@@ -52,14 +52,22 @@ namespace FenomPlus.ViewModels
             Services.Navigation.DevicePowerOnView();
         }
 
-        void DeviceDiscoveredHandler(object sender, EventArgs e)
+        async void DeviceDiscoveredHandler(object sender, EventArgs e)
         {
-            Services.DeviceService.StopDiscovery();
+            try
+            {
+                Services.DeviceService.StopDiscovery();
 
-            var ea = (DeviceServiceEventArgs)e;
-            Helper.WriteDebug("Device discovered.");
-            ea.Device.ConnectAsync();
-            FoundDevice(ea.Device);
+                var ea = (DeviceServiceEventArgs)e;
+                Helper.WriteDebug("Device discovered.");
+                await ea.Device.ConnectAsync();
+                await FoundDevice(ea.Device);
+            }
+            catch (Exception ex)
+            {                
+                Debug.WriteLine("Exception at DeviceDiscoveredHandler: " + ex.Message);
+            }
+            
         }
 
         private void WireEventHandlers()
@@ -98,7 +106,7 @@ namespace FenomPlus.ViewModels
                 {
                     if (device.Name != null)
                     {
-                        if (device.Name.ToLower().Contains("fenom") || device.Name.ToLower().StartsWith("fp"))
+                        if (Services.DeviceService.IsDeviceFenomDevice(device.Name))
                         {
                             Stop = true;
                             await device.ConnectAsync();
@@ -137,9 +145,11 @@ namespace FenomPlus.ViewModels
         public bool DeviceInfoTimer()
         {
             if (Services.Cache.DeviceInfo == null) return true;
+            if (Services.DeviceService.Current == null) return true;
             Services.Cache.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
             //Services.Cache.EnvironmentalInfo = null;
-            // jac: do not request, this is updated by the device
+            // jac: do not request, this is updated by the device            
+            
             Services.DeviceService.Current.RequestEnvironmentalInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
@@ -152,6 +162,7 @@ namespace FenomPlus.ViewModels
         public bool EnvironmentalInfo()
         {
             if (Services.Cache.EnvironmentalInfo == null) return true;
+            if (Services.DeviceService.Current == null) return true;
             //Services.Navigation.DashboardView();
             return false;
         }

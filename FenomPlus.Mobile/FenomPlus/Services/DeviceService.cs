@@ -46,6 +46,7 @@ using FenomPlus.SDK.Core.Utils;
 using Xamarin.Forms;
 using Syncfusion.XlsIO.Parser.Biff_Records;
 using Plugin.BLE.Abstractions.Extensions;
+using Plugin.BLE.Abstractions;
 
 #endregion
 
@@ -154,6 +155,8 @@ namespace FenomPlus.Services.NewArch.R2
         // Methods
         void StartDiscovery(Action<IDevice> deviceFoundAction);
         void StopDiscovery();
+        bool IsDeviceFenomDevice(string name);
+        Device GetBondedOrPairedFenomDevices();
     }
 }
 
@@ -252,7 +255,10 @@ namespace FenomPlus.Services.NewArch.R2
 
             foreach (var dd in _deviceDiscoverers)
             {
-                dd.StopDiscoveryAsync();
+                if (dd is BleScanner)
+                {
+                    dd.StopDiscoveryAsync();
+                }                
             }
 
             _discovering= false;
@@ -367,6 +373,35 @@ namespace FenomPlus.Services.NewArch.R2
                 DeviceReadyTimer.Stop();
             }
         }
+
+        public bool IsDeviceFenomDevice(string deviceName)
+        {
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                return false;
+            }
+
+            return deviceName.ToLower().StartsWith("fenom") || deviceName.ToLower().ToLower().StartsWith("fp");
+        }
+
+        public Device GetBondedOrPairedFenomDevices()
+        {
+            if (Devices != null)
+            {
+                if (Devices.Count > 0)
+                {
+                    foreach (IDevice device in Devices)
+                    {
+                        // Get the first BleDevice
+                        if (device is BleDevice)
+                        {
+                            return (Device)device;
+                        }
+                    }
+                }
+            }
+            return null;
+        }        
     }
 
 
@@ -448,7 +483,7 @@ namespace FenomPlus.Services.NewArch.R2
             await _ble.Adapter.StartScanningForDevicesAsync(
                 deviceFilter: (PluginBleIDevice d) =>
                 {
-                    if (d.Name != null && (d.Name.ToLower().Contains("fenom") || d.Name.ToLower().StartsWith("fp")))
+                    if (_deviceService.IsDeviceFenomDevice(d.Name))
                         return true; 
 
                     return false;   
@@ -474,13 +509,13 @@ namespace FenomPlus.Services.NewArch.R2
             {
                 Helper.WriteDebug(e);
             }
-        }
+        }        
 
         private void Adapter_DeviceDiscovered(object sender, DeviceEventArgs e)
         {
             Helper.WriteDebug(" ... Adapter_DeviceDiscovered ... ");
 
-            if ((e.Device.Name == null) || (e.Device.Name != null && (!e.Device.Name.ToLower().Contains("fenom") && !e.Device.Name.ToLower().StartsWith("fp"))))
+            if (!_deviceService.IsDeviceFenomDevice(e.Device.Name))
                 return;
 
             bool exists = _deviceService.Devices.Any(d => d.Id == e.Device.Id);
@@ -579,6 +614,8 @@ namespace FenomPlus.Services.NewArch.R2
 
         Task ConnectAsync();
 
+        Task ConnectToKnownDeviceAsync(Guid id);
+
         Task DisconnectAsync();
 
         /*
@@ -638,6 +675,8 @@ namespace FenomPlus.Services.NewArch.R2
         // Methods
 
         public abstract Task ConnectAsync();
+
+        public abstract Task ConnectToKnownDeviceAsync(Guid Id);
 
         public abstract Task DisconnectAsync();
 
@@ -840,6 +879,7 @@ namespace FenomPlus.Services.NewArch.R2
             await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
             return result;
         }
+        
     }
 
     public partial class Device
@@ -1113,12 +1153,32 @@ namespace FenomPlus.Services.NewArch.R2
             {
                 try
                 {
-                     await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
-                }
-
-                catch (DeviceConnectionException ex)
+                    await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+                }                
+                catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw ex;
+                }
+            }
+        }        
+
+        public override async Task ConnectToKnownDeviceAsync(Guid id)
+        {
+            var systemDevice = _bleAdapter.GetSystemConnectedOrPairedDevices();
+            if (_bleAdapter != null && id != Guid.Empty)
+            {
+                try
+                {
+                    await _bleAdapter.StopScanningForDevicesAsync();
+                    await _bleAdapter.ConnectToKnownDeviceAsync(id);
+                }
+
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message);
+                    throw ex;
                 }
             }
         }
