@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
@@ -146,6 +146,8 @@ namespace FenomPlus.SDK.Core
                             {
                                 deviceFoundCallback?.Invoke(bleDevice);
                             }
+
+
                         }
                     }),
                     ((IEnumerable<IBleDevice> bleDevices) =>

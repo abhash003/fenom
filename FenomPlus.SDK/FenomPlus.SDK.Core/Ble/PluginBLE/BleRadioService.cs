@@ -1,4 +1,4 @@
-﻿using Plugin.BLE;
+using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using FenomPlus.SDK.Core.Ble.Interface;
@@ -223,10 +223,14 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                             try
                             {
-                                //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
-                                BleDevice bleDevice = new BleDevice(device);
-                                _bondeddevices.Add(bleDevice);
-                                deviceFoundCallback?.Invoke(bleDevice);
+                                // New name check
+                                if (device.Name.ToUpper().StartsWith("FP") || device.Name.ToUpper().StartsWith("FENOM"))
+                                {
+                                    //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                                    BleDevice bleDevice = new BleDevice(device);
+                                    _bondeddevices.Add(bleDevice);
+                                    deviceFoundCallback?.Invoke(bleDevice);
+                                }
                             }
                             finally
                             {
@@ -244,7 +248,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     {
                         if (string.IsNullOrEmpty(e.Device?.Name))
                         {
-                            //return;
+                            return;
                         }
 
                         try
@@ -252,13 +256,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
 
-                            //if (e.Device != null && e.Device.Name.ToUpper().Contains("FENOM"))
-                            //{
+                            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("FP") || e.Device.Name.ToUpper().StartsWith("FENOM")))
+                            {
                                 // create ble device and push to caller
                                 BleDevice bleDevice = new BleDevice(e.Device);
                                 _devices.Add(bleDevice);
                                 deviceFoundCallback?.Invoke(bleDevice);
-                            //}
+                            }
 
                         }
                         finally

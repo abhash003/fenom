@@ -21,7 +21,6 @@ namespace FenomPlus.ViewModels
             {
                 if (!DeviceEnvironmentalWarning())
                 {
-                    await Dialogs.ShowAlertAsync($"Not receiving valid temperature, humidity, pressure or battery level.", "Environment Error!", "Exit");
                     return;
                 }
 
@@ -48,7 +47,6 @@ namespace FenomPlus.ViewModels
             {
                 if (!DeviceEnvironmentalWarning())
                 {
-                    await Dialogs.ShowAlertAsync($"Not receiving valid temperature, humidity, pressure or battery level.", "Environment Error!", "Exit");
                     return;
                 }
 

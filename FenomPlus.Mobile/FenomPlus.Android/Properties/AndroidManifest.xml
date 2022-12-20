@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.2.26" package="com.caireinc.fenomplus" android:installLocation="auto" android:versionCode="10226">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
 	<application android:label="FenomPlus.Android" android:theme="@style/MainTheme"></application>
