@@ -224,7 +224,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             try
                             {
                                 // New name check
-                                if (device.Name.ToUpper().StartsWith("FP") || device.Name.ToUpper().StartsWith("FENOM"))
+                                if (device.Name.ToUpper().StartsWith("HRSTM") || device.Name.ToUpper().StartsWith("FENOM"))
                                 {
                                     //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                                     BleDevice bleDevice = new BleDevice(device);
@@ -256,7 +256,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
 
-                            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("FP") || e.Device.Name.ToUpper().StartsWith("FENOM")))
+                            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("HRSTM") || e.Device.Name.ToUpper().StartsWith("FENOM")))
                             {
                                 // create ble device and push to caller
                                 BleDevice bleDevice = new BleDevice(e.Device);
