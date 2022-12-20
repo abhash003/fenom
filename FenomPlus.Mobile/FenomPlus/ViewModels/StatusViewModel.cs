@@ -731,7 +731,7 @@ namespace FenomPlus.ViewModels
         private async Task NavigateToStatusPageAsync()
         {
             await RefreshStatusAsync();
-            await Services.Navigation.DeviceStatusView();
+            await Services.Navigation.DeviceStatusHubView();
         }
 
     }

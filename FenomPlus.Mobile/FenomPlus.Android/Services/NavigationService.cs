@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FenomPlus.Controls;
 using FenomPlus.Interfaces;
+using FenomPlus.Views;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Intent = Android.Content.Intent;
@@ -35,9 +36,9 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DashboardView)}"), false);
         }
 
-        public async Task DeviceStatusView()
+        public async Task DeviceStatusHubView()
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(StatusDeviceInfoView)}"), false);
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DeviceStatusHubView)}"), false);
         }
 
         public async Task DevicePowerOnView()
