@@ -117,21 +117,21 @@ namespace FenomPlus.ViewModels
         private void UpdateContent()
         {
 
-            if (TutorialIndex == 6)
-            {
-                if (!DashboardViewModel.DeviceEnvironmentalWarning())
-                {
-                    TutorialIndex = 5;
-                    return;
-                }
+            //if (TutorialIndex == 6)
+            //{
+            //    if (!DashboardViewModel.DeviceEnvironmentalWarning())
+            //    {
+            //        TutorialIndex = 5;
+            //        return;
+            //    }
 
-                if (!BleHub.ReadyForTest)
-                {
-                    DashboardViewModel.DeviceNotReadyWarningProgress();
-                    TutorialIndex = 5;
-                    return;
-                }
-            }
+            //    if (!BleHub.ReadyForTest)
+            //    {
+            //        DashboardViewModel.DeviceNotReadyWarningProgress();
+            //        TutorialIndex = 5;
+            //        return;
+            //    }
+            //}
 
             switch (TutorialIndex)
             {
