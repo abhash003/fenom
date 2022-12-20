@@ -98,7 +98,7 @@ namespace FenomPlus.SDK.Core
                             //bleDevice.Manufacturer
                             //bleDevice.Uuid
 
-                            if (bleDevice.Name.ToUpper().StartsWith("HRSTM") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
+                            if (bleDevice.Name.ToUpper().StartsWith("HRSTM") || bleDevice.Name.ToUpper().StartsWith("FP") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
                             {
                                 deviceFoundCallback?.Invoke(bleDevice);
                             }
