@@ -62,7 +62,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool DeviceEnvironmentalWarning()
+        public bool DeviceEnvironmentalWarning()
         {
             // Get the latest environmental info - updates Cache
             Services.DeviceService.Current.RequestEnvironmentalInfo();
@@ -97,7 +97,7 @@ namespace FenomPlus.ViewModels
             return true;
         }
 
-        private void DeviceNotReadyWarningProgress()
+        public void DeviceNotReadyWarningProgress()
         {
             Dialogs.ShowSecondsProgress($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
         }

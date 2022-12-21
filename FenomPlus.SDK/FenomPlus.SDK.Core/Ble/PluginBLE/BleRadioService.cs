@@ -224,7 +224,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                             try
                             {
                                 // New name check
-                                if (device.Name.ToUpper().StartsWith("FP") || device.Name.ToUpper().StartsWith("FENOM"))
+                                if (device.Name.ToUpper().StartsWith("HRSTM") || device.Name.ToUpper().StartsWith("FP") || device.Name.ToUpper().StartsWith("FENOM"))
                                 {
                                     //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
                                     BleDevice bleDevice = new BleDevice(device);
@@ -242,53 +242,53 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
 
                 // scan for ble devices
-                if (scanBleDevices == true)
-                {
-                    void deviceDiscovered(object sender, DeviceEventArgs e)
-                    {
-                        if (string.IsNullOrEmpty(e.Device?.Name))
-                        {
-                            return;
-                        }
+                //if (scanBleDevices == true)
+                //{
+                //    void deviceDiscovered(object sender, DeviceEventArgs e)
+                //    {
+                //        if (string.IsNullOrEmpty(e.Device?.Name))
+                //        {
+                //            return;
+                //        }
 
-                        try
-                        {
-                            //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                //        try
+                //        {
+                //            //PerformanceLogger.StartLog(typeof(BleRadioService), "Scan.discoverEventHandler");
 
 
-                            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("FP") || e.Device.Name.ToUpper().StartsWith("FENOM")))
-                            {
-                                // create ble device and push to caller
-                                BleDevice bleDevice = new BleDevice(e.Device);
-                                _devices.Add(bleDevice);
-                                deviceFoundCallback?.Invoke(bleDevice);
-                            }
+                //            if (e.Device != null && (e.Device.Name.ToUpper().StartsWith("HRSTM") || e.Device.Name.ToUpper().StartsWith("FP") || e.Device.Name.ToUpper().StartsWith("FENOM")))
+                //            {
+                //                // create ble device and push to caller
+                //                BleDevice bleDevice = new BleDevice(e.Device);
+                //                _devices.Add(bleDevice);
+                //                deviceFoundCallback?.Invoke(bleDevice);
+                //            }
 
-                        }
-                        finally
-                        {
-                            //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
-                        }
-                    }
+                //        }
+                //        finally
+                //        {
+                //            //PerformanceLogger.EndLog(typeof(BleRadioService), "Scan.discoverEventHandler");
+                //        }
+                //    }
 
-                    //if (_devices.Count > 1)
-                    //{
-                    //    foreach (var device in _devices)
-                    //    {
+                //    //if (_devices.Count > 1)
+                //    //{
+                //    //    foreach (var device in _devices)
+                //    //    {
 
-                    //    }
-                    //}
+                //    //    }
+                //    //}
 
-                    _devices.Clear();
+                //    _devices.Clear();
 
-                    Adapter.DeviceDiscovered += deviceDiscovered;
-                    Adapter.ScanMode = ScanMode.Balanced;
+                //    Adapter.DeviceDiscovered += deviceDiscovered;
+                //    Adapter.ScanMode = ScanMode.Balanced;
 
-                    await Adapter.StartScanningForDevicesAsync();
-                    scanCompletedCallback?.Invoke(Devices);
+                //    await Adapter.StartScanningForDevicesAsync();
+                //    scanCompletedCallback?.Invoke(Devices);
 
-                    Adapter.DeviceDiscovered -= deviceDiscovered;
-                }
+                //    Adapter.DeviceDiscovered -= deviceDiscovered;
+                //}
 
 
                 return scanBleDevices || scanBondedDevices;
