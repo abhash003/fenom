@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
@@ -12,7 +15,7 @@ using Plugin.Settings.Abstractions;
 
 namespace FenomPlus.Services
 {
-    public class CacheService : BaseService, ICacheService
+    public class CacheService : BaseService, ICacheService, IDisposable
     {
         private readonly RingBuffer BreathBuffer;
 
@@ -240,8 +243,49 @@ namespace FenomPlus.Services
             return BreathManeuver;
         }
 
+        static volatile object _s_debugLogLock = new object();
+        static volatile bool _s_logFileWriterWorkerStarted = false;
+        static volatile bool _s_logFileWriterWorkerStop = false;
+
+        public virtual void Dispose()
+        {
+            _s_logFileWriterWorkerStop = true;
+        }
+
+        private void LogFileWriterWorker()
+        {
+            _s_logFileWriterWorkerStarted = true;
+
+            var current = DateTime.Now;
+
+            while (_s_logFileWriterWorkerStop == false)
+            {
+                if ((DateTime.Now - current).TotalSeconds > 60)
+                {
+                    // flush the log
+                    var debugList = Services.Cache.DebugList;
+
+                    lock (_s_debugLogLock)
+                    {
+                        Services.DebugLogFile.Write(debugList);
+                        debugList.Clear();
+                    }
+
+                    // reset the time
+                    current = DateTime.Now;
+                }
+            }
+        }
+
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
+            if (_s_logFileWriterWorkerStarted == false)
+            {
+                // start the worker
+                Thread workerThread = new Thread(LogFileWriterWorker);
+                workerThread.Start();
+            }
+
             try
             {
                 DebugMsg ??= new DebugMsg();
@@ -250,11 +294,18 @@ namespace FenomPlus.Services
 
                 DebugLog debugLog = DebugLog.Create(data);
 
-                DebugList.Insert(0, debugLog);
-                Services.DebugLogFile.Write(debugLog);
-                NotifyViews();
-                NotifyViewModels();
-            } finally { }
+                lock (_s_debugLogLock)
+                {
+                    DebugList.Insert(0, debugLog);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Services.LogCat.Print(ex);
+            }
+
             return DebugMsg;
         }
 
