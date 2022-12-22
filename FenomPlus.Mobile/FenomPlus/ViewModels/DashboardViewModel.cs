@@ -17,21 +17,21 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task StartStandardTest()
         {
-            if (BleHub.IsNotConnectedRedirect())
+            if (Services.DeviceService.Current.IsNotConnectedRedirect())
             {
                 if (!DeviceEnvironmentalWarning())
                 {
                     return;
                 }
 
-                if (!BleHub.ReadyForTest)
+                if (!Services.DeviceService.Current.ReadyForTest)
                 {
                     DeviceNotReadyWarningProgress();
                     return;
                 }
 
-                Cache.TestType = TestTypeEnum.Standard;
-                await BleHub.StartTest(BreathTestEnum.Start10Second);
+                Services.Cache.TestType = TestTypeEnum.Standard;
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
                 await Services.Navigation.BreathManeuverFeedbackView();
 
 
@@ -41,23 +41,23 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task StartShortTest()
         {
-            bool connected = BleHub.BleDevice.Connected;
+            bool connected = Services.DeviceService.Current.Connected;
 
-            if (BleHub.IsNotConnectedRedirect())
+            if (Services.DeviceService.Current.IsNotConnectedRedirect())
             {
                 if (!DeviceEnvironmentalWarning())
                 {
                     return;
                 }
 
-                if (!BleHub.ReadyForTest)
+                if (!Services.DeviceService.Current.ReadyForTest)
                 {
                     DeviceNotReadyWarningProgress();
                     return;
                 }
 
-                Cache.TestType = TestTypeEnum.Short;
-                await BleHub.StartTest(BreathTestEnum.Start6Second);
+                Services.Cache.TestType = TestTypeEnum.Short;
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
                 await Services.Navigation.BreathManeuverFeedbackView();
             }
         }
@@ -65,32 +65,32 @@ namespace FenomPlus.ViewModels
         public bool DeviceEnvironmentalWarning()
         {
             // Get the latest environmental info - updates Cache
-            BleHub.RequestEnvironmentalInfo();
+            Services.DeviceService.Current.RequestEnvironmentalInfo();
 
-            if (Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
-                Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+            if (Services.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                Services.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
             {
-                Dialogs.ShowToast($"Humidity Level Out of Range: {Cache.EnvironmentalInfo.Humidity}", 5);
+                Dialogs.ShowToast($"Humidity Level Out of Range: {Services.Cache.EnvironmentalInfo.Humidity}", 5);
                 return false;
             }
 
-            if (Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
-                Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            if (Services.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                Services.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
             {
-                Dialogs.ShowToast($"Pressure Level Out of Range: {Cache.EnvironmentalInfo.Pressure}", 5);
+                Dialogs.ShowToast($"Pressure Level Out of Range: {Services.Cache.EnvironmentalInfo.Pressure}", 5);
                 return false;
             }
 
-            if (Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
-                Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+            if (Services.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                Services.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
             {
-                Dialogs.ShowToast($"Temperature Level Out of Range: {Cache.EnvironmentalInfo.Temperature}", 5);
+                Dialogs.ShowToast($"Temperature Level Out of Range: {Services.Cache.EnvironmentalInfo.Temperature}", 5);
                 return false;
             }
 
-            if (Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
             {
-                Dialogs.ShowToast($"Battery Level is Critically Low: {Cache.EnvironmentalInfo.BatteryLevel}", 5);
+                Dialogs.ShowToast($"Battery Level is Critically Low: {Services.Cache.EnvironmentalInfo.BatteryLevel}", 5);
                 return false;
             }
 
@@ -99,13 +99,13 @@ namespace FenomPlus.ViewModels
 
         public void DeviceNotReadyWarningProgress()
         {
-            Dialogs.ShowSecondsProgress($"Device purging..", BleHub.DeviceReadyCountDown);
+            Dialogs.ShowSecondsProgress($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
         }
 
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsConnected();
+            //Services.Device.IsConnected();
         }
 
         public override void OnDisappearing()

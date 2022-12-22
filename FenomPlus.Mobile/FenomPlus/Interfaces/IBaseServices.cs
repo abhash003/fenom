@@ -7,8 +7,8 @@ namespace FenomPlus.Interfaces
     public interface IBaseServices
     {
         IAppServices Services { get; }
-        ICacheService Cache { get; }
-        IBleHubService BleHub { get; }
+        //ICacheService Cache { get; }
+        //IBleHubService BleHub { get; }
 
         // repo here
         IBreathManeuverErrorRepository ErrorsRepo { get; }

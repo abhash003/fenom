@@ -7,14 +7,18 @@ using FenomPlus.Services;
 using System.Threading.Tasks;
 using FenomPlus.Models;
 using Xamarin.Essentials;
+using System.Reflection;
+using System.Diagnostics;
+using Syncfusion.SfNumericTextBox.XForms;
+using FenomPlus.Helpers;
 
 namespace FenomPlus.ViewModels
 {
     public partial class BaseViewModel : ObservableObject, IBaseServices
     {
         public IAppServices Services => IOC.Services;
-        public IBleHubService BleHub => Services.BleHub;
-        public ICacheService Cache => Services.Cache;
+        //public IBleHubService BleHub => Services.BleHub;
+        //public ICacheService Cache => Services.Cache;
         public IConfigService Config => Services.Config;
         public IDialogService Dialogs => Services.Dialogs;
 
@@ -59,6 +63,8 @@ namespace FenomPlus.ViewModels
 
         public BaseViewModel()
         {
+            Services.LogCat.Print($"{new StackFrame().GetMethod().ReflectedType.FullName}: {DebugHelper.GetCallingMethodString(2)}");
+
             AppSoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
             ShowAllMenus = true;
         }

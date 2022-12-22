@@ -1,4 +1,4 @@
-﻿using Plugin.BLE;
+using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using FenomPlus.SDK.Core.Ble.Interface;
 using System;
@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using FenomPlus.SDK.Core.Utils;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Exceptions;
+using FenomPlus.Interfaces;
+using FenomPlus.Services;
 using FenomPlus.SDK.Core.Models;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
@@ -16,6 +18,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         // need Adapter
         private static readonly IBluetoothLE Ble = CrossBluetoothLE.Current;
         private static readonly IAdapter Adapter = Ble.Adapter;
+        private static IAppServices Services => IOC.Services;
         private Logger _logger = new Logger(nameof(BleDevice));
         /// <summary>
         /// 
@@ -43,7 +46,9 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         public string PairSerialNumber { get; set; }
         public bool IsBonded { get; set; }
 
-        public bool Connected => Device.State == DeviceState.Connected;
+
+        //public bool Connected => Device.State == DeviceState.Connected */ // after on connected event this is FALSE! WHY!!!;
+        public bool Connected => (CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count > 0); 
 
         public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
         public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
@@ -85,16 +90,16 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                         try
                         {
-                            int mtuActual = await Device.RequestMtuAsync(156);
+                            //int mtuActual = await Device.RequestMtuAsync(164);
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
+                            Services.LogCat.Print(e);
                         }
 
                         Device.UpdateConnectionInterval(ConnectionInterval.Normal);
 
-                        _ = await GetCharacteristicsAsync();
+                        _ = await GetCharacterasticsAync();
 
                         return true;
                     }
@@ -108,13 +113,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (DeviceConnectionException ex)
             {
-                Console.WriteLine("BleDevice.DeviceConnectionException(): " + ex.Message);
+                Services.LogCat.Print("BleDevice.DeviceConnectionException(): " + ex.Message);
                 _logger.LogException(ex);
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BleDevice.ConnectAsync(): " + ex.Message);
+                Services.LogCat.Print("BleDevice.ConnectAsync(): " + ex.Message);
                 _logger.LogException(ex);
                 return false;
             }
@@ -160,7 +165,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<IGattCharacteristic>> GetCharacteristicsAsync()
+        public async Task<IEnumerable<IGattCharacteristic>> GetCharacterasticsAync()
         {
             try
             {
@@ -222,10 +227,9 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             if(gattCharacteristics.Count <= 0)
             {
-                _ = await GetCharacteristicsAsync();
+                _ = await GetCharacterasticsAync();
                 gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             }
-
             foreach (IGattCharacteristic item in gattCharacteristics)
             {
                 if (!item.Uuid.Equals(guid)) continue;

@@ -1,15 +1,14 @@
-﻿using Plugin.BLE;
-using Plugin.BLE.Abstractions;
+using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
-using Plugin.BLE.Abstractions.Exceptions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xamarin.Forms;
+using FenomPlus.Interfaces;
+using FenomPlus.Services;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
 {
@@ -17,6 +16,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
     {
         private static readonly IBluetoothLE Ble = CrossBluetoothLE.Current;
         private static readonly IAdapter Adapter = Ble.Adapter;
+        private static IAppServices Services => IOC.Services;
 
         private List<IBleDevice> _bondeddevices = new List<IBleDevice>();
         public IEnumerable<IBleDevice> BondedDevices { get { return _bondeddevices; } }
@@ -417,7 +417,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
                 if (characteristic == null)
                 {
-                    Console.WriteLine("BleRadioService.CharacteristicToString() - null characteristic");
+                    Services.LogCat.Print("BleRadioService.CharacteristicToString() - null characteristic");
                     return string.Empty;
                 }
 
@@ -429,7 +429,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
                 return null;
             }
             finally

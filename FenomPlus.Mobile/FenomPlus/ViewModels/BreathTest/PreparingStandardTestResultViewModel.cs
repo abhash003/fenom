@@ -1,11 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
-using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -25,7 +23,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
 
-            TestType = Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
+            TestType = Services.Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
 
             CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
             CalculationsTimer.Elapsed += (sender, e) => CalculationsCompleted();
@@ -42,18 +40,18 @@ namespace FenomPlus.ViewModels
 
         private bool CalculationsCompleted()
         {
-            if (Cache.FenomReady == true)
+            if (Services.Cache.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Cache.BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(Services.Cache.BreathManeuver);
                 ResultsRepo.Insert(model);
 
                 var str = ResultsRepo.ToString();
 
-                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Cache.BreathManeuver.StatusCode}");
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.Cache.BreathManeuver.StatusCode}");
 
-                if (Cache.BreathManeuver.StatusCode != 0x00)
+                if (Services.Cache.BreathManeuver.StatusCode != 0x00)
                 {
-                    var errorModel = BreathManeuverErrorDBModel.Create(Cache.BreathManeuver);
+                    var errorModel = BreathManeuverErrorDBModel.Create(Services.Cache.BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
@@ -66,7 +64,7 @@ namespace FenomPlus.ViewModels
                 }
             }
 
-            return (Cache.FenomReady == false);
+            return (Services.Cache.FenomReady == false);
         }
 
         public override void NewGlobalData()
@@ -75,4 +73,3 @@ namespace FenomPlus.ViewModels
         }
     }
 }
-

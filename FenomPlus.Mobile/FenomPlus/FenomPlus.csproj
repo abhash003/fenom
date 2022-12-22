@@ -18,6 +18,7 @@
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Plugin.BLE" Version="2.2.0-pre5" />
     <PackageReference Include="LiteDB" Version="5.0.13" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.3" />
@@ -73,9 +74,12 @@
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
+    <Compile Remove="Interfaces\IBleHubService.cs" />
+    <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
+    <Compile Remove="Services\BleHubService.cs" />
     <Compile Remove="Services\DeviceStatusService.cs" />
     <Compile Remove="ViewModels\BreathTest\StartTestViewModel.cs" />
     <Compile Remove="ViewModels\MainViewModel.cs" />

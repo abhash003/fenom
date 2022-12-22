@@ -1,14 +1,8 @@
 ﻿
 using Acr.UserDialogs;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
-using FenomPlus.SDK.Core.Features;
-using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {

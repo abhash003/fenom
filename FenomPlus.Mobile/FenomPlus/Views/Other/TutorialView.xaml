@@ -64,7 +64,7 @@
 
             <!--OR-->
 
-            <controls:BreathGauge x:Name="BreathGuage"
+            <controls:BreathGauge x:Name="BreathGauge"
                                   IsVisible="{Binding BreathGaugeVisible}"
                                   Grid.Row="0"
                                   Grid.Column="2"

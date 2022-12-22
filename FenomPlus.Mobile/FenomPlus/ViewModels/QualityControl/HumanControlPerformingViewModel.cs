@@ -17,38 +17,38 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             TestTime = 10;
-            Cache.BreathFlow = 0;
-            TestSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
+            Services.Cache.BreathFlow = 0;
+            TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
 
-            Device.StartTimer(TimeSpan.FromMilliseconds(Cache.BreathFlowTimer), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
                 TestSeconds--;
-                TestTime = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
-                GuageData = Cache.BreathFlow;
+                GaugeData = Services.Cache.BreathFlow;
 
-                if (GuageData < Config.GaugeDataLow)
+                if (GaugeData < Config.GaugeDataLow)
                 {
-                    GuageStatus = "Exhale Harder";
+                    GaugeStatus = "Exhale Harder";
                 }
-                else if (GuageData > Config.GaugeDataHigh)
+                else if (GaugeData > Config.GaugeDataHigh)
                 {
-                    GuageStatus = "Exhale Softer";
+                    GaugeStatus = "Exhale Softer";
                 }
                 else
                 {
-                    GuageStatus = "Good Job!";
+                    GaugeStatus = "Good Job!";
                 }
 
                 // return contiune of below the time
-                GuageSeconds = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                GaugeSeconds = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    BleHub.StopTest();
+                    Services.DeviceService.Current.StopTest();
 
-                    Cache.HumanControlResult = GuageData;
+                    Services.Cache.HumanControlResult = GaugeData;
                     Services.Navigation.HumanControlPreparingView();
                 }
                 return (TestSeconds > 0) && (Stop == false);
@@ -83,13 +83,13 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private int guageSeconds;
-        public int GuageSeconds
+        private int gaugeSeconds;
+        public int GaugeSeconds
         {
-            get => guageSeconds;
+            get => gaugeSeconds;
             set
             {
-                guageSeconds = value;
+                gaugeSeconds = value;
                 OnPropertyChanged("GaugeSeconds");
             }
         }
@@ -97,28 +97,28 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private float guageData;
-        public float GuageData
+        private float gaugeData;
+        public float GaugeData
         {
-            get => guageData;
+            get => gaugeData;
             set
             {
-                guageData = value;
+                gaugeData = value;
                 OnPropertyChanged("GaugeData");
-                if (!Stop) PlaySounds.PlaySound(GuageData);
+                if (!Stop) PlaySounds.PlaySound(GaugeData);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private string guageStatus;
-        public string GuageStatus
+        private string gaugeStatus;
+        public string GaugeStatus
         {
-            get => guageStatus;
+            get => gaugeStatus;
             set
             {
-                guageStatus = value;
+                gaugeStatus = value;
                 OnPropertyChanged("GaugeStatus");
             }
         }

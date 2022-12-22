@@ -29,7 +29,7 @@ namespace FenomPlus.ViewModels
 
         partial void OnGaugeDataChanged(float value)
         {
-            if (!Stop) 
+            if (!Stop)
                 PlaySounds.PlaySound(GaugeData);
         }
 
@@ -44,8 +44,8 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
-            if (Cache.TestType == TestTypeEnum.Standard)
+            Services.DeviceService.Current.IsNotConnectedRedirect();
+            if (Services.Cache.TestType == TestTypeEnum.Standard)
             {
                 TestType = "10-second Test";
                 TestTime = 10;
@@ -60,30 +60,30 @@ namespace FenomPlus.ViewModels
             StartMeasure = false;
 
             GaugeData = 0;
-            Cache.BreathFlow = 0;
-            TestGaugeSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
+            Services.Cache.BreathFlow = 0;
+            TestGaugeSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
 
             // setup our count down
             GaugeSecondsCountdown = TestGaugeSeconds;
-            GaugeSeconds = GaugeSecondsCountdown / (1000 / Cache.BreathFlowTimer);
+            GaugeSeconds = GaugeSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
             GaugeStatus = "Start Blowing";
 
             // start timer
-            Device.StartTimer(TimeSpan.FromMilliseconds(Cache.BreathFlowTimer), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
-                GaugeData = Cache.BreathFlow;
+                GaugeData = Services.Cache.BreathFlow;
                 if ((GaugeData <= 0.0f) && (StartMeasure == false))
                 {
                     // return continue of below the time
-                    
+
                     GaugeStatus = "Start Blowing";
                 }
                 else
                 {
-                    TestGaugeSeconds = Cache.BreathManeuver.TimeRemaining;
+                    TestGaugeSeconds = Services.Cache.BreathManeuver.TimeRemaining;
 
                     if (GaugeSecondsCountdown > 0) GaugeSecondsCountdown--;
-                    GaugeSeconds = GaugeSecondsCountdown / (1000 / Cache.BreathFlowTimer);
+                    GaugeSeconds = GaugeSecondsCountdown / (1000 / Services.Cache.BreathFlowTimer);
                     StartMeasure = true;
                     if (GaugeData < Config.GaugeDataLow)
                     {
@@ -104,7 +104,7 @@ namespace FenomPlus.ViewModels
                 {
                     if ((TestGaugeSeconds <= 0) && (Stop == false))
                     {
-                        BleHub.StopTest();
+                        Services.DeviceService.Current.StopTest();
                         Services.Navigation.StopExhalingView();
                     }
                 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -8,23 +7,33 @@ using FenomPlus.Interfaces;
 using FenomPlus.SDK.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
-using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Utils;
+using FenomPlus.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.BLE.Abstractions.EventArgs;
 using TinyIoC;
-using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core
 {
     public class FenomHubSystemDiscovery : IFenomHubSystemDiscovery
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
+        private IAppServices Services => IOC.Services;
 
         private LoggingManager _loggingManager;
         private Logger _logger;
         private IFenomHubSystem _FenomHubSystem;
-        public readonly IBleRadioService BleRadio;
+
+        private readonly IBleRadioService _bleRadio;
+
+        #region Delegates
+        //private EventHandler<DeviceEventArgs> _deviceAdvertised;
+        //private EventHandler<DeviceEventArgs> _deviceDiscovered;
+        private EventHandler<DeviceEventArgs> _deviceConnected;
+        private EventHandler<DeviceEventArgs> _deviceDisconnected;
+        private EventHandler<DeviceErrorEventArgs> _deviceConnectionLost;
+        #endregion
+
         private IDialogService DialogService;
 
         // Define message
@@ -38,29 +47,65 @@ namespace FenomPlus.SDK.Core
         public FenomHubSystemDiscovery()
         {
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
-            BleRadio = new BleRadioService();
-            BleRadio.DeviceConnected += BleRadioOnDeviceConnected;
-            BleRadio.DeviceConnectionLost += DeviceConnectionLost;
+
+            _bleRadio = new BleRadioService();
             _loggingManager = LoggingManager.GetInstance;
             _logger = new Logger("FenomBLE");
+            _bleRadio.DeviceConnected += _bleRadio_DeviceConnected;
+            _bleRadio.DeviceDisconnected += _bleRadio_DeviceDisconnected;
+            _bleRadio.DeviceConnectionLost += _bleRadio_DeviceConnectionLost;
 
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "FenomHubSystemDiscovery");
 
-            DialogService =  Container.Resolve<IDialogService>();
+            DialogService = Container.Resolve<IDialogService>();
         }
 
+        #region Events from IFenomHubSystemDiscovery
 
-        private void BleRadioOnDeviceConnected(object sender, DeviceEventArgs e)
+        event EventHandler<DeviceEventArgs> IFenomHubSystemDiscovery.DeviceConnected
         {
-            // Send message - Caution, not reliable lag of about 5 seconds
-            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
+            add { _deviceConnected += value; }
+            remove { _deviceConnected -= value; }
         }
 
-        private void DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
+        event EventHandler<DeviceEventArgs> IFenomHubSystemDiscovery.DeviceDisconnected
         {
-            // Send message - Caution, not reliable lag of about 5 seconds
+            add { _deviceDisconnected += value; }
+            remove { _deviceDisconnected -= value; }
+        }
+
+        event EventHandler<DeviceErrorEventArgs> IFenomHubSystemDiscovery.DeviceConnectionLost
+        {
+            add { _deviceConnectionLost += value; }
+            remove { _deviceConnectionLost -= value; }
+        }
+        
+        #endregion
+
+        #region Event Handlers
+        private void _bleRadio_DeviceConnectionLost(object sender, DeviceErrorEventArgs e)
+        {
+            Services.LogCat.Print("***************** 1 DeviceConnectionLost: {0}", e.ToString());
+			// Send message
             WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(false));
+            _deviceConnectionLost?.Invoke(this, e);
         }
+
+        private void _bleRadio_DeviceDisconnected(object sender, DeviceEventArgs e)
+        {
+            Services.LogCat.Print("***************** DeviceDisconnected: {0}", e.ToString());
+            _deviceDisconnected?.Invoke(this, e);
+        }
+
+        private async void _bleRadio_DeviceConnected(object sender, DeviceEventArgs e)
+        {
+            Services.LogCat.Print("***************** DeviceConnected: {0}", e.Device.ToString() + " : " + e.Device.Id);
+			// Send message
+            WeakReferenceMessenger.Default.Send(new DeviceConnectedMessage(true));
+            await StopScan();
+            _deviceConnected?.Invoke(this, e);
+        }
+        #endregion
 
         public IFenomHubSystem FenomHubSystem
         {
@@ -73,7 +118,11 @@ namespace FenomPlus.SDK.Core
             _loggingManager.SetLoggingFactory(loggerFactory);
         }
 
-        public bool IsScanning => BleRadio.IsScanning;
+        /// <summary>
+        /// IsScanning
+        /// </summary>
+        public bool IsScanning => _bleRadio.IsScanning;
+
 
         public async Task<IEnumerable<IFenomHubSystem>> Scan(TimeSpan scanTime = default, bool scanBondedDevices = true, bool scanBleDevices = true, Action<IBleDevice> deviceFoundCallback = null, Action<IEnumerable<IBleDevice>> scanCompletedCallback = null)
         {
@@ -88,17 +137,12 @@ namespace FenomPlus.SDK.Core
                     return null;
                 }
 
-                await BleRadio.Scan(scanTime.TotalMilliseconds, 
-                    scanBondedDevices, 
-                    scanBleDevices, 
+                await _bleRadio.Scan(scanTime.TotalMilliseconds, scanBondedDevices, scanBleDevices,
                     ((IBleDevice bleDevice) =>
                     {
                         if ((bleDevice != null) && (!string.IsNullOrEmpty(bleDevice.Name)))
                         {
-                            //bleDevice.Manufacturer
-                            //bleDevice.Uuid
-
-                            if (bleDevice.Name.ToUpper().StartsWith("HRSTM") || bleDevice.Name.ToUpper().StartsWith("FP") || bleDevice.Name.ToUpper().StartsWith("FENOM"))
+                            if (Services.DeviceService.IsDeviceFenomDevice(bleDevice.Name))
                             {
                                 deviceFoundCallback?.Invoke(bleDevice);
                             }
@@ -134,7 +178,7 @@ namespace FenomPlus.SDK.Core
             //PerformanceLogger.StartLog(typeof(FenomHubSystemDiscovery), "StopScan");
             _logger.LogDebug("FenomHubSystemDiscovery: StopScan");
 
-            await BleRadio.StopScan();
+            await _bleRadio.StopScan();
 
             //PerformanceLogger.EndLog(typeof(FenomHubSystemDiscovery), "StopScan");
             return true;

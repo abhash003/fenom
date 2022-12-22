@@ -1,6 +1,5 @@
 ﻿using Plugin.BLE.Abstractions;
 using FenomPlus.SDK.Core.Ble.Interface;
-using FenomPlus.SDK.Core.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -77,12 +76,12 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Services.LogCat.Print(ex.Message);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
             }
         }
 
@@ -101,7 +100,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
                 return null;
             }
             finally
@@ -127,7 +126,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
                 return false;
             }
             finally
@@ -147,7 +146,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
                 return false;
             }
             finally
@@ -174,7 +173,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
                 return false;
             }
             finally
@@ -193,7 +192,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
             }
             finally
             {
@@ -211,7 +210,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
             }
             finally
             {
@@ -264,7 +263,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
             }
             finally
             {
@@ -281,7 +280,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Services.LogCat.Print(ex.Message);
             }
             finally
             {

@@ -21,7 +21,7 @@
 
             <controls:MarigoldActivityWheel Margin="30" AutoPlay="True"/>
 
-            <Label Text="Scanning for Device Please Wait..."
+            <Label Text="{Binding Message}"
                    Style="{StaticResource Header}"
                    VerticalTextAlignment="Center"
                    Margin="0,0,0,30"/>

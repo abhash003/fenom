@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Threading.Tasks;
+using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
 using FenomPlus.Models;
 using Xamarin.Essentials;
@@ -57,5 +57,13 @@ namespace FenomPlus.Services
         {
             Write(debugLog.DateTime, debugLog.Msg);
         }
+        public void Write(RangeObservableCollection<DebugLog> debugList)
+        {
+            foreach (var debugLog in debugList)
+            {
+                Write(debugLog.DateTime, debugLog.Msg);
+            }
+        }
+
     }
 }
