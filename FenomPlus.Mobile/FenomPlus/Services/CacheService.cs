@@ -199,6 +199,8 @@ namespace FenomPlus.Services
             return DeviceStatusInfo;
         }
 
+        public event EventHandler BreathFlowChanged;
+
         public BreathManeuver DecodeBreathManeuver(byte[] data)
         {
             try
@@ -230,6 +232,7 @@ namespace FenomPlus.Services
 
                     // add new value and average it
                     BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
+                    BreathFlowChanged?.Invoke(null, null);
 
                     // get the noscores
                     NOScore = BreathManeuver.NOScore;
