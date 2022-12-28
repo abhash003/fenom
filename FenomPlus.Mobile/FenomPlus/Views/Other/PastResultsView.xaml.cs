@@ -79,7 +79,7 @@ namespace FenomPlus.Views
             DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
 
-            ExitButton.Focus();
+            DataPager.MoveToFirstPage();
         }
 
         protected override void OnDisappearing()
