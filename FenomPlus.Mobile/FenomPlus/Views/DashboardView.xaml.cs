@@ -20,52 +20,13 @@ namespace FenomPlus.Views
 
         private async void OnStandardTest(object sender, EventArgs e)
         {
-            if (DashboardViewModel.Services.DeviceService.Current.IsNotConnectedRedirect())
-            {
-                if (!DashboardViewModel.Services.DeviceService.Current.ReadyForTest)
-                {
-                    DeviceNotReadyWarning1();
-                    return;
-                }
 
-                DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Standard;
-                await DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
-            }
+            DashboardViewModel.StartStandardTestCommand.Execute(null);
         }
 
         private async void OnShortTest(object sender, EventArgs e)
         {
-            if (DashboardViewModel.Services.DeviceService.Current.IsNotConnectedRedirect())
-            {
-                if (!DashboardViewModel.Services.DeviceService.Current.ReadyForTest)
-                {
-                    DeviceNotReadyWarning2();                   
-                    return;
-                }
-
-                DashboardViewModel.Services.Cache.TestType = TestTypeEnum.Short;
-                await DashboardViewModel.Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
-                await DashboardViewModel.Services.Navigation.BreathManeuverFeedbackView();
-            }
-        }
-
-        private void DeviceNotReadyWarning1()
-        {
-            if (!DashboardViewModel.Services.DeviceService.Current.ReadyForTest)
-            {
-                int secondsRemaining = DashboardViewModel.Services.DeviceService.Current.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowToast($"Preparing for test. {secondsRemaining} seconds required.", secondsRemaining);
-            }
-        }
-
-        private void DeviceNotReadyWarning2()
-        {
-            if (!DashboardViewModel.Services.DeviceService.Current.ReadyForTest)
-            {
-                int secondsRemaining = DashboardViewModel.Services.DeviceService.Current.DeviceReadyCountDown;
-                DashboardViewModel.Dialogs.ShowSecondsProgress($"Preparing for test...", secondsRemaining);
-            }
+            DashboardViewModel.StartShortTestCommand.Execute(null);
         }
 
         private async void OnTutorial(object sender, EventArgs e)

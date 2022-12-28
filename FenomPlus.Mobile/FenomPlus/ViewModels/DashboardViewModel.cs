@@ -17,42 +17,26 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task StartStandardTest()
         {
-            if (Services.DeviceService.Current.IsNotConnectedRedirect())
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                if (!DeviceEnvironmentalWarning())
+                if (!Services.Cache.CheckDeviceBeforeTest())
                 {
-                    return;
-                }
-
-                if (!Services.DeviceService.Current.ReadyForTest)
-                {
-                    DeviceNotReadyWarningProgress();
                     return;
                 }
 
                 Services.Cache.TestType = TestTypeEnum.Standard;
                 await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
                 await Services.Navigation.BreathManeuverFeedbackView();
-
-
             }
         }
 
         [RelayCommand]
         private async Task StartShortTest()
         {
-            bool connected = Services.DeviceService.Current.Connected;
-
-            if (Services.DeviceService.Current.IsNotConnectedRedirect())
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                if (!DeviceEnvironmentalWarning())
+                if (!Services.Cache.CheckDeviceBeforeTest())
                 {
-                    return;
-                }
-
-                if (!Services.DeviceService.Current.ReadyForTest)
-                {
-                    DeviceNotReadyWarningProgress();
                     return;
                 }
 
@@ -60,46 +44,6 @@ namespace FenomPlus.ViewModels
                 await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
                 await Services.Navigation.BreathManeuverFeedbackView();
             }
-        }
-
-        public bool DeviceEnvironmentalWarning()
-        {
-            // Get the latest environmental info - updates Cache
-            Services.DeviceService.Current.RequestEnvironmentalInfo();
-
-            if (Services.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
-                Services.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
-            {
-                Dialogs.ShowToast($"Humidity Level Out of Range: {Services.Cache.EnvironmentalInfo.Humidity}", 5);
-                return false;
-            }
-
-            if (Services.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
-                Services.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
-            {
-                Dialogs.ShowToast($"Pressure Level Out of Range: {Services.Cache.EnvironmentalInfo.Pressure}", 5);
-                return false;
-            }
-
-            if (Services.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
-                Services.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
-            {
-                Dialogs.ShowToast($"Temperature Level Out of Range: {Services.Cache.EnvironmentalInfo.Temperature}", 5);
-                return false;
-            }
-
-            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
-            {
-                Dialogs.ShowToast($"Battery Level is Critically Low: {Services.Cache.EnvironmentalInfo.BatteryLevel}", 5);
-                return false;
-            }
-
-            return true;
-        }
-
-        public void DeviceNotReadyWarningProgress()
-        {
-            Dialogs.ShowSecondsProgress($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
         }
 
         public override void OnAppearing()

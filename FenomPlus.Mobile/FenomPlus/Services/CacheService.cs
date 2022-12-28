@@ -323,6 +323,47 @@ namespace FenomPlus.Services
         {
             App.NotifyViewModels();
         }
+
+        public bool CheckDeviceBeforeTest()
+        {
+            if (Services.DeviceService.Current is { ReadyForTest: false })
+            {
+                Services.Dialogs.ShowSecondsProgress($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
+                return false;
+            }
+
+            // Get the latest environmental info - updates Cache
+            Services.DeviceService.Current?.RequestEnvironmentalInfo();
+
+            if (Services.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                Services.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+            {
+                Services.Dialogs.ShowToast($"Humidity Level Out of Range: {Services.Cache.EnvironmentalInfo.Humidity}", 5);
+                return false;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                Services.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            {
+                Services.Dialogs.ShowToast($"Pressure Level Out of Range: {Services.Cache.EnvironmentalInfo.Pressure}", 5);
+                return false;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                Services.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+            {
+                Services.Dialogs.ShowToast($"Temperature Level Out of Range: {Services.Cache.EnvironmentalInfo.Temperature}", 5);
+                return false;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            {
+                Services.Dialogs.ShowToast($"Battery Level is Critically Low: {Services.Cache.EnvironmentalInfo.BatteryLevel}", 5);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
 

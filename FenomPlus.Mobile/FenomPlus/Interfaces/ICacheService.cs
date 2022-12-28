@@ -42,5 +42,7 @@ namespace FenomPlus.Interfaces
         bool ReadyForTest { get; set; }
         bool FenomReady { get; set; }
         float FenomValue { get; set; }
+
+        public bool CheckDeviceBeforeTest();
     }
 }
