@@ -8,12 +8,9 @@ using System.Linq;
 using Android;
 using Acr.UserDialogs;
 using TinySvgHelper;
-using System.Runtime.InteropServices;
-
-using FenomPlus.Services.NewArch;
-using Java.IO;
-
 using System;
+using FenomPlus.Services.DeviceService;
+using FenomPlus.Services.DeviceService.Interfaces;
 
 namespace FenomPlus.Droid
 {
@@ -36,7 +33,7 @@ namespace FenomPlus.Droid
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
             //AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
             //AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
-            AppServices.Container.Register<FenomPlus.Services.NewArch.R2.IDeviceService, FenomPlus.Services.NewArch.R2.DeviceService>().AsSingleton();
+            AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
 
             try
             {

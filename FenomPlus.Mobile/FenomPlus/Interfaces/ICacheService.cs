@@ -37,6 +37,8 @@ namespace FenomPlus.Interfaces
         ErrorStatusInfo DecodeErrorStatusInfo(byte[] data);
         DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data);
 
+        event EventHandler BreathFlowChanged;
+
         bool ReadyForTest { get; set; }
         bool FenomReady { get; set; }
         float FenomValue { get; set; }

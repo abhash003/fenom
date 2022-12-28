@@ -1,6 +1,6 @@
 using System;
 using FenomPlus.Interfaces;
-using FenomPlus.Services.NewArch.R2;
+using FenomPlus.Services.DeviceService.Interfaces;
 using FenomPlus.ViewModels;
 using TinyIoC;
 
@@ -73,7 +73,7 @@ namespace FenomPlus.Services
             try
             {
                 Container.Register<IConfigService, ConfigService>().AsSingleton();
-                Container.Register<IDeviceService, DeviceService>().AsSingleton();
+                Container.Register<IDeviceService, DeviceService.DeviceService>().AsSingleton();
                 Container.Register<ICacheService, CacheService>().AsSingleton();
                 Container.Register<IDialogService, DialogService>().AsSingleton();
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();

@@ -1,5 +1,4 @@
-﻿
-using FenomPlus.Services.NewArch.R2;
+﻿using FenomPlus.Services.DeviceService.Interfaces;
 
 namespace FenomPlus.Interfaces
 {
