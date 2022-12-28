@@ -6,7 +6,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Services;
-using FenomPlus.Services.NewArch.R2;
+using FenomPlus.Services.DeviceService;
+using FenomPlus.Services.DeviceService.Interfaces;
+using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Views;
 using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
@@ -100,7 +102,7 @@ namespace FenomPlus.ViewModels
             Seconds = 30;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
 
-            Services.DeviceService.StartDiscovery(async (FenomPlus.Services.NewArch.R2.IDevice device) =>
+            Services.DeviceService.StartDiscovery(async (IDevice device) =>
             {
                 try
                 {
