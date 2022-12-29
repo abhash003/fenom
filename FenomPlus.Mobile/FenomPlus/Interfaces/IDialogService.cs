@@ -9,9 +9,12 @@ namespace FenomPlus.Interfaces
 {
     public interface IDialogService
     {
-        Task ShowAlertAsync(string message, string title, string buttonLabel);
+        //Task ShowAlertAsync(string message, string title, string buttonLabel);
+        public void ShowAlert(string message, string title, string buttonLabel);
 
-        Task ShowSecondsProgress(string message, int seconds);
+        Task ShowSecondsProgressAsync(string message, int seconds);
+
+        public void ShowSecondsProgress(string message, int seconds);
 
         bool SecondsProgressDialogShowing();
 

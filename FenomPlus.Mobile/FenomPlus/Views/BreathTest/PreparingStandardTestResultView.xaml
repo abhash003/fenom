@@ -11,12 +11,7 @@
     NavigationPage.HasNavigationBar="False">
 
     <Shell.TitleView>
-
-        <Image Source="TitleIcon"
-               Aspect="AspectFit"
-               Margin="0, 16"
-               HorizontalOptions="StartAndExpand"/>
-
+        <controls:TitleContentView />
     </Shell.TitleView>
 
     <ContentPage.Content>

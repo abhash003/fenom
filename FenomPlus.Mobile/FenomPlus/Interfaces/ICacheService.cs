@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using Microsoft.Extensions.Logging;
+using static FenomPlus.Services.CacheService;
 
 namespace FenomPlus.Interfaces
 {
@@ -43,6 +45,6 @@ namespace FenomPlus.Interfaces
         bool FenomReady { get; set; }
         float FenomValue { get; set; }
 
-        public bool CheckDeviceBeforeTest();
+        public DeviceCheckEnum CheckDeviceBeforeTest();
     }
 }

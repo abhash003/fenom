@@ -8,14 +8,19 @@ namespace FenomPlus.Services
 {
     public class DialogService : IDialogService
     {
-        public Task ShowAlertAsync(string message, string title, string buttonLabel)
+        //public Task ShowAlertAsync(string message, string title, string buttonLabel)
+        //{
+        //    return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
+        //}
+
+        public void ShowAlert(string message, string title, string buttonLabel)
         {
-            return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
+           UserDialogs.Instance.Alert(message, title, buttonLabel);
         }
 
         private IProgressDialog SecondsProgressDialog;
 
-        public async Task ShowSecondsProgress(string message, int seconds)
+        public async Task ShowSecondsProgressAsync(string message, int seconds)
         {
             SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
@@ -32,6 +37,23 @@ namespace FenomPlus.Services
                 else
                 {
                     await Task.Delay(1000);
+                }
+            }
+        }
+
+        public void ShowSecondsProgress(string message, int seconds)
+        {
+            SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
+
+            double increment = Convert.ToDouble(100 / seconds);
+
+            for (int i = 0; i < 100; i++)
+            {
+                SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+
+                if (SecondsProgressDialog.PercentComplete >= 99)
+                {
+                    SecondsProgressDialog.Dispose();
                 }
             }
         }

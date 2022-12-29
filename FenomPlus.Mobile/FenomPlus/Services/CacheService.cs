@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
@@ -324,45 +325,51 @@ namespace FenomPlus.Services
             App.NotifyViewModels();
         }
 
-        public bool CheckDeviceBeforeTest()
+        public enum DeviceCheckEnum
         {
-            if (Services.DeviceService.Current is { ReadyForTest: false })
-            {
-                Services.Dialogs.ShowSecondsProgress($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
-                return false;
-            }
+            Ready,
+            DevicePurging,
+            HumidityOutOfRange,
+            PressureOutOfRange,
+            TemperatureOutOfRange,
+            BatteryCriticallyLow
+        }
 
+        public DeviceCheckEnum CheckDeviceBeforeTest()
+        {
             // Get the latest environmental info - updates Cache
             Services.DeviceService.Current?.RequestEnvironmentalInfo();
+
+            if (Services.DeviceService.Current is { ReadyForTest: false })
+            {
+                Debug.WriteLine("Device is purging");
+                return DeviceCheckEnum.DevicePurging;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            {
+                return DeviceCheckEnum.BatteryCriticallyLow;
+            }
 
             if (Services.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
                 Services.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
             {
-                Services.Dialogs.ShowToast($"Humidity Level Out of Range: {Services.Cache.EnvironmentalInfo.Humidity}", 5);
-                return false;
+                return DeviceCheckEnum.HumidityOutOfRange;
             }
 
             if (Services.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
                 Services.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
             {
-                Services.Dialogs.ShowToast($"Pressure Level Out of Range: {Services.Cache.EnvironmentalInfo.Pressure}", 5);
-                return false;
+                return DeviceCheckEnum.PressureOutOfRange;
             }
 
             if (Services.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
                 Services.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
             {
-                Services.Dialogs.ShowToast($"Temperature Level Out of Range: {Services.Cache.EnvironmentalInfo.Temperature}", 5);
-                return false;
+                return DeviceCheckEnum.TemperatureOutOfRange;
             }
 
-            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
-            {
-                Services.Dialogs.ShowToast($"Battery Level is Critically Low: {Services.Cache.EnvironmentalInfo.BatteryLevel}", 5);
-                return false;
-            }
-
-            return true;
+            return DeviceCheckEnum.Ready;
         }
     }
 }
