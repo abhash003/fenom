@@ -67,15 +67,15 @@
 
                         <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
 
-                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest"/>
+                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
+                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType"/>
+                        <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus"/>
+                        <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus" TextAlignment="Start"  Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult"/>
+                        <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
                     </sfgrid:SfDataGrid.Columns>
 
