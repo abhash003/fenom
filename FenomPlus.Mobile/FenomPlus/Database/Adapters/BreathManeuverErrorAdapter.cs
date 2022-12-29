@@ -57,6 +57,7 @@ namespace FenomPlus.Database.Adapters
             {
                 _id = input._id,
                 DateError = prettyDateTime,
+                Description = input.Description,
                 Firmware = input.Firmware,
                 Humidity = input.Humidity,
                 SerialNumber = input.SerialNumber,
