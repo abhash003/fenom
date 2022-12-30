@@ -20,7 +20,6 @@ namespace FenomPlus.Views
 
         private async void OnStandardTest(object sender, EventArgs e)
         {
-
             DashboardViewModel.StartStandardTestCommand.Execute(null);
         }
 

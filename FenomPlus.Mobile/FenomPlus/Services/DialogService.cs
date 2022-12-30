@@ -22,6 +22,9 @@ namespace FenomPlus.Services
 
         public async Task ShowSecondsProgressAsync(string message, int seconds)
         {
+            if (SecondsProgressDialog is { IsShowing: true })
+                return;
+
             SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
             double increment = Convert.ToDouble(100 / seconds);
@@ -41,22 +44,25 @@ namespace FenomPlus.Services
             }
         }
 
-        public void ShowSecondsProgress(string message, int seconds)
-        {
-            SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
+        //public IProgressDialog ShowSecondsProgress(string message, int seconds)
+        //{
+        //    if (SecondsProgressDialog is { IsShowing: true })
+        //        return
 
-            double increment = Convert.ToDouble(100 / seconds);
+        //    SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
-            for (int i = 0; i < 100; i++)
-            {
-                SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+        //    double increment = Convert.ToDouble(100 / seconds);
 
-                if (SecondsProgressDialog.PercentComplete >= 99)
-                {
-                    SecondsProgressDialog.Dispose();
-                }
-            }
-        }
+        //    for (int i = 0; i < 100; i++)
+        //    {
+        //        SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+
+        //        if (SecondsProgressDialog.PercentComplete >= 99)
+        //        {
+        //            SecondsProgressDialog.Dispose();
+        //        }
+        //    }
+        //}
 
         public bool SecondsProgressDialogShowing()
         {
@@ -68,6 +74,7 @@ namespace FenomPlus.Services
 
         public void DismissSecondsProgressDialog()
         {
+            SecondsProgressDialog.Hide();
             SecondsProgressDialog.Dispose();
         }
 

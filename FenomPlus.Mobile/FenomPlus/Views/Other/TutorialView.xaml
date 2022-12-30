@@ -27,7 +27,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="TextContent" Width="*"/>
                 <ColumnDefinition x:Name="SpacerColumn"  Width="60"/>
-                <ColumnDefinition x:Name="ImageOrGuageContent" Width="*"/>
+                <ColumnDefinition x:Name="ImageOrGaugeContent" Width="*"/>
             </Grid.ColumnDefinitions>
 
             <StackLayout x:Name="InstructionsPanel" 

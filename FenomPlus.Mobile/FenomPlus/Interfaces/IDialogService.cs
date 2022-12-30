@@ -14,7 +14,7 @@ namespace FenomPlus.Interfaces
 
         Task ShowSecondsProgressAsync(string message, int seconds);
 
-        public void ShowSecondsProgress(string message, int seconds);
+        //public IProgressDialog ShowSecondsProgress(string message, int seconds);
 
         bool SecondsProgressDialogShowing();
 

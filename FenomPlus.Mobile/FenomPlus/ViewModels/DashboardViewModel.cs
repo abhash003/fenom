@@ -25,11 +25,6 @@ namespace FenomPlus.ViewModels
             {
                 CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
 
-                if (deviceStatus != CacheService.DeviceCheckEnum.Ready)
-                {
-                    Debug.WriteLine($"{deviceStatus}");
-                }
-
                 switch (deviceStatus)
                 {
                     case CacheService.DeviceCheckEnum.Ready:
