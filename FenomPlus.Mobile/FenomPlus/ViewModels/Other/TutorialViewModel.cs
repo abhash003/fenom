@@ -3,6 +3,7 @@ using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -217,13 +218,17 @@ namespace FenomPlus.ViewModels
             // Monitor event
             Services.Cache.BreathFlowChanged += CacheOnBreathFlowChanged;
 
-            // Force update no matter the TutorialIndex
+            // Reset to first page
             TutorialIndex = 1;
             UpdateContent();
         }
 
         public override void OnDisappearing()
         {
+            base.OnDisappearing();
+
+            PlaySounds.StopAll();
+
             Services.Cache.BreathFlowChanged -= CacheOnBreathFlowChanged;
 
             if (Services.DeviceService.Current?.BreathTestInProgress == true)
@@ -235,10 +240,6 @@ namespace FenomPlus.ViewModels
             {
                 Services.Dialogs.DismissSecondsProgressDialog();
             }
-
-            PlaySounds.StopAll();
-
-            base.OnDisappearing();
         }
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
@@ -304,7 +305,7 @@ namespace FenomPlus.ViewModels
                     }
                 }
             }
-            else
+            else // Not asking for breath test page
             {
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
@@ -319,6 +320,8 @@ namespace FenomPlus.ViewModels
 
             TutorialIndex = requestedIndex;
             UpdateContent();
+
+            Debug.WriteLine($"***** Current Index = {TutorialIndex}");
         }
 
         [RelayCommand]
@@ -333,7 +336,9 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    switch (Services.Cache.CheckDeviceBeforeTest())
+                    CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
+
+                    switch (deviceStatus)
                     {
                         case CacheService.DeviceCheckEnum.Ready:
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
@@ -358,7 +363,7 @@ namespace FenomPlus.ViewModels
                     }
                 }
             }
-            else
+            else // Not asking for breath test page
             {
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
@@ -373,6 +378,8 @@ namespace FenomPlus.ViewModels
 
             TutorialIndex = requestedIndex;
             UpdateContent();
+
+            Debug.WriteLine($"***** Current Index = {TutorialIndex}");
         }
     }
 }
