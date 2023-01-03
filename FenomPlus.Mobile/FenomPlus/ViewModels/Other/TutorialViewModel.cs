@@ -324,6 +324,7 @@ namespace FenomPlus.ViewModels
             Debug.WriteLine($"***** Current Index = {TutorialIndex}");
         }
 
+
         [RelayCommand]
         private async Task Back()
         {
