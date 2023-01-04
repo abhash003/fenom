@@ -147,11 +147,14 @@ namespace FenomPlus.ViewModels
                         try
                         {
                             await bleFenomdevice.ConnectToKnownDeviceAsync(bleFenomdevice.Id);
+                            BluetoothConnected = true;
+                            _ = RefreshStatusAsync();
                         }
                         catch (Exception ex)
                         {
                             if (ex.Message.Contains("133") || ex.Message.Contains("61"))
                             {
+                                BluetoothConnected = false;
                                 _ = RefreshStatusAsync();
                                 if (App.GetCurrentPage() is DevicePowerOnView)
                                 {
@@ -204,17 +207,37 @@ namespace FenomPlus.ViewModels
                     // Only navigate if during startup
                     await Services.Navigation.DashboardView();
                 }
-				
-				if (App.GetCurrentPage() == null)
-                        return;
 
-                    if (App.GetCurrentPage() is DashboardView)
-                        return;
+                // When BluetoothConnected is True and Services.DeviceService.Current == null => Can never be. 
+                // Found few exceptions This chunk of code not needed, but will handle this weird scenario
+                if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
+                {                    
+                    var bleFenomdevice = Services.DeviceService.GetBondedOrPairedFenomDevices();
+                    if (bleFenomdevice != null && bleFenomdevice.Id != Guid.Empty && bleFenomdevice.Connected == false)
+                    {
+                        try
+                        {
+                            await bleFenomdevice.ConnectToKnownDeviceAsync(bleFenomdevice.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Exception in BluetoothCheck to connect: {ex.Message}");
+                        }
+                    }
+                }
+
 
                 if (BluetoothCheckCount == 0)
                 {
-                    await Services.DeviceService.Current.RequestDeviceInfo();
-                    await Services.DeviceService.Current.RequestEnvironmentalInfo();
+                    try
+                    {
+                        await Services.DeviceService.Current.RequestDeviceInfo();
+                        await Services.DeviceService.Current.RequestEnvironmentalInfo();
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.WriteLine($"Exception in BluetoothCheck to RequestDeviceInfo / RequestEnvironmentalInfo: {ex.Message}");
+                    }
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
                 }
@@ -223,6 +246,7 @@ namespace FenomPlus.ViewModels
 
                 if (BluetoothCheckCount >= RequestNewStatusInterval)
                     BluetoothCheckCount = 0;
+
             }
             else
             {
@@ -234,22 +258,23 @@ namespace FenomPlus.ViewModels
             await RefreshStatusAsync();
         }
 
-        private bool RefreshInProgress = false;
+        private bool RefreshInProgress = false;        
 
         public async Task RefreshStatusAsync()
         {
-#if _BREAKING_CHANGES_
+            
             // To early to get status or don't update environmental properties during test
-            if (!BluetoothConnected || 
-                RefreshInProgress ||
-                Services.DeviceService.Current != null ||
-                Services.DeviceService.Current.BreathTestInProgress || 
+            if (RefreshInProgress ||
+                Services?.DeviceService == null ||
+                Services.DeviceService.Current == null ||
+                Services.DeviceService.Current.BreathTestInProgress ||
                 Services.Cache?.EnvironmentalInfo == null)
             {
-                await Task.Delay(1);
+                //await Task.Delay(1);
                 return;
             }
-#endif
+
+
             RefreshInProgress = true;
 
             UpdateVersionNumbers();
@@ -823,6 +848,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
+            BluetoothConnected = CheckDeviceConnection();
             await RefreshStatusAsync();
             await Services.Navigation.DeviceStatusHubView();
         }

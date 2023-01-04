@@ -428,7 +428,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 _ = await GetCharacterasticsAync();
                 gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
             }
-            foreach (IGattCharacteristic item in gattCharacteristics)
+            foreach (IGattCharacteristic item in new List<IGattCharacteristic>(gattCharacteristics))
             {
                 if (!item.Uuid.Equals(guid)) continue;
                 gatt = item;
