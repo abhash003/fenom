@@ -62,8 +62,16 @@ namespace FenomPlus.ViewModels
 
                 var ea = (DeviceServiceEventArgs)e;
                 Helper.WriteDebug("Device discovered.");
-                await ea.Device.ConnectAsync();
-                await FoundDevice(ea.Device);
+                try
+                {
+                    await ea.Device.ConnectAsync();
+                    await FoundDevice(ea.Device);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
+                }
+                
             }
             catch (Exception ex)
             {                
@@ -111,8 +119,16 @@ namespace FenomPlus.ViewModels
                         if (Services.DeviceService.IsDeviceFenomDevice(device.Name))
                         {
                             Stop = true;
-                            await device.ConnectAsync();
-                            await FoundDevice(device);
+                            try
+                            {
+                                await device.ConnectAsync();
+                                await FoundDevice(device);
+                            }
+                            catch(Exception ex)
+                            {
+                                Debug.WriteLine("Exception at DevicePowerOnViewModel StartScan : " + ex.Message);
+                            }
+                            
                         }
                     }
 
@@ -129,10 +145,12 @@ namespace FenomPlus.ViewModels
         public async Task FoundDevice(IDevice device)
         {
             Helper.WriteDebug("enter: FoundDevice()");
-
+            if (Services.DeviceService.Current == null) return;
+            
             Stop = true;
             Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
             // jac: do not request, this is updated by the device
+            
             await Services.DeviceService.Current.RequestDeviceInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
 
