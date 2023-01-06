@@ -122,7 +122,7 @@ namespace FenomPlus.ViewModels
 
                 if (BluetoothCheckCount == 0)
                 {
-                    if (Services != null && Services.DeviceService != null && Services.DeviceService.Current != null)
+                    if (Services is { DeviceService: { Current: { } } })
                     {
                         await Services.DeviceService.Current.RequestDeviceInfo();
                         await Services.DeviceService.Current.RequestEnvironmentalInfo();
