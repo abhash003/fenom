@@ -5,7 +5,6 @@ using FenomPlus.Views;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Essentials;
@@ -72,7 +71,7 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer;
 
-        public StatusViewModel() : base()
+        public StatusViewModel()
         {
             VersionTracking.Track();
 
@@ -91,93 +90,6 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
-
-            Services.DeviceService.DeviceConnected += DeviceService_DeviceConnected;
-            Services.DeviceService.DeviceConnectionLost += DeviceService_DeviceConnectionLost;
-            Services.DeviceService.DeviceDisconnected += DeviceService_DeviceDisconnected;
-
-            //Console.WriteLine("{0} {1} {2}");
-        }
-		
-		private void DeviceService_DeviceConnected(object sender, EventArgs e)
-        {
-            _ = OnConnectedAsync(true);
-        }
-        private void DeviceService_DeviceConnectionLost(object sender, EventArgs e)
-        {
-            _ = OnConnectedAsync(false);
-        }
-
-        private void DeviceService_DeviceDisconnected(object sender, EventArgs e)
-        {
-            _ = OnConnectedAsync(false);
-        }
-		
-		public async Task OnConnectedAsync(bool connected)
-        {
-            bool isBluetoothConnected = connected;
-
-            BluetoothConnected = connected;
-
-            _ = RefreshStatusAsync();
-
-            if (isBluetoothConnected)
-            {
-                if (App.GetCurrentPage() is DevicePowerOnView)
-                {
-                    await Services.Navigation.DashboardView();
-                }
-                else if (App.GetCurrentPage() == null)
-                {
-                    return;
-                }
-                else if (App.GetCurrentPage() is DashboardView)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                if (!(App.GetCurrentPage() is DevicePowerOnView))
-                {
-                    // Check for Bonded Devices
-                    var bleFenomdevice = Services.DeviceService.GetBondedOrPairedFenomDevices();
-                    if (bleFenomdevice != null && bleFenomdevice.Id != Guid.Empty && bleFenomdevice.Connected == false)
-                    {
-                        try
-                        {
-                            await bleFenomdevice.ConnectToKnownDeviceAsync(bleFenomdevice.Id);
-                            BluetoothConnected = true;
-                            _ = RefreshStatusAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            if (ex.Message.Contains("133") || ex.Message.Contains("61"))
-                            {
-                                BluetoothConnected = false;
-                                _ = RefreshStatusAsync();
-                                if (App.GetCurrentPage() is DevicePowerOnView)
-                                {
-                                    await Services.Navigation.DashboardView();
-                                }
-                                else if (App.GetCurrentPage() == null)
-                                {
-                                    return;
-                                }
-                                else if (App.GetCurrentPage() is DashboardView)
-                                {
-                                    await Services.Navigation.DevicePowerOnView();
-                                }
-                            }
-                        }
-                        
-                    }
-                    else
-                    {
-                        await Services.Navigation.DevicePowerOnView();
-                    }                    
-                }
-            }
         }
 
         private bool CheckDeviceConnection()
@@ -187,7 +99,7 @@ namespace FenomPlus.ViewModels
 
             bool deviceIsConnected = Services.DeviceService.Current.Connected;
 
-            // Don't use Services.Device.IsConnected() or it will try to reconnect - we just want current connection status
+            // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
             return deviceIsConnected;
         }
 
@@ -208,35 +120,12 @@ namespace FenomPlus.ViewModels
                     await Services.Navigation.DashboardView();
                 }
 
-                // When BluetoothConnected is True and Services.DeviceService.Current == null => Can never be. 
-                // Found few exceptions This chunk of code not needed, but will handle this weird scenario
-                if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
-                {                    
-                    var bleFenomdevice = Services.DeviceService.GetBondedOrPairedFenomDevices();
-                    if (bleFenomdevice != null && bleFenomdevice.Id != Guid.Empty && bleFenomdevice.Connected == false)
-                    {
-                        try
-                        {
-                            await bleFenomdevice.ConnectToKnownDeviceAsync(bleFenomdevice.Id);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Exception in BluetoothCheck to connect: {ex.Message}");
-                        }
-                    }
-                }
-
-
                 if (BluetoothCheckCount == 0)
                 {
-                    try
+                    if (Services != null && Services.DeviceService != null && Services.DeviceService.Current != null)
                     {
                         await Services.DeviceService.Current.RequestDeviceInfo();
                         await Services.DeviceService.Current.RequestEnvironmentalInfo();
-                    }
-                    catch(Exception ex)
-                    {
-                        Debug.WriteLine($"Exception in BluetoothCheck to RequestDeviceInfo / RequestEnvironmentalInfo: {ex.Message}");
                     }
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
@@ -246,7 +135,6 @@ namespace FenomPlus.ViewModels
 
                 if (BluetoothCheckCount >= RequestNewStatusInterval)
                     BluetoothCheckCount = 0;
-
             }
             else
             {
@@ -258,22 +146,19 @@ namespace FenomPlus.ViewModels
             await RefreshStatusAsync();
         }
 
-        private bool RefreshInProgress = false;        
+        private bool RefreshInProgress = false;
 
         public async Task RefreshStatusAsync()
         {
-            
             // To early to get status or don't update environmental properties during test
-            if (RefreshInProgress ||
-                Services?.DeviceService == null ||
-                Services.DeviceService.Current == null ||
-                Services.DeviceService.Current.BreathTestInProgress ||
-                Services.Cache?.EnvironmentalInfo == null)
+            if (Services.DeviceService.Current != null && (!BluetoothConnected ||
+                                                           RefreshInProgress ||
+                                                           Services.DeviceService.Current.BreathTestInProgress ||
+                                                           Services?.Cache?.EnvironmentalInfo == null))
             {
-                //await Task.Delay(1);
+                await Task.Delay(1);
                 return;
             }
-
 
             RefreshInProgress = true;
 
@@ -326,7 +211,7 @@ namespace FenomPlus.ViewModels
             }
 
             // ToDo: Remove hard coded value
-            expirationDate = DateTime.Now.AddYears(5).AddDays(-10); 
+            expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
             //expirationDate = DateTime.Now.AddDays(5); 
 
             int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
@@ -464,7 +349,6 @@ namespace FenomPlus.ViewModels
         {
             if (BluetoothConnected)
             {
-
                 BluetoothBarIcon = "wo_bluetooth_green.png";
                 BluetoothViewModel.ImagePath = "bluetooth_green.png";
                 BluetoothViewModel.ValueColor = Color.Black;
@@ -620,7 +504,7 @@ namespace FenomPlus.ViewModels
             }
             else if (value < Constants.HumidityWarning25)
             {
-                HumidityBarIconVisible = true; 
+                HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_yellow.png";
                 HumidityViewModel.ImagePath = "humidity_yellow.png";
                 HumidityViewModel.ValueColor = Color.FromHex("#333");
@@ -848,7 +732,6 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
-            BluetoothConnected = CheckDeviceConnection();
             await RefreshStatusAsync();
             await Services.Navigation.DeviceStatusHubView();
         }
