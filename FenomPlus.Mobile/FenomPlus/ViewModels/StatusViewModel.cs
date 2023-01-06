@@ -170,13 +170,20 @@ namespace FenomPlus.ViewModels
 
             UpdateSensor(Services.Cache.SensorExpireDate);
 
-            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
+            // Don't update  an environment value if it is zero, we must not have good value yet
 
-            UpdateHumidity(Services.Cache.EnvironmentalInfo.Humidity);
+            if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
+                UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
+            if (Services.Cache.EnvironmentalInfo.Pressure != 0) 
+                UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
+
+            if (Services.Cache.EnvironmentalInfo.Humidity != 0) 
+                UpdateHumidity(Services.Cache.EnvironmentalInfo.Humidity);
+
+            if (Services.Cache.EnvironmentalInfo.Temperature != 0) 
+                UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
 
             UpdateQualityControlExpiration(7); // ToDo:  Need value here
 
