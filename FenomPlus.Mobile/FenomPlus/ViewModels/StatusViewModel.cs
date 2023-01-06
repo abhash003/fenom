@@ -150,7 +150,7 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
-            // To early to get status or don't update environmental properties during test
+            // To early to get status or don't update environmental properties during test - Important - DO NOT REMOVE!
             if (Services.DeviceService.Current != null && (!BluetoothConnected ||
                                                            RefreshInProgress ||
                                                            Services.DeviceService.Current.BreathTestInProgress ||
