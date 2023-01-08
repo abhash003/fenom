@@ -110,7 +110,7 @@ namespace FenomPlus.ViewModels
             // Note:  All device status parameters are conditional on the bluetooth connection
 
             BluetoothConnected = CheckDeviceConnection();
-            Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
+            //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
             if (BluetoothConnected)
             {
@@ -141,7 +141,7 @@ namespace FenomPlus.ViewModels
                 BluetoothCheckCount = 0; // Reset counter
             }
 
-            Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
+            //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
             await RefreshStatusAsync();
         }
