@@ -170,11 +170,11 @@ namespace FenomPlus.ViewModels
 
             UpdateSensor(Services.Cache.SensorExpireDate);
 
-
+            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel);
             // Don't update  an environment value if it is zero, we must not have good value yet
 
-            if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
-                UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+            //if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
+            //    UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
             if (Services.Cache.EnvironmentalInfo.Pressure != 0) 
                 UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
