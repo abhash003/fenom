@@ -15,6 +15,18 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         private IAppServices Services => IOC.Services;
         private ICacheService Cache => Services.Cache;
         private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _deviceInfolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _environmentalIngolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _errorStatusInfolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _debugMsglock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _breathManeuverlock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _deviceStatuslock = new SemaphoreSlim(1, 1);
         private Plugin.BLE.Abstractions.Contracts.ICharacteristic Characteristic { get; }
         public Guid Uuid => Characteristic.Id;
 
@@ -142,7 +154,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
 
         private void DeviceInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _deviceInfolock.Wait();
             try
             {
                 Cache.DecodeDeviceInfo(e.Characteristic.Value);
@@ -154,13 +166,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _deviceInfolock.Release();
             }
         }
 
         private void EnvironmentalInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _environmentalIngolock.Wait();
             try
             {
                 Cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
@@ -172,13 +184,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _environmentalIngolock.Release();
             }
         }
 
         private void ErrorStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _errorStatusInfolock.Wait();
             try
             {
                 Cache.DecodeErrorStatusInfo(e.Characteristic.Value);
@@ -190,13 +202,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _errorStatusInfolock.Release();
             }
         }
 
         private void DeviceStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _deviceStatuslock.Wait();
             try
             {
                 Cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
@@ -208,13 +220,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _deviceStatuslock.Release();
             }
         }
 
         private void BreathManeuverHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _breathManeuverlock.Wait();
             try
             {
                 Cache.DecodeBreathManeuver(e.Characteristic.Value);
@@ -225,13 +237,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _breathManeuverlock.Release();
             }
         }
 
         private void DebugMsgHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _debugMsglock.Wait();
             try
             {
                 Cache.DecodeDebugMsg(e.Characteristic.Value);
@@ -242,7 +254,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _debugMsglock.Release();
             }
         }
     }
