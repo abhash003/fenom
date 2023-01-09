@@ -107,53 +107,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             {
                 _lock.Release();
             }
-        }
-
-        public async Task<bool> WriteAsync(byte[] value)
-        {
-            await _lock.WaitAsync();
-
-            try
-            {
-                if (!Characteristic.CanWrite)
-                {
-                    throw new Exception("Characteristic cannot be written");
-                }
-
-                Characteristic.WriteType = CharacteristicWriteType.WithResponse;
-
-                return await Characteristic.WriteAsync(value);
-            }
-            catch (Exception ex)
-            {
-                Services.LogCat.Print(ex.Message);
-                return false;
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
-
-        public async Task<bool> WriteWithoutResponseAsyncFast(byte[] value)
-        {
-            await _lock.WaitAsync();
-            try
-            {
-                Characteristic.WriteType = CharacteristicWriteType.WithoutResponse;
-                await Characteristic.WriteAsync(value);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Services.LogCat.Print(ex.Message);
-                return false;
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
+        }        
 
         static object __lock = new object();
 
