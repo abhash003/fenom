@@ -124,8 +124,8 @@ namespace FenomPlus.ViewModels
                 {
                     if (Services is { DeviceService: { Current: { } } })
                     {
-                        await Services.DeviceService.Current.RequestDeviceInfo();
-                        await Services.DeviceService.Current.RequestEnvironmentalInfo();
+                        //await Services.DeviceService.Current.RequestDeviceInfo();
+                        //await Services.DeviceService.Current.RequestEnvironmentalInfo();
                     }
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");

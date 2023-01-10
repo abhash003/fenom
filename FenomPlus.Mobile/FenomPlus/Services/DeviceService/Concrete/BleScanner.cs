@@ -60,6 +60,33 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (_ble.Adapter.IsScanning)
                 return;
 
+            {
+                var devices = _ble.Adapter.GetSystemConnectedOrPairedDevices();
+                foreach (var device in devices)
+                {
+                    var name = device.Name.ToLower();
+                    if (_deviceService.IsDeviceFenomDevice(name))
+                    {
+                        var args = new DeviceEventArgs();
+                        args.Device = device;
+                        Adapter_DeviceDiscovered(null, args);
+                        if (false)
+                        {
+                            try
+                            {
+                                var bleDevice = await _ble.Adapter.ConnectToKnownDeviceAsync(device.Id);
+                                return;
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                                throw;
+                            }
+                        }
+                    }
+                }
+            }
+
             // advertisement interval, window
             // scanning interval, window
 
