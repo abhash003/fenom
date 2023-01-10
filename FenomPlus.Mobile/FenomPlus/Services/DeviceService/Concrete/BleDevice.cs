@@ -58,6 +58,50 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 try
                 {
                     await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+
+                    // get service
+                    var device = (PluginBleIDevice)_nativeDevice;
+
+                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                    // get characteristics
+                    var fwChar  = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .FeatureWriteCharacteristic));
+
+                    var devChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .DeviceInfoCharacteristic));
+
+                    var envChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .EnvironmentalInfoCharacteristic));
+
+                    var bmChar =
+                        await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                            .BreathManeuverCharacteristic));
+
+                    //ICharacteristic[] chars = { fwChar, devChar, envChar };
+
+                    devChar.ValueUpdated += (sender, args) =>
+                    {
+                        //Services.AppServices.DecodeDeviceInfo(e.Characteristic.Value);
+                        Console.WriteLine("updated");
+                    };
+
+                    envChar.ValueUpdated += (sender, args) =>
+                    {
+                        Console.WriteLine("updated");
+                    };
+
+                    byte[] data1 = new byte[4];
+                    data1[0] = 0;
+                    data1[1] = 0; // id
+                    data1[2] = 0;
+                    data1[3] = 2; // sub
+
+                    await fwChar.WriteAsync(data1);
+                    var data2 = await envChar.ReadAsync();
+
+                    await devChar.StartUpdatesAsync();
+                    await envChar.StartUpdatesAsync();
                 }
                 catch (Exception ex)
                 {
