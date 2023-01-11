@@ -346,7 +346,7 @@ namespace FenomPlus.Services
                 return DeviceCheckEnum.DevicePurging;
             }
 
-            if (Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            if (false /*Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3*/)
             {
                 return DeviceCheckEnum.BatteryCriticallyLow;
             }

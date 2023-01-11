@@ -15,6 +15,18 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
         private IAppServices Services => IOC.Services;
         private ICacheService Cache => Services.Cache;
         private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _deviceInfolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _environmentalIngolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _errorStatusInfolock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _debugMsglock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _breathManeuverlock = new SemaphoreSlim(1, 1);
+
+        private readonly SemaphoreSlim _deviceStatuslock = new SemaphoreSlim(1, 1);
         private Plugin.BLE.Abstractions.Contracts.ICharacteristic Characteristic { get; }
         public Guid Uuid => Characteristic.Id;
 
@@ -107,84 +119,42 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             {
                 _lock.Release();
             }
-        }
+        }        
 
-        public async Task<bool> WriteAsync(byte[] value)
-        {
-            await _lock.WaitAsync();
-
-            try
-            {
-                if (!Characteristic.CanWrite)
-                {
-                    throw new Exception("Characteristic cannot be written");
-                }
-
-                Characteristic.WriteType = CharacteristicWriteType.WithResponse;
-
-                return await Characteristic.WriteAsync(value);
-            }
-            catch (Exception ex)
-            {
-                Services.LogCat.Print(ex.Message);
-                return false;
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
-
-        public async Task<bool> WriteWithoutResponseAsyncFast(byte[] value)
-        {
-            await _lock.WaitAsync();
-            try
-            {
-                Characteristic.WriteType = CharacteristicWriteType.WithoutResponse;
-                await Characteristic.WriteAsync(value);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Services.LogCat.Print(ex.Message);
-                return false;
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
+        static object __lock = new object();
 
         public async Task<bool> WriteWithoutResponseAsync(byte[] value)
         {
-            await _lock.WaitAsync();
-
-            try
+            //await _lock.WaitAsync();
+            lock (__lock)
             {
-                if (!Characteristic.CanWrite)
+                try
                 {
-                    throw new Exception("Characteristic cannot be written");
+                    if (!Characteristic.CanWrite)
+                    {
+                        throw new Exception("Characteristic cannot be written");
+                    }
+
+                    Characteristic.WriteType = CharacteristicWriteType.WithoutResponse;
+
+                    Characteristic.WriteAsync(value).ConfigureAwait(continueOnCapturedContext: false);
+                    return true;
                 }
-
-                Characteristic.WriteType = CharacteristicWriteType.WithoutResponse;
-
-                await Characteristic.WriteAsync(value);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Services.LogCat.Print(ex.Message);
-                return false;
-            }
-            finally
-            {
-                _lock.Release();
+                catch (Exception ex)
+                {
+                    Services.LogCat.Print(ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    //_lock.Release();
+                }
             }
         }
 
         private void DeviceInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _deviceInfolock.Wait();
             try
             {
                 Cache.DecodeDeviceInfo(e.Characteristic.Value);
@@ -196,13 +166,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _deviceInfolock.Release();
             }
         }
 
         private void EnvironmentalInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _environmentalIngolock.Wait();
             try
             {
                 Cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
@@ -214,13 +184,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _environmentalIngolock.Release();
             }
         }
 
         private void ErrorStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _errorStatusInfolock.Wait();
             try
             {
                 Cache.DecodeErrorStatusInfo(e.Characteristic.Value);
@@ -232,13 +202,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _errorStatusInfolock.Release();
             }
         }
 
         private void DeviceStatusInfoHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _deviceStatuslock.Wait();
             try
             {
                 Cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
@@ -250,13 +220,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _deviceStatuslock.Release();
             }
         }
 
         private void BreathManeuverHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _breathManeuverlock.Wait();
             try
             {
                 Cache.DecodeBreathManeuver(e.Characteristic.Value);
@@ -267,13 +237,13 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _breathManeuverlock.Release();
             }
         }
 
         private void DebugMsgHandler(object sender, CharacteristicUpdatedEventArgs e)
         {
-            _lock.Wait();
+            _debugMsglock.Wait();
             try
             {
                 Cache.DecodeDebugMsg(e.Characteristic.Value);
@@ -284,7 +254,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             }
             finally
             {
-                _lock.Release();
+                _debugMsglock.Release();
             }
         }
     }

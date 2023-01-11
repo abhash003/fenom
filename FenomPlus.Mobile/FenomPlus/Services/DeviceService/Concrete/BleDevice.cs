@@ -10,6 +10,7 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using PluginBleIDevice = Plugin.BLE.Abstractions.Contracts.IDevice;
 using System.Diagnostics;
+using FenomPlus.Interfaces;
 using Plugin.BLE.Abstractions;
 using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Services.DeviceService.Abstract;
@@ -58,6 +59,61 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 try
                 {
                     await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+
+                    // get service
+                    var device = (PluginBleIDevice)_nativeDevice;
+
+                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                    // get characteristics
+                    var fwChar  = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .FeatureWriteCharacteristic));
+
+                    var devChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .DeviceInfoCharacteristic));
+
+                    var envChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .EnvironmentalInfoCharacteristic));
+
+                    var bmChar =
+                        await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                            .BreathManeuverCharacteristic));
+
+                    //ICharacteristic[] chars = { fwChar, devChar, envChar };
+
+                    devChar.ValueUpdated += (sender, e) =>
+                    {
+                        var cache = AppServices.Container.Resolve<CacheService>();
+                        cache.DecodeDeviceInfo(e.Characteristic.Value);
+                        Console.WriteLine("updated");
+                    };
+
+                    envChar.ValueUpdated += (sender, e) =>
+                    {
+                        var cache = AppServices.Container.Resolve<CacheService>();
+                        cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
+                        Console.WriteLine("updated");
+                    };
+                    
+                    bmChar.ValueUpdated += (sender, e) =>
+                    {
+                        var cache = AppServices.Container.Resolve<CacheService>();
+                        cache.DecodeBreathManeuver(e.Characteristic.Value);
+                        Console.WriteLine("updated");
+                    };
+
+                    byte[] data1 = new byte[4];
+                    data1[0] = 0;
+                    data1[1] = 0; // id
+                    data1[2] = 0;
+                    data1[3] = 2; // sub
+
+                    //await fwChar.WriteAsync(data1);
+                    //var data2 = await envChar.ReadAsync();
+
+                    await devChar.StartUpdatesAsync();
+                    await envChar.StartUpdatesAsync();
+                    await bmChar.StartUpdatesAsync();
                 }
                 catch (Exception ex)
                 {
