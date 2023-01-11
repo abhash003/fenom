@@ -70,6 +70,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         var args = new DeviceEventArgs();
                         args.Device = device;
                         Adapter_DeviceDiscovered(null, args);
+                        return;
                         if (false)
                         {
                             try
@@ -84,7 +85,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             }
                         }
                     }
-                }
+                } 
             }
 
             // advertisement interval, window
