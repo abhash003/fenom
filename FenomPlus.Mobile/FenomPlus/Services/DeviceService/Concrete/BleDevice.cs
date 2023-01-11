@@ -79,46 +79,49 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                             .BreathManeuverCharacteristic));
 
+                    var dbgChar =
+                        await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                            .DebugMessageCharacteristic));
+
                     //ICharacteristic[] chars = { fwChar, devChar, envChar };
 
                     devChar.ValueUpdated += (sender, e) =>
                     {
                         var cache = AppServices.Container.Resolve<CacheService>();
                         cache.DecodeDeviceInfo(e.Characteristic.Value);
-                        Console.WriteLine("updated");
+                        Console.WriteLine("updated characteristic: device info");
                     };
 
                     envChar.ValueUpdated += (sender, e) =>
                     {
                         var cache = AppServices.Container.Resolve<CacheService>();
                         cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
-                        Console.WriteLine("updated");
+                        Console.WriteLine("updated characteristic: environmental info");
                     };
                     
                     bmChar.ValueUpdated += (sender, e) =>
                     {
                         var cache = AppServices.Container.Resolve<CacheService>();
                         cache.DecodeBreathManeuver(e.Characteristic.Value);
-                        Console.WriteLine("updated");
+                        Console.WriteLine("updated characteristic: breath maneuver");
                     };
 
-                    byte[] data1 = new byte[4];
-                    data1[0] = 0;
-                    data1[1] = 0; // id
-                    data1[2] = 0;
-                    data1[3] = 2; // sub
-
-                    //await fwChar.WriteAsync(data1);
-                    //var data2 = await envChar.ReadAsync();
+                    dbgChar.ValueUpdated += (sender, e) =>
+                    {
+                        var cache = AppServices.Container.Resolve<CacheService>();
+                        cache.DecodeDebugMsg(e.Characteristic.Value);
+                        Console.WriteLine("updated characteristic: debug message");
+                    };
 
                     await devChar.StartUpdatesAsync();
                     await envChar.StartUpdatesAsync();
                     await bmChar.StartUpdatesAsync();
+                    await dbgChar.StartUpdatesAsync();
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
-                    throw ex;
+                    throw;
                 }
             }
         }
