@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using Microsoft.Extensions.Logging;
+using static FenomPlus.Services.CacheService;
 
 namespace FenomPlus.Interfaces
 {
@@ -37,8 +39,12 @@ namespace FenomPlus.Interfaces
         ErrorStatusInfo DecodeErrorStatusInfo(byte[] data);
         DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data);
 
+        event EventHandler BreathFlowChanged;
+
         bool ReadyForTest { get; set; }
         bool FenomReady { get; set; }
         float FenomValue { get; set; }
+
+        public DeviceCheckEnum CheckDeviceBeforeTest();
     }
 }

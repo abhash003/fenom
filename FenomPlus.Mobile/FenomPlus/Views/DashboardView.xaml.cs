@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
@@ -18,62 +18,15 @@ namespace FenomPlus.Views
             BindingContext = DashboardViewModel = new DashboardViewModel();
         }
 
-        private void OnStandardTest(object sender, EventArgs e)
+        private async void OnStandardTest(object sender, EventArgs e)
         {
             DashboardViewModel.StartStandardTestCommand.Execute(null);
         }
 
-        private void OnShortTest(object sender, EventArgs e)
+        private async void OnShortTest(object sender, EventArgs e)
         {
             DashboardViewModel.StartShortTestCommand.Execute(null);
         }
-
-        //private bool DeviceEnvironmentalWarning()
-        //{
-        //    // Get the latest environmental info - updates Cache
-        //    DashboardViewModel.BleHub.RequestEnvironmentalInfo();
-
-        //    if (DashboardViewModel.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
-        //        DashboardViewModel.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
-        //    {
-        //        DashboardViewModel.Dialogs.ShowToast($"Humidity Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Humidity}", 5);
-        //        return false;
-        //    }
-
-        //    if (DashboardViewModel.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
-        //        DashboardViewModel.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
-        //    {
-        //        DashboardViewModel.Dialogs.ShowToast($"Pressure Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Pressure}", 5);
-        //        return false;
-        //    }
-
-        //    if (DashboardViewModel.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
-        //        DashboardViewModel.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
-        //    {
-        //        DashboardViewModel.Dialogs.ShowToast($"Temperature Level Out of Range: {DashboardViewModel.Cache.EnvironmentalInfo.Temperature}", 5);
-        //        return false;
-        //    }
-
-        //    if (DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
-        //    {
-        //        DashboardViewModel.Dialogs.ShowToast($"Battery Level is Critically Low: {DashboardViewModel.Cache.EnvironmentalInfo.BatteryLevel}", 5);
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
-        //private void DeviceNotReadyWarningToast()
-        //{
-        //    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-        //    DashboardViewModel.Dialogs.ShowToast($"Device purging, please wait...", secondsRemaining);
-        //}
-
-        //private void DeviceNotReadyWarningProgress()
-        //{
-        //    int secondsRemaining = DashboardViewModel.BleHub.DeviceReadyCountDown;
-        //    DashboardViewModel.Dialogs.ShowSecondsProgress($"Device purging..", secondsRemaining);
-        //}
 
         private async void OnTutorial(object sender, EventArgs e)
         {

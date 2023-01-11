@@ -42,7 +42,7 @@ namespace FenomPlus.Services
         public string DatabasePath(string dbFile)
         {
             var path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), dbFile);
-            Console.WriteLine("DB:" + path);
+            Services.LogCat.Print("DB:" + path);
             return path;
         }
 

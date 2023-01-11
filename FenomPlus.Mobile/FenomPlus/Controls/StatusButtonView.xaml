@@ -88,7 +88,7 @@
             <Label x:Name="Value"
                     Grid.Row="2" 
                     Text="{Binding Value}"
-                    TextColor="{Binding ValueColor}" 
+                    TextColor="#333"  
                     VerticalOptions="Center" 
                     VerticalTextAlignment="Start" 
                     HorizontalOptions="Center" 

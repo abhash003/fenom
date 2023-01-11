@@ -45,9 +45,10 @@
                 <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
                                     ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
                                     LiveDataUpdateMode="AllowDataShaping"
+                                    ColumnSizer="Star"
                                     VerticalOptions="Fill"
                                     HorizontalOptions="Fill"
-                                    AllowResizingColumn="False"
+                                    AllowResizingColumn="True"
                                     AutoGenerateColumns="False"
                                     AllowEditing="False"
                                     AllowSorting="False"
@@ -55,7 +56,6 @@
                                     SelectionMode="Single"
                                     AutoExpandGroups="False"
                                     AllowGroupExpandCollapse="False"
-                                    ColumnSizer="Star"
                                     VerticalScrollBarVisibility="False"
                                     HorizontalScrollBarVisibility="False"
                                     VerticalOverScrollMode="None"
@@ -64,19 +64,19 @@
 
                     <sfgrid:SfDataGrid.Columns>
 
-                        <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
+                        <sfgrid:GridTextColumn HeaderText="ID"  MappingName="Id"  IsHidden="True" />
 
-                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" ColumnSizer="Auto"/>
+                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateError" Padding="10,0,10,0" ColumnSizer="Auto"/> 
 
-                        <sfgrid:GridTextColumn HeaderText="Code / Description"  MappingName="Description"/>
+                        <sfgrid:GridTextColumn HeaderText="Code / Description" MappingName="Description" TextAlignment="Start" Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity"/>
+                        <sfgrid:GridTextColumn HeaderText="Humidity" MappingName="Humidity" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber"/>
+                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware"/>
+                        <sfgrid:GridTextColumn HeaderText="Firmware" MappingName="Firmware" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                        <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software"/>
+                        <sfgrid:GridTextColumn HeaderText="Software" MappingName="Software" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
                     </sfgrid:SfDataGrid.Columns>
 

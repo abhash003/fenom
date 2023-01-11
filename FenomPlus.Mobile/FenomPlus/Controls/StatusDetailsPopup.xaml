@@ -31,7 +31,7 @@
                VerticalOptions="Center" 
                VerticalTextAlignment="End" 
                HorizontalOptions="Center" 
-               TextColor="Red" 
+               TextColor="#333" 
                FontSize="28"
                Margin="0"/>
 

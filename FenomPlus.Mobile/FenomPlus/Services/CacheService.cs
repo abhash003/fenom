@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
@@ -12,7 +16,7 @@ using Plugin.Settings.Abstractions;
 
 namespace FenomPlus.Services
 {
-    public class CacheService : BaseService, ICacheService
+    public class CacheService : BaseService, ICacheService, IDisposable
     {
         private readonly RingBuffer BreathBuffer;
 
@@ -196,6 +200,8 @@ namespace FenomPlus.Services
             return DeviceStatusInfo;
         }
 
+        public event EventHandler BreathFlowChanged;
+
         public BreathManeuver DecodeBreathManeuver(byte[] data)
         {
             try
@@ -227,6 +233,7 @@ namespace FenomPlus.Services
 
                     // add new value and average it
                     BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
+                    BreathFlowChanged?.Invoke(null, null);
 
                     // get the noscores
                     NOScore = BreathManeuver.NOScore;
@@ -240,8 +247,49 @@ namespace FenomPlus.Services
             return BreathManeuver;
         }
 
+        static volatile object _s_debugLogLock = new object();
+        static volatile bool _s_logFileWriterWorkerStarted = false;
+        static volatile bool _s_logFileWriterWorkerStop = false;
+
+        public virtual void Dispose()
+        {
+            _s_logFileWriterWorkerStop = true;
+        }
+
+        private void LogFileWriterWorker()
+        {
+            _s_logFileWriterWorkerStarted = true;
+
+            var current = DateTime.Now;
+
+            while (_s_logFileWriterWorkerStop == false)
+            {
+                if ((DateTime.Now - current).TotalSeconds > 60)
+                {
+                    // flush the log
+                    var debugList = Services.Cache.DebugList;
+
+                    lock (_s_debugLogLock)
+                    {
+                        Services.DebugLogFile.Write(debugList);
+                        debugList.Clear();
+                    }
+
+                    // reset the time
+                    current = DateTime.Now;
+                }
+            }
+        }
+
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
+            if (_s_logFileWriterWorkerStarted == false)
+            {
+                // start the worker
+                Thread workerThread = new Thread(LogFileWriterWorker);
+                workerThread.Start();
+            }
+
             try
             {
                 DebugMsg ??= new DebugMsg();
@@ -250,11 +298,18 @@ namespace FenomPlus.Services
 
                 DebugLog debugLog = DebugLog.Create(data);
 
-                DebugList.Insert(0, debugLog);
-                Services.DebugLogFile.Write(debugLog);
-                NotifyViews();
-                NotifyViewModels();
-            } finally { }
+                lock (_s_debugLogLock)
+                {
+                    DebugList.Insert(0, debugLog);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Services.LogCat.Print(ex);
+            }
+
             return DebugMsg;
         }
 
@@ -268,6 +323,53 @@ namespace FenomPlus.Services
         private void NotifyViewModels()
         {
             App.NotifyViewModels();
+        }
+
+        public enum DeviceCheckEnum
+        {
+            Ready,
+            DevicePurging,
+            HumidityOutOfRange,
+            PressureOutOfRange,
+            TemperatureOutOfRange,
+            BatteryCriticallyLow
+        }
+
+        public DeviceCheckEnum CheckDeviceBeforeTest()
+        {
+            // Get the latest environmental info - updates Cache
+            Services.DeviceService.Current?.RequestEnvironmentalInfo();
+
+            if (Services.DeviceService.Current is { ReadyForTest: false })
+            {
+                Debug.WriteLine("Device is purging");
+                return DeviceCheckEnum.DevicePurging;
+            }
+
+            if (false /*Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3*/)
+            {
+                return DeviceCheckEnum.BatteryCriticallyLow;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                Services.Cache.EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+            {
+                return DeviceCheckEnum.HumidityOutOfRange;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                Services.Cache.EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            {
+                return DeviceCheckEnum.PressureOutOfRange;
+            }
+
+            if (Services.Cache.EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                Services.Cache.EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+            {
+                return DeviceCheckEnum.TemperatureOutOfRange;
+            }
+
+            return DeviceCheckEnum.Ready;
         }
     }
 }

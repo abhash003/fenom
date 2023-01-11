@@ -1,6 +1,6 @@
-﻿using System;
-using FenomPlus.Controls;
+using System;
 using FenomPlus.Interfaces;
+using FenomPlus.Services.DeviceService.Interfaces;
 using FenomPlus.ViewModels;
 using TinyIoC;
 
@@ -9,12 +9,12 @@ namespace FenomPlus.Services
     public class AppServices : IAppServices
     {
         public static TinyIoCContainer Container => TinyIoCContainer.Current;
-
-        protected IBleHubService _BleHub;
-        public IBleHubService BleHub
+        
+        protected IDeviceService _deviceService;
+        public IDeviceService DeviceService
         {
-            get => _BleHub ??= Container.Resolve<IBleHubService>();
-            set => _BleHub = value;
+            get => _deviceService ??= Container.Resolve<IDeviceService>();
+            set => _deviceService = value;
         }
 
         protected IConfigService _Config;
@@ -66,19 +66,14 @@ namespace FenomPlus.Services
             set => _Navigation = value;
         }
 
-        protected IUsbDeviceService _Usb;
-        public IUsbDeviceService Usb
-        {
-            get => _Usb ??= Container.Resolve<IUsbDeviceService>();
-            set => _Usb = value;
-        }
+        
 
         public AppServices()
         {
             try
             {
                 Container.Register<IConfigService, ConfigService>().AsSingleton();
-                Container.Register<IBleHubService, BleHubService>().AsSingleton();
+                Container.Register<IDeviceService, DeviceService.DeviceService>().AsSingleton();
                 Container.Register<ICacheService, CacheService>().AsSingleton();
                 Container.Register<IDialogService, DialogService>().AsSingleton();
                 Container.Register<IDatabaseService, DatabaseService>().AsSingleton();
@@ -87,8 +82,8 @@ namespace FenomPlus.Services
 
                 // We only want one instance of this - includes its own timer
                 Container.Register<StatusViewModel>().AsSingleton();
-
-                Container.Register<PastResultsViewModel>();
+				
+				Container.Register<PastResultsViewModel>();
             }
             catch (Exception ex)
             {

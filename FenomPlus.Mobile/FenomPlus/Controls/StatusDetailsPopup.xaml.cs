@@ -35,7 +35,7 @@ namespace FenomPlus.Controls
             }
             else
             {
-                await StatusButtonViewModel.Services.Dialogs.ShowAlertAsync(
+                StatusButtonViewModel.Services.Dialogs.ShowAlert(
                     "Internet connection currently not available.",
                     "Connection Error",
                     "Exit");

@@ -1,16 +1,17 @@
-﻿
+﻿using FenomPlus.Services.DeviceService.Interfaces;
+
 namespace FenomPlus.Interfaces
 {
     public interface IAppServices
     {
         IConfigService Config { get; }
-        IBleHubService BleHub { get; }
+        //IBleHubService BleHub { get; }
         ICacheService Cache { get; }
         IDialogService Dialogs { get; }
         IDatabaseService Database { get; }
         IDebugLogFileService DebugLogFile { get; }
         ILogCatService LogCat { get; }
         INavigationService Navigation { get; }
-        IUsbDeviceService Usb { get; }
+        IDeviceService DeviceService { get; }
     }
 }

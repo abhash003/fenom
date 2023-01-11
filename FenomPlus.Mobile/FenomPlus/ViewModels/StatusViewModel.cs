@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Views;
@@ -94,10 +94,10 @@ namespace FenomPlus.ViewModels
 
         private bool CheckDeviceConnection()
         {
-            if (Services == null || Services.BleHub == null || Services.BleHub.BleDevice == null)
+            if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
                 return false;
 
-            bool deviceIsConnected = Services.BleHub.BleDevice.Connected;
+            bool deviceIsConnected = Services.DeviceService.Current.Connected;
 
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
             return deviceIsConnected;
@@ -110,7 +110,7 @@ namespace FenomPlus.ViewModels
             // Note:  All device status parameters are conditional on the bluetooth connection
 
             BluetoothConnected = CheckDeviceConnection();
-            Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
+            //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
             if (BluetoothConnected)
             {
@@ -122,8 +122,11 @@ namespace FenomPlus.ViewModels
 
                 if (BluetoothCheckCount == 0)
                 {
-                    await Services.BleHub.RequestDeviceInfo();
-                    await Services.BleHub.RequestEnvironmentalInfo();
+                    if (Services is { DeviceService: { Current: { } } })
+                    {
+                        //await Services.DeviceService.Current.RequestDeviceInfo();
+                        //await Services.DeviceService.Current.RequestEnvironmentalInfo();
+                    }
 
                     Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
                 }
@@ -138,7 +141,7 @@ namespace FenomPlus.ViewModels
                 BluetoothCheckCount = 0; // Reset counter
             }
 
-            Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
+            //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
             await RefreshStatusAsync();
         }
@@ -147,12 +150,11 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
-            // To early to get status or don't update environmental properties during test
-            if (!BluetoothConnected || 
-                RefreshInProgress || 
-                Services?.BleHub == null || 
-                Services.BleHub.BreathTestInProgress || 
-                Cache?.EnvironmentalInfo == null)
+            // To early to get status or don't update environmental properties during test - Important - DO NOT REMOVE!
+            if (Services.DeviceService.Current != null && (!BluetoothConnected ||
+                                                           RefreshInProgress ||
+                                                           Services.DeviceService.Current.BreathTestInProgress ||
+                                                           Services?.Cache?.EnvironmentalInfo == null))
             {
                 await Task.Delay(1);
                 return;
@@ -164,17 +166,24 @@ namespace FenomPlus.ViewModels
 
             UpdateBluetooth();
 
-            UpdateDevice(Cache.DeviceExpireDate);
+            UpdateDevice(Services.Cache.DeviceExpireDate);
 
-            UpdateSensor(Cache.SensorExpireDate);
+            UpdateSensor(Services.Cache.SensorExpireDate);
 
-            UpdateBattery(Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel);
+            // Don't update  an environment value if it is zero, we must not have good value yet
 
-            UpdatePressure(Cache.EnvironmentalInfo.Pressure);
+            //if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
+            //    UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            UpdateHumidity(Cache.EnvironmentalInfo.Humidity);
+            if (Services.Cache.EnvironmentalInfo.Pressure != 0) 
+                UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
 
-            UpdateTemperature(Cache.EnvironmentalInfo.Temperature);
+            if (Services.Cache.EnvironmentalInfo.Humidity != 0) 
+                UpdateHumidity(Services.Cache.EnvironmentalInfo.Humidity);
+
+            if (Services.Cache.EnvironmentalInfo.Temperature != 0) 
+                UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
 
             UpdateQualityControlExpiration(7); // ToDo:  Need value here
 
@@ -209,7 +218,7 @@ namespace FenomPlus.ViewModels
             }
 
             // ToDo: Remove hard coded value
-            expirationDate = DateTime.Now.AddYears(5).AddDays(-10); 
+            expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
             //expirationDate = DateTime.Now.AddDays(5); 
 
             int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
@@ -502,7 +511,7 @@ namespace FenomPlus.ViewModels
             }
             else if (value < Constants.HumidityWarning25)
             {
-                HumidityBarIconVisible = true; 
+                HumidityBarIconVisible = true;
                 HumidityBarIcon = "wo_humidity_yellow.png";
                 HumidityViewModel.ImagePath = "humidity_yellow.png";
                 HumidityViewModel.ValueColor = Color.FromHex("#333");
@@ -731,7 +740,7 @@ namespace FenomPlus.ViewModels
         private async Task NavigateToStatusPageAsync()
         {
             await RefreshStatusAsync();
-            await Services.Navigation.DeviceStatusView();
+            await Services.Navigation.DeviceStatusHubView();
         }
 
     }

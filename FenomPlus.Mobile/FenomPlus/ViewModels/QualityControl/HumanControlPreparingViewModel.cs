@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using FenomPlus.Controls;
 using FenomPlus.Models;
@@ -18,28 +18,28 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.BleHub.IsNotConnectedRedirect();
+            Services.DeviceService.Current.IsNotConnectedRedirect();
             TestTime = 10;
-            TestSeconds = TestTime * (1000 / Cache.BreathFlowTimer);
+            TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
-            Device.StartTimer(TimeSpan.FromMilliseconds(Cache.BreathFlowTimer), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
             {
                 TestSeconds--;
-                TestTime = TestSeconds / (1000 / Cache.BreathFlowTimer);
+                TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
                     QualityControlDataModel model = new QualityControlDataModel()
                     {
                         DateTaken = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                         User = Services.Cache.QCUsername,
-                        TestResult = Cache.BreathFlow,
+                        TestResult = Services.Cache.BreathFlow,
                         SerialNumber = this.DeviceSerialNumber,
                         QCStatus = "",
                         QCExpiration = "",
                     };
 
                     // depending on result
-                    if ((Cache.HumanControlResult >= BreathGauge.Green1) && (Cache.HumanControlResult <= BreathGauge.Green1Top))
+                    if ((Services.Cache.HumanControlResult >= BreathGauge.Green1) && (Services.Cache.HumanControlResult <= BreathGauge.Green1Top))
                     {
                         model.QCStatus = "Qualified";
                         QCRepo.Insert(model);

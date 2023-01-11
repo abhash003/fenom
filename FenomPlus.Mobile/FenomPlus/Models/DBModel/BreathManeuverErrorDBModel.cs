@@ -27,16 +27,27 @@ namespace FenomPlus.Models
             // Get current version of software
             VersionTracking.Track();
 
-            return new BreathManeuverErrorDBModel()
-            {
-                ErrorCode = ErrorCodesEnum.code[statusCode],
-                Description = ErrorCodesEnum.title[statusCode],
-                SerialNumber = IOC.Services.Cache.DeviceSerialNumber,
-                Software = VersionTracking.CurrentVersion,
-                Firmware = IOC.Services.Cache.Firmware,
-                DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
-                Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString()
-            };
+            var db = new BreathManeuverErrorDBModel();
+            db.ErrorCode = ErrorCodesEnum.code[statusCode];
+            db.Description = ErrorCodesEnum.title[statusCode];
+            db.SerialNumber = IOC.Services.Cache.DeviceSerialNumber;
+            db.Software = VersionTracking.CurrentVersion;
+            db.Firmware = IOC.Services.Cache.Firmware;
+            db.DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture);
+            db.Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString();
+
+            //return new BreathManeuverErrorDBModel()
+            //{
+            //    ErrorCode = ErrorCodesEnum.code[statusCode],
+            //    Description = ErrorCodesEnum.title[statusCode],
+            //    SerialNumber = IOC.Services.Cache.DeviceSerialNumber,
+            //    Software = VersionTracking.CurrentVersion,
+            //    Firmware = IOC.Services.Cache.Firmware,
+            //    DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
+            //    Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString()
+            //};
+
+            return db;
         }
     }
 }
