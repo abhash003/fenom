@@ -118,7 +118,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             var cache = AppServices.Container.Resolve<ICacheService>();
                             cache.DecodeBreathManeuver(e.Characteristic.Value);
-                            Console.WriteLine("updated characteristic: breath maneuver");
+                            Console.WriteLine($"updated characteristic: breath maneuver (flow: {cache.BreathManeuver.BreathFlow})");
                         }
                     };
 
@@ -166,7 +166,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 {
                     Debug.WriteLine(ex.Message);
                     Console.WriteLine(ex.Message);
-                    throw ex;
+                    throw;
                 }
             }
         }

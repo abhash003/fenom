@@ -133,10 +133,10 @@ namespace FenomPlus.Services
             calls++;
             try
             {
-                data[0] = 20; // temp
-                data[1] = 60; // humidity
-                data[2] = 90; // pressure
-                data[3] = 80; // battery
+                //data[0] = 20; // temp
+                //data[1] = 60; // humidity
+                //data[2] = 90; // pressure
+                //data[3] = 80; // battery
                 EnvironmentalInfo ??= new EnvironmentalInfo();
                 EnvironmentalInfo.Decode(data);
 
