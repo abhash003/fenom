@@ -401,14 +401,30 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
                 Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
 
-                if (FwCharacteristic != null)
+                if (true)
                 {
-                    await FwCharacteristic.WriteAsync(data);
-                    tracer.Trace("write without response okay");
-                    return true;
+                    // get service
+                    var device = (PluginBleIDevice)_nativeDevice;
+
+                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                    // get characteristics
+                    var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                        .FeatureWriteCharacteristic));
+
+                    fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
+                    bool result = await fwChar.WriteAsync(data);
+
+                    if (result == true)
+                    {
+                        tracer.Trace("write without response okay");
+                    }
+                    else
+                    {
+                        tracer.Trace("something went wrong");
+                    }
+                    return result;
                 }
-                tracer.Trace("something went wrong");
-                return false;
             }
         }
 

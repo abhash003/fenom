@@ -139,10 +139,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (!exists)
             {
                 _deviceService.Devices.Add(new BleDevice(e.Device));
+                _deviceService.HandleDeviceDiscovered(new BleDevice(e.Device));
             }
-
-            //_deviceService.HandleDeviceFound(new BleDevice(e.Device));
-            _deviceService.HandleDeviceDiscovered(new BleDevice(e.Device));
         }
 
         private void Adapter_ScanTimeoutElapsed(object sender, EventArgs e)
