@@ -60,6 +60,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (_ble.Adapter.IsScanning)
                 return;
 
+            _deviceService.Devices.Clear();
+
             {
                 var devices = _ble.Adapter.GetSystemConnectedOrPairedDevices();
                 foreach (var device in devices)
