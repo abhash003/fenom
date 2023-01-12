@@ -156,7 +156,7 @@ namespace FenomPlus.Services
                     Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
 
                     // update the database
-                    Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
+                    //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
                 }
 
                 // setup firmware version
@@ -338,7 +338,7 @@ namespace FenomPlus.Services
         public DeviceCheckEnum CheckDeviceBeforeTest()
         {
             // Get the latest environmental info - updates Cache
-            Services.DeviceService.Current?.RequestEnvironmentalInfo();
+            //Services.DeviceService.Current?.RequestEnvironmentalInfo();
 
             if (Services.DeviceService.Current is { ReadyForTest: false })
             {

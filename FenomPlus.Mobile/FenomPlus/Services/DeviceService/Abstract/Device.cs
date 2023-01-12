@@ -381,6 +381,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return await WRITEREQUEST(message, 24);
         }
 
+        public Plugin.BLE.Abstractions.Contracts.ICharacteristic FwCharacteristic = null;
+
         /// <summary>
         /// 
         /// </summary>
@@ -399,10 +401,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
                 Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
 
-                IGattCharacteristic Characteristic = await FindCharacteristic(SDK.Core.Constants.FeatureWriteCharacteristic);
-                if (Characteristic != null)
+                if (FwCharacteristic != null)
                 {
-                    await Characteristic.WriteWithoutResponseAsync(data);
+                    await FwCharacteristic.WriteAsync(data);
                     tracer.Trace("write without response okay");
                     return true;
                 }
