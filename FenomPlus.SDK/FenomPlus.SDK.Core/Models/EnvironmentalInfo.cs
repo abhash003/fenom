@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -21,6 +22,11 @@ namespace FenomPlus.SDK.Core.Models
         public byte Humidity;
         public byte Pressure;
         public byte BatteryLevel;
+
+        public EnvironmentalInfo()
+        {
+            Humidity = 100;
+        }
 
         public static EnvironmentalInfo Create(byte[] data)
         {

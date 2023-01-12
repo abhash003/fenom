@@ -60,6 +60,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (_ble.Adapter.IsScanning)
                 return;
 
+            _deviceService.Devices.Clear();
+
             {
                 var devices = _ble.Adapter.GetSystemConnectedOrPairedDevices();
                 foreach (var device in devices)
@@ -139,10 +141,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (!exists)
             {
                 _deviceService.Devices.Add(new BleDevice(e.Device));
+                _deviceService.HandleDeviceDiscovered(new BleDevice(e.Device));
             }
-
-            //_deviceService.HandleDeviceFound(new BleDevice(e.Device));
-            _deviceService.HandleDeviceDiscovered(new BleDevice(e.Device));
         }
 
         private void Adapter_ScanTimeoutElapsed(object sender, EventArgs e)

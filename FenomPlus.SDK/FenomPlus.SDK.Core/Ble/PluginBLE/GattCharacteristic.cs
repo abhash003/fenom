@@ -35,11 +35,12 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             try
             {
                 Characteristic = characteristic;
+                return;
                 try
                 {
                     if (Uuid.ToString().ToUpper() == Constants.DeviceInfoCharacteristic.ToUpper())
                     {
-                        Characteristic.ValueUpdated += DeviceInfoHandler;
+                        //Characteristic.ValueUpdated += DeviceInfoHandler;
                         if (Characteristic.CanUpdate)
                         {
                             Characteristic.StartUpdatesAsync();
@@ -47,7 +48,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     }
                     else if (Uuid.ToString().ToUpper() == Constants.EnvironmentalInfoCharacteristic.ToUpper())
                     {
-                        Characteristic.ValueUpdated += EnvironmentalInfoHandler;
+                        //Characteristic.ValueUpdated += EnvironmentalInfoHandler;
                         if (Characteristic.CanUpdate)
                         {
                             Characteristic.StartUpdatesAsync();
@@ -71,7 +72,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     }
                     else if (Uuid.ToString().ToUpper() == Constants.BreathManeuverCharacteristic.ToUpper())
                     {
-                        Characteristic.ValueUpdated += BreathManeuverHandler;
+                        //Characteristic.ValueUpdated += BreathManeuverHandler;
                         if (Characteristic.CanUpdate)
                         {
                             Characteristic.StartUpdatesAsync();
@@ -79,7 +80,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
                     }
                     else if (Uuid.ToString().ToUpper() == Constants.DebugMessageCharacteristic.ToUpper())
                     {
-                        Characteristic.ValueUpdated += DebugMsgHandler;
+                        //Characteristic.ValueUpdated += DebugMsgHandler;
                         if (Characteristic.CanUpdate)
                         {
                             Characteristic.StartUpdatesAsync();

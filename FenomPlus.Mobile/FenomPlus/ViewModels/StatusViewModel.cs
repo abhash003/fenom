@@ -150,6 +150,8 @@ namespace FenomPlus.ViewModels
 
         public async Task RefreshStatusAsync()
         {
+            //Debugger.Break();
+
             // To early to get status or don't update environmental properties during test - Important - DO NOT REMOVE!
             if (Services.DeviceService.Current != null && (!BluetoothConnected ||
                                                            RefreshInProgress ||
@@ -159,6 +161,8 @@ namespace FenomPlus.ViewModels
                 await Task.Delay(1);
                 return;
             }
+
+            Console.WriteLine($"Humidity: {Services.Cache.EnvironmentalInfo.Humidity}");
 
             RefreshInProgress = true;
 
