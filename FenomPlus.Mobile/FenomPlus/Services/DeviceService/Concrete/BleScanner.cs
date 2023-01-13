@@ -140,8 +140,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
             bool exists = _deviceService.Devices.Any(d => d.Id == e.Device.Id);
             if (!exists)
             {
-                _deviceService.Devices.Add(new BleDevice(e.Device));
-                _deviceService.HandleDeviceDiscovered(new BleDevice(e.Device));
+                var device = new BleDevice(e.Device);
+                _deviceService.Devices.Add(device);
+                _deviceService.HandleDeviceDiscovered(device);
             }
         }
 
