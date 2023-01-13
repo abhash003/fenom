@@ -238,8 +238,8 @@ namespace FenomPlus.Services
                     DeviceConnectedStatus = "Processing Test";
                     FenomReady = false;
 
-                    // add new value and average it
-                    BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
+                    // add new value
+                    BreathFlow = BreathManeuver.BreathFlow;
                     BreathFlowChanged?.Invoke(null, null);
 
                     // get the noscores
