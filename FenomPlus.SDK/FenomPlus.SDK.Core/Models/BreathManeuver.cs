@@ -7,19 +7,20 @@ namespace FenomPlus.SDK.Core.Models
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class BreathManeuver : BaseCharacteristic
     {
+        // this can be removed, introduced to accomodate payload length
         public static int Min = 14;
 
         public short TestNumber;
         public byte  TimeRemaining;     // 0-done (??) F0 - | FE-FenomReady | FF-ready
-        public byte  Temperature;
-        public byte  Pressure;
+        public byte  Temperature; // u
+        public byte  Pressure; // u
         public short BreathFlow;
         public short NOScore;
-        public byte  AnalysisTimeLeft;
+        public byte  AnalysisTimeLeft; // u
         public byte  StatusCode;
-        public byte  BreathGaugePressure;
-        public short NOCounts;
-        public byte  SampleMassFlow;
+        public byte  BreathGaugePressure; // u
+        public short NOCounts; // u
+        public byte  SampleMassFlow; // u
 
         /// <summary>
         /// 

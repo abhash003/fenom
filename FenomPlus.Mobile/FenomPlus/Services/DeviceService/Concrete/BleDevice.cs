@@ -11,6 +11,7 @@ using Plugin.BLE.Abstractions.Contracts;
 using PluginBleIDevice = Plugin.BLE.Abstractions.Contracts.IDevice;
 using System.Diagnostics;
 using FenomPlus.Interfaces;
+using FenomPlus.SDK.Core.Models;
 using Plugin.BLE.Abstractions;
 using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Services.DeviceService.Abstract;
@@ -52,6 +53,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
             }
         }
 
+        private object _handlerLock = new object();
+
         public override async Task ConnectAsync()
         {
             if (_bleAdapter != null && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connected)
@@ -68,6 +71,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     // get characteristics
                     var fwChar  = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                         .FeatureWriteCharacteristic));
+
+                    FwCharacteristic = fwChar;
 
                     var devChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                         .DeviceInfoCharacteristic));
@@ -87,31 +92,51 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                     devChar.ValueUpdated += (sender, e) =>
                     {
-                        var cache = AppServices.Container.Resolve<CacheService>();
-                        cache.DecodeDeviceInfo(e.Characteristic.Value);
-                        Console.WriteLine("updated characteristic: device info");
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeDeviceInfo(e.Characteristic.Value);
+                            Console.WriteLine("updated characteristic: device info");
+                        }
+
                     };
+
 
                     envChar.ValueUpdated += (sender, e) =>
                     {
-                        var cache = AppServices.Container.Resolve<CacheService>();
-                        cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
-                        Console.WriteLine("updated characteristic: environmental info");
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
+                            Console.WriteLine("updated characteristic: environmental info");
+                        }
                     };
                     
                     bmChar.ValueUpdated += (sender, e) =>
                     {
-                        var cache = AppServices.Container.Resolve<CacheService>();
-                        cache.DecodeBreathManeuver(e.Characteristic.Value);
-                        Console.WriteLine("updated characteristic: breath maneuver");
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeBreathManeuver(e.Characteristic.Value);
+                            Console.WriteLine($"updated characteristic: breath maneuver (flow: {cache.BreathManeuver.BreathFlow})");
+                        }
                     };
 
                     dbgChar.ValueUpdated += (sender, e) =>
                     {
-                        var cache = AppServices.Container.Resolve<CacheService>();
-                        cache.DecodeDebugMsg(e.Characteristic.Value);
-                        Console.WriteLine("updated characteristic: debug message");
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeDebugMsg(e.Characteristic.Value);
+                            Console.WriteLine("updated characteristic: debug message");
+                        }
                     };
+
+                    {
+                        var cache = AppServices.Container.Resolve<ICacheService>();
+                        cache.DeviceInfo = new DeviceInfo();
+                        cache.EnvironmentalInfo = new EnvironmentalInfo();
+                    }
 
                     await devChar.StartUpdatesAsync();
                     await envChar.StartUpdatesAsync();
@@ -141,7 +166,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 {
                     Debug.WriteLine(ex.Message);
                     Console.WriteLine(ex.Message);
-                    throw ex;
+                    throw;
                 }
             }
         }
