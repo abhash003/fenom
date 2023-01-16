@@ -163,7 +163,7 @@ namespace FenomPlus.Controls
             starPaintFill = new SKPaint()
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColor.Parse("#FFFFFFF"),
+                Color = SKColor.Parse("#FFFFFF"),
                 IsAntialias = true,
                 StrokeWidth = 1
             };
@@ -171,7 +171,7 @@ namespace FenomPlus.Controls
             starPaintStroke = new SKPaint()
             {
                 Style = SKPaintStyle.Stroke,
-                Color = SKColor.Parse("#000000"),
+                Color = SKColor.Parse("#000000").WithAlpha(128),
                 IsAntialias = true,
                 StrokeWidth = 1
             };
