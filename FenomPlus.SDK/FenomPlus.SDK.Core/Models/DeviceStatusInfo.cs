@@ -23,7 +23,7 @@ namespace FenomPlus.SDK.Core.Models
             {
                 Data = data;
 
-                if ((data != null) && (data.Length >= Min))
+                if (data != null)
                 {
                     StatusCode = Data[0];
                     FutureValue = System.BitConverter.ToSingle(data, 1);

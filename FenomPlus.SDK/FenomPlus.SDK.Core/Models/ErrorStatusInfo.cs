@@ -6,8 +6,6 @@ namespace FenomPlus.SDK.Core.Models
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ErrorStatusInfo : BaseCharacteristic
     {
-        public static int Min = 5;
-
         public byte ErrorCode;
         public float FutureValue;
 
@@ -23,10 +21,10 @@ namespace FenomPlus.SDK.Core.Models
             {
                 Data = data;
 
-                if ((data != null) && (data.Length >= Min))
+                if (data != null)
                 {
                     ErrorCode = Data[0];
-                    FutureValue = System.BitConverter.ToSingle(data, 1);
+                    FutureValue = System.BitConverter.ToChar(data, 1);
                 }
             }
             finally { }

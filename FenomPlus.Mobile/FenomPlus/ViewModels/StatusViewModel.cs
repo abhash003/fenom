@@ -162,7 +162,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            Console.WriteLine($"Humidity: {Services.Cache.EnvironmentalInfo.Humidity}");
+            //Console.WriteLine($"Humidity: {Services.Cache.EnvironmentalInfo.Humidity}");
 
             RefreshInProgress = true;
 

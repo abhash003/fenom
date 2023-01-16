@@ -15,6 +15,7 @@ using FenomPlus.SDK.Core.Models;
 using Plugin.BLE.Abstractions;
 using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Services.DeviceService.Abstract;
+using FenomPlus.SDK.Core.Ble.Interface;
 
 namespace FenomPlus.Services.DeviceService.Concrete
 {
@@ -61,12 +62,27 @@ namespace FenomPlus.Services.DeviceService.Concrete
             {
                 try
                 {
-                    await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
-
-                    // get service
                     var device = (PluginBleIDevice)_nativeDevice;
 
+                    // connect to the device
+                    await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+
+                    if (device.State != DeviceState.Connected)
+                    {
+                        throw new Exception("ConnectToDeviceAsync()");
+                    }
+                    else
+                    {
+                        Helper.WriteDebug($"Connection state: {device.State}");
+                    }
+
+                    // get service
                     var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                    if (service == null)
+                    {
+                        throw new Exception("GetServiceAsync() returned null, this isn't correct behavior!");
+                    }
 
                     // get characteristics
                     var fwChar  = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
@@ -88,7 +104,13 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                             .DebugMessageCharacteristic));
 
-                    //ICharacteristic[] chars = { fwChar, devChar, envChar };
+                    var deviceStatusChar =
+                        await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                            .DeviceStatusCharacteristic));
+
+                    var errorStatusChar =
+                        await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                            .ErrorStatusCharacteristic));
 
                     devChar.ValueUpdated += (sender, e) =>
                     {
@@ -98,7 +120,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             cache.DecodeDeviceInfo(e.Characteristic.Value);
                             Console.WriteLine("updated characteristic: device info");
                         }
-
                     };
 
 
@@ -132,20 +153,42 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         }
                     };
 
+                    deviceStatusChar.ValueUpdated += (sender, e) =>
+                    {
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
+                            Console.WriteLine("updated characteristic: device status");
+                        }
+                    };
+
+                    errorStatusChar.ValueUpdated += (sender, e) =>
+                    {
+                        lock (_handlerLock)
+                        {
+                            var cache = AppServices.Container.Resolve<ICacheService>();
+                            cache.DecodeErrorStatusInfo(e.Characteristic.Value);
+                            Console.WriteLine("updated characteristic: error status");
+                        }
+                    };
+
                     {
                         var cache = AppServices.Container.Resolve<ICacheService>();
                         cache.DeviceInfo = new DeviceInfo();
                         cache.EnvironmentalInfo = new EnvironmentalInfo();
                     }
 
-                    await devChar.StartUpdatesAsync();
+                    //await devChar.StartUpdatesAsync();
                     await envChar.StartUpdatesAsync();
-                    await bmChar.StartUpdatesAsync();
-                    await dbgChar.StartUpdatesAsync();
+                    //await bmChar.StartUpdatesAsync();
+                    //await dbgChar.StartUpdatesAsync();
+                    //await deviceStatusChar.StartUpdatesAsync();
+                    //await errorStatusChar.StartUpdatesAsync();
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.Message);
+                    Helper.WriteDebug(ex);
                     throw;
                 }
             }
