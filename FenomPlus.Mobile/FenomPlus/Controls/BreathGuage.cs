@@ -41,8 +41,8 @@ namespace FenomPlus.Controls
         public static readonly BindableProperty GaugeDataProperty =
             BindableProperty.Create(nameof(GaugeData), typeof(float), typeof(BreathGauge));
 
-        public static readonly BindableProperty ValueProperty =
-            BindableProperty.Create(nameof(Value), typeof(string), typeof(BreathGauge), "");
+        public static readonly BindableProperty CountDownProperty =
+            BindableProperty.Create(nameof(CountDown), typeof(string), typeof(BreathGauge), "");
 
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(BreathGauge), "");
@@ -74,10 +74,10 @@ namespace FenomPlus.Controls
             set => SetValue(GaugeDataProperty, value);
         }
 
-        public string Value
+        public string CountDown
         {
-            get => (string)GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
+            get => (string)GetValue(CountDownProperty);
+            set => SetValue(CountDownProperty, value);
         }
 
         public string Text
@@ -196,9 +196,17 @@ namespace FenomPlus.Controls
 
             canvas.Clear();
 
-            int width = e.Info.Width;
-            int height = e.Info.Height;
+            DrawBackground(canvas, e.Info.Width, e.Info.Height);
 
+            DrawStar(canvas, GaugeData);
+
+            DrawNeedle(canvas, GaugeData);
+
+            DrawCountDown(canvas);
+        }
+
+        private void DrawBackground(SKCanvas canvas, float width, float height)
+        {
             canvas.Translate(width / 2, height / 2);
             canvas.Scale(Math.Min(width / 105, height / 260f));
             SKPoint center = new SKPoint(0, 0);
@@ -243,69 +251,6 @@ namespace FenomPlus.Controls
                 canvas.DrawPath(arrow, arrowPaint);
                 canvas.DrawPath(arrowhead, arrowheadPaint);
             }
-
-
-
-            // ------------------------  Star Symbol drawn here! ---------------------------------
-
-            //canvas.Save();
-
-            //// Star Symbol
-            ////canvas.Scale(0.5f);
-            //canvas.Scale(scale);
-            //canvas.Translate(0, -180);
-            //SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
-            
-            
-            //canvas.DrawPath(starPath, new SKPaint()
-            //{
-            //    Color = SKColors.White,
-            //    Style = SKPaintStyle.Fill,
-            //    IsAntialias = true
-            //});
-
-
-            DrawStar(canvas, GaugeData);
-
-
-
-            // --------------------------------------------------------------------------------------
-
-
-
-
-            DrawNeedle(canvas, GaugeData);
-
-            SKPaint textPaint = gaugeStickPaint;
-
-            string UnitsText = Text;
-            float ValueFontSize = 20;
-
-            float textWidth = textPaint.MeasureText(UnitsText);
-            textPaint.TextSize = 9f;
-
-            SKRect textBounds = SKRect.Empty;
-            textPaint.MeasureText(UnitsText, ref textBounds);
-
-            float xText = -1 * textBounds.MidX;
-            float yText = 60 - textBounds.Height;
-
-            // And draw the text
-            canvas.DrawText(UnitsText, xText, yText, textPaint);
-
-            // Draw the Value on the display
-            var valueText = Value.ToString();
-            float valueTextWidth = textPaint.MeasureText(valueText);
-            textPaint.TextSize = ValueFontSize;
-
-            textPaint.MeasureText(valueText, ref textBounds);
-
-            xText = -1 * textBounds.MidX;
-            yText = 75 - textBounds.Height;
-
-            // And draw the text
-            canvas.DrawText(valueText, xText, yText, textPaint);
-            canvas.Restore();
         }
 
         void DrawStar(SKCanvas canvas, float value)
@@ -375,13 +320,50 @@ namespace FenomPlus.Controls
             canvas.Restore();
         }
 
+        private void DrawCountDown(SKCanvas canvas)
+        {
+            canvas.Save();
+
+            SKPaint textPaint = gaugeStickPaint;
+
+            string UnitsText = Text;
+            float ValueFontSize = 20;
+
+            float textWidth = textPaint.MeasureText(UnitsText);
+            textPaint.TextSize = 9f;
+
+            SKRect textBounds = SKRect.Empty;
+            textPaint.MeasureText(UnitsText, ref textBounds);
+
+            float xText = -1 * textBounds.MidX;
+            float yText = 60 - textBounds.Height;
+
+            // And draw the text
+            canvas.DrawText(UnitsText, xText, yText, textPaint);
+
+            // Draw the Value on the display
+            var valueText = CountDown.ToString();
+            float valueTextWidth = textPaint.MeasureText(valueText);
+            textPaint.TextSize = ValueFontSize;
+
+            textPaint.MeasureText(valueText, ref textBounds);
+
+            xText = -1 * textBounds.MidX;
+            yText = 75 - textBounds.Height;
+
+            // And draw the text
+            canvas.DrawText(valueText, xText, yText, textPaint);
+
+            canvas.Restore();
+        }
+
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
 
             if (propertyName == GaugeDataProperty.PropertyName
                 || propertyName == TextProperty.PropertyName
-                || propertyName == ValueProperty.PropertyName)
+                || propertyName == CountDownProperty.PropertyName)
             {
                 InvalidateSurface();
             }
