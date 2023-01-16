@@ -98,6 +98,8 @@ namespace FenomPlus.Controls
         readonly SKPaint warningArcPaint;
         readonly SKPaint safeArcPaint;
         readonly SKPaint arrowPaint;
+        private readonly SKPaint starPaintFill;
+        private readonly SKPaint starPaintStroke;
 
         public BreathGauge()
         {
@@ -157,29 +159,25 @@ namespace FenomPlus.Controls
                 IsAntialias = true,
                 StrokeWidth = 4
             };
+
+            starPaintFill = new SKPaint()
+            {
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.Parse("#FFFFFFF"),
+                IsAntialias = true,
+                StrokeWidth = 1
+            };
+
+            starPaintStroke = new SKPaint()
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColor.Parse("#000000"),
+                IsAntialias = true,
+                StrokeWidth = 1
+            };
         }
 
         private SKCanvas canvas;
-        private readonly bool AnimateStar = true;
-        private float scale; // ranges from 0.5 to 1 to 0.5
-        readonly Stopwatch Stopwatch = new Stopwatch();
-
-        async Task StartStarAnimation()
-        {
-            Stopwatch.Start();
-
-            while (AnimateStar)
-            {
-                double cycleTime = 3;
-                double t = Stopwatch.Elapsed.TotalSeconds % cycleTime / cycleTime;
-                scale = (1 + (float)Math.Sin(2 * Math.PI * t)) / 2;
-                InvalidateSurface();
-
-                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
-            }
-
-            Stopwatch.Stop();
-        }
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
@@ -242,7 +240,7 @@ namespace FenomPlus.Controls
 
                 arrow.AddArc(bounds, 112.5f, 153f);
 
-                //Arrow headpath
+                //Arrow head path
                 SKPath arrowhead = new SKPath();
                 arrowhead.RMoveTo(arrow.LastPoint);
                 arrowhead.RLineTo(-8, -8);
@@ -258,26 +256,21 @@ namespace FenomPlus.Controls
 
             canvas.Save();
 
-            // Star Symbol
-            //canvas.Scale(0.5f);
-            canvas.Scale(0.5f);
-
-
-
-            canvas.Translate(0, -180);
-
-            //float offset = (float)(Height / 2.0f);
-            //canvas.Translate(0, -offset);
+            if (GaugeData is > 2.9f and < 3.1f)
+            {
+                canvas.Scale(0.9f);
+                canvas.Translate(0, -100); // 0.7f scale
+            }
+            else
+            {
+                canvas.Scale(0.6f);
+                canvas.Translate(0, -150); // 0.7f scale
+            }
 
             SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
 
-
-            canvas.DrawPath(starPath, new SKPaint()
-            {
-                Color = SKColors.White,
-                Style = SKPaintStyle.Fill,
-                IsAntialias = true
-            });
+            canvas.DrawPath(starPath, starPaintFill);
+            canvas.DrawPath(starPath, starPaintStroke);
 
             canvas.Restore();
         }
