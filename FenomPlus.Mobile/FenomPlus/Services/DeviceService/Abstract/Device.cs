@@ -13,7 +13,6 @@ using IDevice = FenomPlus.Services.DeviceService.Interfaces.IDevice;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
-using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Utils;
 using FenomPlus.Services.DeviceService.Utils;
 using System.Timers;
@@ -425,84 +424,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     }
                     return result;
                 }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uuid"></param>
-        /// <returns></returns>
-        public async Task<IGattCharacteristic> FindCharacteristic(string uuid)
-        {
-
-            Guid guid = new Guid(uuid);
-            IGattCharacteristic gatt = null;
-
-            var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-            if (gattCharacteristics.Count <= 0)
-            {
-                _ = await GetCharacterasticsAync();
-                gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-            }
-            foreach (IGattCharacteristic item in new List<IGattCharacteristic>(gattCharacteristics))
-            {
-                if (!item.Uuid.Equals(guid)) continue;
-                gatt = item;
-                break;
-            }
-
-            return gatt;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<IGattCharacteristic>> GetCharacterasticsAync()
-        {
-            try
-            {
-                //PerformanceLogger.StartLog(typeof(BleDevice), "GetCharacterasticsAync");
-
-                var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-
-                if (gattCharacteristics == null)
-                {
-                    //_logger.LogWarning("BleDevice.GetCharacteristicsAsync() - list is null");
-                    return null;
-                }
-
-                gattCharacteristics.Clear();
-
-
-                var gattService = GattServices as SynchronizedList<IService>;
-
-                var services = await ((PluginBleIDevice)_nativeDevice).GetServicesAsync();
-
-                foreach (var service in services)
-                {
-                    // add service here
-                    gattService.Add(service);
-
-                    var characteristics = await service.GetCharacteristicsAsync();
-                    foreach (var characteristic in characteristics)
-                    {
-                        IGattCharacteristic gattCharacteristic = new GattCharacteristic(characteristic);
-                        gattCharacteristics.Add(gattCharacteristic);
-                    }
-                }
-
-                return gattCharacteristics;
-            }
-            catch (Exception ex)
-            {
-                Helper.WriteDebug(ex);
-                return null;
-            }
-            finally
-            {
-                //PerformanceLogger.EndLog(typeof(BleDevice), "GetCharacterasticsAync");
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
+using FenomPlus.Enums.ErrorCodes;
 
 namespace FenomPlus.ViewModels
 {
@@ -33,12 +34,11 @@ namespace FenomPlus.ViewModels
 
         private void UpdateError()
         {
-            int statusCode = (Services.Cache.BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
-                ErrorCodesEnum.code.Length :
-                Services.Cache.BreathManeuver.StatusCode;
+            int statusCode = Services.Cache.BreathManeuver.StatusCode;
 
-            ErrorCode = ErrorCodesEnum.code[statusCode];
-            ErrorMessage = ErrorCodesEnum.title[statusCode];
+            var error = ErrorCodeLookup.Lookup(statusCode);
+            ErrorCode = error.Code;
+            ErrorMessage = error.Message;
         }
     }
 }

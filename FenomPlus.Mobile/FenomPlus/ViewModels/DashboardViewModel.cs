@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Enums;
-using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
 using Syncfusion.Drawing;

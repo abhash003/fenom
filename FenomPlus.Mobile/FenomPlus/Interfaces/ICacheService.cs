@@ -31,6 +31,8 @@ namespace FenomPlus.Interfaces
         BreathManeuver BreathManeuver { get; set; }
         DeviceInfo DeviceInfo { get; set; }
         DebugMsg DebugMsg { get; set; }
+        DeviceStatusInfo DeviceStatusInfo { get; set; }
+        ErrorStatusInfo ErrorStatusInfo { get; set; }
 
         EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data);
         BreathManeuver DecodeBreathManeuver(byte[] data);
