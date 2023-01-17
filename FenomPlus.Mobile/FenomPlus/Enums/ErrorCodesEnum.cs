@@ -5,6 +5,7 @@ namespace FenomPlus.Enums
     public class ErrorCodesEnum
     {
         public static string[] title = new string[] {
+            // Non-error status messages // 0x00
             "Test performed OK",
             "Calculating test results",
             "",
@@ -21,8 +22,8 @@ namespace FenomPlus.Enums
             "Humidity indicator turns Red",
             "Humidity indicator turns Yellow.\n status screen indicates \"F150 humidity is near low limit. Move to a higher humidity location and allow time to adjust.\"",
             "Humidity indicator turns Green",
-            "",
-            "Sample flow is out of tolerance. If condition persists, report error code to Customer Service.",
+            "*** PNEUMATIC ERROR SECTION ***", // 16 (0x10)
+            "Sample flow is out of tolerance. If condition persists, contact Customer Service.", // 17 (0x11)
             "",
             "Sensor indicator turns yellow. ",
             "Device indicator turns yellow",
@@ -37,9 +38,9 @@ namespace FenomPlus.Enums
             "QC indicator turns green",
             "QC indicator turns yellow",
             "QC indicator turns red",
-            "",
+            "", // Environmental error section 0x20
             "F150 temperature is too high.  Move F150 to cooler location and allow time to cool. (<35 C)\n,FENO testing is disabled until temperature is lowered.",
-            "F150 temperature is too low.  Move F150 to wamer location and allow time to warm. (>15 C)\n,FENO testing is disabled until temperature is raised.",
+            "F150 temperature is too low.  Move F150 to warmer location and allow time to warm. (>15 C)\n,FENO testing is disabled until temperature is raised.",
             "F150 humidity is too high.  Move F150 to drier location and allow time to adjust. (<90% RH)\n,FENO testing is disabled until humidity is lowered.",
             "F150 humidity is too low.  Move F150 to higher humidity location and allow time to adjust. (>15% RH)\n,FENO testing is disabled until humidity is raised.",
             "F150 ambient pressure is too low (<76kPa).\n,FENO testing is disabled until pressure increases.",
@@ -53,7 +54,7 @@ namespace FenomPlus.Enums
             "",
             "",
             "",
-            "",
+            "", // Breath flow error section 0x30
             "Breath flow was above maximum.   Try again.",
             "Breath flow was below minimum.   Try again.",
             "Breath flow was too high. Focus on the star.",

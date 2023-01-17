@@ -179,12 +179,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         cache.EnvironmentalInfo = new EnvironmentalInfo();
                     }
 
-                    //await devChar.StartUpdatesAsync();
+                    await devChar.StartUpdatesAsync();
                     await envChar.StartUpdatesAsync();
-                    //await bmChar.StartUpdatesAsync();
-                    //await dbgChar.StartUpdatesAsync();
-                    //await deviceStatusChar.StartUpdatesAsync();
-                    //await errorStatusChar.StartUpdatesAsync();
+                    await bmChar.StartUpdatesAsync();
+                    await dbgChar.StartUpdatesAsync();
+                    await deviceStatusChar.StartUpdatesAsync();
+                    await errorStatusChar.StartUpdatesAsync();
                 }
                 catch (Exception ex)
                 {

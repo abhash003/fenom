@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using FenomPlus.Services.DeviceService.Utils;
 
 namespace FenomPlus.SDK.Core.Models
 {
@@ -7,7 +8,6 @@ namespace FenomPlus.SDK.Core.Models
     public class ErrorStatusInfo : BaseCharacteristic
     {
         public byte ErrorCode;
-        public float FutureValue;
 
         public static ErrorStatusInfo Create(byte[] data)
         {
@@ -24,10 +24,15 @@ namespace FenomPlus.SDK.Core.Models
                 if (data != null)
                 {
                     ErrorCode = Data[0];
-                    FutureValue = System.BitConverter.ToChar(data, 1);
                 }
             }
-            finally { }
+
+            finally
+            {
+            }
+
+            // add logging here
+            //Helper.WriteDebug("");
 
             return this;
         }

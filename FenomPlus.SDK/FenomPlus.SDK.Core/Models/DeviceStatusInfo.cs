@@ -6,10 +6,7 @@ namespace FenomPlus.SDK.Core.Models
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class DeviceStatusInfo : BaseCharacteristic
     {
-        public static int Min = 5;
-
         public byte StatusCode;
-        public float FutureValue;
 
         public static DeviceStatusInfo Create(byte[] data)
         {
@@ -26,10 +23,13 @@ namespace FenomPlus.SDK.Core.Models
                 if (data != null)
                 {
                     StatusCode = Data[0];
-                    FutureValue = System.BitConverter.ToSingle(data, 1);
                 }
             }
-            finally { }
+
+            finally
+            {
+            }
+
 
             return this;
         }

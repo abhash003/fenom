@@ -73,6 +73,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         args.Device = device;
 
                         Adapter_DeviceDiscovered(null, args);
+
+                        Helper.WriteDebug($"Connecting to bonded device: {args.Device.Name}");
+
                         return;
 /*
                         if (false)
@@ -103,11 +106,13 @@ namespace FenomPlus.Services.DeviceService.Concrete
             _cancelTokenSource = new CancellationTokenSource();
 
             await _ble.Adapter.StartScanningForDevicesAsync(
-                deviceFilter: (d) =>
+                deviceFilter: (device) =>
                 {
-                    if (_deviceService.IsDeviceFenomDevice(d.Name))
+                    if (_deviceService.IsDeviceFenomDevice(device.Name))
                         return true;
 
+                    Helper.WriteDebug($"Connecting to device found on scan: {device.Name}");
+                    
                     return false;
                 },
                 cancellationToken: _cancelTokenSource.Token);

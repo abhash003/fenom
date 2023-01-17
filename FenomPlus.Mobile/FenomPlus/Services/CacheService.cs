@@ -40,6 +40,8 @@ namespace FenomPlus.Services
             BreathManeuver = new BreathManeuver();
             DeviceInfo = new DeviceInfo();
             DebugMsg = new DebugMsg();
+            DeviceStatusInfo = new DeviceStatusInfo();
+            ErrorStatusInfo = new ErrorStatusInfo();
 
             // write path to debug
             DebugList.Insert(0, DebugLog.Create("App Starting"));
@@ -82,6 +84,10 @@ namespace FenomPlus.Services
         public BreathManeuver BreathManeuver { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
+        
+        //public DeviceStatusInfo DeviceStatusInfo { get; set; }
+        //public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
 
         public string _deviceConnectedStatus = "Unknown";
         public string DeviceConnectedStatus
