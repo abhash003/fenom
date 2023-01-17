@@ -69,7 +69,8 @@ namespace FenomPlus.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
+                    Debug.WriteLine($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
+                    throw;
                 }
                 
             }
@@ -107,7 +108,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StartScan()
         {
-            Seconds = 30;
+            Seconds = 5;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
 
             Services.DeviceService.StartDiscovery(async (IDevice device) =>
@@ -145,14 +146,10 @@ namespace FenomPlus.ViewModels
         public async Task FoundDevice(IDevice device)
         {
             Helper.WriteDebug("enter: FoundDevice()");
-            if (Services.DeviceService.Current == null) return;
+            if (Services.DeviceService.Current == null) 
+                return;
             
             Stop = true;
-            //Services.Cache.DeviceInfo = new SDK.Core.Models.DeviceInfo();
-            // jac: do not request, this is updated by the device
-            
-            //await Services.DeviceService.Current.RequestDeviceInfo();
-            //Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), DeviceInfoTimer);
             
             await Services.Navigation.DashboardView();
             Helper.WriteDebug("exit:FoundDevice()");
@@ -196,7 +193,6 @@ namespace FenomPlus.ViewModels
             Seconds--;
             if (Seconds <= 0)
             {
-                //_ = Services.DeviceService.Current.DisconnectAsync();
                 StopScan();
                 StartScan();
                 return false;

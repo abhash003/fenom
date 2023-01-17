@@ -27,7 +27,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Ble\Interface\IBleRadioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ble\Interface\IGattCharacteristic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoggingManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Ble\PluginBLE\GattCharacteristic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\ID_SUB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\ID_MESSAGE.cs" />

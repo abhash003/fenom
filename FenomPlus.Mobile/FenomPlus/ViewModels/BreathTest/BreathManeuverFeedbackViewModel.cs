@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.SDK.Core.Ble.Interface;
 using Xamarin.Forms;
-using FenomPlus.SDK.Core.Ble.PluginBLE;
 using Plugin.BLE.Abstractions.EventArgs;
 
 namespace FenomPlus.ViewModels
