@@ -108,7 +108,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StartScan()
         {
-            Seconds = 30;
+            Seconds = 5;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
 
             Services.DeviceService.StartDiscovery(async (IDevice device) =>

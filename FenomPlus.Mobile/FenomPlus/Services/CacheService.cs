@@ -166,7 +166,7 @@ namespace FenomPlus.Services
                 if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
                 {
                     DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
-                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber} {DateTime.Now}");
 
                     // update the database
                     //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);

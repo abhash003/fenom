@@ -77,21 +77,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         Helper.WriteDebug($"Connecting to bonded device: {args.Device.Name}");
 
                         return;
-/*
-                        if (false)
-                        {
-                            try
-                            {
-                                var bleDevice = await _ble.Adapter.ConnectToKnownDeviceAsync(device.Id);
-                                return;
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                                throw;
-                            }
-                        }
-*/
                     }
                 } 
             }
@@ -100,7 +85,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
             // scanning interval, window
 
             _ble.Adapter.ScanMode = ScanMode.LowLatency; // high duty cycle
-            _ble.Adapter.ScanTimeout = 30 * 1000;
+            _ble.Adapter.ScanTimeout = 5 * 1000;
             _ble.Adapter.ScanMatchMode = ScanMatchMode.STICKY;
 
             _cancelTokenSource = new CancellationTokenSource();
@@ -141,6 +126,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
         private void Adapter_DeviceDiscovered(object sender, DeviceEventArgs e)
         {
             Helper.WriteDebug(" ... Adapter_DeviceDiscovered ... ");
+
+            if (e.Device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
+                return;
 
             if (!_deviceService.IsDeviceFenomDevice(e.Device.Name))
                 return;
