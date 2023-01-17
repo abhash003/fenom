@@ -24,7 +24,7 @@ namespace FenomPlus.Database.Tables
             Name = "Negative Control";
             CurrentStatus = "None";
             DateCreated = DateTime.Now;
-            ExpiresDate = DateCreated.AddHours(16);
+            ExpiresDate = DateCreated.AddHours(16); // 
             NextTestDate = DateCreated.AddHours(16);
         }
  

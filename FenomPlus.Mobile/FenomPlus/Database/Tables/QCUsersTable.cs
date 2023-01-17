@@ -37,8 +37,8 @@ namespace FenomPlus.Database.Tables
         {
             Name = userName;
             DateAdded = DateTime.Now;
-            QCStatus = "Conditionally Qualified"; // When new user has no tests
-            TestResults = new List<QCTestResultsTable>();
+            CurrentStatus = "Conditionally Qualified"; // When new user has no tests
+            TestResults = new List<QCResultsTable>();
         }
 
         private string GetStatus()
