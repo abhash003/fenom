@@ -63,6 +63,6 @@ namespace FenomPlus.Services
         public IQualityControlDevicesRepository QualityControlDevicesRepo { get { return (_QualityControlDevicesRepo == null) ? _QualityControlDevicesRepo = new QualityControlDevicesRepository() : _QualityControlDevicesRepo; } }
 
         private IQualityControlUsersRepository _QualityControlUsersRepo;
-        public IQualityControlUsersRepository QualityControlUsersRepo { get { return (_QualityControlUsersRepo == null) ? _QualityControlUsersRepo = new QualityControlUsersRepository() : _QualityControlUsersRepo; } }
+        public IQualityControlUsersRepository QualityControlUsersRepo { get { return (_QualityControlUsersRepo == null) ? _QualityControlUsersRepo = new QCUsersRepository() : _QualityControlUsersRepo; } }
     }
 }

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<views:BaseContentPage
+    xmlns:views="clr-namespace:FenomPlus.Views"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
+    x:Class="FenomPlus.Views.DashboardView"
+    x:Name="ChooseTestsView"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="True"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False">
+        
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="#333" />
+        </Style>
+
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <Grid>
+
+            <StackLayout Padding="32, 16">
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
+
+                    <!--Standard 10s Test-->
+                    <Frame HeightRequest="140"
+                           Padding="20"
+                           WidthRequest="200"
+                           HorizontalOptions="Start"
+                           VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandardTest"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="StandardBreathe" HeightRequest="50" />
+                            <Label Text="10-second" FontSize="18" HorizontalTextAlignment="Center" />
+                            <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!--Spacer-->
+                    <Frame WidthRequest="5" BorderColor="Transparent" />
+
+                    <!--Quick 6s Test-->
+                    <Frame HeightRequest="140"
+                           Padding="20"
+                           WidthRequest="200"
+                           HorizontalOptions="Start"
+                           VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="ShortBreathe" HeightRequest="50" />
+                            <Label Text="6-second" FontSize="18" HorizontalTextAlignment="Center" />
+                            <Label Text="Test" FontSize="14" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                </StackLayout>
+
+                <!--Tutorial Button-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
+                    <Frame HeightRequest="140"
+                            Padding="20"
+                            WidthRequest="200"
+                            HorizontalOptions="Start"
+                            VerticalOptions="StartAndExpand">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnTutorial"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout VerticalOptions="CenterAndExpand">
+                            <Image Aspect="AspectFit" Source="Tutorial" HeightRequest="50" />
+                            <Label Text="Tutorial" FontSize="18" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+
+        </Grid>
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>

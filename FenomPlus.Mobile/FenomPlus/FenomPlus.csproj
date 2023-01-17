@@ -65,9 +65,7 @@
     <None Remove="Syncfusion.Xamarin.SfBusyIndicator" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Database\" />
     <Folder Include="TinyIoC\" />
-    <Folder Include="Models\DBModel\" />
     <Folder Include="Models\GridDataModel\" />
     <Folder Include="Enums\" />
   </ItemGroup>
@@ -79,10 +77,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
+    <Compile Remove="Database\Repository\Interfaces\IQualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Repository\QualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Tables\QualityControlDevicesTb.cs" />
+    <Compile Remove="Database\Tables\QualityControlTb.cs" />
+    <Compile Remove="Database\Tables\QualityControlUsersTb.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
     <Compile Remove="Interfaces\IBleHubService.cs" />
     <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
+    <Compile Remove="Models\DBModel\QualityControlDeviceDBModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
     <Compile Remove="Services\BleHubService.cs" />
@@ -91,11 +95,9 @@
     <Compile Remove="ViewModels\MainViewModel.cs" />
     <Compile Remove="ViewModels\Other\StatusDeviceInfoViewModel.cs" />
     <Compile Remove="Views\BreathTest\StartTestView.xaml.cs" />
-    <Compile Remove="Views\QualityControl\QCTabView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\BreathTest\StartTestView.xaml" />
-    <EmbeddedResource Remove="Views\QualityControl\QCTabView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="AppShell.xaml.cs">
@@ -106,9 +108,6 @@
     </Compile>
     <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
       <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controls\QCButtonView.xaml.cs">
-      <DependentUpon>QCButtonView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Controls\StatusButtonView.xaml.cs">
       <SubType>Code</SubType>
@@ -129,8 +128,35 @@
     <Compile Update="Views\Other\PastErrorsView.xaml.cs">
       <DependentUpon>PastErrorsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\QualityControl\QualityControlView.xaml.cs">
-      <DependentUpon>QualityControlView.xaml</DependentUpon>
+    <Compile Update="Views\QualityControl\QCNegativePassView.xaml.cs">
+      <DependentUpon>QCNegativePassView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCUserPassedView.xaml.cs">
+      <DependentUpon>QCUserPassedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCUserDisqualifiedView.xaml.cs">
+      <DependentUpon>QCUserDisqualifiedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCUserPerformingView.xaml.cs">
+      <DependentUpon>QCUserPerformingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCUserPreparingView.xaml.cs">
+      <DependentUpon>QCUserPreparingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCNegativeFailView.xaml.cs">
+      <DependentUpon>QCNegativeFailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCNegativePerformView.xaml.cs">
+      <DependentUpon>QCNegativePerformView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCNewUserView.xaml.cs">
+      <DependentUpon>QCNewUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCDevicesView.xaml.cs">
+      <DependentUpon>QCDevicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QCUsersView.xaml.cs">
+      <DependentUpon>QCUsersView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -140,10 +166,10 @@
     <EmbeddedResource Update="Controls\ImageButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
+    <EmbeddedResource Update="Controls\QCButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\QCButtonView.xaml">
+    <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusButtonView.xaml">
@@ -155,6 +181,39 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Other\StatusDeviceInfoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCUserDisqualifiedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCUserPassedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCUserPerformingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCUserPreparingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCNegativeFailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCNegativePassView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCNegativePerformView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCDevicesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCUsersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QCNewUserView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QualityControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems')" />
