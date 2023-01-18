@@ -6,7 +6,7 @@ namespace FenomPlus.Database.Tables
 {
     public class QCDevicesTable : BaseTb<QCDevicesTable>
     {
-        public string SerialNumber { get; set; }
-        public string LastConnected { get; set; }
+        public string DeviceSerialNumber { get; set; }
+        public QCNegativeControlTable. QCNegativeControlTable.cs { get; set; }
     }
 }
