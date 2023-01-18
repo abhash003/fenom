@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using FenomPlus.Services.DeviceService.Utils;
 
 namespace FenomPlus.SDK.Core.Models
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ErrorStatusInfo : BaseCharacteristic
     {
-        public static int Min = 5;
-
         public byte ErrorCode;
-        public float FutureValue;
 
         public static ErrorStatusInfo Create(byte[] data)
         {
@@ -23,13 +21,18 @@ namespace FenomPlus.SDK.Core.Models
             {
                 Data = data;
 
-                if ((data != null) && (data.Length >= Min))
+                if (data != null)
                 {
                     ErrorCode = Data[0];
-                    FutureValue = System.BitConverter.ToSingle(data, 1);
                 }
             }
-            finally { }
+
+            finally
+            {
+            }
+
+            // add logging here
+            //Helper.WriteDebug("");
 
             return this;
         }

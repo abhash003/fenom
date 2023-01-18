@@ -40,6 +40,8 @@ namespace FenomPlus.Services
             BreathManeuver = new BreathManeuver();
             DeviceInfo = new DeviceInfo();
             DebugMsg = new DebugMsg();
+            DeviceStatusInfo = new DeviceStatusInfo();
+            ErrorStatusInfo = new ErrorStatusInfo();
 
             // write path to debug
             DebugList.Insert(0, DebugLog.Create("App Starting"));
@@ -82,6 +84,10 @@ namespace FenomPlus.Services
         public BreathManeuver BreathManeuver { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
+        
+        //public DeviceStatusInfo DeviceStatusInfo { get; set; }
+        //public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
 
         public string _deviceConnectedStatus = "Unknown";
         public string DeviceConnectedStatus
@@ -160,7 +166,7 @@ namespace FenomPlus.Services
                 if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
                 {
                     DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
-                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber} {DateTime.Now}");
 
                     // update the database
                     //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
@@ -238,8 +244,8 @@ namespace FenomPlus.Services
                     DeviceConnectedStatus = "Processing Test";
                     FenomReady = false;
 
-                    // add new value and average it
-                    BreathFlow = BreathBuffer.Add(BreathManeuver.BreathFlow);
+                    // add new value
+                    BreathFlow = BreathManeuver.BreathFlow;
                     BreathFlowChanged?.Invoke(null, null);
 
                     // get the noscores
