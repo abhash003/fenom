@@ -71,7 +71,7 @@
                                   VerticalOptions="FillAndExpand" 
                                   HorizontalOptions="FillAndExpand"
                                   Text=""
-                                  Value=""
+                                  CountDown=""
                                   GaugeData="{Binding GaugeData}"/>
 
 
