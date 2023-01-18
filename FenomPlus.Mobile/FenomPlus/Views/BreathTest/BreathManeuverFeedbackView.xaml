@@ -37,7 +37,7 @@
                                   GaugeData="{Binding GaugeData}"
                                   Text=""
                                   IsShowStep="false"
-                                  Value="{Binding GaugeSeconds}" />
+                                  CountDown="{Binding GaugeSeconds}" />
 
                 <Label Text="{Binding GaugeStatus}"
                            FontSize="16"
