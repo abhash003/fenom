@@ -33,9 +33,9 @@ namespace FenomPlus.ViewModels
 
         private void UpdateError()
         {
-            int statusCode = (Services.Cache.BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
+            int statusCode = (Services.DeviceService.Current.BreathManeuver.StatusCode >= ErrorCodesEnum.code.Length) ?
                 ErrorCodesEnum.code.Length :
-                Services.Cache.BreathManeuver.StatusCode;
+                Services.DeviceService.Current.BreathManeuver.StatusCode;
 
             ErrorCode = ErrorCodesEnum.code[statusCode];
             ErrorMessage = ErrorCodesEnum.title[statusCode];

@@ -33,18 +33,7 @@ namespace FenomPlus.Droid
             AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
             //AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
             //AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
-            AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
-
-            try
-            {
-                //var svc1 = AppServices.Container.Resolve<IDeviceService>();
-                //var svc2 = AppServices.Container.Resolve<FenomPlus.Services.NewArch.R2.IDeviceService>();
-            }
-
-            catch (Exception ex)
-            {
-                ex = ex;
-            }
+            AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();            
 
             CheckPermissions();
 

@@ -11,6 +11,7 @@ using Syncfusion.Pdf.Graphics;
 using Xamarin.Forms;
 using FenomPlus.Enums;
 using FenomPlus.Services;
+using FenomPlus.Services.DeviceService.Enums;
 
 namespace FenomPlus.ViewModels
 {
@@ -212,11 +213,11 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
 
-            GaugeData = Services.Cache.BreathFlow = 0;
+            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
             GaugeStatus = "Start Blowing";
 
             // Monitor event
-            Services.Cache.BreathFlowChanged += CacheOnBreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged += CacheOnBreathFlowChanged;
 
             // Reset to first page
             TutorialIndex = 1;
@@ -229,7 +230,7 @@ namespace FenomPlus.ViewModels
 
             PlaySounds.StopAll();
 
-            Services.Cache.BreathFlowChanged -= CacheOnBreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged -= CacheOnBreathFlowChanged;
 
             if (Services.DeviceService.Current?.BreathTestInProgress == true)
             {
@@ -244,7 +245,7 @@ namespace FenomPlus.ViewModels
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
         {
-            GaugeData = Services.Cache.BreathFlow;
+            GaugeData = Services.DeviceService.Current.BreathFlow;
 
             if (GaugeData < Config.GaugeDataLow)
             {
@@ -263,7 +264,7 @@ namespace FenomPlus.ViewModels
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            GaugeData = Services.Cache.BreathFlow;
+            GaugeData = Services.DeviceService.Current.BreathFlow;
         }
 
         [RelayCommand]
@@ -278,27 +279,27 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
+                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                     switch (deviceStatus)
                     {
-                        case CacheService.DeviceCheckEnum.Ready:
+                        case DeviceCheckEnum.Ready:
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
-                        case CacheService.DeviceCheckEnum.DevicePurging:
+                        case DeviceCheckEnum.DevicePurging:
                             await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.HumidityOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.Cache.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
+                        case DeviceCheckEnum.HumidityOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.PressureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Pressure level ({Services.Cache.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
+                        case DeviceCheckEnum.PressureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.Cache.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                        case DeviceCheckEnum.TemperatureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.BatteryCriticallyLow:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.Cache.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
+                        case DeviceCheckEnum.BatteryCriticallyLow:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -337,27 +338,27 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
+                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                     switch (deviceStatus)
                     {
-                        case CacheService.DeviceCheckEnum.Ready:
+                        case DeviceCheckEnum.Ready:
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
-                        case CacheService.DeviceCheckEnum.DevicePurging:
+                        case DeviceCheckEnum.DevicePurging:
                             await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.HumidityOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.Cache.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
+                        case DeviceCheckEnum.HumidityOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.PressureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Pressure level ({Services.Cache.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
+                        case DeviceCheckEnum.PressureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.Cache.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                        case DeviceCheckEnum.TemperatureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.BatteryCriticallyLow:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Battery Level ({Services.Cache.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
+                        case DeviceCheckEnum.BatteryCriticallyLow:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
                         default:
                             throw new ArgumentOutOfRangeException();

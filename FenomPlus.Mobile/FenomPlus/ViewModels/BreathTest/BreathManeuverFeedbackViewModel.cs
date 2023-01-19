@@ -38,8 +38,8 @@ namespace FenomPlus.ViewModels
 
         private void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
-            GaugeData = Services.Cache.BreathFlow;
-            GaugeSeconds = Services.Cache.BreathManeuver.TimeRemaining;
+            GaugeData = Services.DeviceService.Current.BreathFlow;
+            GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
 
             if (GaugeSeconds <= 0)
             {
@@ -67,7 +67,7 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
 
             // Allows Updating the Breath Gauge in UI
-            Services.Cache.BreathFlowChanged += Cache_BreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
 
             Services.DeviceService.Current?.IsNotConnectedRedirect();
 
@@ -82,14 +82,14 @@ namespace FenomPlus.ViewModels
                 TestTime = 6;
             }
 
-            GaugeData = Services.Cache.BreathFlow = 0;
+            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
             GaugeSeconds = TestTime;
             GaugeStatus = "Start Blowing";
         }
 
         public override void OnDisappearing()
         {
-            Services.Cache.BreathFlowChanged -= Cache_BreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
 
             base.OnDisappearing();
             PlaySounds.StopAll();

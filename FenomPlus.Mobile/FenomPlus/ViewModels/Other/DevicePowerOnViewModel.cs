@@ -163,10 +163,10 @@ namespace FenomPlus.ViewModels
         /// </summary>
         /// <returns></returns>
         public bool DeviceInfoTimer()
-        {
-            if (Services.Cache.DeviceInfo == null) return true;
+        {            
             if (Services.DeviceService.Current == null) return true;
-            Services.Cache.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
+            if (Services.DeviceService.Current.DeviceInfo == null) return true;
+            Services.DeviceService.Current.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
             //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device            
             
@@ -180,9 +180,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         /// <returns></returns>
         public bool EnvironmentalInfo()
-        {
-            if (Services.Cache.EnvironmentalInfo == null) return true;
+        {            
             if (Services.DeviceService.Current == null) return true;
+            if (Services.DeviceService.Current.EnvironmentalInfo == null) return true;
             //Services.Navigation.DashboardView();
             return false;
         }

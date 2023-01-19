@@ -17,7 +17,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             TestTime = 10;
-            Services.Cache.BreathFlow = 0;
+            Services.DeviceService.Current.BreathFlow = 0;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
 
@@ -26,7 +26,7 @@ namespace FenomPlus.ViewModels
                 TestSeconds--;
                 TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
-                GaugeData = Services.Cache.BreathFlow;
+                GaugeData = Services.DeviceService.Current.BreathFlow;
 
                 if (GaugeData < Config.GaugeDataLow)
                 {

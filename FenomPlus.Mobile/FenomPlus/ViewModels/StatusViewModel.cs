@@ -156,13 +156,13 @@ namespace FenomPlus.ViewModels
             if (Services.DeviceService.Current != null && (!BluetoothConnected ||
                                                            RefreshInProgress ||
                                                            Services.DeviceService.Current.BreathTestInProgress ||
-                                                           Services?.Cache?.EnvironmentalInfo == null))
+                                                           Services.DeviceService.Current.EnvironmentalInfo == null))
             {
                 await Task.Delay(1);
                 return;
             }
 
-            Console.WriteLine($"Humidity: {Services.Cache.EnvironmentalInfo.Humidity}");
+            Console.WriteLine($"Humidity: {Services.DeviceService.Current?.EnvironmentalInfo.Humidity}");
 
             RefreshInProgress = true;
 
@@ -172,22 +172,27 @@ namespace FenomPlus.ViewModels
 
             UpdateDevice(Services.Cache.DeviceExpireDate);
 
-            UpdateSensor(Services.Cache.SensorExpireDate);
+            if (Services.DeviceService.Current != null)
+            {
+                UpdateSensor(Services.DeviceService.Current.SensorExpireDate);
 
-            UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel);
-            // Don't update  an environment value if it is zero, we must not have good value yet
+                UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
+                // Don't update  an environment value if it is zero, we must not have good value yet
 
-            //if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
-            //    UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+                //if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
+                //    UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
 
-            if (Services.Cache.EnvironmentalInfo.Pressure != 0) 
-                UpdatePressure(Services.Cache.EnvironmentalInfo.Pressure);
+                if (Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0)
+                    UpdatePressure(Services.DeviceService.Current.EnvironmentalInfo.Pressure);
 
-            if (Services.Cache.EnvironmentalInfo.Humidity != 0) 
-                UpdateHumidity(Services.Cache.EnvironmentalInfo.Humidity);
+                if (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
+                    UpdateHumidity(Services.DeviceService.Current.EnvironmentalInfo.Humidity);
 
-            if (Services.Cache.EnvironmentalInfo.Temperature != 0) 
-                UpdateTemperature(Services.Cache.EnvironmentalInfo.Temperature);
+                if (Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0)
+                    UpdateTemperature(Services.DeviceService.Current.EnvironmentalInfo.Temperature);
+            }
+
+            
 
             UpdateQualityControlExpiration(7); // ToDo:  Need value here
 
@@ -198,8 +203,8 @@ namespace FenomPlus.ViewModels
         {
             if (BluetoothConnected)
             {
-                DeviceSerialNumber = $"Device Serial Number ({Services.Cache.DeviceSerialNumber})";
-                DeviceFirmwareVersion = $"Firmware ({Services.Cache.Firmware})";
+                DeviceSerialNumber = $"Device Serial Number ({Services.DeviceService.Current.DeviceSerialNumber})";
+                DeviceFirmwareVersion = $"Firmware ({Services.DeviceService.Current.Firmware})";
             }
             else
             {

@@ -17,14 +17,22 @@ using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Utils;
 using FenomPlus.Services.DeviceService.Utils;
 using System.Timers;
+using FenomPlus.Services.DeviceService.Enums;
+using System.Threading;
+using FenomPlus.Models;
+using Timer = System.Timers.Timer;
+using FenomPlus.Helpers;
+using System.Text;
+using System.Diagnostics;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
-    public abstract partial class Device : IDevice
+    public abstract partial class Device : IDevice, IDisposable
     {
         // Fields
 
         protected object _nativeDevice = null;
+        private int calls = 0;
 
         // Constructor
 
@@ -38,9 +46,30 @@ namespace FenomPlus.Services.DeviceService.Abstract
             DeviceReadyTimer = new Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
             ReadyForTest = true;
+
+            EnvironmentalInfo = new EnvironmentalInfo();
+            BreathManeuver = new BreathManeuver();
+            DeviceInfo = new DeviceInfo();
+            DebugMsg = new DebugMsg();
+
+            DeviceSerialNumber = string.Empty;
+            Firmware = string.Empty;
+            FenomReady = true;
+
+            DebugList = new RangeObservableCollection<DebugLog>();
+
+            // write path to debug
+            DebugList.Insert(0, DebugLog.Create("App Starting"));
+            DebugList.Insert(0, DebugLog.Create(IOC.Services.DebugLogFile.GetFilePath()));
         }
 
         // Properties
+
+        #region Properties
+
+        public RangeObservableCollection<DebugLog> DebugList { get; set; }
+
+        public bool FenomReady { get; set; }
 
         public abstract string Name { get; }
 
@@ -49,54 +78,96 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public abstract bool Connected { get; }
 
         public object NativeDevice { get => _nativeDevice; }
+        public EnvironmentalInfo EnvironmentalInfo { get; set; }
+
+        public DeviceInfo DeviceInfo { get; set; }
+
+        public int NOScore { get; set; }
+
+        public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
+        public DeviceStatusInfo DeviceStatusInfo { get; set; }
+
+        public BreathManeuver BreathManeuver { get; set; }
+
+        public DebugMsg DebugMsg { get; set; }
+
+        public float FenomValue { get; set; }
+
+        public int BatteryLevel { get; set; }
+
+        private float _breathFlow { get; set; }
+        public float BreathFlow
+        {
+            get => _breathFlow / 1000;
+            set { _breathFlow = value; }
+        }
+
+        public string _deviceConnectedStatus = "Unknown";
+        public string DeviceConnectedStatus
+        {
+            get => _deviceConnectedStatus;
+            set
+            {
+                _deviceConnectedStatus = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
+
+        public string _firmware;
+        public string Firmware
+        {
+            get => _firmware;
+            set
+            {
+                _firmware = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
+
+        public string _deviceSerialNumber;
+        public string DeviceSerialNumber
+        {
+            get => _deviceSerialNumber;
+            set
+            {
+                _deviceSerialNumber = value;
+                NotifyViews();
+                NotifyViewModels();
+            }
+        }
+
+        public DateTime SensorExpireDate { get; set; }
+
+        public bool BreathTestInProgress
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
+
+        public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
+
+        public event EventHandler BreathFlowChanged;
+
+        static volatile object _s_debugLogLock = new object();
+        static volatile bool _s_logFileWriterWorkerStarted = false;
+        static volatile bool _s_logFileWriterWorkerStop = false;
+
+        #endregion
 
         // Methods
+
+        #region Methods
 
         public abstract Task ConnectAsync();
 
         public abstract Task ConnectToKnownDeviceAsync(Guid Id);
 
         public abstract Task DisconnectAsync();
-
-        /*
-         * 
-         * LEGACY CODE
-         * 
-         */
-        public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
-
-        public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
-
-        public int DeviceReadyCountDown { get; set; }
-
-        private bool _readyForTest;
-        public bool ReadyForTest
-        {
-            get => _readyForTest;
-            set
-            {
-                _readyForTest = value;
-
-                if (_readyForTest == false)
-                {
-                    DeviceReadyCountDown = 32;
-                    DeviceReadyTimer.Start();
-                }
-            }
-        }
-
-        private readonly Timer DeviceReadyTimer;
-        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            DeviceReadyCountDown -= 1;
-
-            if (DeviceReadyCountDown <= 0)
-            {
-                ReadyForTest = true;
-                DeviceReadyTimer.Stop();
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -124,12 +195,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
             //AppServices.Container.Resolve<INavigationService>().DevicePowerOnView();
 
             return false;
-        }
-
-        public bool BreathTestInProgress
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -161,6 +226,283 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return false;
         }
 
+        public DeviceCheckEnum CheckDeviceBeforeTest()
+        {
+            // Get the latest environmental info - updates Cache
+            //Services.DeviceService.Current?.RequestEnvironmentalInfo();
+
+            if (ReadyForTest == false)
+            {
+                Console.WriteLine("Device is purging");
+                return DeviceCheckEnum.DevicePurging;
+            }
+
+            if (false /*Services.Cache.EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3*/)
+            {
+                return DeviceCheckEnum.BatteryCriticallyLow;
+            }
+
+            if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+            {
+                return DeviceCheckEnum.HumidityOutOfRange;
+            }
+
+            if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            {
+                return DeviceCheckEnum.PressureOutOfRange;
+            }
+
+            if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+            {
+                return DeviceCheckEnum.TemperatureOutOfRange;
+            }
+
+            return DeviceCheckEnum.Ready;
+        }
+
+        private void LogFileWriterWorker()
+        {
+            _s_logFileWriterWorkerStarted = true;
+
+            var current = DateTime.Now;
+
+            while (_s_logFileWriterWorkerStop == false)
+            {
+                if ((DateTime.Now - current).TotalSeconds > 60)
+                {
+                    // flush the log
+                    var debugList = DebugList;
+
+                    lock (_s_debugLogLock)
+                    {
+                        Console.WriteLine(debugList);
+                        debugList.Clear();
+                    }
+
+                    // reset the time
+                    current = DateTime.Now;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Timer
+
+        private bool _readyForTest;
+        public int DeviceReadyCountDown { get; set; }
+
+        public bool ReadyForTest
+        {
+            get => _readyForTest;
+            set
+            {
+                _readyForTest = value;
+
+                if (_readyForTest == false)
+                {
+                    DeviceReadyCountDown = 32;
+                    DeviceReadyTimer.Start();
+                }
+            }
+        }
+
+        private readonly Timer DeviceReadyTimer;
+        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            DeviceReadyCountDown -= 1;
+
+            if (DeviceReadyCountDown <= 0)
+            {
+                ReadyForTest = true;
+                DeviceReadyTimer.Stop();
+            }
+        }
+
+        #endregion        
+
+        #region Decode Characteristics
+
+        public EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data)
+        {
+            calls++;
+            try
+            {
+                //data[0] = 20; // temp
+                //data[1] = 60; // humidity
+                //data[2] = 90; // pressure
+                //data[3] = 80; // battery
+                EnvironmentalInfo ??= new EnvironmentalInfo();
+                EnvironmentalInfo.Decode(data);
+
+                BatteryLevel = EnvironmentalInfo.BatteryLevel;
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return EnvironmentalInfo;
+        }        
+
+        public DeviceInfo DecodeDeviceInfo(byte[] data)
+        {
+            try
+            {
+                DeviceInfo ??= new DeviceInfo();
+
+                DeviceInfo.Decode(data);
+
+                // setup serial number
+                if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
+                {
+                    DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
+
+                    // update the database
+                    //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
+                }
+
+                // setup firmware version
+                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
+
+                // get SensorExpireDate
+                SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return DeviceInfo;
+        }        
+
+        public ErrorStatusInfo DecodeErrorStatusInfo(byte[] data)
+        {
+            try
+            {
+                ErrorStatusInfo ??= new ErrorStatusInfo();
+                ErrorStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return ErrorStatusInfo;
+        }
+
+        public DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data)
+        {
+            try
+            {
+                DeviceStatusInfo ??= new DeviceStatusInfo();
+                DeviceStatusInfo.Decode(data);
+
+                NotifyViews();
+                NotifyViewModels();
+            }
+            finally { }
+            return DeviceStatusInfo;
+        }
+
+        public BreathManeuver DecodeBreathManeuver(byte[] data)
+        {
+            try
+            {
+                BreathManeuver ??= new BreathManeuver();
+
+                BreathManeuver.Decode(data);
+
+                if (BreathManeuver.TimeRemaining == 0xff)
+                {
+                    FenomReady = false;
+                    ReadyForTest = true;
+                    DeviceConnectedStatus = "Ready For Test";
+                }
+                else if (BreathManeuver.TimeRemaining == 0xfe)
+                {
+                    ReadyForTest = false;
+                    FenomReady = true;
+                    FenomValue = BreathManeuver.NOScore;
+                }
+                else if (BreathManeuver.TimeRemaining == 0xf0)
+                {
+                    // log ??
+                }
+                else
+                {
+                    DeviceConnectedStatus = "Processing Test";
+                    FenomReady = false;
+
+                    // add new value
+                    BreathFlow = BreathManeuver.BreathFlow;
+                    BreathFlowChanged?.Invoke(null, null);
+
+                    // get the noscores
+                    NOScore = BreathManeuver.NOScore;
+                }
+
+                NotifyViews();
+
+                NotifyViewModels();
+
+            }
+            finally { }
+            return BreathManeuver;
+        }
+
+        public DebugMsg DecodeDebugMsg(byte[] data)
+        {
+            if (_s_logFileWriterWorkerStarted == false)
+            {
+                // start the worker
+                Thread workerThread = new Thread(LogFileWriterWorker);
+                workerThread.Start();
+            }
+
+            try
+            {
+                DebugMsg ??= new DebugMsg();
+
+                DebugMsg.Decode(data);
+
+                DebugLog debugLog = DebugLog.Create(data);
+
+                lock (_s_debugLogLock)
+                {
+                    DebugList.Insert(0, debugLog);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return DebugMsg;
+        }
+
+        #endregion
+
+        #region Notify View and View Models
+        // ToDo: Remove - bad design
+        private void NotifyViews()
+        {
+            App.NotifyViews();
+        }
+
+        // ToDo: Remove - bad design
+        private void NotifyViewModels()
+        {
+            App.NotifyViewModels();
+        }
+
+        #endregion
+
+        #region Request Characteristics
+
         /// <summary>
         /// 
         /// </summary>
@@ -186,6 +528,10 @@ namespace FenomPlus.Services.DeviceService.Abstract
             }
             return false;
         }
+
+        #endregion
+
+        #region Send Characteristics
 
         /// <summary>
         /// 
@@ -258,6 +604,16 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return result;
         }
 
+        #endregion
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            _s_logFileWriterWorkerStop = true;
+        }
+
+        #endregion
     }
 
     public partial class Device

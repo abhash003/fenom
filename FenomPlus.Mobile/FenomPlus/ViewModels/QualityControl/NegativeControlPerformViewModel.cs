@@ -14,7 +14,7 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             TestTime = 10;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
-            Services.Cache.BreathFlow = 0;
+            Services.DeviceService.Current.BreathFlow = 0;
             Stop = false;
 
             Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
@@ -24,7 +24,7 @@ namespace FenomPlus.ViewModels
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
                     Services.DeviceService.Current.StopTest();
-                    if (Services.Cache.BreathFlow <= 0)
+                    if (Services.DeviceService.Current.BreathFlow <= 0)
                     {
                         Services.Navigation.NegativeControlPassView();
                     }

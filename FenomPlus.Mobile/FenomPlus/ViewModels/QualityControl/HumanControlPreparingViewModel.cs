@@ -32,7 +32,7 @@ namespace FenomPlus.ViewModels
                     {
                         DateTaken = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                         User = Services.Cache.QCUsername,
-                        TestResult = Services.Cache.BreathFlow,
+                        TestResult = Services.DeviceService.Current.BreathFlow,
                         SerialNumber = this.DeviceSerialNumber,
                         QCStatus = "",
                         QCExpiration = "",
