@@ -14,7 +14,7 @@ namespace FenomPlus.Database.Tables
 
         public string DeviceStatus { get; set; } = "Insufficient Data"; // Pass, Fail, Expired, Insufficient Data
 
-        public List<QCUsersTable> Users { get; set; } = new List<QCUsersTable>();
+        public List<QCUserTable> Users { get; set; } = new List<QCUserTable>();
 
     }
 }

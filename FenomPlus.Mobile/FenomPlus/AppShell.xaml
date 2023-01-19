@@ -56,13 +56,13 @@
 
     <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="DashboardView"              ContentTemplate="{DataTemplate pages:DashboardView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
+    <!--<ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPerformingView"    Route="HumanControlPerformingView"  ContentTemplate="{DataTemplate pages:HumanControlPerformingView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPreparingView"     Route="HumanControlPreparingView"   ContentTemplate="{DataTemplate pages:HumanControlPreparingView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPerformView"    Route="NegativeControlPerformView"  ContentTemplate="{DataTemplate pages:NegativeControlPerformView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlFailView"       Route="NegativeControlFailView"     ContentTemplate="{DataTemplate pages:NegativeControlFailView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView"       Route="NegativeControlPassView"     ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView"       Route="NegativeControlPassView"     ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />-->
     <ShellContent FlyoutItemIsVisible="False" Title="PreparingStandardTestResultView" Route="PreparingStandardTestResultView" ContentTemplate="{DataTemplate pages:PreparingStandardTestResultView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="StopExhalingView"              Route="StopExhalingView"            ContentTemplate="{DataTemplate pages:StopExhalingView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="TestErrorView"                 Route="TestErrorView"               ContentTemplate="{DataTemplate pages:TestErrorView}" />

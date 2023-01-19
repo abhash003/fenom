@@ -10,20 +10,19 @@ using LiteDB;
 
 namespace FenomPlus.Database.Repository
 {
-    public class QCUsersRepository : GenericRepository<QCUsersTable>, IQQCUsersRepository
-    {
+    public class QCUsersRepository : GenericRepository<IQCUserTable>, IQCUserRepository
         //private static string TblName = "QualityControlUsersRepository";
         //private ILiteCollection<QualityControlUsersTb> Collection => db.GetCollection<QualityControlUsersTb>(TblName);
 
-        //public QualityControlUsersRepository() : base(TblName)
-        //{
+        public QCUsersRepository() : base(QCUserTable)
+        {
 
-        //}
+        }
 
-        //public QualityControlUsersRepository(LiteDatabase db) : base(TblName, db)
-        //{
+        public QCUsersRepository(LiteDatabase db) : base(TblName, db)
+        {
 
-        //}
+        }
 
         ///// <summary>
         ///// 
@@ -142,7 +141,7 @@ namespace FenomPlus.Database.Repository
         ///// </summary>
         ///// <param name="model"></param>
         ///// <returns></returns>
-        
+
         //public QualityControlUsersTb Insert(QualityControlUsersTb model)
         //{
         //    if (model != null)
@@ -161,7 +160,7 @@ namespace FenomPlus.Database.Repository
         //    }
         //    return model;
         //}
-        
+
         ///// <summary>
         ///// 
         ///// </summary>

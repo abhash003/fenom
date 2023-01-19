@@ -11,12 +11,12 @@ namespace FenomPlus.Views
 {
     public partial class QualityControlDevicesView : BaseContentPage
     {
-        private readonly QualityControlDevicesViewModel QualityControlDevicesViewModel;
+        private readonly QCDevicesViewModel QualityControlDevicesViewModel;
 
         public QualityControlDevicesView()
         {
             InitializeComponent();
-            BindingContext = QualityControlDevicesViewModel = new QualityControlDevicesViewModel();
+            BindingContext = QualityControlDevicesViewModel = new QCDevicesViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 

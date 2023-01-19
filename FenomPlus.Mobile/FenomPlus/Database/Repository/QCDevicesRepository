@@ -11,17 +11,17 @@ using LiteDB;
 
 namespace FenomPlus.Database.Repository
 {
-    public class QualityControlDevicesRepository : GenericRepository<QualityControlDevicesTb>, IQualityControlDevicesRepository
+    public class QCDevicesRepository : GenericRepository<QCDevicesTb>, IQCDevicesRepository
     {
         private static string TblName = "QualityControlDevicesRepository";
         private ILiteCollection<QualityControlDevicesTb> Collection => db.GetCollection<QualityControlDevicesTb>(TblName);
 
-        public QualityControlDevicesRepository() : base(TblName)
+        public QCDevicesRepository() : base(TblName)
         {
 
         }
 
-        public QualityControlDevicesRepository(LiteDatabase db) : base(TblName, db)
+        public QCDevicesRepository(LiteDatabase db) : base(TblName, db)
         {
 
         }        

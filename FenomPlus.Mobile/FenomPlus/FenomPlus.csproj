@@ -39,6 +39,10 @@
     <PackageReference Include="Xamarin.Forms.Svg" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Database\Repository\QCDevicesRepository" />
+    <None Remove="DataSet1.xsc" />
+    <None Remove="DataSet1.xsd" />
+    <None Remove="DataSet1.xss" />
     <None Remove="Microsoft.Extensions.Logging" />
     <None Remove="Plugin.BLE" />
     <None Remove="Polly" />
@@ -77,17 +81,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
+    <Compile Remove="Database\Repository\Interfaces\IQCUsersRepository.cs" />
     <Compile Remove="Database\Repository\Interfaces\IQualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Repository\Interfaces\IQualityControlRepository.cs" />
+    <Compile Remove="Database\Repository\QCUsersRepository.cs" />
     <Compile Remove="Database\Repository\QualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Repository\QualityControlRepository.cs" />
     <Compile Remove="Database\Tables\QualityControlDevicesTb.cs" />
     <Compile Remove="Database\Tables\QualityControlTb.cs" />
     <Compile Remove="Database\Tables\QualityControlUsersTb.cs" />
+    <Compile Remove="DataSet1.Designer.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
     <Compile Remove="Interfaces\IBleHubService.cs" />
     <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
+    <Compile Remove="Models\DBModel\QCNegativeDBModel.cs" />
     <Compile Remove="Models\DBModel\QualityControlDeviceDBModel.cs" />
+    <Compile Remove="Models\DBModel\QualityControlUsersDBModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlDataModel.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlDevicesDataModel.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlUsersDataModel.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
     <Compile Remove="Services\BleHubService.cs" />
     <Compile Remove="Services\DeviceStatusService.cs" />
@@ -95,9 +109,12 @@
     <Compile Remove="ViewModels\MainViewModel.cs" />
     <Compile Remove="ViewModels\Other\StatusDeviceInfoViewModel.cs" />
     <Compile Remove="Views\BreathTest\StartTestView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCDevicesView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\BreathTest\StartTestView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCDevicesView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCPerformTestView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="AppShell.xaml.cs">
@@ -106,17 +123,15 @@
     <Compile Update="Controls\ImageButtonView.xaml.cs">
       <DependentUpon>ImageButtonView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Controls\QCButton.xaml.cs">
+      <DependentUpon>QCButton.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
       <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Controls\StatusButtonView.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>StatusButtonView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="DataSet1.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Update="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
@@ -157,9 +172,6 @@
     <Compile Update="Views\QualityControl\QCNewUserView.xaml.cs">
       <DependentUpon>QCNewUserView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\QualityControl\QCDevicesView.xaml.cs">
-      <DependentUpon>QCDevicesView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\QualityControl\QCUsersView.xaml.cs">
       <DependentUpon>QCUsersView.xaml</DependentUpon>
     </Compile>
@@ -171,7 +183,7 @@
     <EmbeddedResource Update="Controls\ImageButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\QCButtonView.xaml">
+    <EmbeddedResource Update="Controls\QCButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
@@ -208,9 +220,6 @@
     <EmbeddedResource Update="Views\QualityControl\QCNegativePerformView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QCDevicesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\QualityControl\QCUsersView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -220,12 +229,6 @@
     <EmbeddedResource Update="Views\QualityControl\QualityControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="DataSet1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems')" />
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Abstractions\FenomPlus.SDK.Abstractions.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Abstractions\FenomPlus.SDK.Abstractions.projitems')" />

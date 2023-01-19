@@ -25,9 +25,9 @@ namespace FenomPlus.ViewModels
         // repos here
         public IBreathManeuverErrorRepository ErrorsRepo => Services.Database.BreathManeuverErrorRepo;
         public IBreathManeuverResultRepository ResultsRepo => Services.Database.BreathManeuverResultRepo;
-        public IQualityControlRepository QCRepo => Services.Database.QualityControlRepo;
-        public IQualityControlDevicesRepository QCDevicesRepo => Services.Database.QualityControlDevicesRepo;
-        public IQualityControlUsersRepository QCUsersRepo => Services.Database.QualityControlUsersRepo;
+        //public IQualityControlRepository QCRepo => Services.Database.QualityControlRepo;
+        //public IQualityControlDeviceRepository QCDevicesRepo => Services.Database.QualityControlDevicesRepo;
+        //public IQualityControlUsersRepository QCUsersRepo => Services.Database.QualityControlUsersRepo;
 
         [ObservableProperty]
         bool _isBusy = false;

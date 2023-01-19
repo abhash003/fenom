@@ -3,14 +3,14 @@ using FenomPlus.ViewModels;
 
 namespace FenomPlus.Views
 {
-    public partial class NegativeControlPassView : BaseContentPage
+    public partial class QCNegativePassView : BaseContentPage
     {
-        private NegativeControlPassViewModel model;
+        private QualityControlViewModel model;
 
-        public NegativeControlPassView()
+        public QCNegativePassView()
         {
             InitializeComponent();
-            BindingContext = model = new NegativeControlPassViewModel();
+            BindingContext = model = new QualityControlViewModel();
         }
 
         protected override void OnAppearing()

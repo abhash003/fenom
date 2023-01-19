@@ -6,7 +6,7 @@
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
              xmlns:converters="http://xamarin.com/schemas/2020/toolkit"
-             x:Class="FenomPlus.Controls.QCButtonView">
+             x:Class="FenomPlus.Controls.QCButton">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -54,9 +54,9 @@
                 <RowDefinition Height="1.5*" />
             </Grid.RowDefinitions>
 
-            <Label x:Name="Header"
+            <Label x:Name="HeaderLabel"
                     Grid.Row="0"
-                    Text="{Binding Header}"
+                    Text="{Binding Title}"
                     VerticalOptions="Start" 
                     VerticalTextAlignment="Center" 
                     HorizontalOptions="Center" 
@@ -70,7 +70,7 @@
                     <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Status:"
+                <Label Text="Status"
                        Grid.Column="0"
                        VerticalOptions="Center" 
                        VerticalTextAlignment="Start" 
@@ -78,7 +78,7 @@
                        TextColor="#333" 
                        FontSize="Small"/>
 
-                <Label x:Name="Status"
+                    <Label x:Name="StatusLabel"
                        Grid.Column="1"
                        Margin="10,0,0,0"
                        Text="{Binding Status}"
@@ -106,7 +106,7 @@
                        TextColor="#333" 
                        FontSize="Small"/>
 
-                <Label x:Name="Expires"
+                <Label x:Name="ExpiresLabel"
                         Grid.Column="1" 
                         Margin="10,0,0,0"
                         Text="{Binding Expires}"
@@ -132,7 +132,7 @@
                        TextColor="#333" 
                        FontSize="Small"/>
 
-                <Label x:Name="NextTest"
+                <Label x:Name="NextTestLabel"
                         Grid.Column="1" 
                         Margin="10,0,0,0"
                         Text="{Binding NextTest}"

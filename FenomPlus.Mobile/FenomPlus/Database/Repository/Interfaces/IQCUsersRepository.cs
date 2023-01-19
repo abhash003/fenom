@@ -4,7 +4,7 @@ using FenomPlus.Models;
 
 namespace FenomPlus.Database.Repository.Interfaces
 {
-    public interface IQCUsersRepository : IGenericRepository<QCUsersTable>
+    public interface IQCUsersRepository : IGenericRepository<QCUserTable>
     {
         //// inserts
         //QualityControlUsersTb Insert(QualityControlUsersDBModel model);

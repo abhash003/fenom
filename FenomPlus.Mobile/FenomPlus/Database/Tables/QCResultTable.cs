@@ -4,21 +4,23 @@ using System.Text;
 
 namespace FenomPlus.Database.Tables
 {
-    public class QCResultsTable : BaseTb<QCResultsTable>
+    public class QCResultTable : BaseTb<QCResultTable>
     {
-        public DateTime TestDate { get; set; }
+        public string UserName { get; set; }
 
         public string DeviceSerialNumber { get; set; }
+
+        public DateTime TestDate { get; set; }
 
         public string TestType { get; set; }
 
         public double TestValue { get; set; }
 
-        public string TestResult { get; set; }
+        public string TestStatus { get; set; }
 
-        public QCResultsTable(DateTime dateTime, string deviceSerialNumber, string testType, double testValue)
+        public QCResultTable(string deviceSerialNumber, string testType, double testValue)
         {
-            TestDate = dateTime;
+            TestDate = DateTime.Now;
             DeviceSerialNumber = deviceSerialNumber;
             TestType = testType;
             TestValue = testValue;

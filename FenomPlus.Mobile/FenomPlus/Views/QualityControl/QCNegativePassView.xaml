@@ -4,7 +4,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:FenomPlus.Controls"
-    x:Class="FenomPlus.Views.NegativeControlPassView"
+    x:Class="FenomPlus.Views.QCNegativePassView"
     Title="{Binding Title}"
     Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"

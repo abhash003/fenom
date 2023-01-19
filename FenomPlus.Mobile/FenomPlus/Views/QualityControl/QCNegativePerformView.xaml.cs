@@ -2,11 +2,11 @@
 
 namespace FenomPlus.Views
 {
-    public partial class NegativeControlPerformView : BaseContentPage
+    public partial class QCNegativePerformView : BaseContentPage
     {
         private readonly NegativeControlPerformViewModel NegativeControlPerformViewModel;
 
-        public NegativeControlPerformView()
+        public QCNegativePerformView()
         {
             InitializeComponent();
             BindingContext = NegativeControlPerformViewModel = new NegativeControlPerformViewModel();

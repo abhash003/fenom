@@ -17,47 +17,47 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public override void OnAppearing()
         {
-            base.OnAppearing();
-            Services.DeviceService.Current.IsNotConnectedRedirect();
-            TestTime = 10;
-            TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
-            Stop = false;
-            Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
-            {
-                TestSeconds--;
-                TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
-                if ((TestSeconds <= 0) && (Stop == false))
-                {
-                    QualityControlDataModel model = new QualityControlDataModel()
-                    {
-                        DateTaken = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
-                        User = Services.Cache.QCUsername,
-                        TestResult = Services.Cache.BreathFlow,
-                        SerialNumber = this.DeviceSerialNumber,
-                        QCStatus = "",
-                        QCExpiration = "",
-                    };
+            //base.OnAppearing();
+            //Services.DeviceService.Current.IsNotConnectedRedirect();
+            //TestTime = 10;
+            //TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
+            //Stop = false;
+            //Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
+            //{
+            //    TestSeconds--;
+            //    TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
+            //    if ((TestSeconds <= 0) && (Stop == false))
+            //    {
+            //        QualityControlDataModel model = new QualityControlDataModel()
+            //        {
+            //            DateTaken = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
+            //            User = Services.Cache.QCUsername,
+            //            TestResult = Services.Cache.BreathFlow,
+            //            SerialNumber = this.DeviceSerialNumber,
+            //            QCStatus = "",
+            //            QCExpiration = "",
+            //        };
 
-                    // depending on result
-                    if ((Services.Cache.HumanControlResult >= BreathGauge.Green1) && (Services.Cache.HumanControlResult <= BreathGauge.Green1Top))
-                    {
-                        model.QCStatus = "Qualified";
-                        QCRepo.Insert(model);
-                        // log passed here
-                        Services.Navigation.HumanControlPassedView();
-                    }
-                    else
-                    {
-                        model.QCStatus = "Disqualified";
-                        QCRepo.Insert(model);
-                        // log failed here
-                        Services.Navigation.HumanControlDisqualifiedView();
-                    }
+            //        // depending on result
+            //        if ((Services.Cache.HumanControlResult >= BreathGauge.Green1) && (Services.Cache.HumanControlResult <= BreathGauge.Green1Top))
+            //        {
+            //            model.QCStatus = "Qualified";
+            //            QCRepo.Insert(model);
+            //            // log passed here
+            //            Services.Navigation.HumanControlPassedView();
+            //        }
+            //        else
+            //        {
+            //            model.QCStatus = "Disqualified";
+            //            QCRepo.Insert(model);
+            //            // log failed here
+            //            Services.Navigation.HumanControlDisqualifiedView();
+            //        }
 
-                }
+            //    }
 
-                return (TestSeconds > 0) && (Stop == false);
-            });
+            //    return (TestSeconds > 0) && (Stop == false);
+            //});
         }
 
         /// <summary>

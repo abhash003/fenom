@@ -2,14 +2,14 @@
 
 namespace FenomPlus.Views
 {
-    public partial class NegativeControlFailView : BaseContentPage
+    public partial class QCNegativeFailView : BaseContentPage
     {
-        private readonly NegativeControlFailViewModel NegativeControlFailViewModel;
+        private readonly QualityControlViewModel NegativeControlFailViewModel;
 
-        public NegativeControlFailView()
+        public QCNegativeFailView()
         {
             InitializeComponent();
-            BindingContext = NegativeControlFailViewModel = new NegativeControlFailViewModel();
+            BindingContext = NegativeControlFailViewModel = new QualityControlViewModel();
         }
 
         protected override void OnAppearing()

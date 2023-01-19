@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Controls;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
@@ -11,13 +12,15 @@ using FenomPlus.SDK.Core.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public class QualityControlViewModel : BaseViewModel
+    public partial class QualityControlViewModel : BaseViewModel
     {
         // ToDo: Load from device
-        private Database.Tables.QualityControlTable QCViewTable = new Database.Tables.QualityControlTable();
+        private readonly List<QCDeviceTable> QCDevices = new List<QCDeviceTable>();
 
+        private readonly QualityControlTable QualityControlTable = new QualityControlTable();
 
         public QcButtonViewModel NegativeControlViewModel = new QcButtonViewModel();
+
         public QcButtonViewModel QcUser1ViewModel = new QcButtonViewModel();
         public QcButtonViewModel QcUser2ViewModel = new QcButtonViewModel();
         public QcButtonViewModel QcUser3ViewModel = new QcButtonViewModel();
@@ -26,10 +29,12 @@ namespace FenomPlus.ViewModels
         public QcButtonViewModel QcUser6ViewModel = new QcButtonViewModel();
         public ImageButtonViewModel ImageButtonViewModel = new ImageButtonViewModel();
 
+
+
         public QualityControlViewModel()
         {
+            // ToDo: Read from database
             MockData();
-
 
             NegativeControlViewModel.Header = "Negative Control";
             QcUser1ViewModel.Header = "QC User 1";
@@ -54,52 +59,81 @@ namespace FenomPlus.ViewModels
         {
             string serial = "820022";
 
-            // Add three dummy users
+            var newDevice = AddDevice(serial);
 
-            var userTable = new QCUsersTable("Jim");
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 20));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 30));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 25));
-            QCViewTable.Users.Add(userTable);
+            newDevice.NegativeControl = new QCNegativeControlTable();
 
-            userTable = new QCUsersTable("Bob");
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 20));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 30));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 19));
-            QCViewTable.Users.Add(userTable);
+            var userTable1 = new QCUserTable("Jim");
+            userTable1.TestResults.Add(new QCResultTable(serial, "10", 20));
+            userTable1.TestResults.Add(new QCResultTable(serial, "10", 30));
+            userTable1.TestResults.Add(new QCResultTable(serial, "10", 25));
+            newDevice.Users.Add(userTable1);
 
-            userTable = new QCUsersTable("Vinh");
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 20));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 30));
-            userTable.TestResults.Add(new QCTestResultsTable(DateTime.Now, serial, "10", 31));
-            QCViewTable.Users.Add(userTable);
+            var userTable2 = new QCUserTable("Bob");
+            userTable2.TestResults.Add(new QCResultTable(serial, "10", 20));
+            userTable2.TestResults.Add(new QCResultTable(serial, "10", 30));
+            userTable2.TestResults.Add(new QCResultTable(serial, "10", 19));
+            newDevice.Users.Add(userTable2);
 
+            var userTable3 = new QCUserTable("Vinh");
+            userTable3.TestResults.Add(new QCResultTable(serial, "10", 20));
+            userTable3.TestResults.Add(new QCResultTable(serial, "10", 30));
+            userTable3.TestResults.Add(new QCResultTable(serial, "10", 31));
+            newDevice.Users.Add(userTable3);
         }
 
-        private QCUsersTable CurrentQCUser;
+
+        public QCDeviceTable AddDevice(string serialNumber)
+        {
+            if (QCDevices == null)
+                return null;
+
+            var device = new QCDeviceTable(serialNumber);
+            QCDevices.Add(device);
+            return device;
+        }
+
+        public bool DeleteDevice(string serialNumber)
+        {
+            if (QCDevices == null)
+                return false;
+
+            for (int i = 0; i < QCDevices.Count - 1; i++)
+            {
+                if (QCDevices[i].SerialNumber == serialNumber)
+                {
+                    QCDevices.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private QCUserTable CurrentQcUser;
 
         private bool AddUser(string userName)
         {
-            if (QCViewTable.Users.Any(user => userName == user.UserName))
+            if (QualityControlTable.Users.Any(user => userName == user.Name))
             {
                 // User already exists
                 return false;
             }
 
-            QCUsersTable newUser = new QCUsersTable(userName);
-            QCViewTable.Users.Add(newUser);
-            CurrentQCUser = newUser;
+            QCUserTable newUser = new QCUserTable(userName);
+            QualityControlTable.Users.Add(newUser);
+            CurrentQcUser = newUser;
             return true;
         }
 
         private bool DeleteUser(string userName)
         {
-            for (int i = 0; i < QCViewTable.Users.Count; i++)
+            for (int i = 0; i < QualityControlTable.Users.Count; i++)
             {
-                if (userName == QCViewTable.Users[i].UserName)
+                if (userName == QualityControlTable.Users[i].Name)
                 {
-                    QCViewTable.Users.RemoveAt(i);
-                    CurrentQCUser = null;
+                    QualityControlTable.Users.RemoveAt(i);
+                    CurrentQcUser = null;
                     return true;
                 }
             }
@@ -108,24 +142,24 @@ namespace FenomPlus.ViewModels
         }
 
 
-        public QCTestResultsTable LastResult()
+        public QCResultTable LastResult()
         {
-            if (CurrentQCUser.TestResults.Count <= 0)
+            if (CurrentQcUser.TestResults.Count <= 0)
                 return null;
 
-            return CurrentQCUser.TestResults[CurrentQCUser.TestResults.Count - 1];
+            return CurrentQcUser.TestResults[CurrentQcUser.TestResults.Count - 1];
         }
 
-        public List<QCTestResultsTable> LastFourResults()
+        public List<QCResultTable> LastFourResults()
         {
-            if (CurrentQCUser.TestResults.Count <= 0)
+            if (CurrentQcUser.TestResults.Count <= 0)
                 return null;
 
-            List<QCTestResultsTable> results = new List<QCTestResultsTable>();
+            List<QCResultTable> results = new List<QCResultTable>();
 
-            for (int i = CurrentQCUser.TestResults.Count - 1; i >= 0; i--)
+            for (int i = CurrentQcUser.TestResults.Count - 1; i >= 0; i--)
             {
-                results.Add(CurrentQCUser.TestResults[i]);
+                results.Add(CurrentQcUser.TestResults[i]);
             }
 
             return results;

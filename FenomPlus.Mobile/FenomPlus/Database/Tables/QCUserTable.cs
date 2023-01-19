@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FenomPlus.Database.Tables
 {
-    public class QCUsersTable : BaseTb<QCUsersTable>
+    public class QCUserTable : BaseTb<QCUserTable>
     {
         public string Name { get; set; }  // User name
 
@@ -29,22 +29,24 @@ namespace FenomPlus.Database.Tables
 
         public DateTime NextTestDate { get; set; }  // Next Test date?
 
-        public List<QCResultsTable> TestResults;
+        public List<QCResultTable> TestResults;
 
         // Use TestResults as Chart Data
 
-        public QCUsersTable(string userName)
+        public QCUserTable(string userName)
         {
+            // ToDo: Read from database
+
             Name = userName;
             DateAdded = DateTime.Now;
             CurrentStatus = "Conditionally Qualified"; // When new user has no tests
-            TestResults = new List<QCResultsTable>();
+            TestResults = new List<QCResultTable>();
         }
 
-        private string GetStatus()
-        {
+        //private string GetStatus()
+        //{
 
-        }
+        //}
  
 
     }

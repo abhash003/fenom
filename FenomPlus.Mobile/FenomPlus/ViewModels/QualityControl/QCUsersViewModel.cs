@@ -6,12 +6,12 @@ using FenomPlus.Models;
 
 namespace FenomPlus.ViewModels
 {
-    public class QualityControlUsersViewModel : BaseViewModel
+    public class QCUsersViewModel : BaseViewModel
     {
-        public QualityControlUsersViewModel()
+        public QCUsersViewModel()
         {
-            DataForGrid = new RangeObservableCollection<QualityControlUsersDataModel>();
-            UpdateGrid();
+            //DataForGrid = new RangeObservableCollection<QualityControlUsersDataModel>();
+            //UpdateGrid();
         }
 
         /// <summary>
@@ -19,24 +19,24 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void UpdateGrid()
         {
-            DataForGrid.Clear();
-            IEnumerable<QualityControlUsersTb> records = QCUsersRepo.SelectAll();
-            foreach (QualityControlUsersTb record in records)
-            {
-                AddToGrid(record);
-            }
+            //DataForGrid.Clear();
+            //IEnumerable<QCUserTable> records = QCUsersRepo.SelectAll();
+            //foreach (QCUserTable record in records)
+            //{
+            //    AddToGrid(record);
+            //}
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="record"></param>
-        public void AddToGrid(QualityControlUsersTb record)
+        public void AddToGrid(QCUserTable record)
         {
-            if (record != null)
-            {
-                DataForGrid.Add(record.ConvertForGrid());
-            }
+            //if (record != null)
+            //{
+            //    DataForGrid.Add(record.ConvertForGrid());
+            //}
         }
 
         /// <summary>
@@ -59,16 +59,16 @@ namespace FenomPlus.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private RangeObservableCollection<QualityControlUsersDataModel> _DataForGrid;
-        public RangeObservableCollection<QualityControlUsersDataModel> DataForGrid
-        {
-            get => _DataForGrid;
-            set
-            {
-                _DataForGrid = value;
-                OnPropertyChanged("RecentErrorsData");
-            }
-        }
+        //private RangeObservableCollection<QualityControlUsersDataModel> _DataForGrid;
+        //public RangeObservableCollection<QualityControlUsersDataModel> DataForGrid
+        //{
+        //    get => _DataForGrid;
+        //    set
+        //    {
+        //        _DataForGrid = value;
+        //        OnPropertyChanged("RecentErrorsData");
+        //    }
+        //}
 
         /// <summary>
         /// 
