@@ -7,6 +7,7 @@ using FenomPlus.Enums;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Enums;
 using Syncfusion.Drawing;
 
@@ -30,7 +31,7 @@ namespace FenomPlus.ViewModels
                 {
                     case DeviceCheckEnum.Ready:
                         Services.Cache.TestType = TestTypeEnum.Standard;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Start10Second);
                         await Services.Navigation.BreathManeuverFeedbackView();
                         break;
                     case DeviceCheckEnum.DevicePurging:
@@ -63,7 +64,7 @@ namespace FenomPlus.ViewModels
                 {
                     case DeviceCheckEnum.Ready:
                         Services.Cache.TestType = TestTypeEnum.Short;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
+                        await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Start6Second);
                         await Services.Navigation.BreathManeuverFeedbackView();
                         break;
                     case DeviceCheckEnum.DevicePurging:

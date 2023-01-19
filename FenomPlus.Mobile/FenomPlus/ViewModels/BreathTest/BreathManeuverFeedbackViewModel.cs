@@ -7,6 +7,7 @@ using FenomPlus.SDK.Core.Ble.Interface;
 using Xamarin.Forms;
 using FenomPlus.SDK.Core.Ble.PluginBLE;
 using Plugin.BLE.Abstractions.EventArgs;
+using FenomPlus.Services.DeviceService.Concrete;
 
 namespace FenomPlus.ViewModels
 {
@@ -36,15 +37,18 @@ namespace FenomPlus.ViewModels
         {
         }
 
-        private void Cache_BreathFlowChanged(object sender, EventArgs e)
+        private async void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
             GaugeData = Services.DeviceService.Current.BreathFlow;
             GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
 
             if (GaugeSeconds <= 0)
             {
-                Services.DeviceService.Current?.StopTest();
-                Services.Navigation.StopExhalingView();
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
+                {
+                    await (Services.DeviceService.Current as BleDevice).StopTest();
+                }                
+                await Services.Navigation.StopExhalingView();
                 return;
             }
 

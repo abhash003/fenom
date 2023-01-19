@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Services;
 using FenomPlus.Services.DeviceService;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Interfaces;
 using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Views;
@@ -169,8 +170,8 @@ namespace FenomPlus.ViewModels
             Services.DeviceService.Current.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
             //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device            
-            
-            Services.DeviceService.Current.RequestEnvironmentalInfo();
+
+            (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }

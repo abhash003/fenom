@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FenomPlus.Services.DeviceService.Concrete;
+using System;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -23,7 +24,7 @@ namespace FenomPlus.ViewModels
                 TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.DeviceService.Current.StopTest();
+                    _ = (Services.DeviceService.Current as BleDevice).StopTest();
                     if (Services.DeviceService.Current.BreathFlow <= 0)
                     {
                         Services.Navigation.NegativeControlPassView();

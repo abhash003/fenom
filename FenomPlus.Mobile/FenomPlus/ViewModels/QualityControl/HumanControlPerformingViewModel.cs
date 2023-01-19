@@ -1,5 +1,6 @@
 ﻿using System;
 using FenomPlus.Helpers;
+using FenomPlus.Services.DeviceService.Concrete;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -46,7 +47,7 @@ namespace FenomPlus.ViewModels
 
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.DeviceService.Current.StopTest();
+                    _ = (Services.DeviceService.Current as BleDevice).StopTest();
 
                     Services.Cache.HumanControlResult = GaugeData;
                     Services.Navigation.HumanControlPreparingView();

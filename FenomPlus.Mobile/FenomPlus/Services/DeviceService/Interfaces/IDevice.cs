@@ -45,17 +45,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         bool BreathTestInProgress { get; set; }
 
         //bool IsConnected(bool devicePowerOn = false);
-        bool IsNotConnectedRedirect(bool devicePowerOn = false);
-
-        Task<bool> StartTest(BreathTestEnum breathTestEnum);
-        Task<bool> StopTest();
-        Task<bool> RequestDeviceInfo();
-        Task<bool> RequestEnvironmentalInfo();
-        Task<bool> SendMessage(MESSAGE message);
-        Task<bool> SendSerialNumber(string SerailNumber);
-        Task<bool> SendDateTime(string date, string time);
-        Task<bool> SendCalibration(double cal1, double cal2, double cal3);
-        Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
+        bool IsNotConnectedRedirect(bool devicePowerOn = false);       
 
         EnvironmentalInfo EnvironmentalInfo { get; set; }
         BreathManeuver BreathManeuver { get; set; }
