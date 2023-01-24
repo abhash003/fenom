@@ -10,7 +10,6 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using PluginBleIDevice = Plugin.BLE.Abstractions.Contracts.IDevice;
 using System.Diagnostics;
-using FenomPlus.Interfaces;
 using FenomPlus.SDK.Core.Models;
 using Plugin.BLE.Abstractions;
 using FenomPlus.Services.DeviceService.Utils;
@@ -18,7 +17,6 @@ using FenomPlus.Services.DeviceService.Abstract;
 using FenomPlus.SDK.Core.Ble.Interface;
 using System.Collections.Generic;
 using FenomPlus.SDK.Core.Utils;
-using FenomPlus.SDK.Core.Ble.PluginBLE;
 using FenomPlus.SDK.Core.Features;
 
 namespace FenomPlus.Services.DeviceService.Concrete
@@ -65,18 +63,33 @@ namespace FenomPlus.Services.DeviceService.Concrete
         public override async Task ConnectAsync()
         {
             if (_bleAdapter != null && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connected)
-            {
-                try
                 {
-                    await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
-
-                    // get service
-                    var device = (PluginBleIDevice)_nativeDevice;
-
-                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
-
-                    if (service != null)
+                    try
                     {
+                        var device = (PluginBleIDevice)_nativeDevice;
+
+                        // connect to the device
+                        await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+
+                        if (device.State != DeviceState.Connected)
+                        {
+                            throw new Exception("ConnectToDeviceAsync()");
+                        }
+                        else
+                        {
+                            Helper.WriteDebug($"Connection state: {device.State}");
+                        }
+
+                        await Task.Delay(1000);
+
+                        // get service
+                        var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                        if (service == null)
+                        {
+                            throw new Exception("GetServiceAsync() returned null, this isn't correct behavior!");
+                        }
+
                         // get characteristics
                         var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                             .FeatureWriteCharacteristic));
@@ -97,17 +110,21 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                                 .DebugMessageCharacteristic));
 
-                        //ICharacteristic[] chars = { fwChar, devChar, envChar };
+                        var deviceStatusChar =
+                            await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                                .DeviceStatusCharacteristic));
+
+                        var errorStatusChar =
+                            await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                                .ErrorStatusCharacteristic));
 
                         devChar.ValueUpdated += (sender, e) =>
                         {
                             lock (_handlerLock)
-                            {
-                                //var cache = AppServices.Container.Resolve<ICacheService>();
+                            {                                
                                 DecodeDeviceInfo(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: device info");
                             }
-
                         };
 
 
@@ -115,7 +132,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
-                                //var cache = AppServices.Container.Resolve<ICacheService>();
                                 DecodeEnvironmentalInfo(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: environmental info");
                             }
@@ -125,7 +141,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
-                                //var cache = AppServices.Container.Resolve<ICacheService>();
                                 DecodeBreathManeuver(e.Characteristic.Value);
                                 Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow})");
                             }
@@ -135,31 +150,48 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
-                                //var cache = AppServices.Container.Resolve<ICacheService>();
                                 DecodeDebugMsg(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: debug message");
                             }
                         };
 
+                        deviceStatusChar.ValueUpdated += (sender, e) =>
                         {
-                            //var cache = AppServices.Container.Resolve<ICacheService>();
+                            lock (_handlerLock)
+                            {
+                                DecodeDeviceStatusInfo(e.Characteristic.Value);
+                                Console.WriteLine("updated characteristic: device status");
+                            }
+                        };
+
+                        errorStatusChar.ValueUpdated += (sender, e) =>
+                        {
+                            lock (_handlerLock)
+                            {
+                                DecodeErrorStatusInfo(e.Characteristic.Value);
+                                Console.WriteLine("updated characteristic: error status");
+                            }
+                        };
+
+                        {
                             DeviceInfo = new DeviceInfo();
                             EnvironmentalInfo = new EnvironmentalInfo();
                         }
 
+                        await bmChar.StartUpdatesAsync();
                         await devChar.StartUpdatesAsync();
                         await envChar.StartUpdatesAsync();
-                        await bmChar.StartUpdatesAsync();
                         await dbgChar.StartUpdatesAsync();
+                        await deviceStatusChar.StartUpdatesAsync();
+                        await errorStatusChar.StartUpdatesAsync();
                     }
-                    
+                    catch (Exception ex)
+                    {
+                        Helper.WriteDebug(ex);
+                        throw;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    throw;
-                }
-            }
+
         }
 
         public override async Task ConnectToKnownDeviceAsync(Guid id)
@@ -187,84 +219,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
             if (((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected)
             {
                 await _bleAdapter.DisconnectDeviceAsync((PluginBleIDevice)_nativeDevice);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="uuid"></param>
-        /// <returns></returns>
-        public async Task<IGattCharacteristic> FindCharacteristic(string uuid)
-        {
-
-            Guid guid = new Guid(uuid);
-            IGattCharacteristic gatt = null;
-
-            var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-            if (gattCharacteristics.Count <= 0)
-            {
-                _ = await GetCharacterasticsAync();
-                gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-            }
-            foreach (IGattCharacteristic item in new List<IGattCharacteristic>(gattCharacteristics))
-            {
-                if (!item.Uuid.Equals(guid)) continue;
-                gatt = item;
-                break;
-            }
-
-            return gatt;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<IGattCharacteristic>> GetCharacterasticsAync()
-        {
-            try
-            {
-                //PerformanceLogger.StartLog(typeof(BleDevice), "GetCharacterasticsAync");
-
-                var gattCharacteristics = GattCharacteristics as SynchronizedList<IGattCharacteristic>;
-
-                if (gattCharacteristics == null)
-                {
-                    //_logger.LogWarning("BleDevice.GetCharacteristicsAsync() - list is null");
-                    return null;
-                }
-
-                gattCharacteristics.Clear();
-
-
-                var gattService = GattServices as SynchronizedList<IService>;
-
-                var services = await ((PluginBleIDevice)_nativeDevice).GetServicesAsync();
-
-                foreach (var service in services)
-                {
-                    // add service here
-                    gattService.Add(service);
-
-                    var characteristics = await service.GetCharacteristicsAsync();
-                    foreach (var characteristic in characteristics)
-                    {
-                        IGattCharacteristic gattCharacteristic = new GattCharacteristic(characteristic);
-                        gattCharacteristics.Add(gattCharacteristic);
-                    }
-                }
-
-                return gattCharacteristics;
-            }
-            catch (Exception ex)
-            {
-                Helper.WriteDebug(ex);
-                return null;
-            }
-            finally
-            {
-                //PerformanceLogger.EndLog(typeof(BleDevice), "GetCharacterasticsAync");
             }
         }
 
@@ -448,7 +402,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="breathTestEnum"></param>
         /// <returns></returns>
-        public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
+        public override async Task<bool> StartTest(BreathTestEnum breathTestEnum)
         {
             if (IsConnected())
             {
@@ -462,7 +416,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> StopTest()
+        public override async Task<bool> StopTest()
         {
             if (IsConnected())
             {

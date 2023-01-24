@@ -162,8 +162,6 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            Console.WriteLine($"Humidity: {Services.DeviceService.Current?.EnvironmentalInfo.Humidity}");
-
             RefreshInProgress = true;
 
             UpdateVersionNumbers();
@@ -573,15 +571,18 @@ namespace FenomPlus.ViewModels
 
             BatteryBarIconVisible = true; // Always visible when device is connected
 
-            bool batteryCharging = false; // ToDo: Hard coded for now
+            // 0x4a -- not charging
+            // 0x4b -- charging
+            // 0x00 -- unknown
+            bool batteryCharging = (Services.DeviceService.Current?.DeviceStatusInfo.StatusCode == 0x4b);
 
             if (batteryCharging)
             {
                 // ToDo; Need to finish implementation
                 if (value > Constants.BatteryWarning20)
                 {
-                    BatteryBarIcon = "wo_battery_charge_green_50.png";
-                    BatteryViewModel.ImagePath = "battery_charge_green_50.png";
+                    BatteryBarIcon = "wo_battery_charge_green.png";
+                    BatteryViewModel.ImagePath = "battery_charge_green.png";
                     BatteryViewModel.ValueColor = Color.FromHex("#333");
                     BatteryViewModel.Label = "Charge";
                     BatteryViewModel.Description = "Battery charge OK.";
@@ -598,7 +599,7 @@ namespace FenomPlus.ViewModels
                 {
                     BatteryBarIcon = "wo_battery_charge_red.png";
                     BatteryViewModel.ImagePath = "battery_charge_red.png";
-                    BatteryViewModel.ValueColor = Color.Red;
+                    BatteryViewModel.ValueColor = (System.Drawing.Color) Color.Red;
                     BatteryViewModel.Label = "Low";
                     BatteryViewModel.Description = "Battery charge is critically low. Charging.";
                 }
@@ -640,7 +641,7 @@ namespace FenomPlus.ViewModels
                 else
                 {
                     BatteryBarIcon = "wo_battery_charge_red.png";
-                    BatteryViewModel.ImagePath = "battery__red.png";
+                    BatteryViewModel.ImagePath = "battery_red.png";
                     BatteryViewModel.ValueColor = Color.Red;
                     BatteryViewModel.Label = "Critical";
                     BatteryViewModel.Description = "Battery charge is critically low. Connect the device to an outlet with the supplied USB-C cord.";

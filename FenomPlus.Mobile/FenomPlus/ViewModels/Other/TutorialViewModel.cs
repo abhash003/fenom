@@ -235,7 +235,7 @@ namespace FenomPlus.ViewModels
 
             if (Services.DeviceService.Current?.BreathTestInProgress == true)
             {
-                _ = (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Stop);
+                _ = Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
             }
 
             if (Services.Dialogs.SecondsProgressDialogShowing())
@@ -285,7 +285,7 @@ namespace FenomPlus.ViewModels
                     switch (deviceStatus)
                     {
                         case DeviceCheckEnum.Ready:
-                            await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Training);
+                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
                             await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
@@ -311,7 +311,7 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
-                    await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Stop);
+                    await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
 
                 if (Services.Dialogs.SecondsProgressDialogShowing())
@@ -344,7 +344,7 @@ namespace FenomPlus.ViewModels
                     switch (deviceStatus)
                     {
                         case DeviceCheckEnum.Ready:
-                            await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Training);
+                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
                             await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
@@ -370,7 +370,7 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
-                    await (Services.DeviceService.Current as BleDevice).StartTest(BreathTestEnum.Stop);
+                    await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
 
                 if (Services.Dialogs.SecondsProgressDialogShowing())

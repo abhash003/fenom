@@ -192,7 +192,7 @@ namespace FenomPlus.Services.DeviceService
         internal void HandleDeviceDiscovered(IDevice device)
         {
             Helper.WriteDebug("Invoking DeviceDiscovered");
-            DeviceDiscovered?.Invoke(this, new DeviceServiceEventArgs(device));
+               DeviceDiscovered?.Invoke(this, new DeviceServiceEventArgs(device));
         }
 
         #region Fields

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.SDK.Core.Ble.Interface;
 using Xamarin.Forms;
-using FenomPlus.SDK.Core.Ble.PluginBLE;
 using Plugin.BLE.Abstractions.EventArgs;
 using FenomPlus.Services.DeviceService.Concrete;
 
@@ -46,7 +45,7 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
                 {
-                    await (Services.DeviceService.Current as BleDevice).StopTest();
+                    await Services.DeviceService.Current.StopTest();
                 }                
                 await Services.Navigation.StopExhalingView();
                 return;

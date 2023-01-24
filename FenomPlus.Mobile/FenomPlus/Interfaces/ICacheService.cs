@@ -16,9 +16,6 @@ namespace FenomPlus.Interfaces
         
         int BreathFlowTimer { get; set; }        
 
-        float HumanControlResult { get; set; }        
-
-        bool ReadyForTest { get; set; }        
-                
+        float HumanControlResult { get; set; }
     }
 }

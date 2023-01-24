@@ -47,6 +47,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
             BreathManeuver = new BreathManeuver();
             DeviceInfo = new DeviceInfo();
             DebugMsg = new DebugMsg();
+            DeviceStatusInfo = new DeviceStatusInfo();
+            ErrorStatusInfo = new ErrorStatusInfo();
 
             DeviceSerialNumber = string.Empty;
             Firmware = string.Empty;
@@ -72,6 +74,10 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public abstract Guid Id { get; }
 
         public abstract bool Connected { get; }
+
+        public abstract Task<bool> StartTest(BreathTestEnum breathTestEnum);
+
+        public abstract Task<bool> StopTest();
 
         public object NativeDevice { get => _nativeDevice; }
         public EnvironmentalInfo EnvironmentalInfo { get; set; }
@@ -326,7 +332,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
                 {
                     DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
-                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber}");
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber} {DateTime.Now}");
 
                     // update the database
                     //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
@@ -480,12 +486,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
         }
 
         #endregion
+
     }
-
-    //public partial class Device
-    //{
-        
-
-        
-    //}
 }

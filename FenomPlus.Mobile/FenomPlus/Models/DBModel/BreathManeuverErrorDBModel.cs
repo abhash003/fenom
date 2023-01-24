@@ -1,5 +1,6 @@
 ﻿using FenomPlus.Database.Tables;
 using FenomPlus.Enums;
+using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
 using System;
@@ -22,15 +23,17 @@ namespace FenomPlus.Models
         /// <returns></returns>
         public static BreathManeuverErrorDBModel Create(BreathManeuver input)
         {
-            int statusCode = (input.StatusCode >= ErrorCodesEnum.code.Length) ? ErrorCodesEnum.code.Length : input.StatusCode;
+            int statusCode = input.StatusCode;
 
             // Get current version of software
             VersionTracking.Track();
 
             var db = new BreathManeuverErrorDBModel();
-            db.ErrorCode = ErrorCodesEnum.code[statusCode];
-            db.Description = ErrorCodesEnum.title[statusCode];
+
+            db.ErrorCode = ErrorCodeLookup.Lookup(statusCode).Code;
+            db.Description = ErrorCodeLookup.Lookup(statusCode).Message;
             db.SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber;
+
             db.Software = VersionTracking.CurrentVersion;
             db.Firmware = IOC.Services.DeviceService.Current?.Firmware;
             db.DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture);

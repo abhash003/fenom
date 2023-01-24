@@ -28,6 +28,10 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         // Methods
 
+        Task<bool> StartTest(BreathTestEnum breathTestEnum);
+
+        Task<bool> StopTest();
+
         Task ConnectAsync();
 
         Task ConnectToKnownDeviceAsync(Guid id);
@@ -51,6 +55,9 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         BreathManeuver BreathManeuver { get; set; }
         DeviceInfo DeviceInfo { get; set; }
         DebugMsg DebugMsg { get; set; }
+        DeviceStatusInfo DeviceStatusInfo { get; set; }
+        ErrorStatusInfo ErrorStatusInfo { get; set; }
+
         public DeviceCheckEnum CheckDeviceBeforeTest();
 
         EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data);

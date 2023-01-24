@@ -35,62 +35,10 @@ namespace FenomPlus.Droid
             //AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
             AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();            
 
+
             CheckPermissions();
 
             LoadApplication(new App());
-
-#if false
-            // start device service
-            //AppServices.Container.Resolve<IDeviceService>().Start();
-            var svc = AppServices.Container.Resolve<FenomPlus.Services.NewArch.IDeviceService>();
-
-            // wait for the service to connect to the first FENOM device it sees
-            new System.Threading.Tasks.Task(async () =>
-            {
-                IDevice device = null;
-
-                // wait until the service selects a device
-                while ((device = svc.CurrentDevice) == null)
-                {}
-
-                try
-                {
-                    device.OnConnected += (object sender, EventArgs e) =>
-                    {
-                        if (device.Connected)
-                        {
-                            System.Console.WriteLine("Device.OnConnected: passed");
-                        }
-                        else
-                        {
-                            System.Console.WriteLine("Device.OnConnected: failed");
-                        }
-                    };
-
-                    device.OnDisconnected += (object sender, EventArgs e) =>
-                    {
-                        if (!device.Connected)
-                        {
-                            System.Console.WriteLine("Device.OnDisconnected: passed");
-                        }
-                        else
-                        {
-                            System.Console.WriteLine("Device.OnDisconnected: failed");
-                        }
-                    };
-
-                    await device.ConnectAsync();
-
-                    //device.Disconnect();
-
-                }
-                catch (Exception ex)
-                {
-                    throw new NotImplementedException(ex.Message);                    
-                }
-
-            }).Start();
-#endif
         }
 
         protected override void OnStop()
