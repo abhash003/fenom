@@ -229,7 +229,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DEVICEINFO()
+        public override async Task<bool> DEVICEINFO()
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
             return await WRITEREQUEST(message, 1);
@@ -239,7 +239,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> ENVIROMENTALINFO()
+        public override async Task<bool> ENVIROMENTALINFO()
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_ENVIROMENTALINFO);
             return await WRITEREQUEST(message, 1);
@@ -249,7 +249,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
+        public override async Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER, (byte)breathTestEnum);
             return await WRITEREQUEST(message, 1);
@@ -259,7 +259,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> BREATHMANUEVER()
+        public override async Task<bool> BREATHMANUEVER()
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER);
             return await WRITEREQUEST(message, 1);
@@ -280,7 +280,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DEBUGMSG()
+        public override async Task<bool> DEBUGMSG()
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMSG);
             return await WRITEREQUEST(message, 1);
@@ -301,7 +301,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<bool> MESSAGE(MESSAGE message)
+        public override async Task<bool> MESSAGE(MESSAGE message)
         {
             return await WRITEREQUEST(message, 1);
         }
@@ -311,7 +311,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="SerailNumber"></param>
         /// <returns></returns>
-        public async Task<bool> SERIALNUMBER(string SerailNumber)
+        public override async Task<bool> SERIALNUMBER(string SerailNumber)
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_SERIALNUMBER, SerailNumber);
             return await WRITEREQUEST(message, 10);
@@ -322,7 +322,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public async Task<bool> DATETIME(string date, string time)
+        public override async Task<bool> DATETIME(string date, string time)
         {
             string strDateTime;
 
@@ -338,7 +338,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// <param name="iD_SUB"></param>
         /// <param name="cal"></param>
         /// <returns></returns>
-        public async Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
+        public override async Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, iD_SUB, cal1, cal2, cal3);
             return await WRITEREQUEST(message, 24);
@@ -351,7 +351,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        private async Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size)
+        public override async Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size)
         {
             using (var tracer = new Helper.FunctionTrace())
             {

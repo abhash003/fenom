@@ -20,6 +20,7 @@ using Timer = System.Timers.Timer;
 using FenomPlus.Helpers;
 using System.Text;
 using System.Diagnostics;
+using FenomPlus.SDK.Core.Features;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -77,7 +78,27 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> StartTest(BreathTestEnum breathTestEnum);
 
+        public abstract Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size);
+
         public abstract Task<bool> StopTest();
+
+        public abstract Task<bool> DEVICEINFO();
+
+        public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
+
+        public abstract Task<bool> DATETIME(string date, string time);
+
+        public abstract Task<bool> SERIALNUMBER(string SerailNumber);
+
+        public abstract Task<bool> MESSAGE(MESSAGE message);
+
+        public abstract Task<bool> DEBUGMSG();
+
+        public abstract Task<bool> ENVIROMENTALINFO();
+
+        public abstract Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
+
+        public abstract Task<bool> BREATHMANUEVER();
 
         public object NativeDevice { get => _nativeDevice; }
         public EnvironmentalInfo EnvironmentalInfo { get; set; }

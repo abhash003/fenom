@@ -32,11 +32,31 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> StopTest();
 
+        Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size);
+
+        Task<bool> DEVICEINFO();
+
         Task ConnectAsync();
 
         Task ConnectToKnownDeviceAsync(Guid id);
 
         Task DisconnectAsync();
+
+        Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
+
+        Task<bool> DATETIME(string date, string time);
+
+        Task<bool> SERIALNUMBER(string SerailNumber);
+
+        Task<bool> MESSAGE(MESSAGE message);
+
+        Task<bool> DEBUGMSG();
+
+        Task<bool> ENVIROMENTALINFO();
+
+        Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
+
+        Task<bool> BREATHMANUEVER();
 
         /*
          * 
