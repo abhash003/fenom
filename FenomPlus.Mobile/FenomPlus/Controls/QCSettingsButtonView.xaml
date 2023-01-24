@@ -5,7 +5,7 @@
              xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
-             x:Class="FenomPlus.Controls.ImageButtonView">
+             x:Class="FenomPlus.Controls.QCSettingsButtonView">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -42,7 +42,7 @@
         <Grid HorizontalOptions="FillAndExpand" 
               VerticalOptions="FillAndExpand" 
               Grid.Padding="5"
-              x:DataType="controls:ImageButtonViewModel">
+              x:DataType="controls:QCSettingsButtonViewModel">
 
             <Image x:Name="ButtonImage"
                    Source="{Binding ImageName}"

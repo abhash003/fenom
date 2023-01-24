@@ -1,34 +1,36 @@
 ﻿using System;
+using Acr.UserDialogs;
 using FenomPlus.ViewModels;
+using FenomPlus.SDK.Core.Models;
+using FenomPlus.Enums;
+using FenomPlus.Controls;
+using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
-    public partial class QCNegativePassView : BaseContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class QCSettingsView : BaseContentPage
     {
-        private QualityControlViewModel model;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
-        public QCNegativePassView()
+        public QCSettingsView()
         {
             InitializeComponent();
-            BindingContext = model = new QualityControlViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            model.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            model.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            model.NewGlobalData();
         }
     }
 }

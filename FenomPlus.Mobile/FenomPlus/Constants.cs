@@ -7,7 +7,10 @@ namespace FenomPlus
     public static class Constants
     {
         public static string DateTimeFormatString = "O"; // Sortable e.g. “2016-12-20T10:34:37.3456”
+
+        public static string PrettyDateFormatString = "MMMM d, yyyy";
         public static string PrettyTimeFormatString = "MMMM d, yyyy h:mm tt"; // e.g. “November 10, 2022 3:08 PM”
+        public static string PrettyHoursFormatString = "h:mm:ss"; 
 
         public static int DeviceExpired = 0;
         public static int DeviceWarning60Days = 60;

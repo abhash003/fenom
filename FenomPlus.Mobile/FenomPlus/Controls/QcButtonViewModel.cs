@@ -16,7 +16,7 @@ namespace FenomPlus.Controls
         private bool _assigned;
 
         [ObservableProperty] 
-        private string _header = "QC User";
+        private string _title = "QC User";
 
         [ObservableProperty]
         private string _status = "Expired";
@@ -33,12 +33,6 @@ namespace FenomPlus.Controls
         public QcButtonViewModel()
         {
             
-        }
-
-        [RelayCommand]
-        private void ButtonPress()
-        {
-
         }
     }
 }

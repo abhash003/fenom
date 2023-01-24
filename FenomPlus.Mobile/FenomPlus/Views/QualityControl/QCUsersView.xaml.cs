@@ -11,12 +11,12 @@ namespace FenomPlus.Views
 {
     public partial class QualityControlUsersView : BaseContentPage
     {
-        private readonly QCUsersViewModel QualityControlUsersViewModel;
+        private readonly QCUserViewModel QualityControlUserViewModel;
 
         public QualityControlUsersView()
         {
             InitializeComponent();
-            BindingContext = QualityControlUsersViewModel = new QCUsersViewModel();
+            BindingContext = QualityControlUserViewModel = new QCUserViewModel();
             dataGrid.GridStyle = new CustomGridStyle();
         }
 
@@ -64,19 +64,19 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            QualityControlUsersViewModel.OnAppearing();
+            QualityControlUserViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            QualityControlUsersViewModel.OnDisappearing();
+            QualityControlUserViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            QualityControlUsersViewModel.NewGlobalData();
+            QualityControlUserViewModel.NewGlobalData();
         }
     }
 }

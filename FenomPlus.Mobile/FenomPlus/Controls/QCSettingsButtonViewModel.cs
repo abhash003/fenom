@@ -10,12 +10,12 @@ using Xamarin.Forms;
 
 namespace FenomPlus.Controls
 {
-    public partial class ImageButtonViewModel : BaseViewModel
+    public partial class QCSettingsButtonViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string _imageName = string.Empty;
 
-        public ImageButtonViewModel()
+        public QCSettingsButtonViewModel()
         {
             
         }

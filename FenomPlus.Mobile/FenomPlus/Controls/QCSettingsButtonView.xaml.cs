@@ -8,14 +8,14 @@ namespace FenomPlus.Controls
 {
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ImageButtonView
+    public partial class QCSettingsButtonView
     {
         //public event EventHandler Clicked = delegate { };
 
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ImageButtonView), propertyChanged: CommandUpdated);
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ImageButtonView), propertyChanged: CommandParameterUpdated);
-        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(ImageButtonView), propertyChanged: EnabledUpdated);
-        public static readonly BindableProperty ImageNameProperty = BindableProperty.Create(nameof(ImageName), typeof(string), typeof(ImageButtonView), propertyChanged: ImageUpdated);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(QCSettingsButtonView), propertyChanged: CommandUpdated);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(QCSettingsButtonView), propertyChanged: CommandParameterUpdated);
+        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(QCSettingsButtonView), propertyChanged: EnabledUpdated);
+        public static readonly BindableProperty ImageNameProperty = BindableProperty.Create(nameof(ImageName), typeof(string), typeof(QCSettingsButtonView), propertyChanged: ImageUpdated);
 
         public ICommand Command
         {
@@ -42,7 +42,7 @@ namespace FenomPlus.Controls
         }
 
 
-        public ImageButtonView()
+        public QCSettingsButtonView()
         {
             InitializeComponent();
 
@@ -55,7 +55,7 @@ namespace FenomPlus.Controls
 
         private static void CommandUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is ImageButtonView imageButton && newValue is ICommand newCommand)
+            if (sender is QCSettingsButtonView imageButton && newValue is ICommand newCommand)
             {
                 imageButton.InnerButton.Command = newCommand;
             }
@@ -63,7 +63,7 @@ namespace FenomPlus.Controls
 
         private static void CommandParameterUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is ImageButtonView imageButton && newValue != null)
+            if (sender is QCSettingsButtonView imageButton && newValue != null)
             {
                 imageButton.InnerButton.CommandParameter = newValue;
             }
@@ -71,7 +71,7 @@ namespace FenomPlus.Controls
 
         private static void EnabledUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is ImageButtonView imageButton && newValue != null)
+            if (sender is QCSettingsButtonView imageButton && newValue != null)
             {
                 imageButton.InnerButton.IsEnabled = (bool)newValue;
             }
@@ -79,7 +79,7 @@ namespace FenomPlus.Controls
 
         private static void ImageUpdated(object sender, object oldValue, object newValue)
         {
-            if (sender is ImageButtonView imageButton && newValue != null)
+            if (sender is QCSettingsButtonView imageButton && newValue != null)
             {
                 imageButton.ButtonImage.Source = (string)newValue;
             }

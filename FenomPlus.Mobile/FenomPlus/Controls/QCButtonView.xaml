@@ -6,13 +6,14 @@
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
              xmlns:converters="http://xamarin.com/schemas/2020/toolkit"
-             x:Class="FenomPlus.Controls.QCButton">
+             x:Class="FenomPlus.Controls.QCButtonView">
 
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentView.Resources>
+
 
     <buttons:SfButton x:Name="InnerButton" 
                     HasShadow="True" 
@@ -38,7 +39,9 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" x:DataType="controls:QcButtonViewModel">
+        <Grid HorizontalOptions="FillAndExpand" 
+              VerticalOptions="FillAndExpand"
+              x:DataType="controls:QcButtonViewModel">
 
             <Grid HorizontalOptions="FillAndExpand" 
                   VerticalOptions="FillAndExpand" 
