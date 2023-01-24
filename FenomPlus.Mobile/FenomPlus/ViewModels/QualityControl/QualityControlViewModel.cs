@@ -34,73 +34,37 @@ namespace FenomPlus.ViewModels
 
         public string CurrentSerialNumber => $"Device Serial Number ({Services?.Cache?.DeviceSerialNumber})";
 
+        public QCUser CurrentQcUser;
 
-        public List<QCDevice> AllDevices => GetAllDevices();
-        public List<QCUser> AllUsers => GetAllUsers();
-        public List<QCTest> AllTests => GetAllTests();
 
-        private readonly string QCDeviceRecordsPath;
+        public List<QCUser> AllDevices => GetAllQcDevices();
+        public List<QCUser> AllUsers => ReadAllQcUsers(Services?.Cache?.DeviceSerialNumber);
+        public List<QCTest> AllTests => ReadAllQcTests(Services?.Cache?.DeviceSerialNumber, CurrentQcUser.UserName);
+
         private readonly string QCUserRecordsPath;
         private readonly string QCTestRecordsPath;
 
         public QualityControlViewModel()
         {
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            QCDeviceRecordsPath = Path.Combine(localFolder, @"QCDeviceRecords.db");
             QCUserRecordsPath = Path.Combine(localFolder, @"QCUserRecords.db");
             QCTestRecordsPath = Path.Combine(localFolder, @"QCTestRecords.db");
 
             // ToDo: Read from database
-            MockData();
+            //MockData();
         }
-
-        private void MockData()
-        {
-
-
-            //var negativeControlTable = new QCNegativeControlTable();
-
-            //var userTable1 = new QCUserTable(serial, "Jim");
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable1.TestStatus
-            //    userTable1.TestDate
-
-
-
-
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 25));
-            //newDevice.Users.Add(userTable1);
-
-            //var userTable2 = new QCUserTable(serial, "Bob");
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 19));
-            //newDevice.Users.Add(userTable2);
-
-            //var userTable3 = new QCUserTable(serial, "Vinh");
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 31));
-            //newDevice.Users.Add(userTable3);
-        }
-
-
 
         // Required for QualityControlView (Hub)
-        private QCDevice QCDevice;
-        private QCUser QCNegativeControl;
-        private List<QCUser> QCUsers;
+        private QCUser QCDevice; // For a specific device with unique serial number - only one per device
+        private QCUser QCNegativeControl; // For a specific device with unique serial number - only one per device
+        private List<QCUser> QCUsers; // Users assigned to a device with the device's serial number
 
         private bool CheckDeviceConnection()
         {
             if (Services?.DeviceService?.Current == null)
                 return false;
-
-            bool deviceIsConnected = Services.DeviceService.Current.Connected;
-
-            // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
-            return deviceIsConnected;
+ 
+            return Services.DeviceService.Current.Connected; ;
         }
 
         public void LoadData()
@@ -113,28 +77,22 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            WipeDataTables();
+            WipeDataBase(); // ToDo: Fro debugging only
 
             // Get currently connected device's status or create a new one
-            QCDevice = GetDeviceQCInfo();
+            QCDevice = ReadQcDevice(Services?.Cache?.DeviceSerialNumber);
 
             // Get currently connected device's negative control or create one
-            QCNegativeControl = GetNegativeControl();
+            QCNegativeControl = ReadQcNegativeControl(Services?.Cache?.DeviceSerialNumber);
 
             // Get all users for this currently connected device
-            QCUsers = GetAllDeviceUsers();
+            QCUsers = ReadAllQcUsers(Services?.Cache?.DeviceSerialNumber);
 
             InitializeUserButtonViewModels();
         }
 
-        private void WipeDataTables()
+        private void WipeDataBase()
         {
-            using (var db = new LiteDatabase(QCDeviceRecordsPath))
-            {
-                var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
-                deviceCollection.DeleteAll();
-            }
-
             using (var db = new LiteDatabase(QCUserRecordsPath))
             {
                 var usersCollection = db.GetCollection<QCUser>("qcusers");
@@ -148,73 +106,535 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private void DeleteDevice()
+
+
+        #region "QC Device CRUD"
+
+        private QCUser CreateQcDevice(string serialNumber)
         {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
+            if (string.IsNullOrEmpty(serialNumber))
             {
-                // ToDo: alert user
-                return;
+                return null;
             }
 
-            // Delete the QC Device record
-            using var db = new LiteDatabase(QCDeviceRecordsPath);
-
-            var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
-
-            var qcDevice = deviceCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber);
-
-            if (qcDevice != null)
+            try
             {
-                deviceCollection.Delete(qcDevice.DeviceId);
+                var newDevice = new QCUser(serialNumber, QCUser.DeviceName, QCUser.DeviceInsufficientData, DateTime.Now, DateTime.MinValue, DateTime.MinValue);
+
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Insert(newDevice);
+                    userCollection.EnsureIndex(x => x.DeviceSerialNumber);
+                }
+
+                return newDevice;
             }
-
-            // Delete the QC Negative Control Record
-
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var qcNegativeControl = usersCollection.Query()
-                .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == "Negative Control")
-                .ToList();
-
-            // Delete all QC Users for this device
-            if (qcNegativeControl != null)
+            catch (Exception e)
             {
-                // ToDo: Implement
-                //usersCollection.Delete(qcNegativeControl);
+                Debug.WriteLine(e);
+                return null;
             }
-
-            // Delete all associated tests
-            DeleteAllDeviceTests();
         }
 
-        #region "QC Device"
-
-        private QCDevice GetDeviceQCInfo()
+        private QCUser ReadQcDevice(string serialNumber)
         {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
+            if (string.IsNullOrEmpty(serialNumber))
             {
-                // ToDo: alert user
                 return null;
             }
 
             // Only ONE in the collection
-            QCDevice qcDevice = null;
+            using (var db = new LiteDatabase(QCUserRecordsPath))
+            {
+                try
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
 
-            using var db = new LiteDatabase(QCDeviceRecordsPath);
-            var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
+                    var devices = userCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == QCUser.DeviceName)
+                        .ToList();
 
-            qcDevice = deviceCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber);
-
-            // If it doesn't exist for this device, create one
-            //if (qcDevice == null)
-            //{
-            //    qcDevice = new QCDevice(Services.Cache.DeviceSerialNumber, "Insufficient Data");
-            //    deviceCollection.Insert(qcDevice);
-            //    deviceCollection.EnsureIndex(x => x.DeviceSerialNumber); // ToDo: Do I need this?
-            //}
-
-            return qcDevice;
+                    // Should only be one for each device serial number
+                    return devices.Count == 1 ? devices[0] : null;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    return null;
+                }
+            }
         }
+
+        private bool UpdateQcDevice(QCUser device)
+        {
+            if (device == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Update(device);
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private bool DeleteQcDevice(QCUser device)
+        {
+            if (device == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    // Get all user records for this device
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Delete(device.Id);
+ 
+                    // Get all test records for this device
+                    var testsCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testsCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == device.DeviceSerialNumber)
+                        .ToList();
+
+                    foreach (var t in tests)
+                    {
+                        testsCollection.Delete(t.Id);
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private List<QCUser> GetAllQcDevices()
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+
+                    var devices = userCollection.Query()
+                        .Where(x => x.UserName == QCUser.DeviceName)
+                        .ToList();
+
+                    return devices;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new List<QCUser>(); // Empty
+            }
+        }
+
+        #endregion
+
+
+        #region "QC Negative Control CRUD"
+
+        private QCUser CreateQcNegativeControl(string serialNumber)
+        {
+            if (string.IsNullOrEmpty(serialNumber))
+            {
+                return null;
+            }
+
+            try
+            {
+                var newNegativeControl = new QCUser(serialNumber, QCUser.NegativeControlName, QCUser.NegativeControlNone, DateTime.Now, DateTime.MinValue, DateTime.MinValue);
+
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Insert(newNegativeControl);
+                    userCollection.EnsureIndex(x => x.DeviceSerialNumber);
+                }
+
+                return newNegativeControl;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        private QCUser ReadQcNegativeControl(string serialNumber)
+        {
+            if (string.IsNullOrEmpty(serialNumber))
+            {
+                return null;
+            }
+
+            // Only ONE in the collection
+            using (var db = new LiteDatabase(QCUserRecordsPath))
+            {
+                try
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+
+                    var negativeControls = userCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == QCUser.NegativeControlName)
+                        .ToList();
+
+                    // Should only be one for each device serial number
+                    return negativeControls.Count == 1 ? negativeControls[0] : null;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    return null;
+                }
+            }
+        }
+
+        private bool UpdateQcNegativeControl(QCUser negativeControl)
+        {
+            if (negativeControl == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Update(negativeControl);
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private bool DeleteQcNegativeControl(QCUser negativeControl)
+        {
+            if (negativeControl == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    // Get all user records for this device
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Delete(negativeControl.Id);
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private List<QCUser> GetAllNegativeControls()
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+
+                    var negativeControls = userCollection.Query()
+                        .Where(x => x.UserName == QCUser.NegativeControlName)
+                        .ToList();
+
+                    return negativeControls;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new List<QCUser>(); // Empty
+            }
+        }
+
+        #endregion
+
+
+        #region "QC Users CRUD"
+
+        private QCUser CreateQcUser(string serialNumber, string userName)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
+            {
+                return null;
+            }
+
+            try
+            {
+                var newQcUser = new QCUser(serialNumber, userName, QCUser.UserNone, DateTime.Now, DateTime.MinValue, DateTime.MinValue);
+
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Insert(newQcUser);
+                    userCollection.EnsureIndex(x => x.DeviceSerialNumber);
+                }
+
+                return newQcUser;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        private QCUser ReadQcUser(string serialNumber, string userName)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
+            {
+                return null;
+            }
+
+            using (var db = new LiteDatabase(QCUserRecordsPath))
+            {
+                try
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+
+                    var user = userCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == userName)
+                        .ToList();
+
+                    // Should only be one for each device serial number
+                    return user.Count == 1 ? user[0] : null;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    return null;
+                }
+            }
+        }
+
+        private bool UpdateQcUser(QCUser user)
+        {
+            if (user == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Update(user);
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private bool DeleteQcUser(QCUser user)
+        {
+            if (user == null)
+            {
+                return false; 
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    // Get all user records for this device
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+                    userCollection.Delete(user.Id);
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private List<QCUser> ReadAllQcUsers(string serialNumber)
+        {
+            if (string.IsNullOrEmpty(serialNumber))
+            {
+                return new List<QCUser>(); // Empty
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCUserRecordsPath))
+                {
+                    var userCollection = db.GetCollection<QCUser>("qcusers");
+
+                    var users = userCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber)
+                        .ToList();
+
+                    return users;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new List<QCUser>(); // Empty
+            }
+        }
+
+        #endregion
+
+
+        #region "QCTests CRUD"
+
+        private QCTest CreateQcTest(string serialNumber, string userName, int result)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName) || result <= 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                var newTest = new QCTest(Services.Cache.DeviceSerialNumber, userName, DateTime.Now, result);
+
+                using (var db = new LiteDatabase(QCTestRecordsPath))
+                {
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    testCollection.Insert(newTest);
+                    testCollection.EnsureIndex(x => x.DeviceSerialNumber);
+                }
+
+                return newTest;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        private List<QCTest> ReadQcTests(string serialNumber, string userName)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
+            {
+                return new List<QCTest>(); // Empty
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCTestRecordsPath))
+                {
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == userName)
+                        .ToList();
+
+                    return tests;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return new List<QCTest>(); // Empty
+            }
+        }
+
+        // No updates to QC Tests
+
+        private bool DeleteAllQcTests(string serialNumber, string userName)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
+            {
+                return false;
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCTestRecordsPath))
+                {
+                    // Get all user records for this device
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == userName)
+                        .ToList();
+
+                    foreach (var t in tests)
+                    {
+                        testCollection.Delete(t.Id);
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        private List<QCTest> ReadAllQcTests(string serialNumber, string userName)
+        {
+            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
+            {
+                return new List<QCTest>(); // Empty
+            }
+
+            try
+            {
+                using (var db = new LiteDatabase(QCTestRecordsPath))
+                {
+                    // Get all user records for this device
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == userName)
+                        .ToList();
+                    return tests;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return new List<QCTest>(); // Empty
+            }
+        }
+
+        #endregion
 
         private void InitializeUserButtonViewModels()
         {
@@ -357,344 +777,35 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private void UpdateDeviceQCStatus(string status)
+        private void MockData()
         {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
 
-            // Only ONE in the collection
 
-            using var db = new LiteDatabase(QCDeviceRecordsPath);
-            var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
+            //var negativeControlTable = new QCNegativeControlTable();
 
-            var qcDevice = deviceCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber);
+            //var userTable1 = new QCUserTable(serial, "Jim");
+            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 20));
+            //userTable1.TestStatus
+            //    userTable1.TestDate
 
-            if (qcDevice != null)
-            {
-                qcDevice.DeviceStatus = status;
-                deviceCollection.Update(qcDevice);
-            }
+
+
+
+            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 30));
+            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 25));
+            //newDevice.Users.Add(userTable1);
+
+            //var userTable2 = new QCUserTable(serial, "Bob");
+            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 20));
+            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 30));
+            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 19));
+            //newDevice.Users.Add(userTable2);
+
+            //var userTable3 = new QCUserTable(serial, "Vinh");
+            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 20));
+            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 30));
+            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 31));
+            //newDevice.Users.Add(userTable3);
         }
-
-        private List<QCDevice> GetAllDevices()
-        {
-            using var db = new LiteDatabase(QCDeviceRecordsPath);
-            var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
-
-            var devices = deviceCollection.FindAll()
-                .OrderBy(x => x.DeviceSerialNumber)
-                .ToList();
-
-            return devices;
-        }
-
-        #endregion
-
-        #region "QC Negative Control"
-
-        // Gets existing Negative Control or creates one based on device serial number
-        private QCUser GetNegativeControl()
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return null;
-            }
-
-            QCUser qcNegativeControl = null;
-
-            // Only ONE in the collection
-            using (var db = new LiteDatabase(QCUserRecordsPath))
-            {
-                var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-                var users = usersCollection.Query()
-                    .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == "Negative Control")
-                    .OrderBy(x => x.UserName)
-                    .ToList();
-
-                if (users.Count <= 0)
-                {
-                    qcNegativeControl = new QCUser(Services.Cache.DeviceSerialNumber, "Negative Control", "None", DateTime.Now, DateTime.MinValue, DateTime.MinValue);
-                    usersCollection.Insert(qcNegativeControl);
-                    usersCollection.EnsureIndex(x=> x.DeviceSerialNumber);
-                }
-                else
-                {
-                    qcNegativeControl = users[0];
-                }
-            }
-
-
-            return qcNegativeControl;
-        }
-
-        private void UpdateNegativeControl(string status, DateTime expiresDate, DateTime nextTestDate)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Only ONE in the collection
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var qcNegativeControl = usersCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == "Negative Control");
-
-            if (qcNegativeControl != null)
-            {
-                qcNegativeControl.CurrentStatus = status;
-                qcNegativeControl.ExpiresDate = expiresDate;
-                qcNegativeControl.NextTestDate = nextTestDate;
-                usersCollection.Update(qcNegativeControl);
-            }
-        }
-
-        private void DeleteNegativeControl()
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Only ONE in the collection
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var user = usersCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == "Negative Control");
-            usersCollection.Delete(user.UserId);
-        }
-
-        #endregion
-
-        #region "QC Users"
-
-        private List<QCUser> GetAllDeviceUsers()
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return new List<QCUser>();
-            }
-
-            // Multiples in the collection
-            List<QCUser> users = null;
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            users = usersCollection.Query()
-                .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName != "Negative Control")
-                .OrderBy(x => x.UserName)
-                .ToList();
-
-            //if (users == null)
-            //{
-            //    users = new List<QCUser>();
-            //    usersCollection.Insert(users);
-            //    usersCollection.EnsureIndex(x => x.DeviceSerialNumber); // ToDo: Do I need this?
-            //}
-
-            //if (users.Count <= 0)
-            //{
-            //    qcNegativeControl = new QCUser(Services.Cache.DeviceSerialNumber, "Negative Control", "None", DateTime.Now, DateTime.MinValue, DateTime.MinValue);
-            //    usersCollection.Insert(qcNegativeControl);
-            //}
-            //else
-            //{
-            //    qcNegativeControl = users[0];
-            //}
-
-            return users;
-        }
-
-        private QCUser AddDeviceUser(string userName)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return null;
-            }
-
-            // Only ONE in the collection
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var newUser = new QCUser(Services.Cache.DeviceSerialNumber, userName, "None", DateTime.Now, DateTime.MinValue, DateTime.MinValue);
-            usersCollection.Insert(newUser);
-
-            return newUser;
-        }
-
-        private void UpdateDeviceUser(string userName, string status, DateTime expiresDate, DateTime nextTestDate)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Only ONE in the collection
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var user = usersCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == userName);
-
-            if (user != null)
-            {
-                user.CurrentStatus = status;
-                user.ExpiresDate = expiresDate;
-                user.NextTestDate = nextTestDate;
-                usersCollection.Update(user);
-            }
-        }
-
-        private void DeleteDeviceUser(string userName)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Only ONE in the collection
-
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var user = usersCollection.FindOne(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == userName);
-            usersCollection.Delete(user.UserId);
-        }
-
-        private List<QCUser> GetAllUsers()
-        {
-            using var db = new LiteDatabase(QCUserRecordsPath);
-            var usersCollection = db.GetCollection<QCUser>("qcusers");
-
-            var users = usersCollection.FindAll()
-                .OrderBy(x => x.UserName)
-                .ToList();
-
-            return users;
-        }
-
-        #endregion
-
-        #region "QCTests"
-
-        private List<QCTest> GetTests(string userName)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return new List<QCTest>();
-            }
-
-            // Multiples in the collection
-            List<QCTest> tests = null;
-
-            using var db = new LiteDatabase(QCTestRecordsPath);
-            var testsCollection = db.GetCollection<QCTest>("qctests");
-
-            if (testsCollection.Count() > 0)
-            {
-                tests = testsCollection.Query()
-                    .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == userName)
-                    .OrderBy(x => x.TestDate)
-                    .ToList();
-            }
-
-            if (tests == null)
-            {
-                tests = new List<QCTest>();
-                testsCollection.Insert(tests);
-                testsCollection.EnsureIndex(x => x.DeviceSerialNumber); // ToDo: Do I need this?
-            }
-
-            return tests;
-        }
-
-        private void AddTest(string userName, string status, int result)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Multiples in the collection
-
-            using var db = new LiteDatabase(QCTestRecordsPath);
-            var testsCollection = db.GetCollection<QCTest>("qctests");
-
-            var newTest = new QCTest(Services.Cache.DeviceSerialNumber, userName, DateTime.Now, result);
-            testsCollection.Insert(newTest);
-        }
-
-        private void DeleteAllUserTests(string userName)
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Multiples in the collection
-
-            using var db = new LiteDatabase(QCTestRecordsPath);
-            var testsCollection = db.GetCollection<QCTest>("qctests");
-
-            var tests = testsCollection.Query()
-                .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber && x.UserName == userName)
-                .ToList();
-
-            // ToDo: Implement
-            //testsCollection.DeleteMany(tests);
-        }
-
-        private void DeleteAllDeviceTests()
-        {
-            if (string.IsNullOrEmpty(Services?.Cache?.DeviceSerialNumber))
-            {
-                // ToDo: alert user
-                return;
-            }
-
-            // Multiples in the collection
-
-            using var db = new LiteDatabase(QCTestRecordsPath);
-            var testsCollection = db.GetCollection<QCTest>("qctests");
-
-            var tests = testsCollection.Query()
-                .Where(x => x.DeviceSerialNumber == Services.Cache.DeviceSerialNumber)
-                .ToList();
-
-            // ToDo: Implement
-            //testsCollection.DeleteMany(tests);
-        }
-
-        private List<QCTest> GetAllTests()
-        {
-            using var db = new LiteDatabase(QCTestRecordsPath);
-            var testsCollection = db.GetCollection<QCTest>("qctests");
-
-            var tests = testsCollection.FindAll()
-                .OrderBy(x => x.TestDate)
-                .ToList();
-
-            return tests;
-        }
-
-        #endregion
     }
 }

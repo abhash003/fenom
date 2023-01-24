@@ -8,13 +8,52 @@ namespace FenomPlus.ViewModels.QualityControl
 {
     public class QCUser
     {
-        public ObjectId UserId { get; }
+        // Unique User Names stored in Users Table
+        public const string DeviceName = "Device";
+        public const string NegativeControlName = "Negative Control";
 
-        public string DeviceSerialNumber { get; set; }
+        // Status for Device...
 
-        public string UserName { get; set; }  // User name
+        //•	Pass
+        //    - Negative Control status is “Pass” and
+        //    - QC User status is “Conditionally Qualified” or “Qualified”.
+        //    - Both tests were done in the last 24 hours.
 
-        // Status...
+        //•	Fail
+        //    - Negative Control status is “Fail” or
+        //    - QC User status is “Disqualified”.
+        //o Both tests were done in the last 24 hours.
+
+        //•	Expired
+        //    - Negative Control status is “Pass” and
+        //    - QC User Qualification or Validity period is “Expired”.
+        //o No tests have been done in the last 24 hours.
+
+        //•	Insufficient Data
+        //    - Negative Control status is “None”, test is required or
+        //    - QC User test is “None”, test is required.
+
+        public const string DevicePass = "Pass";
+        public const string DeviceFail = "Fail";
+        public const string DeviceExpired = "Expired";
+        public const string DeviceInsufficientData = "Insufficient Data";
+
+
+        // Status for Negative Control...
+
+        //•	Pass
+        //    - Negative Control value of ≤5 ppb.
+        //•	Fail
+        //    - Negative Control value of >5 ppb.
+        //•	None
+        //    - Negative Control test is required.
+
+        public const string NegativeControlPass = "Pass";
+        public const string NegativeControlFail = "Fail";
+        public const string NegativeControlNone = "None";
+
+
+        // Status for User...
 
         //•	Conditionally Qualified
         //     - Fewer than 4 tests have been performed by the QC User.
@@ -29,6 +68,17 @@ namespace FenomPlus.ViewModels.QualityControl
         //•	None
         //      - QC User test is required.
 
+        public const string UserConditionallyQualified = "Conditionally Qualified";
+        public const string UserQualified = "Qualified";
+        public const string UserDisqualified = "Disqualified";
+        public const string UserNone = "None";
+
+        public ObjectId Id { get; set; }
+
+        public string DeviceSerialNumber { get; set; }
+
+        public string UserName { get; set; }  // User name
+
         public string CurrentStatus { get; set; }
 
         public DateTime DateCreated { get; set; }  // Date created
@@ -39,7 +89,7 @@ namespace FenomPlus.ViewModels.QualityControl
 
         public QCUser(string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
         {
-            UserId = ObjectId.NewObjectId();
+            Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             UserName = userName;
             CurrentStatus = status;
@@ -50,9 +100,9 @@ namespace FenomPlus.ViewModels.QualityControl
         }
 
         [BsonCtor]
-        public QCUser(ObjectId userId, string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
+        public QCUser(ObjectId id, string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
         {
-            UserId = userId;
+            Id = id;
             DeviceSerialNumber = deviceSerialNumber;
             UserName = userName;
             CurrentStatus = status;

@@ -7,7 +7,7 @@ namespace FenomPlus.ViewModels.QualityControl
 {
     public class QCTest
     {
-        public ObjectId TestId { get; }
+        public ObjectId Id { get; }
 
         public string DeviceSerialNumber { get; }
 
@@ -20,7 +20,7 @@ namespace FenomPlus.ViewModels.QualityControl
 
         public QCTest(string deviceSerialNumber, string userName, DateTime testDate, int testResult)
         {
-            TestId = ObjectId.NewObjectId();
+            Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             UserName = userName;
             TestDate = testDate;
@@ -28,9 +28,9 @@ namespace FenomPlus.ViewModels.QualityControl
         }
 
         [BsonCtor]
-        public QCTest(ObjectId testId, string deviceSerialNumber, string userName, DateTime testDate, int testResult)
+        public QCTest(ObjectId id, string deviceSerialNumber, string userName, DateTime testDate, int testResult)
         {
-            TestId = testId;
+            Id = id;
             DeviceSerialNumber = deviceSerialNumber;
             UserName = userName;
             TestDate = testDate;

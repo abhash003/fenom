@@ -111,6 +111,7 @@
     <Compile Remove="ViewModels\BreathTest\StartTestViewModel.cs" />
     <Compile Remove="ViewModels\MainViewModel.cs" />
     <Compile Remove="ViewModels\Other\StatusDeviceInfoViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCDevice.cs" />
     <Compile Remove="ViewModels\QualityControl\QCNegativeControlViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\QCUserViewModel.cs" />
     <Compile Remove="Views\BreathTest\StartTestView.xaml.cs" />
