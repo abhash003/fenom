@@ -69,13 +69,6 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged("RecentErrorsData");
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+                
     }
 }

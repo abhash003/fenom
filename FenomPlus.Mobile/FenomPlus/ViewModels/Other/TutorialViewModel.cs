@@ -262,9 +262,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
+        public void NewGlobalData()
+        {            
             GaugeData = Services.DeviceService.Current.BreathFlow;
         }
 

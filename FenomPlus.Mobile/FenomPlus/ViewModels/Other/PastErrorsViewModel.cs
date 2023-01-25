@@ -61,12 +61,7 @@ namespace FenomPlus.ViewModels
 
                 RecentErrorsData.Add(record.ConvertForGrid());
             }
-        }
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        }        
 
         public override void OnAppearing()
         {

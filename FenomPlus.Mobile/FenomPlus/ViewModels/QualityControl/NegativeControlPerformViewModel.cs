@@ -59,10 +59,6 @@ namespace FenomPlus.ViewModels
 
         private bool Stop;
         private int TestSeconds;
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        
     }
 }

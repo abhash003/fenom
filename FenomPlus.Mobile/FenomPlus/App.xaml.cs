@@ -50,22 +50,7 @@ namespace FenomPlus
         {
             base.OnResume();
         }
-
-        public static void NotifyViews()
-        {
-            if (AppShell != null)
-            {
-                AppShell.NotifyViews();
-            }
-        }
-
-        public static void NotifyViewModels()
-        {
-            if (AppShell != null)
-            {
-                AppShell.NotifyViewModels();
-            }
-        }
+        
 
         public static Page GetCurrentPage()
         {

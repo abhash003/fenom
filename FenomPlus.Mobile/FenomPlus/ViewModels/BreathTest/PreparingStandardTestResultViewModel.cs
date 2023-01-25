@@ -66,10 +66,6 @@ namespace FenomPlus.ViewModels
 
             return (Services.DeviceService.Current.FenomReady == false);
         }
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        
     }
 }
