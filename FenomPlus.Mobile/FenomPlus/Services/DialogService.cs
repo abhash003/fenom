@@ -1,8 +1,10 @@
 ﻿
 using Acr.UserDialogs;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FenomPlus.Interfaces;
+using Xamarin.Forms;
 
 namespace FenomPlus.Services
 {
@@ -19,50 +21,67 @@ namespace FenomPlus.Services
         }
 
         private IProgressDialog SecondsProgressDialog;
+        private int ProgressValue = 0;
 
         public async Task ShowSecondsProgressAsync(string message, int seconds)
         {
             if (SecondsProgressDialog is { IsShowing: true })
                 return;
 
-            SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
+            //SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
 
             double increment = Convert.ToDouble(100 / seconds);
 
-            for (int i = 0; i < 100; i++)
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+
+            //    if (SecondsProgressDialog.PercentComplete >= 99)
+            //    {
+            //        DismissSecondsProgressDialog();
+            //    }
+            //    else
+            //    {
+            //        await Task.Delay(1000);
+            //    }
+            //}
+
+            ProgressValue = 0;
+
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
+                using (SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None))
+                {
+                    await Task.Run(async () =>
+                    {
+                        for (int i = 0; i < 100; i++)
+                        {
+                            int newProgress = Convert.ToInt32(i * increment);
+                            if (newProgress > ProgressValue)
+                            {
+                                ProgressValue = newProgress;
+                            }
 
-                if (SecondsProgressDialog.PercentComplete >= 99)
-                {
-                    SecondsProgressDialog.Dispose();
+                            if (ProgressValue > SecondsProgressDialog.PercentComplete)
+                            {
+                                SecondsProgressDialog.PercentComplete = ProgressValue;
+
+                                if (SecondsProgressDialog.PercentComplete >= 99)
+                                {
+                                    DismissSecondsProgressDialog();
+                                }
+                                else
+                                {
+                                    await Task.Delay(1000);
+                                }
+                            }
+
+
+                        }
+                    });
                 }
-                else
-                {
-                    await Task.Delay(1000);
-                }
-            }
+            });
         }
-
-        //public IProgressDialog ShowSecondsProgress(string message, int seconds)
-        //{
-        //    if (SecondsProgressDialog is { IsShowing: true })
-        //        return
-
-        //    SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
-
-        //    double increment = Convert.ToDouble(100 / seconds);
-
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
-
-        //        if (SecondsProgressDialog.PercentComplete >= 99)
-        //        {
-        //            SecondsProgressDialog.Dispose();
-        //        }
-        //    }
-        //}
 
         public bool SecondsProgressDialogShowing()
         {
@@ -74,8 +93,11 @@ namespace FenomPlus.Services
 
         public void DismissSecondsProgressDialog()
         {
-            SecondsProgressDialog.Hide();
-            SecondsProgressDialog.Dispose();
+            if (SecondsProgressDialog != null)
+            {
+                SecondsProgressDialog.Hide();
+                SecondsProgressDialog.Dispose();
+            }
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)
