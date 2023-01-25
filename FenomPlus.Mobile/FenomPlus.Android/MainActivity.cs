@@ -30,9 +30,7 @@ namespace FenomPlus.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
             // register the navigation here
-            AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();
-            //AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();
-            //AppServices.Container.Register<FenomPlus.Services.NewArch.IDeviceService, FenomPlus.Services.NewArch.DeviceService> ().AsSingleton();
+            AppServices.Container.Register<INavigationService, NavigationService>().AsSingleton();            
             AppServices.Container.Register<IDeviceService, DeviceService>().AsSingleton();            
 
 
