@@ -78,6 +78,8 @@ namespace FenomPlus.Droid
                 Manifest.Permission.AccessCoarseLocation,
                 Manifest.Permission.AccessFineLocation,
                 Manifest.Permission_group.BluetoothNetwork,
+                Manifest.Permission.WriteExternalStorage,
+                Manifest.Permission.ReadExternalStorage,
                 Manifest.Permission_group.Location
             };
 
