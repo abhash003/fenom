@@ -50,7 +50,6 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            StatusViewModel.NewGlobalData();
         }
 
         private void DeviceInfo_OnClicked(object sender, EventArgs e)

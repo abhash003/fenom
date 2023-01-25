@@ -123,13 +123,6 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged("GaugeStatus");
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        
     }
 }

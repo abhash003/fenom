@@ -97,10 +97,5 @@ namespace FenomPlus.ViewModels
             base.OnDisappearing();
             PlaySounds.StopAll();
         }
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
     }
 }

@@ -83,18 +83,12 @@ namespace FenomPlus.ViewModels
 
         public virtual void OnAppearing()
         {
-            NewGlobalData();
+            
         }
 
         public virtual void OnDisappearing()
         {
         }
-
-        public virtual void NewGlobalData()
-        {
-            //StatusViewModel.RefreshStatus();
-            //DeviceSerialNumber = Services.Cache.DeviceSerialNumber;
-            //Firmware = Services.Cache.Firmware;
-        }
+        
     }
 }

@@ -58,9 +58,5 @@ namespace FenomPlus.ViewModels
         }
 
 
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
     }
 }

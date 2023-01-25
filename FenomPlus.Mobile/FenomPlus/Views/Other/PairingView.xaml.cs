@@ -39,7 +39,6 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            PairingViewModel.NewGlobalData();
         }
     }
 }

@@ -26,12 +26,6 @@ namespace FenomPlus.Controls
             base.OnDisappearing();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        
     }
 }

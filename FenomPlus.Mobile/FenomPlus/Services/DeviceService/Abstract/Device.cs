@@ -132,9 +132,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             get => _deviceConnectedStatus;
             set
             {
-                _deviceConnectedStatus = value;
-                NotifyViews();
-                NotifyViewModels();
+                _deviceConnectedStatus = value;                
             }
         }
 
@@ -145,8 +143,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
             set
             {
                 _firmware = value;
-                NotifyViews();
-                NotifyViewModels();
             }
         }
 
@@ -157,8 +153,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
             set
             {
                 _deviceSerialNumber = value;
-                NotifyViews();
-                NotifyViewModels();
             }
         }
 
@@ -333,9 +327,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 EnvironmentalInfo.Decode(data);
 
                 BatteryLevel = EnvironmentalInfo.BatteryLevel;
-
-                NotifyViews();
-                NotifyViewModels();
+                
             }
             finally { }
             return EnvironmentalInfo;
@@ -364,9 +356,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
-
-                NotifyViews();
-                NotifyViewModels();
+                
             }
             finally { }
             return DeviceInfo;
@@ -378,9 +368,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
             {
                 ErrorStatusInfo ??= new ErrorStatusInfo();
                 ErrorStatusInfo.Decode(data);
-
-                NotifyViews();
-                NotifyViewModels();
             }
             finally { }
             return ErrorStatusInfo;
@@ -392,9 +379,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             {
                 DeviceStatusInfo ??= new DeviceStatusInfo();
                 DeviceStatusInfo.Decode(data);
-
-                NotifyViews();
-                NotifyViewModels();
+                                
             }
             finally { }
             return DeviceStatusInfo;
@@ -436,10 +421,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     // get the noscores
                     NOScore = BreathManeuver.NOScore;
                 }
-
-                NotifyViews();
-
-                NotifyViewModels();
+                                
 
             }
             finally { }
@@ -480,25 +462,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #endregion
 
-        #region Notify View and View Models
-        // ToDo: Remove - bad design
-        private void NotifyViews()
-        {
-            App.NotifyViews();
-        }
-
-        // ToDo: Remove - bad design
-        private void NotifyViewModels()
-        {
-            App.NotifyViewModels();
-        }
-
-        #endregion
-
-        
-
-        
-
+       
         #region Dispose
 
         public void Dispose()
