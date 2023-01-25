@@ -34,8 +34,8 @@ namespace FenomPlus.ViewModels
 
         private void UpdateError()
         {
-            int statusCode = Services.Cache.BreathManeuver.StatusCode;
 
+            int statusCode = Services.DeviceService.Current.BreathManeuver.StatusCode;
             var error = ErrorCodeLookup.Lookup(statusCode);
             ErrorCode = error.Code;
             ErrorMessage = error.Message;

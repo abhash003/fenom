@@ -29,7 +29,7 @@ namespace FenomPlus.Models
                 Temperature = input.Temperature,
                 TestNumber = input.TestNumber,
                 
-                SerialNumber = IOC.Services.Cache.DeviceSerialNumber,
+                SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber,
                 QCStatus = "?",
                 TestType = IOC.Services.Cache.TestType.ToString(),
                 TestResult = input.NOScore.ToString()

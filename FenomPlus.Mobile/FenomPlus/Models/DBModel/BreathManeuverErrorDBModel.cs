@@ -29,13 +29,15 @@ namespace FenomPlus.Models
             VersionTracking.Track();
 
             var db = new BreathManeuverErrorDBModel();
+
             db.ErrorCode = ErrorCodeLookup.Lookup(statusCode).Code;
             db.Description = ErrorCodeLookup.Lookup(statusCode).Message;
-            db.SerialNumber = IOC.Services.Cache.DeviceSerialNumber;
+            db.SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber;
+
             db.Software = VersionTracking.CurrentVersion;
-            db.Firmware = IOC.Services.Cache.Firmware;
+            db.Firmware = IOC.Services.DeviceService.Current?.Firmware;
             db.DateError = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture);
-            db.Humidity = IOC.Services.Cache.EnvironmentalInfo.Humidity.ToString();
+            db.Humidity = IOC.Services.DeviceService.Current?.EnvironmentalInfo.Humidity.ToString();
 
             //return new BreathManeuverErrorDBModel()
             //{

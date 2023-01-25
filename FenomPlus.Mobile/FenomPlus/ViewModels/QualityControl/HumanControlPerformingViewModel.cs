@@ -1,5 +1,6 @@
 ﻿using System;
 using FenomPlus.Helpers;
+using FenomPlus.Services.DeviceService.Concrete;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -17,7 +18,7 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             TestTime = 10;
-            Services.Cache.BreathFlow = 0;
+            Services.DeviceService.Current.BreathFlow = 0;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
             Stop = false;
 
@@ -26,7 +27,7 @@ namespace FenomPlus.ViewModels
                 TestSeconds--;
                 TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
 
-                GaugeData = Services.Cache.BreathFlow;
+                GaugeData = Services.DeviceService.Current.BreathFlow;
 
                 if (GaugeData < Config.GaugeDataLow)
                 {
@@ -46,7 +47,7 @@ namespace FenomPlus.ViewModels
 
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.DeviceService.Current.StopTest();
+                    _ = Services.DeviceService.Current.StopTest();
 
                     Services.Cache.HumanControlResult = GaugeData;
                     Services.Navigation.HumanControlPreparingView();

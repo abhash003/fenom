@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FenomPlus.Services.DeviceService.Concrete;
+using System;
 using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
@@ -14,7 +15,7 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             TestTime = 10;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);
-            Services.Cache.BreathFlow = 0;
+            Services.DeviceService.Current.BreathFlow = 0;
             Stop = false;
 
             Device.StartTimer(TimeSpan.FromMilliseconds(Services.Cache.BreathFlowTimer), () =>
@@ -23,8 +24,8 @@ namespace FenomPlus.ViewModels
                 TestTime = TestSeconds / (1000 / Services.Cache.BreathFlowTimer);
                 if ((TestSeconds <= 0) && (Stop == false))
                 {
-                    Services.DeviceService.Current.StopTest();
-                    if (Services.Cache.BreathFlow <= 0)
+                    _ = Services.DeviceService.Current.StopTest();
+                    if (Services.DeviceService.Current.BreathFlow <= 0)
                     {
                         Services.Navigation.NegativeControlPassView();
                     }

@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FenomPlus.SDK.Core.Ble.Interface;
 using FenomPlus.Services;
 using FenomPlus.Services.DeviceService;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Interfaces;
 using FenomPlus.Services.DeviceService.Utils;
 using FenomPlus.Views;
@@ -160,14 +161,14 @@ namespace FenomPlus.ViewModels
         /// </summary>
         /// <returns></returns>
         public bool DeviceInfoTimer()
-        {
-            if (Services.Cache.DeviceInfo == null) return true;
+        {            
             if (Services.DeviceService.Current == null) return true;
-            Services.Cache.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
+            if (Services.DeviceService.Current.DeviceInfo == null) return true;
+            Services.DeviceService.Current.EnvironmentalInfo = new SDK.Core.Models.EnvironmentalInfo();
             //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device            
-            
-            Services.DeviceService.Current.RequestEnvironmentalInfo();
+
+            (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }
@@ -177,9 +178,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         /// <returns></returns>
         public bool EnvironmentalInfo()
-        {
-            if (Services.Cache.EnvironmentalInfo == null) return true;
+        {            
             if (Services.DeviceService.Current == null) return true;
+            if (Services.DeviceService.Current.EnvironmentalInfo == null) return true;
             //Services.Navigation.DashboardView();
             return false;
         }

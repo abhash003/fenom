@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.SDK.Core.Ble.Interface;
 using Xamarin.Forms;
 using Plugin.BLE.Abstractions.EventArgs;
+using FenomPlus.Services.DeviceService.Concrete;
 
 namespace FenomPlus.ViewModels
 {
@@ -35,15 +36,18 @@ namespace FenomPlus.ViewModels
         {
         }
 
-        private void Cache_BreathFlowChanged(object sender, EventArgs e)
+        private async void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
-            GaugeData = Services.Cache.BreathFlow;
-            GaugeSeconds = Services.Cache.BreathManeuver.TimeRemaining;
+            GaugeData = Services.DeviceService.Current.BreathFlow;
+            GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
 
             if (GaugeSeconds <= 0)
             {
-                Services.DeviceService.Current?.StopTest();
-                Services.Navigation.StopExhalingView();
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
+                {
+                    await Services.DeviceService.Current.StopTest();
+                }                
+                await Services.Navigation.StopExhalingView();
                 return;
             }
 
@@ -66,7 +70,7 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
 
             // Allows Updating the Breath Gauge in UI
-            Services.Cache.BreathFlowChanged += Cache_BreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
 
             Services.DeviceService.Current?.IsNotConnectedRedirect();
 
@@ -81,14 +85,14 @@ namespace FenomPlus.ViewModels
                 TestTime = 6;
             }
 
-            GaugeData = Services.Cache.BreathFlow = 0;
+            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
             GaugeSeconds = TestTime;
             GaugeStatus = "Start Blowing";
         }
 
         public override void OnDisappearing()
         {
-            Services.Cache.BreathFlowChanged -= Cache_BreathFlowChanged;
+            Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
 
             base.OnDisappearing();
             PlaySounds.StopAll();
