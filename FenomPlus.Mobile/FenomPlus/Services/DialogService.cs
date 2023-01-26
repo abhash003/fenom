@@ -3,6 +3,7 @@ using Acr.UserDialogs;
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Interfaces;
 using Xamarin.Forms;
 
@@ -10,18 +11,16 @@ namespace FenomPlus.Services
 {
     public class DialogService : IDialogService
     {
-        //public Task ShowAlertAsync(string message, string title, string buttonLabel)
-        //{
-        //    return UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
-        //}
-
         public void ShowAlert(string message, string title, string buttonLabel)
         {
            UserDialogs.Instance.Alert(message, title, buttonLabel);
         }
 
-        public async Task NotifyDevicePurgingAsync(int secondsRemaining)
+        private IAsyncRelayCommand NextCommand;
+
+        public async Task NotifyDevicePurgingAsync(int secondsRemaining, IAsyncRelayCommand nextCommand)
         {
+            NextCommand = nextCommand;
             double increment = Convert.ToDouble(100 / secondsRemaining);
 
             using (var dlg = UserDialogs.Instance.Progress("Device purging..", CancelAction, "Cancel", true, MaskType.Black))
@@ -36,15 +35,16 @@ namespace FenomPlus.Services
                     }
                     else
                     {
+                        NextCommand?.Execute(null);
                         break;
                     }
                 }
             }
-
         }
 
         private void CancelAction()
         {
+            // Nothing here - but required stub to show Cancel button.
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)

@@ -287,7 +287,7 @@ namespace FenomPlus.ViewModels
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown, null);
                             return; // Don't Increment
                         case DeviceCheckEnum.HumidityOutOfRange:
                             Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
@@ -346,7 +346,7 @@ namespace FenomPlus.ViewModels
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown, null);
                             return; // Don't Increment
                         case DeviceCheckEnum.HumidityOutOfRange:
                             Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");

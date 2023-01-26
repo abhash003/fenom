@@ -1,4 +1,5 @@
 ﻿using Acr.UserDialogs;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace FenomPlus.Interfaces
         //Task ShowAlertAsync(string message, string title, string buttonLabel);
         public void ShowAlert(string message, string title, string buttonLabel);
 
-        Task NotifyDevicePurgingAsync(int secondsRemaining);
+        Task NotifyDevicePurgingAsync(int secondsRemaining, IAsyncRelayCommand nextCommand);
 
         //bool SecondsProgressDialogShowing();
 
@@ -23,5 +24,6 @@ namespace FenomPlus.Interfaces
         void ShowToast(string message, int seconds);
 
         Task DatePromptAsync(string message, DateTime defaultDateTime);
+
     }
 }
