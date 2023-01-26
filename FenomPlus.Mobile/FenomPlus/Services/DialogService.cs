@@ -20,84 +20,31 @@ namespace FenomPlus.Services
            UserDialogs.Instance.Alert(message, title, buttonLabel);
         }
 
-        private IProgressDialog SecondsProgressDialog;
-        private int ProgressValue = 0;
-
-        public async Task ShowSecondsProgressAsync(string message, int seconds)
+        public async Task NotifyDevicePurgingAsync(int secondsRemaining)
         {
-            if (SecondsProgressDialog is { IsShowing: true })
-                return;
+            double increment = Convert.ToDouble(100 / secondsRemaining);
 
-            //SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None);
-
-            double increment = Convert.ToDouble(100 / seconds);
-
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    SecondsProgressDialog.PercentComplete = Convert.ToInt32(i * increment);
-
-            //    if (SecondsProgressDialog.PercentComplete >= 99)
-            //    {
-            //        DismissSecondsProgressDialog();
-            //    }
-            //    else
-            //    {
-            //        await Task.Delay(1000);
-            //    }
-            //}
-
-            ProgressValue = 0;
-
-            Device.BeginInvokeOnMainThread(async () =>
+            using (var dlg = UserDialogs.Instance.Progress("Device purging..", CancelAction, "Cancel", true, MaskType.Black))
             {
-                using (SecondsProgressDialog = UserDialogs.Instance.Progress(message, null, null, true, MaskType.None))
+                for (var i = 0; i < 99; i++)
                 {
-                    await Task.Run(async () =>
+                    dlg.PercentComplete = Convert.ToInt32(i * increment);
+
+                    if (dlg.PercentComplete <= 99)
                     {
-                        for (int i = 0; i < 100; i++)
-                        {
-                            int newProgress = Convert.ToInt32(i * increment);
-                            if (newProgress > ProgressValue)
-                            {
-                                ProgressValue = newProgress;
-                            }
-
-                            if (ProgressValue > SecondsProgressDialog.PercentComplete)
-                            {
-                                SecondsProgressDialog.PercentComplete = ProgressValue;
-
-                                if (SecondsProgressDialog.PercentComplete >= 99)
-                                {
-                                    DismissSecondsProgressDialog();
-                                }
-                                else
-                                {
-                                    await Task.Delay(1000);
-                                }
-                            }
-
-
-                        }
-                    });
+                        await Task.Delay(1000);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-            });
-        }
-
-        public bool SecondsProgressDialogShowing()
-        {
-            if (SecondsProgressDialog != null)
-                return SecondsProgressDialog.IsShowing;
-            else
-                return false;
-        }
-
-        public void DismissSecondsProgressDialog()
-        {
-            if (SecondsProgressDialog != null)
-            {
-                SecondsProgressDialog.Hide();
-                SecondsProgressDialog.Dispose();
             }
+
+        }
+
+        private void CancelAction()
+        {
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)

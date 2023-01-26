@@ -238,10 +238,10 @@ namespace FenomPlus.ViewModels
                 _ = Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
             }
 
-            if (Services.Dialogs.SecondsProgressDialogShowing())
-            {
-                Services.Dialogs.DismissSecondsProgressDialog();
-            }
+            //if (Services.Dialogs.SecondsProgressDialogShowing())
+            //{
+            //    Services.Dialogs.DismissSecondsProgressDialog();
+            //}
         }
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
@@ -287,7 +287,7 @@ namespace FenomPlus.ViewModels
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                             return; // Don't Increment
                         case DeviceCheckEnum.HumidityOutOfRange:
                             Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
@@ -313,10 +313,10 @@ namespace FenomPlus.ViewModels
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
 
-                if (Services.Dialogs.SecondsProgressDialogShowing())
-                {
-                    Services.Dialogs.DismissSecondsProgressDialog();
-                }
+                //if (Services.Dialogs.SecondsProgressDialogShowing())
+                //{
+                //    Services.Dialogs.DismissSecondsProgressDialog();
+                //}
             }
 
             TutorialIndex = requestedIndex;
@@ -346,7 +346,7 @@ namespace FenomPlus.ViewModels
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
                         case DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                             return; // Don't Increment
                         case DeviceCheckEnum.HumidityOutOfRange:
                             Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
@@ -372,10 +372,10 @@ namespace FenomPlus.ViewModels
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
 
-                if (Services.Dialogs.SecondsProgressDialogShowing())
-                {
-                    Services.Dialogs.DismissSecondsProgressDialog();
-                }
+                //if (Services.Dialogs.SecondsProgressDialogShowing())
+                //{
+                //    Services.Dialogs.DismissSecondsProgressDialog();
+                //}
             }
 
             TutorialIndex = requestedIndex;

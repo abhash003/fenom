@@ -12,13 +12,11 @@ namespace FenomPlus.Interfaces
         //Task ShowAlertAsync(string message, string title, string buttonLabel);
         public void ShowAlert(string message, string title, string buttonLabel);
 
-        Task ShowSecondsProgressAsync(string message, int seconds);
+        Task NotifyDevicePurgingAsync(int secondsRemaining);
 
-        //public IProgressDialog ShowSecondsProgress(string message, int seconds);
+        //bool SecondsProgressDialogShowing();
 
-        bool SecondsProgressDialogShowing();
-
-        void DismissSecondsProgressDialog();
+        //void DismissSecondsProgressDialog();
 
         Task ShowLoadingAsync(string message, int seconds);
 
