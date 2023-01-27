@@ -5,19 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FenomPlus.Interfaces
 {
     public interface IDialogService
     {
-        //Task ShowAlertAsync(string message, string title, string buttonLabel);
         public void ShowAlert(string message, string title, string buttonLabel);
 
-        Task NotifyDevicePurgingAsync(int secondsRemaining, IAsyncRelayCommand nextCommand);
+        // Indicates if a cancellation was requested in NotifyDevicePurgingAsync
+        public bool PurgeCancelRequest { get; set; }
 
-        //bool SecondsProgressDialogShowing();
-
-        //void DismissSecondsProgressDialog();
+        Task NotifyDevicePurgingAsync(int secondsRemaining);
 
         Task ShowLoadingAsync(string message, int seconds);
 

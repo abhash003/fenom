@@ -16,35 +16,36 @@ namespace FenomPlus.Services
            UserDialogs.Instance.Alert(message, title, buttonLabel);
         }
 
-        private IAsyncRelayCommand NextCommand;
+        public bool PurgeCancelRequest { get; set; }
 
-        public async Task NotifyDevicePurgingAsync(int secondsRemaining, IAsyncRelayCommand nextCommand)
+        public async Task NotifyDevicePurgingAsync(int secondsRemaining)
         {
-            NextCommand = nextCommand;
             double increment = Convert.ToDouble(100 / secondsRemaining);
+            PurgeCancelRequest = false;
 
-            using (var dlg = UserDialogs.Instance.Progress("Device purging..", CancelAction, "Cancel", true, MaskType.Black))
+            using (var dlg = UserDialogs.Instance.Progress("Device purging..", PurgeCancelAction, "Cancel", true, MaskType.Black))
             {
                 for (var i = 0; i < 99; i++)
                 {
+                    if (PurgeCancelRequest)
+                    {
+                        break;
+                    }
+
+
                     dlg.PercentComplete = Convert.ToInt32(i * increment);
 
                     if (dlg.PercentComplete <= 99)
                     {
                         await Task.Delay(1000);
                     }
-                    else
-                    {
-                        NextCommand?.Execute(null);
-                        break;
-                    }
                 }
             }
         }
 
-        private void CancelAction()
+        private void PurgeCancelAction()
         {
-            // Nothing here - but required stub to show Cancel button.
+            PurgeCancelRequest = true;
         }
 
         public async Task ShowLoadingAsync(string message, int seconds)
