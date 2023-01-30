@@ -1,29 +1,27 @@
 ﻿using FenomPlus.ViewModels;
-using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class TestResultsView : BaseContentPage
+    public partial class NegativeControlPerformView : BaseContentPage
     {
-        private readonly TestResultsViewModel TestResultsViewModel;
+        private readonly NegativeControlPerformViewModel NegativeControlPerformViewModel;
 
-        public TestResultsView()
+        public NegativeControlPerformView()
         {
             InitializeComponent();
-            BindingContext = TestResultsViewModel = new TestResultsViewModel();
+            BindingContext = NegativeControlPerformViewModel = new NegativeControlPerformViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            TestResultsViewModel.OnAppearing();
+            NegativeControlPerformViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            TestResultsViewModel.OnDisappearing();
+            NegativeControlPerformViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
@@ -32,4 +30,3 @@ namespace FenomPlus.Views
         }
     }
 }
-

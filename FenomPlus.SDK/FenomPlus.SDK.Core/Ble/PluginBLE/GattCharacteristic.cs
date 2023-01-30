@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using Plugin.BLE.Abstractions.EventArgs;
 using FenomPlus.Services;
 using FenomPlus.Interfaces;
+using FenomPlus.Services.DeviceService.Interfaces;
 
 namespace FenomPlus.SDK.Core.Ble.PluginBLE
 {
     public class GattCharacteristic : IGattCharacteristic
     {
         private IAppServices Services => IOC.Services;
-        private ICacheService Cache => Services.Cache;
+        //private ICacheService Cache => Services.Cache;
+        private IDeviceService DeviceService => Services.DeviceService;
         private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
 
         private readonly SemaphoreSlim _deviceInfolock = new SemaphoreSlim(1, 1);
@@ -158,7 +160,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _deviceInfolock.Wait();
             try
             {
-                Cache.DecodeDeviceInfo(e.Characteristic.Value);
+                DeviceService.Current.DecodeDeviceInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** DeviceInfoHandler called: DeviceInfo Updated in Cache");
             }
             catch (Exception ex)
@@ -176,7 +178,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _environmentalIngolock.Wait();
             try
             {
-                Cache.DecodeEnvironmentalInfo(e.Characteristic.Value);
+                DeviceService.Current.DecodeEnvironmentalInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** EnvironmentalInfoHandler called: EnvironmentalInfo Updated in Cache");
             }
             catch (Exception ex)
@@ -194,7 +196,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _errorStatusInfolock.Wait();
             try
             {
-                Cache.DecodeErrorStatusInfo(e.Characteristic.Value);
+                DeviceService.Current.DecodeErrorStatusInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** ErrorInfoHandler called: ErrorInfo Updated in Cache");
             }
             catch (Exception ex)
@@ -212,7 +214,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _deviceStatuslock.Wait();
             try
             {
-                Cache.DecodeDeviceStatusInfo(e.Characteristic.Value);
+                DeviceService.Current.DecodeDeviceStatusInfo(e.Characteristic.Value);
                 Debug.WriteLine("***** StatusInfoHandler called: StatusInfo Updated in Cache");
             }
             catch (Exception ex)
@@ -230,7 +232,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _breathManeuverlock.Wait();
             try
             {
-                Cache.DecodeBreathManeuver(e.Characteristic.Value);
+                DeviceService.Current.DecodeBreathManeuver(e.Characteristic.Value);
             }
             catch (Exception ex)
             {
@@ -247,7 +249,7 @@ namespace FenomPlus.SDK.Core.Ble.PluginBLE
             _debugMsglock.Wait();
             try
             {
-                Cache.DecodeDebugMsg(e.Characteristic.Value);
+                DeviceService.Current.DecodeDebugMsg(e.Characteristic.Value);
             }
             catch (Exception ex)
             {

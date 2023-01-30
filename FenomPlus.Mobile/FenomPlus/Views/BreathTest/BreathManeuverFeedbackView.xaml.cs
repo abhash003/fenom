@@ -26,10 +26,5 @@ namespace FenomPlus.Views
             BreathManeuverFeedbackViewModel.OnDisappearing();
         }
 
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-            BreathManeuverFeedbackViewModel.NewGlobalData();
-        }
     }
 }

@@ -23,6 +23,7 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             Stop = false;
             Seconds = Config.StopExhalingReadyWait;
+            PlaySounds.PlaySuccessSound();
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
 
@@ -40,9 +41,9 @@ namespace FenomPlus.ViewModels
 
             if ((Seconds <= 0) && (Stop == false))
             {
-                if (Services.Cache.BreathManeuver.StatusCode != 0x00)
+                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
                 {
-                    var model = BreathManeuverErrorDBModel.Create(Services.Cache.BreathManeuver);
+                    var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
                     ErrorsRepo.Insert(model);
 
                     PlaySounds.PlayFailedSound();
@@ -58,9 +59,5 @@ namespace FenomPlus.ViewModels
         }
 
 
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
     }
 }

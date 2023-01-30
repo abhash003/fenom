@@ -105,6 +105,7 @@ namespace FenomPlus.ViewModels
                 testsCollection.DeleteAll();
             }
         }
+<<<<<<< HEAD
 
 
 
@@ -807,5 +808,8 @@ namespace FenomPlus.ViewModels
             //userTable3.TestResults.Add(new QCResultTable(serial, "10", 31));
             //newDevice.Users.Add(userTable3);
         }
+=======
+       
+>>>>>>> origin/develop
     }
 }

@@ -18,12 +18,12 @@ namespace FenomPlus.Views
             BindingContext = DashboardViewModel = new DashboardViewModel();
         }
 
-        private async void OnStandardTest(object sender, EventArgs e)
+        private void OnStandardTest(object sender, EventArgs e)
         {
             DashboardViewModel.StartStandardTestCommand.Execute(null);
         }
 
-        private async void OnShortTest(object sender, EventArgs e)
+        private void OnShortTest(object sender, EventArgs e)
         {
             DashboardViewModel.StartShortTestCommand.Execute(null);
         }
@@ -41,11 +41,6 @@ namespace FenomPlus.Views
 
         protected override void OnDisappearing()
         {
-            if (DashboardViewModel.Dialogs.SecondsProgressDialogShowing())
-            {
-                DashboardViewModel.Dialogs.DismissSecondsProgressDialog();
-            }
-
             base.OnDisappearing();
             DashboardViewModel.OnDisappearing();
         }
@@ -53,7 +48,6 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            DashboardViewModel.NewGlobalData();
         }
     }
 }

@@ -27,15 +27,11 @@ namespace FenomPlus.ViewModels
             base.OnDisappearing();
         }
 
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
 
         private void UpdateError()
         {
-            int statusCode = Services.Cache.BreathManeuver.StatusCode;
 
+            int statusCode = Services.DeviceService.Current.BreathManeuver.StatusCode;
             var error = ErrorCodeLookup.Lookup(statusCode);
             ErrorCode = error.Code;
             ErrorMessage = error.Message;

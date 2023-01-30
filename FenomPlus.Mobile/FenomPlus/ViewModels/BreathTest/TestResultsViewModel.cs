@@ -24,9 +24,9 @@ namespace FenomPlus.ViewModels
                 TestType = "6-second";
             }
 
-            TestResult = (Services.Cache.FenomValue) < 5 ? "< 5" :
-                        (Services.Cache.FenomValue) > 300 ? "> 300":
-                        Services.Cache.FenomValue.ToString(CultureInfo.InvariantCulture);
+            TestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
+                        (Services.DeviceService.Current.FenomValue) > 300 ? "> 300":
+                        Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
 
             Services.DeviceService.Current.ReadyForTest = false;
         }
@@ -67,12 +67,5 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
     }
 }

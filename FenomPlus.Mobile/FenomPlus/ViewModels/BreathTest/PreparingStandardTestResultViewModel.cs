@@ -40,18 +40,18 @@ namespace FenomPlus.ViewModels
 
         private bool CalculationsCompleted()
         {
-            if (Services.Cache.FenomReady == true)
+            if (Services.DeviceService.Current.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Services.Cache.BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(Services.DeviceService.Current.BreathManeuver);
                 ResultsRepo.Insert(model);
 
                 var str = ResultsRepo.ToString();
 
-                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.Cache.BreathManeuver.StatusCode}");
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
 
-                if (Services.Cache.BreathManeuver.StatusCode != 0x00)
+                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
                 {
-                    var errorModel = BreathManeuverErrorDBModel.Create(Services.Cache.BreathManeuver);
+                    var errorModel = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
@@ -59,17 +59,12 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    PlaySounds.PlaySuccessSound();
                     Services.Navigation.TestResultsView();
                 }
             }
 
-            return (Services.Cache.FenomReady == false);
+            return (Services.DeviceService.Current.FenomReady == false);
         }
-
-        public override void NewGlobalData()
-        {
-            base.NewGlobalData();
-        }
+        
     }
 }

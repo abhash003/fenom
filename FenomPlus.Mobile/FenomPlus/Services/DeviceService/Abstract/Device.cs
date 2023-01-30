@@ -10,20 +10,26 @@ using System.Threading.Tasks;
 using Plugin.BLE.Abstractions.Contracts;
 using PluginBleIDevice = Plugin.BLE.Abstractions.Contracts.IDevice;
 using IDevice = FenomPlus.Services.DeviceService.Interfaces.IDevice;
-using FenomPlus.SDK.Core.Ble.Interface;
-using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.SDK.Core.Utils;
-using FenomPlus.Services.DeviceService.Utils;
 using System.Timers;
+using FenomPlus.Services.DeviceService.Enums;
+using System.Threading;
+using FenomPlus.Models;
+using Timer = System.Timers.Timer;
+using FenomPlus.Helpers;
+using System.Text;
+using System.Diagnostics;
+using FenomPlus.SDK.Core.Features;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
-    public abstract partial class Device : IDevice
+    public abstract partial class Device : IDevice, IDisposable
     {
         // Fields
 
         protected object _nativeDevice = null;
+        private int calls = 0;
 
         // Constructor
 
@@ -37,9 +43,32 @@ namespace FenomPlus.Services.DeviceService.Abstract
             DeviceReadyTimer = new Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
             ReadyForTest = true;
+
+            EnvironmentalInfo = new EnvironmentalInfo();
+            BreathManeuver = new BreathManeuver();
+            DeviceInfo = new DeviceInfo();
+            DebugMsg = new DebugMsg();
+            DeviceStatusInfo = new DeviceStatusInfo();
+            ErrorStatusInfo = new ErrorStatusInfo();
+
+            DeviceSerialNumber = string.Empty;
+            Firmware = string.Empty;
+            FenomReady = true;
+
+            DebugList = new RangeObservableCollection<DebugLog>();
+
+            // write path to debug
+            DebugList.Insert(0, DebugLog.Create("App Starting"));
+            DebugList.Insert(0, DebugLog.Create(IOC.Services.DebugLogFile.GetFilePath()));
         }
 
         // Properties
+
+        #region Properties
+
+        public RangeObservableCollection<DebugLog> DebugList { get; set; }
+
+        public bool FenomReady { get; set; }
 
         public abstract string Name { get; }
 
@@ -47,55 +76,115 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract bool Connected { get; }
 
+        public abstract Task<bool> StartTest(BreathTestEnum breathTestEnum);
+
+        public abstract Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size);
+
+        public abstract Task<bool> StopTest();
+
+        public abstract Task<bool> DEVICEINFO();
+
+        public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
+
+        public abstract Task<bool> DATETIME(string date, string time);
+
+        public abstract Task<bool> SERIALNUMBER(string SerailNumber);
+
+        public abstract Task<bool> MESSAGE(MESSAGE message);
+
+        public abstract Task<bool> DEBUGMSG();
+
+        public abstract Task<bool> ENVIROMENTALINFO();
+
+        public abstract Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second);
+
+        public abstract Task<bool> BREATHMANUEVER();
+
         public object NativeDevice { get => _nativeDevice; }
+        public EnvironmentalInfo EnvironmentalInfo { get; set; }
+
+        public DeviceInfo DeviceInfo { get; set; }
+
+        public int NOScore { get; set; }
+
+        public ErrorStatusInfo ErrorStatusInfo { get; set; }
+
+        public DeviceStatusInfo DeviceStatusInfo { get; set; }
+
+        public BreathManeuver BreathManeuver { get; set; }
+
+        public DebugMsg DebugMsg { get; set; }
+
+        public float FenomValue { get; set; }
+
+        public int BatteryLevel { get; set; }
+
+        private float _breathFlow { get; set; }
+        public float BreathFlow
+        {
+            get => _breathFlow / 1000;
+            set { _breathFlow = value; }
+        }
+
+        public string _deviceConnectedStatus = "Unknown";
+        public string DeviceConnectedStatus
+        {
+            get => _deviceConnectedStatus;
+            set
+            {
+                _deviceConnectedStatus = value;                
+            }
+        }
+
+        public string _firmware;
+        public string Firmware
+        {
+            get => _firmware;
+            set
+            {
+                _firmware = value;
+            }
+        }
+
+        public string _deviceSerialNumber;
+        public string DeviceSerialNumber
+        {
+            get => _deviceSerialNumber;
+            set
+            {
+                _deviceSerialNumber = value;
+            }
+        }
+
+        public DateTime SensorExpireDate { get; set; }
+
+        public bool BreathTestInProgress
+        {
+            get;
+            set;
+        }
+
+        
+
+        public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
+
+        public event EventHandler BreathFlowChanged;
+
+        static volatile object _s_debugLogLock = new object();
+        static volatile bool _s_logFileWriterWorkerStarted = false;
+        static volatile bool _s_logFileWriterWorkerStop = false;
+
+        #endregion
 
         // Methods
+
+        #region Methods
 
         public abstract Task ConnectAsync();
 
         public abstract Task ConnectToKnownDeviceAsync(Guid Id);
 
         public abstract Task DisconnectAsync();
-
-        /*
-         * 
-         * LEGACY CODE
-         * 
-         */
-        public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
-
-        public IEnumerable<IService> GattServices { get; } = new SynchronizedList<IService>();
-
-        public int DeviceReadyCountDown { get; set; }
-
-        private bool _readyForTest;
-        public bool ReadyForTest
-        {
-            get => _readyForTest;
-            set
-            {
-                _readyForTest = value;
-
-                if (_readyForTest == false)
-                {
-                    DeviceReadyCountDown = 32;
-                    DeviceReadyTimer.Start();
-                }
-            }
-        }
-
-        private readonly Timer DeviceReadyTimer;
-        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            DeviceReadyCountDown -= 1;
-
-            if (DeviceReadyCountDown <= 0)
-            {
-                ReadyForTest = true;
-                DeviceReadyTimer.Stop();
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -123,308 +212,265 @@ namespace FenomPlus.Services.DeviceService.Abstract
             //AppServices.Container.Resolve<INavigationService>().DevicePowerOnView();
 
             return false;
-        }
+        }        
 
-        public bool BreathTestInProgress
+        public DeviceCheckEnum CheckDeviceBeforeTest()
         {
-            get;
-            set;
-        }
+            // Get the latest environmental info - updates Cache
+            //Services.DeviceService.Current?.RequestEnvironmentalInfo();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="breathTestEnum"></param>
-        /// <returns></returns>
-        public async Task<bool> StartTest(BreathTestEnum breathTestEnum)
-        {
-            if (IsConnected())
+            if (ReadyForTest == false)
             {
-                BreathTestInProgress = true;
-                return await BREATHTEST(breathTestEnum);
+                Console.WriteLine("Device is purging");
+                return DeviceCheckEnum.DevicePurging;
             }
-            return false;
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> StopTest()
-        {
-            if (IsConnected())
+            if (EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
             {
-                BreathTestInProgress = false;
-                return await BREATHTEST(BreathTestEnum.Stop);
+                return DeviceCheckEnum.BatteryCriticallyLow;
             }
-            return false;
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> RequestDeviceInfo()
-        {
-            if (IsConnected())
+            if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
             {
-                return await DEVICEINFO();
+                return DeviceCheckEnum.HumidityOutOfRange;
             }
-            return false;
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> RequestEnvironmentalInfo()
-        {
-            if (IsConnected())
+            if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                EnvironmentalInfo.Pressure > Constants.PressureHigh110)
             {
-                return await ENVIROMENTALINFO();
+                return DeviceCheckEnum.PressureOutOfRange;
             }
-            return false;
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public async Task<bool> SendMessage(MESSAGE message)
-        {
-            if (IsConnected())
+            if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
             {
-                return await MESSAGE(message);
+                return DeviceCheckEnum.TemperatureOutOfRange;
             }
-            return false;
+
+            return DeviceCheckEnum.Ready;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="serialNumber"></param>
-        /// <returns></returns>
-        public async Task<bool> SendSerialNumber(string serialNumber)
+        private void LogFileWriterWorker()
         {
-            if (IsConnected())
+            _s_logFileWriterWorkerStarted = true;
+
+            var current = DateTime.Now;
+
+            while (_s_logFileWriterWorkerStop == false)
             {
-                return await SERIALNUMBER(serialNumber);
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        public async Task<bool> SendDateTime(string date, string time)
-        {
-            if (IsConnected())
-            {
-                return await DATETIME(date, time);
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="iD_SUB"></param>
-        /// <param name="cal1"></param>
-        /// <returns></returns>
-        public async Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
-        {
-            if (IsConnected())
-            {
-                return await CALIBRATION(iD_SUB, cal1, cal2, cal3);
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cal1"></param>
-        /// <param name="cal2"></param>
-        /// <param name="cal3"></param>
-        /// <returns></returns>
-        public async Task<bool> SendCalibration(double cal1, double cal2, double cal3)
-        {
-            bool result = true;
-            await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
-            return result;
-        }
-
-    }
-
-    public partial class Device
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> DEVICEINFO()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> ENVIROMENTALINFO()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_ENVIROMENTALINFO);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> BREATHTEST(BreathTestEnum breathTestEnum = BreathTestEnum.Start10Second)
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER, (byte)breathTestEnum);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> BREATHMANUEVER()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER);
-            return await WRITEREQUEST(message, 1);
-        }
-
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> TRAININGMODE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> DEBUGMSG()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMSG);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> DEBUGMANUEVERTYPE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public async Task<bool> MESSAGE(MESSAGE message)
-        {
-            return await WRITEREQUEST(message, 1);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="SerailNumber"></param>
-        /// <returns></returns>
-        public async Task<bool> SERIALNUMBER(string SerailNumber)
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_SERIALNUMBER, SerailNumber);
-            return await WRITEREQUEST(message, 10);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        public async Task<bool> DATETIME(string date, string time)
-        {
-            string strDateTime;
-
-            strDateTime = date + "T" + time;
-
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_PROVISIONING_DATA, ID_SUB.ID_PROVISIONING_DATETIME, strDateTime);
-            return await WRITEREQUEST(message, (short)strDateTime.Length);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="iD_SUB"></param>
-        /// <param name="cal"></param>
-        /// <returns></returns>
-        public async Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, iD_SUB, cal1, cal2, cal3);
-            return await WRITEREQUEST(message, 24);
-        }
-
-        public Plugin.BLE.Abstractions.Contracts.ICharacteristic FwCharacteristic = null;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private async Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size)
-        {
-            using (var tracer = new Helper.FunctionTrace())
-            {
-                byte[] data = new byte[2 + 2 + idvar_size];
-
-                data[0] = (byte)(message.IDMSG >> 8);
-                data[1] = (byte)message.IDMSG;
-                data[2] = (byte)(message.IDSUB >> 8);
-                data[3] = (byte)message.IDSUB;
-
-                Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
-
-                if (true)
+                if ((DateTime.Now - current).TotalSeconds > 60)
                 {
-                    // get service
-                    var device = (PluginBleIDevice)_nativeDevice;
+                    // flush the log
+                    var debugList = DebugList;
 
-                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
-
-                    // get characteristics
-                    var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
-                        .FeatureWriteCharacteristic));
-
-                    fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
-                    bool result = await fwChar.WriteAsync(data);
-
-                    if (result == true)
+                    lock (_s_debugLogLock)
                     {
-                        tracer.Trace("write without response okay");
+                        Console.WriteLine(debugList);
+                        debugList.Clear();
                     }
-                    else
-                    {
-                        tracer.Trace("something went wrong");
-                    }
-                    return result;
+
+                    // reset the time
+                    current = DateTime.Now;
                 }
             }
         }
+
+        #endregion
+
+        #region Timer
+
+        private bool _readyForTest;
+        public int DeviceReadyCountDown { get; set; }
+
+        public bool ReadyForTest
+        {
+            get => _readyForTest;
+            set
+            {
+                _readyForTest = value;
+
+                if (_readyForTest == false)
+                {
+                    DeviceReadyCountDown = 32;
+                    DeviceReadyTimer.Start();
+                }
+            }
+        }
+
+        private readonly Timer DeviceReadyTimer;
+        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            DeviceReadyCountDown -= 1;
+
+            if (DeviceReadyCountDown <= 0)
+            {
+                ReadyForTest = true;
+                DeviceReadyTimer.Stop();
+            }
+        }
+
+        #endregion        
+
+        #region Decode Characteristics
+
+        public EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data)
+        {
+            calls++;
+            try
+            {
+                //data[0] = 20; // temp
+                //data[1] = 60; // humidity
+                //data[2] = 90; // pressure
+                //data[3] = 80; // battery
+                EnvironmentalInfo ??= new EnvironmentalInfo();
+                EnvironmentalInfo.Decode(data);
+
+                BatteryLevel = EnvironmentalInfo.BatteryLevel;
+                
+            }
+            finally { }
+            return EnvironmentalInfo;
+        }        
+
+        public DeviceInfo DecodeDeviceInfo(byte[] data)
+        {
+            try
+            {
+                DeviceInfo ??= new DeviceInfo();
+
+                DeviceInfo.Decode(data);
+
+                // setup serial number
+                if ((DeviceInfo.SerialNumber != null) && (DeviceInfo.SerialNumber.Length > 0))
+                {
+                    DeviceSerialNumber = $"{Encoding.Default.GetString(DeviceInfo.SerialNumber)}";
+                    Debug.WriteLine($"----> Device Serial Number: {DeviceSerialNumber} {DateTime.Now}");
+
+                    // update the database
+                    //Services.Database.QualityControlDevicesRepo.UpdateDateOrAdd(DeviceSerialNumber);
+                }
+
+                // setup firmware version
+                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
+
+                // get SensorExpireDate
+                SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
+                
+            }
+            finally { }
+            return DeviceInfo;
+        }        
+
+        public ErrorStatusInfo DecodeErrorStatusInfo(byte[] data)
+        {
+            try
+            {
+                ErrorStatusInfo ??= new ErrorStatusInfo();
+                ErrorStatusInfo.Decode(data);
+            }
+            finally { }
+            return ErrorStatusInfo;
+        }
+
+        public DeviceStatusInfo DecodeDeviceStatusInfo(byte[] data)
+        {
+            try
+            {
+                DeviceStatusInfo ??= new DeviceStatusInfo();
+                DeviceStatusInfo.Decode(data);
+                                
+            }
+            finally { }
+            return DeviceStatusInfo;
+        }
+
+        public BreathManeuver DecodeBreathManeuver(byte[] data)
+        {
+            try
+            {
+                BreathManeuver ??= new BreathManeuver();
+
+                BreathManeuver.Decode(data);
+
+                if (BreathManeuver.TimeRemaining == 0xff)
+                {
+                    FenomReady = false;
+                    ReadyForTest = true;
+                    DeviceConnectedStatus = "Ready For Test";
+                }
+                else if (BreathManeuver.TimeRemaining == 0xfe)
+                {
+                    ReadyForTest = false;
+                    FenomReady = true;
+                    FenomValue = BreathManeuver.NOScore;
+                }
+                else if (BreathManeuver.TimeRemaining == 0xf0)
+                {
+                    // log ??
+                }
+                else
+                {
+                    DeviceConnectedStatus = "Processing Test";
+                    FenomReady = false;
+
+                    // add new value
+                    BreathFlow = BreathManeuver.BreathFlow;
+                    BreathFlowChanged?.Invoke(null, null);
+
+                    // get the noscores
+                    NOScore = BreathManeuver.NOScore;
+                }
+                                
+
+            }
+            finally { }
+            return BreathManeuver;
+        }
+
+        public DebugMsg DecodeDebugMsg(byte[] data)
+        {
+            if (_s_logFileWriterWorkerStarted == false)
+            {
+                // start the worker
+                Thread workerThread = new Thread(LogFileWriterWorker);
+                workerThread.Start();
+            }
+
+            try
+            {
+                DebugMsg ??= new DebugMsg();
+
+                DebugMsg.Decode(data);
+
+                DebugLog debugLog = DebugLog.Create(data);
+
+                lock (_s_debugLogLock)
+                {
+                    DebugList.Insert(0, debugLog);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return DebugMsg;
+        }
+
+        #endregion
+
+       
+        #region Dispose
+
+        public void Dispose()
+        {
+            _s_logFileWriterWorkerStop = true;
+        }
+
+        #endregion
+
     }
 }

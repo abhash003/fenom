@@ -4,9 +4,12 @@ namespace FenomPlus.Views
 {
     public partial class HumanControlPreparingView : BaseContentPage
     {
+        private HumanControlPreparingViewModel model;
+
         public HumanControlPreparingView()
         {
             InitializeComponent();
+            BindingContext = model = new HumanControlPreparingViewModel();
         }
 
         /// <summary>
@@ -15,7 +18,7 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //model.OnAppearing();
+            model.OnAppearing();
         }
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace FenomPlus.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            //model.OnDisappearing();
+            model.OnDisappearing();
         }
 
         /// <summary>
@@ -33,7 +36,6 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
-            //model.NewGlobalData();
         }
     }
 }

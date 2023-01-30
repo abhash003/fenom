@@ -1,17 +1,18 @@
 ﻿
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
 
 namespace FenomPlus.ViewModels
 {
-    public class PairingViewModel : BaseViewModel
+    public partial class HumanControlDisqualifiedViewModel : BaseViewModel
     {
-        public PairingViewModel()
+        public HumanControlDisqualifiedViewModel()
         {
         }
 
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.Navigation.GotoBluetoothSettings();
         }
 
         public override void OnDisappearing()

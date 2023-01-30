@@ -152,7 +152,7 @@ namespace FenomPlus.Services.DeviceService
             catch (ThreadAbortException ex)
             {
                 // thread aborted
-                Helper.WriteDebug("ABORTED MONITOR THREAD");
+                Helper.WriteDebug("ABORTED MONITOR THREAD " + ex.Message);
             }
 
             // exit monitor

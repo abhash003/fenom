@@ -1,23 +1,21 @@
 ﻿
-
 namespace FenomPlus.ViewModels
 {
-    public class PairingViewModel : BaseViewModel
+    public class NegativeControlFailViewModel : BaseViewModel
     {
-        public PairingViewModel()
+        public NegativeControlFailViewModel()
         {
         }
 
         public override void OnAppearing()
         {
             base.OnAppearing();
-            Services.Navigation.GotoBluetoothSettings();
         }
 
         public override void OnDisappearing()
         {
             base.OnDisappearing();
         }
-
+               
     }
 }

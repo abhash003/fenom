@@ -1,16 +1,11 @@
-using FenomPlus.Helpers;
-using FenomPlus.Models;
-using FenomPlus.SDK.Core.Models;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Syncfusion.Pdf.Graphics;
-using Xamarin.Forms;
-using FenomPlus.Enums;
-using FenomPlus.Services;
+using FenomPlus.Helpers;
+using FenomPlus.SDK.Core.Models;
+using FenomPlus.Services.DeviceService.Enums;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace FenomPlus.ViewModels
 {
@@ -18,40 +13,6 @@ namespace FenomPlus.ViewModels
     {
         [ObservableProperty]
         private int _tutorialIndex = 1;
-
-        //partial void OnTutorialIndexChanged(int value)
-        //{
-        //    if (TutorialIndex < 1)
-        //        TutorialIndex = 1;
-
-        //    if (TutorialIndex > 6)
-        //        TutorialIndex = 6;
-
-        //    //int priorTutorialIndex = TutorialIndex;
-
-        //    //if (TutorialIndex is 4 or 6)
-        //    //{
-        //    //    if (Services.DeviceService.Current != null)
-        //    //    {
-        //    //        Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        if (Services.DeviceService.Devices.Count > 0)
-        //    //        {
-        //    //            Services.DeviceService.Devices[0].ConnectAsync();
-        //    //        }
-        //    //        else
-        //    //        {
-        //    //            Console.WriteLine("####Devices not found####");
-        //    //        }
-        //    //    }
-                
-        //    //    PlaySounds.StopAll();
-        //    //}
-
-        //    //UpdateContent();
-        //}
 
         [ObservableProperty]
         private bool _instructionsVisible;
@@ -178,7 +139,7 @@ namespace FenomPlus.ViewModels
                     InstructionsText = "Take a deep breath\n\nPlace your lips around the mouthpiece";
                     break;
 
-                case 5:
+                case 5: // Breath Gauge
                     InstructionsVisible = true;
                     IllustrationVisible = false;
                     BreathGaugeVisible = true;
@@ -212,11 +173,14 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
 
-            GaugeData = Services.Cache.BreathFlow = 0;
-            GaugeStatus = "Start Blowing";
+            if (Services.DeviceService.Current != null)
+            {
+                GaugeData = Services.DeviceService.Current.BreathFlow = 0;
+                GaugeStatus = "Start Blowing";
 
-            // Monitor event
-            Services.Cache.BreathFlowChanged += CacheOnBreathFlowChanged;
+                // Monitor event
+                Services.DeviceService.Current.BreathFlowChanged += CacheOnBreathFlowChanged;
+            }
 
             // Reset to first page
             TutorialIndex = 1;
@@ -229,22 +193,20 @@ namespace FenomPlus.ViewModels
 
             PlaySounds.StopAll();
 
-            Services.Cache.BreathFlowChanged -= CacheOnBreathFlowChanged;
-
-            if (Services.DeviceService.Current?.BreathTestInProgress == true)
+            if (Services.DeviceService.Current != null)
             {
-                Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
-            }
+                Services.DeviceService.Current.BreathFlowChanged -= CacheOnBreathFlowChanged;
 
-            if (Services.Dialogs.SecondsProgressDialogShowing())
-            {
-                Services.Dialogs.DismissSecondsProgressDialog();
+                if (Services.DeviceService.Current?.BreathTestInProgress == true)
+                {
+                    _ = Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
+                }
             }
         }
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
         {
-            GaugeData = Services.Cache.BreathFlow;
+            if (Services.DeviceService.Current != null) GaugeData = Services.DeviceService.Current.BreathFlow;
 
             if (GaugeData < Config.GaugeDataLow)
             {
@@ -260,10 +222,10 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public override void NewGlobalData()
+        public void NewGlobalData()
         {
-            base.NewGlobalData();
-            GaugeData = Services.Cache.BreathFlow;
+            if (Services.DeviceService.Current != null) 
+                GaugeData = Services.DeviceService.Current.BreathFlow;
         }
 
         [RelayCommand]
@@ -278,28 +240,39 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
+                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                     switch (deviceStatus)
                     {
-                        case CacheService.DeviceCheckEnum.Ready:
+                        case DeviceCheckEnum.Ready:
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
-                        case CacheService.DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
+                        
+                        case DeviceCheckEnum.DevicePurging:
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                            if (Services.Dialogs.PurgeCancelRequest)
+                            {
+                                UpdateContent(); // Force a faster refresh
+                                return; // Don't Increment
+                            }
+                            break;
+
+                        case DeviceCheckEnum.HumidityOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.HumidityOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Humidity level ({Services.Cache.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
+                        
+                        case DeviceCheckEnum.PressureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.PressureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Pressure level ({Services.Cache.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
+                        
+                        case DeviceCheckEnum.TemperatureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.Cache.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                        
+                        case DeviceCheckEnum.BatteryCriticallyLow:
+                            Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.BatteryCriticallyLow:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.Cache.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
-                            return; // Don't Increment
+                        
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -310,11 +283,6 @@ namespace FenomPlus.ViewModels
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
-                }
-
-                if (Services.Dialogs.SecondsProgressDialogShowing())
-                {
-                    Services.Dialogs.DismissSecondsProgressDialog();
                 }
             }
 
@@ -337,28 +305,38 @@ namespace FenomPlus.ViewModels
             {
                 if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    CacheService.DeviceCheckEnum deviceStatus = Services.Cache.CheckDeviceBeforeTest();
+                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                     switch (deviceStatus)
                     {
-                        case CacheService.DeviceCheckEnum.Ready:
+                        case DeviceCheckEnum.Ready:
                             await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
-                        case CacheService.DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.ShowSecondsProgressAsync($"Device purging..", Services.DeviceService.Current.DeviceReadyCountDown);
+                        
+                        case DeviceCheckEnum.DevicePurging:
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                            if (Services.Dialogs.PurgeCancelRequest)
+                            {
+                                return;
+                            }
+                            break;
+                        
+                        case DeviceCheckEnum.HumidityOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.HumidityOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.Cache.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
+                        
+                        case DeviceCheckEnum.PressureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.PressureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Pressure level ({Services.Cache.EnvironmentalInfo.Pressure} kPa) is out of range.", "Pressure Warning", "Close");
+                        
+                        case DeviceCheckEnum.TemperatureOutOfRange:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.Cache.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                        
+                        case DeviceCheckEnum.BatteryCriticallyLow:
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
-                        case CacheService.DeviceCheckEnum.BatteryCriticallyLow:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Battery Level ({Services.Cache.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
-                            return; // Don't Increment
+                        
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -369,11 +347,6 @@ namespace FenomPlus.ViewModels
                 if (Services.DeviceService.Current?.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
-                }
-
-                if (Services.Dialogs.SecondsProgressDialogShowing())
-                {
-                    Services.Dialogs.DismissSecondsProgressDialog();
                 }
             }
 
