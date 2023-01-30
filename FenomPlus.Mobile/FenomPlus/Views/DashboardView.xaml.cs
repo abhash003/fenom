@@ -41,11 +41,6 @@ namespace FenomPlus.Views
 
         protected override void OnDisappearing()
         {
-            if (DashboardViewModel.Dialogs.SecondsProgressDialogShowing())
-            {
-                DashboardViewModel.Dialogs.DismissSecondsProgressDialog();
-            }
-
             base.OnDisappearing();
             DashboardViewModel.OnDisappearing();
         }

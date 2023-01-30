@@ -59,7 +59,6 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    PlaySounds.PlaySuccessSound();
                     Services.Navigation.TestResultsView();
                 }
             }
