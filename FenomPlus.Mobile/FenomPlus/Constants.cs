@@ -35,5 +35,8 @@ namespace FenomPlus
         public static int BatteryWarning20 = 20;
         public static int BatteryLevel50 = 50;
         public static int BatteryLevel75 = 75;
+
+        public static byte NoSensorMissing = 112;
+        public static byte NoSensorCommunicationFailed = 113;
     }
 }
