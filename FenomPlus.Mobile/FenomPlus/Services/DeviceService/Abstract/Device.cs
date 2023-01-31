@@ -248,6 +248,11 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 return DeviceCheckEnum.TemperatureOutOfRange;
             }
 
+            if (BreathManeuver.StatusCode == 0x70)
+            {
+                return DeviceCheckEnum.NoSensorMissing;
+            }
+
             return DeviceCheckEnum.Ready;
         }
 
@@ -391,7 +396,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
             {
                 BreathManeuver ??= new BreathManeuver();
 
-                BreathManeuver.Decode(data);
+                BreathManeuver.Decode(data);               
+                
 
                 if (BreathManeuver.TimeRemaining == 0xff)
                 {
