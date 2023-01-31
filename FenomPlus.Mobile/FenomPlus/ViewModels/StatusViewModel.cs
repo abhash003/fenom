@@ -750,7 +750,22 @@ namespace FenomPlus.ViewModels
         private async Task NavigateToStatusPageAsync()
         {
             await RefreshStatusAsync();
-            await Services.Navigation.DeviceStatusHubView();
+
+            switch (App.GetCurrentPage())
+            {
+                //case TestErrorView testErrorView:     // Seems to be OK to navigate away from this
+                //case TestFailedView testFailedView:   // Seems to be OK to navigate away from this
+                case BreathManeuverFeedbackView breathManeuverFeedbackView:
+                case PreparingStandardTestResultView preparingStandardTestResultView:
+                case StopExhalingView stopExhalingView:
+                case TestResultsView testResultsView:
+                    // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
+                    break;
+                default:
+                    await Services.Navigation.DeviceStatusHubView();
+                    break;
+            }
+
         }
 
     }

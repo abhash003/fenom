@@ -98,7 +98,8 @@ namespace FenomPlus.Controls
         readonly SKPaint warningArcPaint;
         readonly SKPaint safeArcPaint;
         readonly SKPaint arrowPaint;
-        private readonly SKPaint starPaintFill;
+        private readonly SKPaint starPaintFillSmall;
+        private readonly SKPaint starPaintFillBig;
         private readonly SKPaint starPaintStroke;
 
         public BreathGauge()
@@ -160,10 +161,18 @@ namespace FenomPlus.Controls
                 StrokeWidth = 4
             };
 
-            starPaintFill = new SKPaint()
+            starPaintFillSmall = new SKPaint()
             {
                 Style = SKPaintStyle.Fill,
                 Color = SKColor.Parse("#FFFFFF"),
+                IsAntialias = true,
+                StrokeWidth = 1
+            };
+
+            starPaintFillBig = new SKPaint()
+            {
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.Parse("#FFFF00"),
                 IsAntialias = true,
                 StrokeWidth = 1
             };
@@ -175,6 +184,7 @@ namespace FenomPlus.Controls
                 IsAntialias = true,
                 StrokeWidth = 1
             };
+
         }
 
         private SKCanvas canvas;
@@ -253,23 +263,24 @@ namespace FenomPlus.Controls
 
         void DrawStar(SKCanvas canvas, float value)
         {
-
             canvas.Save();
+
+            SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
+
 
             if (GaugeData is > 2.9f and < 3.1f)
             {
-                canvas.Scale(0.9f);
-                canvas.Translate(0, -100); // 0.7f scale
+                canvas.Scale(1.2f);
+                canvas.Translate(0, -77); // 0.7f scale
+                canvas.DrawPath(starPath, starPaintFillBig);
             }
             else
             {
                 canvas.Scale(0.6f);
-                canvas.Translate(0, -150); // 0.7f scale
+                canvas.Translate(0, -152); // 0.7f scale
+                canvas.DrawPath(starPath, starPaintFillSmall);
             }
 
-            SKPath starPath = SKPath.ParseSvgPathData("m-11,-1.49329l8.32289,0l2.57184,-7.90671l2.57184,7.90671l8.32289,0l-6.73335,4.88656l2.57197,7.90671l-6.73336,-4.8867l-6.73335,4.8867l2.57197,-7.90671l-6.73335,-4.88656l0,0z");
-
-            canvas.DrawPath(starPath, starPaintFill);
             canvas.DrawPath(starPath, starPaintStroke);
 
             canvas.Restore();
