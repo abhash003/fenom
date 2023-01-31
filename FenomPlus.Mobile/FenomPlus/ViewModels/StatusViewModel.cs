@@ -295,6 +295,26 @@ namespace FenomPlus.ViewModels
                 SensorViewModel.Value = $"{daysRemaining}";
                 SensorViewModel.Label = "Days Left";
             }
+            else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorMissing)
+            {
+                // error
+                SensorBarIcon = "wo_sensor_red.png";
+                SensorViewModel.ImagePath = "sensor_red.png";
+                SensorViewModel.ValueColor = Color.Red;
+                SensorViewModel.Description = "Nitrous Oxide Sensor is missing.  Install a F150 sensor.";
+                SensorViewModel.Value = $"{daysRemaining}";
+                SensorViewModel.Label = "Days Left";
+            }
+            else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorCommunicationFailed)
+            {
+                // error
+                SensorBarIcon = "wo_sensor_red.png";
+                SensorViewModel.ImagePath = "sensor_red.png";
+                SensorViewModel.ValueColor = Color.Red;
+                SensorViewModel.Description = "Nitrous Oxide Sensor communication failed.";
+                SensorViewModel.Value = $"{daysRemaining}";
+                SensorViewModel.Label = "Days Left";
+            }
             else if (daysRemaining <= Constants.SensorWarning60Days)
             {
                 // warning
