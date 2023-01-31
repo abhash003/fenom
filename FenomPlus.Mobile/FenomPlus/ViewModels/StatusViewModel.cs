@@ -301,7 +301,7 @@ namespace FenomPlus.ViewModels
                 SensorBarIcon = "wo_sensor_red.png";
                 SensorViewModel.ImagePath = "sensor_red.png";
                 SensorViewModel.ValueColor = Color.Red;
-                SensorViewModel.Description = "NO Sensor is missing.  Install a F150 sensor.";
+                SensorViewModel.Description = "Nitrous Oxide Sensor is missing.  Install a F150 sensor.";
                 SensorViewModel.Value = $"{daysRemaining}";
                 SensorViewModel.Label = "Days Left";
             }
@@ -311,7 +311,7 @@ namespace FenomPlus.ViewModels
                 SensorBarIcon = "wo_sensor_red.png";
                 SensorViewModel.ImagePath = "sensor_red.png";
                 SensorViewModel.ValueColor = Color.Red;
-                SensorViewModel.Description = "NO Sensor communication failed.";
+                SensorViewModel.Description = "Nitrous Oxide Sensor communication failed.";
                 SensorViewModel.Value = $"{daysRemaining}";
                 SensorViewModel.Label = "Days Left";
             }

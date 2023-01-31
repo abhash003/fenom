@@ -56,10 +56,10 @@ namespace FenomPlus.ViewModels
                         Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning","Close");
                         break;
                     case DeviceCheckEnum.NoSensorMissing:
-                        Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
                         break;
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
-                        Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -104,10 +104,10 @@ namespace FenomPlus.ViewModels
                         Services.Dialogs.ShowAlert($"Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low.", "Unable to Run Test", "Close");
                         break;
                     case DeviceCheckEnum.NoSensorMissing:
-                        Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
                         break;
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
-                        Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

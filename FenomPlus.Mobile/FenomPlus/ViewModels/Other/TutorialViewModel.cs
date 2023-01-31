@@ -274,11 +274,11 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
 
                         case DeviceCheckEnum.NoSensorMissing:
-                            Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
                             return; // Don't Increment
 
                         case DeviceCheckEnum.NoSensorCommunicationFailed:
-                            Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
 
                         default:
@@ -346,11 +346,11 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
 
                         case DeviceCheckEnum.NoSensorMissing:
-                            Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
                             return; // Don't Increment
 
                         case DeviceCheckEnum.NoSensorCommunicationFailed:
-                            Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
 
                         default:
