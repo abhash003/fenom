@@ -752,6 +752,23 @@ namespace FenomPlus.ViewModels
 
         #region "QC User Test"
 
+        [ObservableProperty]
+        private int _testTime;
+
+        [ObservableProperty]
+        private int _gaugeSeconds;
+
+        [ObservableProperty]
+        private float _gaugeData;
+
+        partial void OnGaugeDataChanged(float value)
+        {
+            PlaySounds.PlaySound(GaugeData);
+        }
+
+        [ObservableProperty]
+        private string _gaugeStatus;
+
         private async Task StartUserBreathTest()
         {
             if (Services.DeviceService.Current != null)
