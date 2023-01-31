@@ -1,4 +1,5 @@
 ﻿using FenomPlus.ViewModels;
+using FenomPlus.ViewModels.QualityControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,12 @@ namespace FenomPlus.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QCNegativeControlTestView : ContentView
     {
-        private readonly QualityControlViewModel QualityControlViewModel;
+        private readonly QCNegativeControlTestViewModel QCNegativeControlTestViewModel;
 
         public QCNegativeControlTestView()
         {
             InitializeComponent();
-            BindingContext = QualityControlViewModel = new QualityControlViewModel();
+            BindingContext = QCNegativeControlTestViewModel = new QCNegativeControlTestViewModel();
         }
     }
 }

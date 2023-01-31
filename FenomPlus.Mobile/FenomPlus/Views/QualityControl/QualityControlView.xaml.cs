@@ -19,7 +19,7 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = QualityControlViewModel = new QualityControlViewModel();
 
-            QcSettings.BindingContext = QualityControlViewModel.ImageButtonViewModel;
+            QcSettings.BindingContext = QualityControlViewModel.QCSettingsViewModel;
         }
 
         protected override void OnAppearing()

@@ -85,12 +85,20 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestView)}"), false);
         }
 
+        public async Task QCUserStopTestView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserStopTestView)}"), false);
+        }
+
+        public async Task QCUserTestCalculationView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestCalculationView)}"), false);
+        }
+
         public async Task QCUserTestResultView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestResultView)}"), false);
         }
-
-
 
         public async Task QCUserTestChartView()
         {

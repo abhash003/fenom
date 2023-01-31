@@ -1,5 +1,5 @@
 ﻿using FenomPlus.ViewModels;
-using FenomPlus.ViewModels.QualityControl;
+using FenomPlus.ViewModels.QualityControl.Models;
 using System;
 using System.Globalization;
 
@@ -7,9 +7,19 @@ namespace FenomPlus.Controls
 {
     public partial class QcButtonViewModel : BaseViewModel
     {
-        public QCUser QCUserModel { get; set; }
+        private QCUser _qcUserModel;
+        public QCUser QCUserModel
+        {
+            get => _qcUserModel;
+            set
+            {
+                _qcUserModel = value;
 
-        public bool Assigned { get; set; }
+                Assigned = _qcUserModel != null;
+            }
+        }
+
+        public bool Assigned { get; set; } = false;
 
         public string UserName
         {
@@ -47,22 +57,31 @@ namespace FenomPlus.Controls
 
         public string NextTestDateString { get; set; } = string.Empty;
 
-        public QcButtonViewModel(QCUser userModel)
+        public QcButtonViewModel()
         {
-            QCUserModel = userModel;
-
-            if (QCUserModel != null)
-            {
-                Assigned = true;
-                UserName = QCUserModel.UserName;
-                CurrentStatus = QCUserModel.CurrentStatus;
-                ExpiresDate = QCUserModel.ExpiresDate;
-                NextTestDate = QCUserModel.NextTestDate;
-            }
-            else
-            {
-                Assigned = false;
-            }
+                
         }
+
+        //public QcButtonViewModel(QCUser userModel)
+        //{
+        //    QCUserModel = userModel;
+
+        //    if (QCUserModel != null)
+        //    {
+        //        Assigned = true;
+        //        UserName = QCUserModel.UserName;
+        //        CurrentStatus = QCUserModel.CurrentStatus;
+        //        ExpiresDate = QCUserModel.ExpiresDate;
+        //        NextTestDate = QCUserModel.NextTestDate;
+        //    }
+        //    else
+        //    {
+        //        Assigned = false;
+        //        UserName = string.Empty;
+        //        CurrentStatus = string.Empty;
+        //        ExpiresDateString = string.Empty;
+        //        NextTestDateString = string.Empty;
+        //    }
+        //}
     }
 }

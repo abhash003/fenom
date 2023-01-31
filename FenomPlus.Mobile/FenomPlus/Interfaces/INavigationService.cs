@@ -1,6 +1,7 @@
 ﻿using FenomPlus.Controls;
 using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace FenomPlus.Interfaces
 {
@@ -19,6 +20,9 @@ namespace FenomPlus.Interfaces
         Task QCNegativeControlResult();
         Task QCNegativeControlChartView();
         Task QCUserTestView();
+
+        Task QCUserStopTestView();
+        Task QCUserTestCalculationView();
         Task QCUserTestResultView();
         Task QCUserTestChartView();
         Task QCSettingsView();

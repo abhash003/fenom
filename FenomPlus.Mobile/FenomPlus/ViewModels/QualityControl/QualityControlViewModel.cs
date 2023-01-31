@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
-using FenomPlus.Database.Adapters;
-using FenomPlus.Database.Tables;
+using FenomPlus.Enums;
 using FenomPlus.Helpers;
-using FenomPlus.Models;
-using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
-using FenomPlus.SDK.Core.Utils;
 using FenomPlus.Services.DeviceService.Concrete;
+using FenomPlus.Services.DeviceService.Enums;
 using FenomPlus.ViewModels.QualityControl;
+using FenomPlus.ViewModels.QualityControl.Models;
 using LiteDB;
-using Microsoft.Extensions.DependencyInjection;
-using Plugin.BLE.Abstractions;
-using Xamarin.Forms;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace FenomPlus.ViewModels
 {
@@ -31,7 +23,7 @@ namespace FenomPlus.ViewModels
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
         public List<QcButtonViewModel> QcButtonViewModels = new List<QcButtonViewModel>();
 
-        public QCSettingsButtonViewModel ImageButtonViewModel = new QCSettingsButtonViewModel();
+        public QCSettingsViewModel QCSettingsViewModel = new QCSettingsViewModel();
 
         private string CurrentDeviceSerialNumber = string.Empty;
 
@@ -57,6 +49,11 @@ namespace FenomPlus.ViewModels
 
             // ToDo: Read from database
             //MockData();
+
+            for (int i = 0; i < 7; i++) // Negative control + 6 users
+            {
+                QcButtonViewModels.Add(new QcButtonViewModel());
+            }
         }
 
         // Required for QualityControlView (Hub)
@@ -100,7 +97,22 @@ namespace FenomPlus.ViewModels
             // Get all users for this currently connected device
             QCUsers = ReadAllQcUsers(CurrentDeviceSerialNumber);
 
-            InitializeUserButtonViewModels();
+
+
+            // Need to clear the button viewModels without creating new since they may already be bound to buttons
+            for (int i = 0; i < 7; i++)
+            {
+                QcButtonViewModels[i].QCUserModel = null;
+            }
+
+            // Now assign Negative Control and users to the buttons
+            QcButtonViewModels[0].QCUserModel = QCNegativeControl;
+
+            // Now assign users from the database
+            for (int i = 0; i <= QCUsers.Count - 1; i++)
+            {
+                QcButtonViewModels[i + 1].QCUserModel = QCUsers[i];
+            }
         }
 
         private void WipeDataBase()
@@ -648,39 +660,6 @@ namespace FenomPlus.ViewModels
 
         #endregion
 
-        private void InitializeUserButtonViewModels()
-        {
-            Debug.Assert(QCNegativeControl != null); // Should always be assigned by this point
-
-            QcButtonViewModels.Clear();
-
-            //QcButtonViewModels[0] is the Negative Control, the other elements are users
-            var negativeControl = new QcButtonViewModel(QCNegativeControl)
-            {
-                Assigned = true,
-                UserName = QCNegativeControl.UserName,
-                CurrentStatus = QCNegativeControl.CurrentStatus,
-                ExpiresDate = QCNegativeControl.ExpiresDate, //QCNegativeControl.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture);
-                NextTestDate = QCNegativeControl.NextTestDate //.ToString(Constants.PrettyHoursFormatString, CultureInfo.CurrentCulture);
-            };
-
-            QcButtonViewModels.Add(negativeControl);
-
-            // Now assign users from the database
-            for (int i = 0; i < 6; i++)
-            {
-                if (i <= QCUsers.Count - 1)
-                {
-                    var buttonViewModel = new QcButtonViewModel(QCUsers[i]);
-                    QcButtonViewModels.Add(buttonViewModel);
-                }
-                else
-                {
-                    var buttonViewModel = new QcButtonViewModel(null);
-                    QcButtonViewModels.Add(buttonViewModel);
-                }
-            }
-        }
 
         [RelayCommand]
         private void UpdateNegativeControl()
@@ -703,9 +682,12 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task UpdateUser1Async()
         {
+            CurrentQcUser = QcButtonViewModels[1].QCUserModel;
+
             if (QcButtonViewModels[1].Assigned)
             {
                 // Open and run new breath test for this user
+                await StartUserBreathTest();
             }
             else
             {
@@ -714,10 +696,14 @@ namespace FenomPlus.ViewModels
 
                 if (!string.IsNullOrEmpty(userName))
                 {
-                    QcButtonViewModels[1].Assigned = true;
-                    QcButtonViewModels[1].UserName = userName;
+                    //QcButtonViewModels[1].UserName = userName;
+                    //QcButtonViewModels[1].Assigned = true;
+
+                    QCUser newUserModel = CreateQcUser(CurrentDeviceSerialNumber, userName);
+                    QcButtonViewModels[1].QCUserModel = newUserModel;
 
                     // Open and run new breath test for this user
+                    await StartUserBreathTest();
                 }
             }
         }
@@ -763,63 +749,63 @@ namespace FenomPlus.ViewModels
 
         }
 
-        [ObservableProperty]
-        private string _gaugeStatus;
 
-        [ObservableProperty]
-        private int _gaugeSeconds;
+        #region "QC User Test"
 
-        [ObservableProperty]
-        private float _gaugeData;
-
-        partial void OnGaugeDataChanged(float value)
+        private async Task StartUserBreathTest()
         {
-            PlaySounds.PlaySound(GaugeData);
-        }
-
-        private void DoBreathTest()
-        {
-            Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
-
-            //TestType = "10-second Test";
-            //TestTime = 10;
-
-            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
-            GaugeSeconds = 10;
-            GaugeStatus = "Start Blowing";
-
-
-            Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
-        }
-
-        private async void Cache_BreathFlowChanged(object sender, EventArgs e)
-        {
-            GaugeData = Services.DeviceService.Current.BreathFlow;
-            GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
-
-            if (GaugeSeconds <= 0)
+            if (Services.DeviceService.Current != null)
             {
-                if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
                 {
-                    await Services.DeviceService.Current.StopTest();
-                }
-                await Services.Navigation.StopExhalingView();
-                return;
-            }
+                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
-            if (GaugeData < Config.GaugeDataLow)
-            {
-                GaugeStatus = "Exhale Harder";
-            }
-            else if (GaugeData > Config.GaugeDataHigh)
-            {
-                GaugeStatus = "Exhale Softer";
-            }
-            else
-            {
-                GaugeStatus = "Good Job!";
+                    switch (deviceStatus)
+                    {
+                        case DeviceCheckEnum.Ready:
+                            Services.Cache.TestType = TestTypeEnum.Standard;
+                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                            await Services.Navigation.QCUserTestView();
+                            break;
+                        case DeviceCheckEnum.DevicePurging:
+                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                            if (Services.Dialogs.PurgeCancelRequest)
+                            {
+                                return;
+                            }
+
+                            Services.Cache.TestType = TestTypeEnum.Standard;
+                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                            await Services.Navigation.QCUserTestView();
+                            break;
+                        case DeviceCheckEnum.HumidityOutOfRange:
+                            Services.Dialogs.ShowAlert(
+                                $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
+                                "Humidity Warning", "Close");
+                            break;
+                        case DeviceCheckEnum.PressureOutOfRange:
+                            Services.Dialogs.ShowAlert(
+                                $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
+                                "Pressure Warning", "Close");
+                            break;
+                        case DeviceCheckEnum.TemperatureOutOfRange:
+                            Services.Dialogs.ShowAlert(
+                                $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
+                                "Temperature Warning", "Close");
+                            break;
+                        case DeviceCheckEnum.BatteryCriticallyLow:
+                            Services.Dialogs.ShowAlert(
+                                $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
+                                "Battery Warning", "Close");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             }
         }
+
+        #endregion
 
     }
 }
