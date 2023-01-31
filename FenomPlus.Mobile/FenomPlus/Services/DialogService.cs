@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Interfaces;
 using Xamarin.Forms;
+using System.Threading;
 
 namespace FenomPlus.Services
 {
@@ -71,6 +72,33 @@ namespace FenomPlus.Services
         public async Task DatePromptAsync(string message, DateTime defaultDateTime)
         {
             await UserDialogs.Instance.DatePromptAsync(message, defaultDateTime);
+        }
+
+        public async Task<string> UserNamePromptAsync()
+        {
+
+            var result = await UserDialogs.Instance.PromptAsync("User Name", "Create new QC User", "Create", "Cancel", "", InputType.Name);
+
+
+
+            //PromptConfig config = new PromptConfig();
+            //config.Title = "User Name";
+            //config.Message = "Create new QC User";
+            ////config.OnAction { get; set; }
+            //config.IsCancellable = true;
+            //config.OkText = "Create";
+            //config.CancelText = "Cancel";
+            //config.Placeholder = "Name";
+            //config.MaxLength = 128;
+
+            //var result = await UserDialogs.Instance.PromptAsync(config);
+
+
+
+            if (!result.Ok)
+                return string.Empty;
+
+            return result.Text;
         }
     }
 }

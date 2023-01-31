@@ -24,5 +24,7 @@ namespace FenomPlus.Interfaces
 
         Task DatePromptAsync(string message, DateTime defaultDateTime);
 
+        Task<string> UserNamePromptAsync();
+
     }
 }

@@ -2,6 +2,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:pages="clr-namespace:FenomPlus.Views"
        xmlns:controls="clr-namespace:FenomPlus.Controls"
+       xmlns:qualityControl="clr-namespace:FenomPlus.Views.QualityControl;assembly=FenomPlus"
        x:Class="FenomPlus.AppShell"
        BackgroundColor="#4895D9"
        Shell.NavBarIsVisible="True"
@@ -51,23 +52,24 @@
                   Route="PairingView"
                   IsVisible="true"/>
 
-
-    <!--The following are for debugging purposes only-->
-
     <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="DashboardView"              ContentTemplate="{DataTemplate pages:DashboardView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
-    <!--<ShellContent FlyoutItemIsVisible="False" Title="HumanControlDisqualifiedView"  Route="HumanControlDisqualifiedView" ContentTemplate="{DataTemplate pages:HumanControlDisqualifiedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPassedView"        Route="HumanControlPassedView"      ContentTemplate="{DataTemplate pages:HumanControlPassedView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPerformingView"    Route="HumanControlPerformingView"  ContentTemplate="{DataTemplate pages:HumanControlPerformingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="HumanControlPreparingView"     Route="HumanControlPreparingView"   ContentTemplate="{DataTemplate pages:HumanControlPreparingView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPerformView"    Route="NegativeControlPerformView"  ContentTemplate="{DataTemplate pages:NegativeControlPerformView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlFailView"       Route="NegativeControlFailView"     ContentTemplate="{DataTemplate pages:NegativeControlFailView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="NegativeControlPassView"       Route="NegativeControlPassView"     ContentTemplate="{DataTemplate pages:NegativeControlPassView}" />-->
     <ShellContent FlyoutItemIsVisible="False" Title="PreparingStandardTestResultView" Route="PreparingStandardTestResultView" ContentTemplate="{DataTemplate pages:PreparingStandardTestResultView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="StopExhalingView"              Route="StopExhalingView"            ContentTemplate="{DataTemplate pages:StopExhalingView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="TestErrorView"                 Route="TestErrorView"               ContentTemplate="{DataTemplate pages:TestErrorView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="TestFailedView"                Route="TestFailedView"              ContentTemplate="{DataTemplate pages:TestFailedView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="TestResultsView"               Route="TestResultsView"             ContentTemplate="{DataTemplate pages:TestResultsView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:TutorialView}" />
-    
+
+    <!--QC Views-->
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QualityControlView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCNegativeControlTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCNegativeControlResultView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCNegativeControlChartView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCUserTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCUserTestResultView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCUserTestChartView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:QCSettingsView}" />
+
+
 </Shell>

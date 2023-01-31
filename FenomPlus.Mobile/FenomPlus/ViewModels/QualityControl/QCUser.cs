@@ -75,7 +75,7 @@ namespace FenomPlus.ViewModels.QualityControl
 
         public ObjectId Id { get; set; }
 
-        public string DeviceSerialNumber { get; set; }
+        public string DeviceSerialNumber { get; set; } = string.Empty;
 
         public string UserName { get; set; }  // User name
 
@@ -86,6 +86,18 @@ namespace FenomPlus.ViewModels.QualityControl
         public DateTime ExpiresDate { get; set; }  // Date in which this expires?
 
         public DateTime NextTestDate { get; set; }  // Next Test date?
+
+        public List<double> ChartData { get; set; } = new List<double>();  // Next Test date?
+
+        public QCUser()
+        {
+            Id = ObjectId.NewObjectId();
+            DeviceSerialNumber = string.Empty;
+            UserName = string.Empty;
+            CurrentStatus = string.Empty;
+            ExpiresDate = DateTime.MinValue;
+            NextTestDate = DateTime.MinValue;
+        }
 
         public QCUser(string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
         {

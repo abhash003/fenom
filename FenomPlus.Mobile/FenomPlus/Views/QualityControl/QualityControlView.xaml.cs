@@ -19,15 +19,6 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = QualityControlViewModel = new QualityControlViewModel();
 
-            NegativeControlButton.BindingContext = QualityControlViewModel.QcNegativeControlViewModel;
-
-            User1Button.BindingContext = QualityControlViewModel.QcUser1ViewModel;
-            User2Button.BindingContext = QualityControlViewModel.QcUser2ViewModel;
-            User3Button.BindingContext = QualityControlViewModel.QcUser3ViewModel;
-            User4Button.BindingContext = QualityControlViewModel.QcUser4ViewModel;
-            User5Button.BindingContext = QualityControlViewModel.QcUser5ViewModel;
-            User6Button.BindingContext = QualityControlViewModel.QcUser6ViewModel;
-
             QcSettings.BindingContext = QualityControlViewModel.ImageButtonViewModel;
         }
 
@@ -37,6 +28,14 @@ namespace FenomPlus.Views
 
             // Refresh Data - ToDo: Later optimize and only refresh when needed?
             QualityControlViewModel.LoadData();
+
+            NegativeControlButton.BindingContext = QualityControlViewModel.QcButtonViewModels[0];
+            User1Button.BindingContext = QualityControlViewModel.QcButtonViewModels[1];
+            User2Button.BindingContext = QualityControlViewModel.QcButtonViewModels[2];
+            User3Button.BindingContext = QualityControlViewModel.QcButtonViewModels[3];
+            User4Button.BindingContext = QualityControlViewModel.QcButtonViewModels[4];
+            User5Button.BindingContext = QualityControlViewModel.QcButtonViewModels[5];
+            User6Button.BindingContext = QualityControlViewModel.QcButtonViewModels[6];
         }
 
         protected override void OnDisappearing()

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Database.Adapters;
 using FenomPlus.Database.Tables;
@@ -14,32 +15,36 @@ using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Features;
 using FenomPlus.SDK.Core.Models;
+using FenomPlus.SDK.Core.Utils;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.ViewModels.QualityControl;
 using LiteDB;
 using Microsoft.Extensions.DependencyInjection;
 using Plugin.BLE.Abstractions;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
     public partial class QualityControlViewModel : BaseViewModel
     {
-        public QcButtonViewModel QcNegativeControlViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser1ViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser2ViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser3ViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser4ViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser5ViewModel = new QcButtonViewModel();
-        public QcButtonViewModel QcUser6ViewModel = new QcButtonViewModel();
+
+        //QcButtonViewModels[0] is the Negative Control, the other elements are users
+        public List<QcButtonViewModel> QcButtonViewModels = new List<QcButtonViewModel>();
+
         public QCSettingsButtonViewModel ImageButtonViewModel = new QCSettingsButtonViewModel();
 
-        public string CurrentSerialNumber => $"Device Serial Number ({Services?.Cache?.DeviceSerialNumber})";
+        private string CurrentDeviceSerialNumber = string.Empty;
+
+        public string CurrentSerialNumber => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
         public QCUser CurrentQcUser;
 
+        [ObservableProperty]
+        private string _newUserName = string.Empty;
 
         public List<QCUser> AllDevices => GetAllQcDevices();
-        public List<QCUser> AllUsers => ReadAllQcUsers(Services?.Cache?.DeviceSerialNumber);
-        public List<QCTest> AllTests => ReadAllQcTests(Services?.Cache?.DeviceSerialNumber, CurrentQcUser.UserName);
+        public List<QCUser> AllUsers => ReadAllQcUsers(CurrentDeviceSerialNumber);
+        public List<QCTest> AllTests => ReadAllQcTests(CurrentDeviceSerialNumber, CurrentQcUser.UserName);
 
         private readonly string QCUserRecordsPath;
         private readonly string QCTestRecordsPath;
@@ -63,7 +68,7 @@ namespace FenomPlus.ViewModels
         {
             if (Services?.DeviceService?.Current == null)
                 return false;
- 
+
             return Services.DeviceService.Current.Connected; ;
         }
 
@@ -72,21 +77,28 @@ namespace FenomPlus.ViewModels
             if (!CheckDeviceConnection())
             {
                 // ToDo: Put up alert
-                Services.Dialogs.ShowAlert("You must have a connection to a device to continue.","Device Not Connected", "OK");
+                Services.Dialogs.ShowAlert("You must have a connection to a device to continue.", "Device Not Connected", "OK");
                 Services.Navigation.DashboardView();
                 return;
             }
 
-            WipeDataBase(); // ToDo: Fro debugging only
+            CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
+
+            if (Services == null || Services.Cache == null || string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                Debug.Assert(true);
+            }
+
+            WipeDataBase(); // ToDo: For debugging only
 
             // Get currently connected device's status or create a new one
-            QCDevice = ReadQcDevice(Services?.Cache?.DeviceSerialNumber);
+            QCDevice = ReadQcDevice(CurrentDeviceSerialNumber);
 
             // Get currently connected device's negative control or create one
-            QCNegativeControl = ReadQcNegativeControl(Services?.Cache?.DeviceSerialNumber);
+            QCNegativeControl = ReadQcNegativeControl(CurrentDeviceSerialNumber) ?? CreateQcNegativeControl(CurrentDeviceSerialNumber);
 
             // Get all users for this currently connected device
-            QCUsers = ReadAllQcUsers(Services?.Cache?.DeviceSerialNumber);
+            QCUsers = ReadAllQcUsers(CurrentDeviceSerialNumber);
 
             InitializeUserButtonViewModels();
         }
@@ -105,7 +117,6 @@ namespace FenomPlus.ViewModels
                 testsCollection.DeleteAll();
             }
         }
-<<<<<<< HEAD
 
 
 
@@ -205,7 +216,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Delete(device.Id);
- 
+
                     // Get all test records for this device
                     var testsCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testsCollection.Query()
@@ -469,7 +480,7 @@ namespace FenomPlus.ViewModels
         {
             if (user == null)
             {
-                return false; 
+                return false;
             }
 
             try
@@ -531,7 +542,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                var newTest = new QCTest(Services.Cache.DeviceSerialNumber, userName, DateTime.Now, result);
+                var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, result);
 
                 using (var db = new LiteDatabase(QCTestRecordsPath))
                 {
@@ -639,177 +650,176 @@ namespace FenomPlus.ViewModels
 
         private void InitializeUserButtonViewModels()
         {
-            if (QCNegativeControl != null)
-            {
-                QcNegativeControlViewModel.Assigned = true;
-                QcNegativeControlViewModel.Title = QCNegativeControl.UserName;
-                QcNegativeControlViewModel.Status = QCNegativeControl.CurrentStatus;
-                QcNegativeControlViewModel.Expires = QCNegativeControl.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture);
-                QcNegativeControlViewModel.NextTest = QCNegativeControl.NextTestDate.ToString(Constants.PrettyHoursFormatString, CultureInfo.CurrentCulture);
-            }
+            Debug.Assert(QCNegativeControl != null); // Should always be assigned by this point
 
+            QcButtonViewModels.Clear();
 
-            if (QCUsers.Count <= 0)
+            //QcButtonViewModels[0] is the Negative Control, the other elements are users
+            var negativeControl = new QcButtonViewModel(QCNegativeControl)
             {
-                QcUser1ViewModel.Assigned = false;
-                QcUser2ViewModel.Assigned = false;
-                QcUser3ViewModel.Assigned = false;
-                QcUser4ViewModel.Assigned = false;
-                QcUser5ViewModel.Assigned = false;
-                QcUser6ViewModel.Assigned = false;
-            }
-            else
+                Assigned = true,
+                UserName = QCNegativeControl.UserName,
+                CurrentStatus = QCNegativeControl.CurrentStatus,
+                ExpiresDate = QCNegativeControl.ExpiresDate, //QCNegativeControl.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture);
+                NextTestDate = QCNegativeControl.NextTestDate //.ToString(Constants.PrettyHoursFormatString, CultureInfo.CurrentCulture);
+            };
+
+            QcButtonViewModels.Add(negativeControl);
+
+            // Now assign users from the database
+            for (int i = 0; i < 6; i++)
             {
-                for (int i = 0; i < 6; i++)
+                if (i <= QCUsers.Count - 1)
                 {
-                    var user = QCUsers[i];
-
-                    switch (i)
-                    {
-                        case 0:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser1ViewModel.Assigned = true;
-                                QcUser1ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser1ViewModel.Title = user.UserName;
-                                QcUser1ViewModel.Status = user.CurrentStatus;
-                                QcUser1ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser1ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser1ViewModel.Assigned = false;
-                            }
-
-                            break;
-
-                        case 1:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser2ViewModel.Assigned = true;
-                                QcUser2ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser2ViewModel.Title = user.UserName;
-                                QcUser2ViewModel.Status = user.CurrentStatus;
-                                QcUser2ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser2ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser2ViewModel.Assigned = false;
-                            }
-
-
-                            break;
-
-                        case 2:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser3ViewModel.Assigned = true;
-                                QcUser3ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser3ViewModel.Title = user.UserName;
-                                QcUser3ViewModel.Status = user.CurrentStatus;
-                                QcUser3ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser3ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser3ViewModel.Assigned = false;
-                            }
-
-                            break;
-
-                        case 3:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser4ViewModel.Assigned = true;
-                                QcUser4ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser4ViewModel.Title = user.UserName;
-                                QcUser4ViewModel.Status = user.CurrentStatus;
-                                QcUser4ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser4ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser4ViewModel.Assigned = false;
-                            }
-
-
-                            break;
-
-                        case 4:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser5ViewModel.Assigned = true;
-                                QcUser5ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser5ViewModel.Title = user.UserName;
-                                QcUser5ViewModel.Status = user.CurrentStatus;
-                                QcUser5ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser5ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser5ViewModel.Assigned = false;
-                            }
-
-
-                            break;
-
-                        case 5:
-                            if (i < QCUsers.Count - 1)
-                            {
-                                QcUser6ViewModel.Assigned = true;
-                                QcUser6ViewModel.DeviceSerialNumber = user.DeviceSerialNumber;
-                                QcUser6ViewModel.Title = user.UserName;
-                                QcUser6ViewModel.Status = user.CurrentStatus;
-                                QcUser6ViewModel.Expires = user.ExpiresDate.ToString(Constants.PrettyDateFormatString);
-                                QcUser6ViewModel.NextTest = user.NextTestDate.ToString(Constants.PrettyHoursFormatString);
-                            }
-                            else
-                            {
-                                QcUser6ViewModel.Assigned = false;
-                            }
-
-
-                            break;
-
-                        default: break;
-                    }
+                    var buttonViewModel = new QcButtonViewModel(QCUsers[i]);
+                    QcButtonViewModels.Add(buttonViewModel);
+                }
+                else
+                {
+                    var buttonViewModel = new QcButtonViewModel(null);
+                    QcButtonViewModels.Add(buttonViewModel);
                 }
             }
         }
 
-        private void MockData()
+        [RelayCommand]
+        private void UpdateNegativeControl()
+        {
+            //QCNegativeControl
+            //QcNegativeControlViewModel
+
+            // Open QC Negative control view and do automatic breath test
+
+            if (QcButtonViewModels[0].Assigned)
+            {
+                // Open and run automatic test for negative control
+            }
+            else
+            {
+                Debugger.Break(); // Should never happen
+            }
+        }
+
+        [RelayCommand]
+        private async Task UpdateUser1Async()
+        {
+            if (QcButtonViewModels[1].Assigned)
+            {
+                // Open and run new breath test for this user
+            }
+            else
+            {
+                // Open user name dialog and create user, then open breath test view
+                string userName = await Services.Dialogs.UserNamePromptAsync();
+
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    QcButtonViewModels[1].Assigned = true;
+                    QcButtonViewModels[1].UserName = userName;
+
+                    // Open and run new breath test for this user
+                }
+            }
+        }
+
+        [RelayCommand]
+        private void UpdateUser2()
+        {
+            //QCUsers[1]
+            //QcUser2ViewModel
+        }
+
+        [RelayCommand]
+        private void UpdateUser3()
+        {
+            //QCUsers[2]
+            //QcUser3ViewModel
+        }
+
+        [RelayCommand]
+        private void UpdateUser4()
+        {
+            //QCUsers[3]
+            //QcUser4ViewModel
+        }
+
+        [RelayCommand]
+        private void UpdateUser5()
+        {
+            //QCUsers[4]
+            //QcUser5ViewModel
+        }
+
+        [RelayCommand]
+        private void UpdateUser6()
+        {
+            //QCUsers[5]
+            //QcUser6ViewModel
+        }
+
+        [RelayCommand]
+        private void ShowQCSettings()
         {
 
-
-            //var negativeControlTable = new QCNegativeControlTable();
-
-            //var userTable1 = new QCUserTable(serial, "Jim");
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable1.TestStatus
-            //    userTable1.TestDate
-
-
-
-
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable1.TestResults.Add(new QCResultTable(serial, "10", 25));
-            //newDevice.Users.Add(userTable1);
-
-            //var userTable2 = new QCUserTable(serial, "Bob");
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable2.TestResults.Add(new QCResultTable(serial, "10", 19));
-            //newDevice.Users.Add(userTable2);
-
-            //var userTable3 = new QCUserTable(serial, "Vinh");
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 20));
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 30));
-            //userTable3.TestResults.Add(new QCResultTable(serial, "10", 31));
-            //newDevice.Users.Add(userTable3);
         }
-=======
-       
->>>>>>> origin/develop
+
+        [ObservableProperty]
+        private string _gaugeStatus;
+
+        [ObservableProperty]
+        private int _gaugeSeconds;
+
+        [ObservableProperty]
+        private float _gaugeData;
+
+        partial void OnGaugeDataChanged(float value)
+        {
+            PlaySounds.PlaySound(GaugeData);
+        }
+
+        private void DoBreathTest()
+        {
+            Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
+
+            //TestType = "10-second Test";
+            //TestTime = 10;
+
+            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
+            GaugeSeconds = 10;
+            GaugeStatus = "Start Blowing";
+
+
+            Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
+        }
+
+        private async void Cache_BreathFlowChanged(object sender, EventArgs e)
+        {
+            GaugeData = Services.DeviceService.Current.BreathFlow;
+            GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
+
+            if (GaugeSeconds <= 0)
+            {
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
+                {
+                    await Services.DeviceService.Current.StopTest();
+                }
+                await Services.Navigation.StopExhalingView();
+                return;
+            }
+
+            if (GaugeData < Config.GaugeDataLow)
+            {
+                GaugeStatus = "Exhale Harder";
+            }
+            else if (GaugeData > Config.GaugeDataHigh)
+            {
+                GaugeStatus = "Exhale Softer";
+            }
+            else
+            {
+                GaugeStatus = "Good Job!";
+            }
+        }
+
     }
 }
