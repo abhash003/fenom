@@ -9,6 +9,7 @@ namespace FenomPlus.Services.DeviceService.Enums
         PressureOutOfRange,
         TemperatureOutOfRange,
         BatteryCriticallyLow,
-        NoSensorMissing
+        NoSensorMissing,
+        NoSensorCommunicationFailed
     }
 }

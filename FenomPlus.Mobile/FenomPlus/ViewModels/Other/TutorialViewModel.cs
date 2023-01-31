@@ -277,6 +277,10 @@ namespace FenomPlus.ViewModels
                             Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
                             return; // Don't Increment
 
+                        case DeviceCheckEnum.NoSensorCommunicationFailed:
+                            Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -343,6 +347,10 @@ namespace FenomPlus.ViewModels
 
                         case DeviceCheckEnum.NoSensorMissing:
                             Services.Dialogs.ShowAlert($"NO Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
+                        case DeviceCheckEnum.NoSensorCommunicationFailed:
+                            Services.Dialogs.ShowAlert($"NO Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
 
                         default:
