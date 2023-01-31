@@ -272,7 +272,15 @@ namespace FenomPlus.ViewModels
                         case DeviceCheckEnum.BatteryCriticallyLow:
                             Services.Dialogs.ShowAlert($"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
-                        
+
+                        case DeviceCheckEnum.NoSensorMissing:
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
+                        case DeviceCheckEnum.NoSensorCommunicationFailed:
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -336,7 +344,15 @@ namespace FenomPlus.ViewModels
                         case DeviceCheckEnum.BatteryCriticallyLow:
                             Services.Dialogs.ShowAlert($"Unable to run practice test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ", "Battery Warning", "Close");
                             return; // Don't Increment
-                        
+
+                        case DeviceCheckEnum.NoSensorMissing:
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
+                        case DeviceCheckEnum.NoSensorCommunicationFailed:
+                            Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                            return; // Don't Increment
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
