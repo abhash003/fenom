@@ -26,7 +26,7 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //QualityControlViewModel.OnAppearing();
+            QualityControlViewModel.InitUserTestResults();
         }
 
         protected override void OnDisappearing()

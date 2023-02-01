@@ -34,7 +34,7 @@
                        HorizontalTextAlignment="Center"
                        Padding="0,0,0,0"/>
 
-                <Label Text="{Binding TestResult}"
+                <Label Text="{Binding QCUserTestResult}"
                        FontSize="100"
                        TextColor="#333333"
                        HorizontalTextAlignment="Center"
@@ -52,7 +52,7 @@
             <Button Text="Exit"
                     Grid.Row="1"
                     Style="{StaticResource defaultButton}"
-                    Command="{Binding ExitToDashboardCommand}"
+                    Command="{Binding ExitToQCCommand}"
                     HorizontalOptions="End"
                     Margin="0,0,40,0"/>
 

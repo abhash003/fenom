@@ -66,9 +66,10 @@
     <ShellContent FlyoutItemIsVisible="False" Title="Negative Control Result"        Route="QCNegativeControlResultView"       ContentTemplate="{DataTemplate pages:QCNegativeControlResultView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Negative Control Chart"         Route="QCNegativeControlChartView"        ContentTemplate="{DataTemplate pages:QCNegativeControlChartView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Quality Control User"           Route="QCUserTestView"                    ContentTemplate="{DataTemplate pages:QCUserTestView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="Stop Test"                      Route="QCUserStopTestView"                    ContentTemplate="{DataTemplate pages:QCUserStopTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Stop Test"                      Route="QCUserStopTestView"                ContentTemplate="{DataTemplate pages:QCUserStopTestView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Calculating Result"             Route="QCUserTestCalculationView"         ContentTemplate="{DataTemplate pages:QCUserTestCalculationView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Quality Control Test Results"   Route="QCUserTestResultView"              ContentTemplate="{DataTemplate pages:QCUserTestResultView}" />
-    <ShellContent FlyoutItemIsVisible="False" Title="Quality Control Test Failed"    Route="QCUserTestFailedView"              ContentTemplate="{DataTemplate pages:QCUserTestErrorView}" />
+    <ShellContent FlyoutItemIsVisible="False" Title="Quality Control Test Failed"    Route="QCUserTestErrorView"              ContentTemplate="{DataTemplate pages:QCUserTestErrorView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Quality Control User Chart"     Route="QCUserTestChartView"               ContentTemplate="{DataTemplate pages:QCUserTestChartView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Quality Control Settings"       Route="QCSettingsView"                    ContentTemplate="{DataTemplate pages:QCSettingsView}" />
 

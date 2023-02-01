@@ -768,10 +768,7 @@ namespace FenomPlus.ViewModels
         }
 
 
-        #region "QC User Test"
-
-        [ObservableProperty]
-        private string _userTestErrorCode = string.Empty;
+        #region "QC User Breath Test"
 
         public async Task StartUserBreathTest()
         {
@@ -850,12 +847,8 @@ namespace FenomPlus.ViewModels
 
                 if (GaugeSeconds <= 0)
                 {
-                    //GaugeData = 0;
-
                     await Services.DeviceService.Current.StopTest();
                     await Services.Navigation.QCUserStopTestView();
-
-
                     return;
                 }
             }
@@ -874,11 +867,15 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private Timer UiTimer;
+        #endregion
+
+        #region "QC User Stop Test:
+
+
         //private bool Stop;
 
-        [ObservableProperty]
-        private int _seconds;
+        //[ObservableProperty]
+        //private int _seconds;
 
         public void InitUserStopBreathTest()
         {
@@ -903,9 +900,16 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                Services.Navigation.PreparingStandardTestResultView();
+                Services.Navigation.QCUserTestCalculationView();
             }
         }
+
+        #endregion
+
+
+        #region "QC User Test Calculation"
+
+        private Timer UiTimer;
 
         public void StartUserTestCalculations()
         {
@@ -920,6 +924,7 @@ namespace FenomPlus.ViewModels
         private bool CalculationsCompleted()
         {
             UiTimer.Stop();
+            UiTimer.Dispose();
 
             if (Services.DeviceService.Current is { FenomReady: false })
                 return false;
@@ -947,19 +952,21 @@ namespace FenomPlus.ViewModels
                 Services.Navigation.QCUserTestResultView();
             }
 
-            UiTimer.Start(); // Just in case
-            UiTimer.Dispose();
-
             return (Services.DeviceService.Current.FenomReady == false);
         }
 
+        #endregion
+
+
+        #region "QC User Test Result"
+
 
         [ObservableProperty]
-        private string _userTestResult = string.Empty;
+        private string _qCUserTestResult = string.Empty;
 
         public void InitUserTestResults()
         {
-            UserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
+            QCUserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
                 (Services.DeviceService.Current.FenomValue) > 300 ? "> 300" :
                 Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
 
