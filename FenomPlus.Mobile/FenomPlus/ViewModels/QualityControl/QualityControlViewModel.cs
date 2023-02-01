@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Forms;
@@ -29,8 +30,6 @@ namespace FenomPlus.ViewModels
         private string CurrentDeviceSerialNumber = string.Empty;
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
-
-        public QCUser CurrentQcUser;
 
         [ObservableProperty]
         private string _newUserName = string.Empty;
@@ -148,6 +147,25 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        public int SelectedUserIndex = -1;
+
+        public QCUser CurrentQcUser
+        {
+            get
+            {
+                if (SelectedUserIndex >= 0)
+                {
+                    return QcButtonViewModels[SelectedUserIndex].QCUserModel;
+                }
+
+                return null;
+            }
+        }
+
+        public void ResetSelectedUserIndex()
+        {
+            SelectedUserIndex = -1;
+        }
 
 
         #region "QC Device CRUD"
@@ -682,10 +700,13 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateNegativeControl()
         {
+            SelectedUserIndex = 0;
+
             //QCNegativeControl
             //QcNegativeControlViewModel
 
             // Open QC Negative control view and do automatic breath test
+
 
             if (QcButtonViewModels[0].Assigned)
             {
@@ -700,7 +721,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task UpdateUser1Async()
         {
-            CurrentQcUser = QcButtonViewModels[1].QCUserModel;
+            SelectedUserIndex = 1;
 
             if (QcButtonViewModels[1].Assigned)
             {
@@ -717,6 +738,12 @@ namespace FenomPlus.ViewModels
                     //QcButtonViewModels[1].UserName = userName;
                     //QcButtonViewModels[1].Assigned = true;
 
+                    if (QCUsers.Any(user => userName == user.UserName))
+                    {
+                        Services.Dialogs.ShowAlert($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
+                        return;
+                    }
+
                     QCUser newUserModel = CreateQcUser(CurrentDeviceSerialNumber, userName);
                     QcButtonViewModels[1].QCUserModel = newUserModel;
 
@@ -729,6 +756,8 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateUser2()
         {
+            SelectedUserIndex = 2;
+
             //QCUsers[1]
             //QcUser2ViewModel
         }
@@ -736,6 +765,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateUser3()
         {
+            SelectedUserIndex = 3;
             //QCUsers[2]
             //QcUser3ViewModel
         }
@@ -743,6 +773,8 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateUser4()
         {
+            SelectedUserIndex = 4;
+
             //QCUsers[3]
             //QcUser4ViewModel
         }
@@ -750,6 +782,8 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateUser5()
         {
+            SelectedUserIndex = 5;
+
             //QCUsers[4]
             //QcUser5ViewModel
         }
@@ -757,6 +791,8 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void UpdateUser6()
         {
+            SelectedUserIndex = 6;
+
             //QCUsers[5]
             //QcUser6ViewModel
         }
