@@ -48,7 +48,7 @@
                     </Grid>-->
 
                     <Label Text="Quality Control" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0"/>
-                    <Label Text="{Binding CurrentSerialNumber}" Grid.Row="0" Grid.Column="0" HorizontalOptions="End" Margin="20,0"/>
+                    <Label Text="{Binding SerialNumberString}" Grid.Row="0" Grid.Column="0" HorizontalOptions="End" Margin="20,0"/>
 
 
 

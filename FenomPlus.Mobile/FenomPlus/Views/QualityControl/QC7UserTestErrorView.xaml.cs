@@ -1,38 +1,34 @@
-﻿using FenomPlus.Services;
+﻿using System;
+using FenomPlus.Services;
 using FenomPlus.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class QCNegativeControlChartView : BaseContentPage
+    public partial class QCUserTestErrorView : BaseContentPage
     {
         private readonly QualityControlViewModel QualityControlViewModel;
 
-        public QCNegativeControlChartView()
+        public QCUserTestErrorView()
         {
             InitializeComponent();
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
-
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //QualityControlViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            //QualityControlViewModel.OnDisappearing();
+        }
+
+        public override void NewGlobalData()
+        {
+            base.NewGlobalData();
         }
     }
 }

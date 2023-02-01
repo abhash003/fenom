@@ -4,11 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:FenomPlus.Controls"
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
     x:Class="FenomPlus.Views.QCUserTestView"
     Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False"
+    x:DataType="viewModels:QualityControlViewModel">
 
     <Shell.TitleView>
         <controls:TitleContentView />
@@ -27,7 +29,7 @@
                      HorizontalOptions="FillAndExpand"
                      Margin="100,0,100,0">
 
-                <Label Text="{Binding TestType}"
+                <Label Text="QC User Test"
                            FontSize="30"
                            TextColor="#333"
                            HorizontalTextAlignment="Center" />
@@ -49,7 +51,7 @@
             <Button Text="Exit"
                     Grid.Row="1"
                     Style="{StaticResource defaultButton}"
-                    Command="{Binding ExitToQc}"
+                    Command="{Binding ExitToQCCommand}"
                     HorizontalOptions="End"
                     Margin="0,0,40,0"/>
 

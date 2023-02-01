@@ -100,6 +100,11 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestResultView)}"), false);
         }
 
+        public async Task QCUserTestErrorView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestErrorView)}"), false);
+        }
+
         public async Task QCUserTestChartView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestChartView)}"), false);

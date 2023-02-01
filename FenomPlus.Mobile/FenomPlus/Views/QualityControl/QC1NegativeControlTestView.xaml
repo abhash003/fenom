@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FenomPlus.Views.QCNegativeControlTestView">
-  <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
-</ContentView>
+<views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+                       xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                       x:Class="FenomPlus.Views.QCNegativeControlTestView">
+
+    <ContentPage.Content>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" AutoPlay="True" AutoHide="False"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>

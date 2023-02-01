@@ -1,4 +1,5 @@
-﻿using FenomPlus.ViewModels;
+﻿using FenomPlus.Services;
+using FenomPlus.ViewModels;
 using FenomPlus.ViewModels.QualityControl;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,27 @@ using Xamarin.Forms.Xaml;
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class QCNegativeControlTestView : ContentView
+    public partial class QCNegativeControlTestView : BaseContentPage
     {
-        private readonly QCNegativeControlTestViewModel QCNegativeControlTestViewModel;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
         public QCNegativeControlTestView()
         {
             InitializeComponent();
-            BindingContext = QCNegativeControlTestViewModel = new QCNegativeControlTestViewModel();
+            BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
+
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            //QualityControlViewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            //QualityControlViewModel.OnDisappearing();
         }
     }
 }

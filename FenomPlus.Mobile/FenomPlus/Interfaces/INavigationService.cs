@@ -1,4 +1,5 @@
 ﻿using FenomPlus.Controls;
+using FenomPlus.Views;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -24,6 +25,7 @@ namespace FenomPlus.Interfaces
         Task QCUserStopTestView();
         Task QCUserTestCalculationView();
         Task QCUserTestResultView();
+        Task QCUserTestErrorView();
         Task QCUserTestChartView();
         Task QCSettingsView();
 

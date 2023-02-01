@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using FenomPlus.ViewModels;
@@ -6,6 +6,7 @@ using FenomPlus.SDK.Core.Models;
 using FenomPlus.Enums;
 using FenomPlus.Controls;
 using Xamarin.Forms.Xaml;
+using FenomPlus.Services;
 
 namespace FenomPlus.Views
 {
@@ -17,9 +18,7 @@ namespace FenomPlus.Views
         public QualityControlView()
         {
             InitializeComponent();
-            BindingContext = QualityControlViewModel = new QualityControlViewModel();
-
-            QcSettings.BindingContext = QualityControlViewModel.QCSettingsViewModel;
+            BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
         }
 
         protected override void OnAppearing()

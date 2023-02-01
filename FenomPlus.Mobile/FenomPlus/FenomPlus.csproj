@@ -118,8 +118,17 @@
     <Compile Remove="ViewModels\QualityControl\NegativeControlFailViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\NegativeControlPassViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\NegativeControlPerformViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC1NegativeControlTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC2NegativeControlResultViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC3NegativeControlChartViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC4UserTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC5UserStopTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC6UserTestCalculationViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC7UserTestResultViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC8UserTestChartViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\QCDevice.cs" />
     <Compile Remove="ViewModels\QualityControl\QCNegativeControlViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCSettingsViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\QCUserViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\QualityControlDevicesViewModel.cs" />
     <Compile Remove="ViewModels\QualityControl\QualityControlUsersViewModel.cs" />
@@ -204,6 +213,9 @@
     </Compile>
     <Compile Update="Views\QualityControl\QC5UserStopTestView.xaml.cs">
       <DependentUpon>QC5UserStopTestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\QualityControl\QC7UserTestErrorView.xaml.cs">
+      <DependentUpon>QC7UserTestErrorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

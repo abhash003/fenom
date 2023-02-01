@@ -1,4 +1,5 @@
-﻿using FenomPlus.ViewModels;
+﻿using FenomPlus.Services;
+using FenomPlus.ViewModels;
 using FenomPlus.ViewModels.QualityControl;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,26 @@ using Xamarin.Forms.Xaml;
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class QCUserTestResultView : ContentView
+    public partial class QCUserTestResultView : BaseContentPage
     {
-        private readonly QCUserTestResultViewModel QCUserTestResultViewModel;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
         public QCUserTestResultView()
         {
             InitializeComponent();
-            BindingContext = QCUserTestResultViewModel = new QCUserTestResultViewModel();
+            BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            //QualityControlViewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            //QualityControlViewModel.OnDisappearing();
         }
     }
 }

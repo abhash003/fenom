@@ -7,18 +7,32 @@ using System.Threading.Tasks;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using FenomPlus.Services;
 
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class QCUserStopTestView : ContentView
+    public partial class QCUserStopTestView : BaseContentPage
     {
-        private readonly QCUserStopTestViewModel QCUserStopTestViewModel;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
         public QCUserStopTestView()
         {
             InitializeComponent();
-            BindingContext = QCUserStopTestViewModel = new QCUserStopTestViewModel();
+            BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
+
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            QualityControlViewModel.InitUserStopBreathTest();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            //QualityControlViewModel.OnDisappearing();
         }
     }
 }

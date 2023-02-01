@@ -13,9 +13,6 @@ namespace FenomPlus.ViewModels
     public partial class QCUserTestViewModel : BaseViewModel
     {
         [ObservableProperty]
-        private string _testType;
-
-        [ObservableProperty]
         private int _testTime;
 
         [ObservableProperty]

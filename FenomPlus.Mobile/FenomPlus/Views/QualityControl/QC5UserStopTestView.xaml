@@ -1,10 +1,26 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FenomPlus.Views.QCUserStopTestView">
-  <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
-</ContentView>
+<views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+                       xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                       x:Class="FenomPlus.Views.QCUserStopTestView">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <Image Source="StopSign"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   WidthRequest="400"
+                   HeightRequest="400"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+</views:BaseContentPage>

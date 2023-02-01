@@ -6,18 +6,20 @@ using FenomPlus.Enums;
 using FenomPlus.Controls;
 using FenomPlus.ViewModels.QualityControl;
 using Xamarin.Forms.Xaml;
+using FenomPlus.Services;
 
 namespace FenomPlus.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QCSettingsView : BaseContentPage
     {
-        private readonly QCSettingsViewModel QCSettingsViewModel;
+        private readonly QualityControlViewModel QualityControlViewModel;
 
         public QCSettingsView()
         {
             InitializeComponent();
-            BindingContext = QCSettingsViewModel = new QCSettingsViewModel();
+            BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
+
         }
 
         protected override void OnAppearing()

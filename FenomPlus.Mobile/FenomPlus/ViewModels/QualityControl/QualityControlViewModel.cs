@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
+using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Enums;
@@ -12,27 +13,44 @@ using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using System.Timers;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
     public partial class QualityControlViewModel : BaseViewModel
     {
-
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
         public List<QcButtonViewModel> QcButtonViewModels = new List<QcButtonViewModel>();
 
-        public QCSettingsViewModel QCSettingsViewModel = new QCSettingsViewModel();
-
         private string CurrentDeviceSerialNumber = string.Empty;
 
-        public string CurrentSerialNumber => $"Device Serial Number ({CurrentDeviceSerialNumber})";
+        public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
         public QCUser CurrentQcUser;
 
         [ObservableProperty]
         private string _newUserName = string.Empty;
+
+        [ObservableProperty]
+        private int _testTime;
+
+        [ObservableProperty]
+        private int _gaugeSeconds;
+
+        [ObservableProperty]
+        private float _gaugeData;
+
+        partial void OnGaugeDataChanged(float value)
+        {
+            PlaySounds.PlaySound(GaugeData);
+        }
+
+        [ObservableProperty]
+        private string _gaugeStatus;
 
         public List<QCUser> AllDevices => GetAllQcDevices();
         public List<QCUser> AllUsers => ReadAllQcUsers(CurrentDeviceSerialNumber);
@@ -753,23 +771,9 @@ namespace FenomPlus.ViewModels
         #region "QC User Test"
 
         [ObservableProperty]
-        private int _testTime;
+        private string _userTestErrorCode = string.Empty;
 
-        [ObservableProperty]
-        private int _gaugeSeconds;
-
-        [ObservableProperty]
-        private float _gaugeData;
-
-        partial void OnGaugeDataChanged(float value)
-        {
-            PlaySounds.PlaySound(GaugeData);
-        }
-
-        [ObservableProperty]
-        private string _gaugeStatus;
-
-        private async Task StartUserBreathTest()
+        public async Task StartUserBreathTest()
         {
             if (Services.DeviceService.Current != null)
             {
@@ -780,19 +784,14 @@ namespace FenomPlus.ViewModels
                     switch (deviceStatus)
                     {
                         case DeviceCheckEnum.Ready:
-                            Services.Cache.TestType = TestTypeEnum.Standard;
-                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                            await InitializeBreathGauge();
                             await Services.Navigation.QCUserTestView();
                             break;
                         case DeviceCheckEnum.DevicePurging:
                             await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                             if (Services.Dialogs.PurgeCancelRequest)
-                            {
                                 return;
-                            }
-
-                            Services.Cache.TestType = TestTypeEnum.Standard;
-                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                            await InitializeBreathGauge();
                             await Services.Navigation.QCUserTestView();
                             break;
                         case DeviceCheckEnum.HumidityOutOfRange:
@@ -820,6 +819,151 @@ namespace FenomPlus.ViewModels
                     }
                 }
             }
+        }
+
+        private async Task InitializeBreathGauge()
+        {
+            Services.Cache.TestType = TestTypeEnum.Standard;
+
+            if (Services.DeviceService.Current != null)
+            {
+                // Allows Updating the Breath Gauge in UI
+
+                Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
+
+                Services.DeviceService.Current.IsNotConnectedRedirect();
+
+                GaugeData = Services.DeviceService.Current!.BreathFlow = 0;
+                GaugeSeconds = 6; // ToDo: change to 10 after debugging
+                GaugeStatus = "Start Blowing";
+
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second); // ToDo: Change tp 10 after debugging
+            }
+        }
+
+        public async void Cache_BreathFlowChanged(object sender, EventArgs e)
+        {
+            if (Services.DeviceService.Current != null)
+            {
+                GaugeData = Services.DeviceService.Current.BreathFlow;
+                GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
+
+                if (GaugeSeconds <= 0)
+                {
+                    //GaugeData = 0;
+
+                    await Services.DeviceService.Current.StopTest();
+                    await Services.Navigation.QCUserStopTestView();
+
+
+                    return;
+                }
+            }
+
+            if (GaugeData < Config.GaugeDataLow)
+            {
+                GaugeStatus = "Exhale Harder";
+            }
+            else if (GaugeData > Config.GaugeDataHigh)
+            {
+                GaugeStatus = "Exhale Softer";
+            }
+            else
+            {
+                GaugeStatus = "Good Job!";
+            }
+        }
+
+        private Timer UiTimer;
+        //private bool Stop;
+
+        [ObservableProperty]
+        private int _seconds;
+
+        public void InitUserStopBreathTest()
+        {
+            //Stop = false;
+            //Seconds = Config.StopExhalingReadyWait;
+            PlaySounds.PlaySuccessSound();
+
+            //UiTimer = new Timer(1000);
+            //UiTimer.Elapsed += (sender, e) => StopBreathCompleted();
+            //UiTimer.Start();
+
+            //UiTimer.Stop();
+            Task.Delay(Config.StopExhalingReadyWait);
+
+            if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+            {
+                var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                ErrorsRepo.Insert(model);
+
+                PlaySounds.PlayFailedSound();
+                Services.Navigation.TestErrorView();
+            }
+            else
+            {
+                Services.Navigation.PreparingStandardTestResultView();
+            }
+        }
+
+        public void StartUserTestCalculations()
+        {
+            UiTimer = new Timer(Config.TestResultReadyWait * 1000);
+            UiTimer.Elapsed += (sender, e) => CalculationsCompleted();
+            UiTimer.Start();
+        }
+
+        [ObservableProperty]
+        private string _userTestErrorCode = string.Empty;
+
+        private bool CalculationsCompleted()
+        {
+            UiTimer.Stop();
+
+            if (Services.DeviceService.Current is { FenomReady: false })
+                return false;
+
+            // ToDo: Add to normal test results database?
+            var model = BreathManeuverResultDBModel.Create(Services.DeviceService.Current!.BreathManeuver);
+            ResultsRepo.Insert(model);
+
+            var str = ResultsRepo.ToString();
+
+            Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
+
+            if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+            {
+                var errorModel = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                ErrorsRepo.Insert(errorModel);
+
+                UserTestErrorCode = errorModel.ErrorCode;
+
+                PlaySounds.PlayFailedSound();
+                Services.Navigation.QCUserTestErrorView();
+            }
+            else
+            {
+                Services.Navigation.QCUserTestResultView();
+            }
+
+            UiTimer.Start(); // Just in case
+            UiTimer.Dispose();
+
+            return (Services.DeviceService.Current.FenomReady == false);
+        }
+
+
+        [ObservableProperty]
+        private string _userTestResult = string.Empty;
+
+        public void InitUserTestResults()
+        {
+            UserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
+                (Services.DeviceService.Current.FenomValue) > 300 ? "> 300" :
+                Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
+
+            Services.DeviceService.Current.ReadyForTest = false;
         }
 
         #endregion
