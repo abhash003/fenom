@@ -15,7 +15,7 @@ namespace FenomPlus
             InitializeComponent();
 
             // https://www.syncfusion.com/account
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("OTY0MjczQDMyMzAyZTM0MmUzMG1YbmkwZjN2STBsRy9EMkF4OXh3eWlNY1RYK2pES3hqMXczSDNJeHhWQTA9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTA2NTAxNUAzMjMwMmUzNDJlMzBXM0ozeG1ZbnowOHRMSklJZ25DbldybjdYdU10NVlrSjVZQWFISFVMdExRPQ==");
 
             SvgImageSource.RegisterAssembly();
 
