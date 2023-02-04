@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
+using System.Threading.Tasks;
 
 namespace FenomPlus.ViewModels
 {
@@ -38,7 +39,7 @@ namespace FenomPlus.ViewModels
             base.OnDisappearing();
         }
 
-        private bool CalculationsCompleted()
+        private async Task<bool> CalculationsCompleted()
         {
             if (Services.DeviceService.Current.FenomReady == true)
             {
@@ -49,17 +50,17 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
 
-                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00 || Services.DeviceService.Current.LastStatusCode != 0)
                 {
                     var errorModel = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
-                    Services.Navigation.TestFailedView();
+                    await Services.Navigation.TestErrorView();
                 }
                 else
                 {
-                    Services.Navigation.TestResultsView();
+                    await Services.Navigation.TestResultsView();
                 }
             }
 

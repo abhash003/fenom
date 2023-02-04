@@ -120,12 +120,12 @@ namespace FenomPlus.Enums
                     {0x37,  "Breath flow detected after STOP." },
                     {0x38,  "undecl: 0x38" },
                     {0x39,  "undecl: 0x39" },
-                    {0x3B,  "undecl: 0x3A" },
-                    {0x3C,  "undecl: 0x3B" },
-                    {0x3D,  "undecl: 0x3C" },
-                    {0x3E,  "undecl: 0x3D" },
-                    {0x3F,  "undecl: 0x3E" },
-                    {0x3E,  "undecl: 0x3F" },
+                    {0x3A,  "undecl: 0x3A" },
+                    {0x3B,  "undecl: 0x3B" },
+                    {0x3C,  "undecl: 0x3C" },
+                    {0x3D,  "undecl: 0x3D" },
+                    {0x3E,  "undecl: 0x3E" },
+                    {0x3F,  "undecl: 0x3F" },
 
                     // section 4
                     {0x40,  "*** Battery voltage too high ***" },

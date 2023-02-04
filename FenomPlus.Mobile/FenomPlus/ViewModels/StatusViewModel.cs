@@ -172,13 +172,11 @@ namespace FenomPlus.ViewModels
 
             if (Services.DeviceService.Current != null)
             {
-                UpdateSensor(Services.DeviceService.Current.SensorExpireDate);
+                if (Services.DeviceService.Current.SensorExpireDate != new DateTime(1,1,1))
+                    UpdateSensor(Services.DeviceService.Current.SensorExpireDate);
 
-                UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
-                // Don't update  an environment value if it is zero, we must not have good value yet
-
-                //if (Services.Cache.EnvironmentalInfo.BatteryLevel != 0)
-                //    UpdateBattery(Services.Cache.EnvironmentalInfo.BatteryLevel); // Cache is updated when characteristic changes
+                if (Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0)
+                    UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
 
                 if (Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0)
                     UpdatePressure(Services.DeviceService.Current.EnvironmentalInfo.Pressure);
@@ -277,8 +275,21 @@ namespace FenomPlus.ViewModels
             }
 
             // ToDo: Remove hard coded value
-            expirationDate = DateTime.Now.AddMonths(18).AddDays(-10);
-            //expirationDate = DateTime.Now.AddDays(5); 
+            int month = (Services.DeviceService.Current.DeviceInfo.SensorExpDateMonth);
+            int day = (Services.DeviceService.Current.DeviceInfo.SensorExpDateDay);
+            int year = (Services.DeviceService.Current.DeviceInfo.SensorExpDateYear);
+
+            // TODO
+            // temp fix: the status view should not be displayed until we have valid values
+            //           until that's done, give some valid values...
+            if (month == 0 || day == 0 || year == 0)
+            {
+                month = 01;
+                day   = 02;
+                year  = 03;
+            }
+
+            expirationDate = new DateTime(year, month, day);
 
             int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
 

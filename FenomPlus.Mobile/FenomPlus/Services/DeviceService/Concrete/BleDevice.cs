@@ -141,8 +141,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
+                                LastStatusCode = BreathManeuver.StatusCode;
                                 DecodeBreathManeuver(e.Characteristic.Value);
-                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow})");
+                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} status: {BreathManeuver.StatusCode}) score: {BreathManeuver.NOScore}");
                             }
                         };
 
@@ -151,7 +152,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeDebugMsg(e.Characteristic.Value);
-                                Console.WriteLine("updated characteristic: debug message");
+                                //Console.WriteLine("updated characteristic: debug message");
                             }
                         };
 
@@ -168,8 +169,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
+                                LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine("updated characteristic: error status");
+                                Console.WriteLine($"updated characteristic: error status (value={e.Characteristic.Value[0]})");
                             }
                         };
 
