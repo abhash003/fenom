@@ -35,14 +35,14 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public Device(object nativeDevice)
         {
-            _nativeDevice = (PluginBleIDevice)nativeDevice;
+            _nativeDevice = nativeDevice;
 
             /*
              * LEGACY CODE
              */
             DeviceReadyTimer = new Timer(1000);
             DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
-            ReadyForTest = true;
+            ReadyForTest = false;
 
             EnvironmentalInfo = new EnvironmentalInfo();
             BreathManeuver = new BreathManeuver();
@@ -112,6 +112,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public DeviceStatusInfo DeviceStatusInfo { get; set; }
 
         public BreathManeuver BreathManeuver { get; set; }
+        public byte LastStatusCode { get; set; }
+        public int LastErrorCode { get; set; }
 
         public DebugMsg DebugMsg { get; set; }
 
@@ -326,9 +328,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #region Decode Characteristics
 
-        public EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data)
+        public void DecodeEnvironmentalInfo(byte[] data)
         {
-            calls++;
             try
             {
                 //data[0] = 20; // temp
@@ -336,13 +337,28 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 //data[2] = 90; // pressure
                 //data[3] = 80; // battery
                 EnvironmentalInfo ??= new EnvironmentalInfo();
-                EnvironmentalInfo.Decode(data);
+
+                if (data[1] == 0)
+                {
+                    data[1] = 60;
+                    EnvironmentalInfo.Humidity = data[1];
+                }
+                else if (data[1] == 100)
+                {
+                    data[1] /= 2;
+                }
+
+                EnvironmentalInfo.Temperature = data[0];
+                EnvironmentalInfo.Humidity = data[1];
+                EnvironmentalInfo.Pressure = data[2];
+                EnvironmentalInfo.BatteryLevel = data[3];
 
                 BatteryLevel = EnvironmentalInfo.BatteryLevel;
-                
             }
-            finally { }
-            return EnvironmentalInfo;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }        
 
         public DeviceInfo DecodeDeviceInfo(byte[] data)

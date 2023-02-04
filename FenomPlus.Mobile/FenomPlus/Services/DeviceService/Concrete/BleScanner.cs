@@ -72,7 +72,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         var args = new DeviceEventArgs();
                         args.Device = device;
 
-                        Adapter_DeviceDiscovered(null, args);
+                        Adapter_DeviceDiscovered(this, args);
 
                         Helper.WriteDebug($"Connecting to bonded device: {args.Device.Name}");
 

@@ -73,6 +73,8 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         EnvironmentalInfo EnvironmentalInfo { get; set; }
         BreathManeuver BreathManeuver { get; set; }
+        byte LastStatusCode { get; set; }
+        int LastErrorCode { get; set; }
         DeviceInfo DeviceInfo { get; set; }
         DebugMsg DebugMsg { get; set; }
         DeviceStatusInfo DeviceStatusInfo { get; set; }
@@ -80,7 +82,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         public DeviceCheckEnum CheckDeviceBeforeTest();
 
-        EnvironmentalInfo DecodeEnvironmentalInfo(byte[] data);
+        void DecodeEnvironmentalInfo(byte[] data);
         BreathManeuver DecodeBreathManeuver(byte[] data);
         DeviceInfo DecodeDeviceInfo(byte[] data);
         DebugMsg DecodeDebugMsg(byte[] data);

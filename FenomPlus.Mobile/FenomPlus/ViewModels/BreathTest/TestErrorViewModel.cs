@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Enums;
 using FenomPlus.Enums.ErrorCodes;
+using System.ComponentModel;
 
 namespace FenomPlus.ViewModels
 {
@@ -30,9 +31,20 @@ namespace FenomPlus.ViewModels
 
         private void UpdateError()
         {
+            var bm = Services.DeviceService.Current.BreathManeuver;
 
-            int statusCode = Services.DeviceService.Current.BreathManeuver.StatusCode;
+            int statusCode = 0;
+            if ((bm.TimeRemaining == 0 || bm.TimeRemaining == 0xfe) && bm.StatusCode != 0)
+            {
+                statusCode = bm.StatusCode;
+            }
+            else
+            {
+                statusCode = Services.DeviceService.Current.LastErrorCode;
+            }
+
             var error = ErrorCodeLookup.Lookup(statusCode);
+
             ErrorCode = error.Code;
             ErrorMessage = error.Message;
         }

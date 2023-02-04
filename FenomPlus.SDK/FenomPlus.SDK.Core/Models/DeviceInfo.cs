@@ -50,7 +50,7 @@ namespace FenomPlus.SDK.Core.Models
                     BuildVersion = Data[3];
                     SensorExpDateMonth = Data[4];
                     SensorExpDateDay = Data[5];
-                    SensorExpDateYear = (short)((int)(((int)Data[6]) * 256 + (int)Data[7]));
+                    SensorExpDateYear = (short)((int)(((int)Data[6]) * 100 + (int)Data[7]));
                     int len = data.Length - 8;
                     SerialNumber = new byte[len];
                     Array.Copy(data, 8, SerialNumber, 0, len);

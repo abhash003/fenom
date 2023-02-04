@@ -25,7 +25,6 @@ namespace FenomPlus.SDK.Core.Models
 
         public EnvironmentalInfo()
         {
-            Humidity = 100;
         }
 
         public static EnvironmentalInfo Create(byte[] data)
