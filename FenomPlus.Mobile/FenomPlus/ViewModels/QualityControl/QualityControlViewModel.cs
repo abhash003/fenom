@@ -132,21 +132,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private void WipeDataBase()
-        {
-            using (var db = new LiteDatabase(QCUserRecordsPath))
-            {
-                var usersCollection = db.GetCollection<QCUser>("qcusers");
-                usersCollection.DeleteAll();
-            }
-
-            using (var db = new LiteDatabase(QCTestRecordsPath))
-            {
-                var testsCollection = db.GetCollection<QCTest>("qctests");
-                testsCollection.DeleteAll();
-            }
-        }
-
         public int SelectedUserIndex = -1;
 
         public QCUser CurrentQcUser
@@ -697,6 +682,8 @@ namespace FenomPlus.ViewModels
         #endregion
 
 
+        #region "Main Screen Commands"
+
         [RelayCommand]
         private void UpdateNegativeControl()
         {
@@ -798,10 +785,12 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        private void ShowQCSettings()
+        private async Task ShowQCSettings()
         {
-
+            await Services.Navigation.QCSettingsView();
         }
+
+        #endregion
 
 
         #region "QC User Breath Test"
@@ -905,13 +894,8 @@ namespace FenomPlus.ViewModels
 
         #endregion
 
+
         #region "QC User Stop Test:
-
-
-        //private bool Stop;
-
-        //[ObservableProperty]
-        //private int _seconds;
 
         public void InitUserStopBreathTest()
         {
@@ -1011,5 +995,51 @@ namespace FenomPlus.ViewModels
 
         #endregion
 
+
+        #region "Debug Commands"
+
+        [RelayCommand]
+        private void CreateMockDataBase()
+        {
+            string serialNumber = string.Empty;
+
+            var newDevice = CreateQcDevice(serialNumber);
+
+            // New User Qualified
+            var newUser = CreateQcUser(serialNumber, "Jim");
+            var newTest = CreateQcTest(serialNumber, newUser.UserName, 20);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 30);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 25);
+
+            // New User Disqualified
+            newUser = CreateQcUser(serialNumber, "Vinh");
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 20);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 30);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 19);
+
+            // New User Disqualified
+            newUser = CreateQcUser(serialNumber, "Bob");
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 20);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 30);
+            newTest = CreateQcTest(serialNumber, newUser.UserName, 32);
+        }
+
+        [RelayCommand]
+        private void WipeDataBase()
+        {
+            using (var db = new LiteDatabase(QCUserRecordsPath))
+            {
+                var usersCollection = db.GetCollection<QCUser>("qcusers");
+                usersCollection.DeleteAll();
+            }
+
+            using (var db = new LiteDatabase(QCTestRecordsPath))
+            {
+                var testsCollection = db.GetCollection<QCTest>("qctests");
+                testsCollection.DeleteAll();
+            }
+        }
+
+        #endregion
     }
 }

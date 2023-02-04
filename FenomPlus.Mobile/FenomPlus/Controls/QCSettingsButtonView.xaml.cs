@@ -14,8 +14,8 @@ namespace FenomPlus.Controls
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(QCSettingsButtonView), propertyChanged: CommandUpdated);
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(QCSettingsButtonView), propertyChanged: CommandParameterUpdated);
-        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(QCSettingsButtonView), propertyChanged: EnabledUpdated);
-        public static readonly BindableProperty ImageNameProperty = BindableProperty.Create(nameof(ImageName), typeof(string), typeof(QCSettingsButtonView), propertyChanged: ImageUpdated);
+        //public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(QCSettingsButtonView), propertyChanged: EnabledUpdated);
+        //public static readonly BindableProperty ImageNameProperty = BindableProperty.Create(nameof(ImageName), typeof(string), typeof(QCSettingsButtonView), propertyChanged: ImageUpdated);
 
         public ICommand Command
         {
@@ -29,17 +29,17 @@ namespace FenomPlus.Controls
             set => this.SetValue(CommandParameterProperty, value);
         }
 
-        public bool Enabled
-        {
-            get => (bool)this.GetValue(EnabledProperty);
-            set => this.SetValue(EnabledProperty, value);
-        }
+        //public bool Enabled
+        //{
+        //    get => (bool)this.GetValue(EnabledProperty);
+        //    set => this.SetValue(EnabledProperty, value);
+        //}
 
-        public string ImageName
-        {
-            get => (string)this.GetValue(ImageNameProperty);
-            set => this.SetValue(ImageNameProperty, value);
-        }
+        //public string ImageName
+        //{
+        //    get => (string)this.GetValue(ImageNameProperty);
+        //    set => this.SetValue(ImageNameProperty, value);
+        //}
 
 
         public QCSettingsButtonView()
@@ -69,21 +69,21 @@ namespace FenomPlus.Controls
             }
         }
 
-        private static void EnabledUpdated(object sender, object oldValue, object newValue)
-        {
-            if (sender is QCSettingsButtonView imageButton && newValue != null)
-            {
-                imageButton.InnerButton.IsEnabled = (bool)newValue;
-            }
-        }
+        //private static void EnabledUpdated(object sender, object oldValue, object newValue)
+        //{
+        //    if (sender is QCSettingsButtonView imageButton && newValue != null)
+        //    {
+        //        imageButton.InnerButton.IsEnabled = (bool)newValue;
+        //    }
+        //}
 
-        private static void ImageUpdated(object sender, object oldValue, object newValue)
-        {
-            if (sender is QCSettingsButtonView imageButton && newValue != null)
-            {
-                imageButton.ButtonImage.Source = (string)newValue;
-            }
-        }
+        //private static void ImageUpdated(object sender, object oldValue, object newValue)
+        //{
+        //    if (sender is QCSettingsButtonView imageButton && newValue != null)
+        //    {
+        //        imageButton.ButtonImage.Source = (string)newValue;
+        //    }
+        //}
 
         //private void OnClicked(object sender, EventArgs args)
         //{

@@ -9,7 +9,7 @@
     xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
     xmlns:xForms="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
     x:Class="FenomPlus.Views.QCSettingsView"
-    Title="Quality Control"
+    Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False"
@@ -19,174 +19,224 @@
         <controls:TitleContentView />
     </Shell.TitleView>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="TabButtons" TargetType="Button">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderWidth" Value="0" />
+                <Setter Property="HeightRequest" Value="35" />
+            </Style>
+
+            <Style x:Key="TabButtonUnderline" TargetType="BoxView">
+                <Setter Property="HeightRequest" Value="3" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="Color" Value="DeepSkyBlue" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
 
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0,20,0,20">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackLayout  Grid.Row="0" Grid.Column="0">
+            <Label Grid.Row="0" Text="Quality Control Settings" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
 
-                <border:SfBorder 
-                    BorderColor="LightGray"
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="Fill" 
-                    Height="100"
-                    BorderWidth="1"
+            <Grid Grid.Row="1" >
 
-                    Margin="0,0,0,0"
-                    Padding="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                    <xForms:SfDataGrid x:Name="AllDevicesDataGrid"
-                                        ItemsSource="{Binding AllDevices }"
-                                        LiveDataUpdateMode="AllowDataShaping"
-                                        VerticalOptions="Fill"
-                                        HorizontalOptions="Fill"
-                                        AllowResizingColumn="False"
-                                        AutoGenerateColumns="False"
-                                        AllowEditing="False"
-                                        AllowSorting="False"
-                                        NavigationMode="Row"
-                                        SelectionMode="Single"
-                                        AutoExpandGroups="False"
-                                        AllowGroupExpandCollapse="False"
-                                        ColumnSizer="Star"
-                                        VerticalScrollBarVisibility="False"
-                                        HorizontalScrollBarVisibility="False"
-                                        VerticalOverScrollMode="None"
-                                        AllowPullToRefresh="False"
-                                        Margin="0,0,1,0">
+                <Grid HorizontalOptions="StartAndExpand" Grid.Row="0" Margin="10,0,10,0" ColumnSpacing="5">
 
-                        <xForms:SfDataGrid.Columns>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                            <xForms:GridTextColumn HeaderText="Device Serial Number" MappingName="DeviceSerialNumber"/>
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="0">
 
-                            <xForms:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                        <Button Text="Devices"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab1ButtonClicked"/>
 
-                            <xForms:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                        <BoxView x:Name="Tab1ButtonBorder" 
+                             Style="{StaticResource TabButtonUnderline}"
+                             IsVisible="True"/>
 
-                            <xForms:GridTextColumn HeaderText="Test"  MappingName="TestType" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                    </StackLayout>
 
-                            <xForms:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus" TextAlignment="Start"  Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
 
-                            <xForms:GridTextColumn HeaderText="Test Result"  MappingName="TestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                        <Button Text="Users"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab2ButtonClicked"/>
 
-                        </xForms:SfDataGrid.Columns>
+                        <BoxView x:Name="Tab2ButtonBorder" 
+                                 Style="{StaticResource TabButtonUnderline}"
+                                 IsVisible="False"/>
 
-                    </xForms:SfDataGrid>
+                    </StackLayout>
 
-                </border:SfBorder>
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="2">
 
-                <border:SfBorder 
-                    BorderColor="LightGray"
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="Fill" 
-                    Height="200"
-                    BorderWidth="1"
+                        <Button Text="Tests"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab3ButtonClicked"/>
 
-                    Margin="0,0,0,0"
-                    Padding="0">
+                        <BoxView x:Name="Tab3ButtonBorder" 
+                                 Style="{StaticResource TabButtonUnderline}"
+                                 IsVisible="False"/>
 
-                    <xForms:SfDataGrid x:Name="AllUsersDataGrid"
-                                        ItemsSource="{Binding AllUsers }"
-                                        LiveDataUpdateMode="AllowDataShaping"
-                                        VerticalOptions="Fill"
-                                        HorizontalOptions="Fill"
-                                        AllowResizingColumn="False"
-                                        AutoGenerateColumns="False"
-                                        AllowEditing="False"
-                                        AllowSorting="False"
-                                        NavigationMode="Row"
-                                        SelectionMode="Single"
-                                        AutoExpandGroups="False"
-                                        AllowGroupExpandCollapse="False"
-                                        ColumnSizer="Star"
-                                        VerticalScrollBarVisibility="False"
-                                        HorizontalScrollBarVisibility="False"
-                                        VerticalOverScrollMode="None"
-                                        AllowPullToRefresh="False"
-                                        Margin="0,0,1,0">
-
-                        <xForms:SfDataGrid.Columns>
-
-                            <xForms:GridTextColumn HeaderText="Serial Number" MappingName="DeviceSerialNumber"/>
-
-                            <xForms:GridTextColumn HeaderText="User Name" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                            <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                            <xForms:GridTextColumn HeaderText="Date"  MappingName="DateCreated" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                            <xForms:GridTextColumn HeaderText="Expires"  MappingName="ExpiresDate" TextAlignment="Start"  Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
-
-                            <xForms:GridTextColumn HeaderText="Next Test"  MappingName="NextTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                        </xForms:SfDataGrid.Columns>
-
-                    </xForms:SfDataGrid>
-
-                </border:SfBorder>
-
-                <border:SfBorder 
-                    BorderColor="LightGray"
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="Fill" 
-                    Height="300"
-                    BorderWidth="1"
-
-                    Margin="0,0,0,0"
-                    Padding="0">
-
-                    <xForms:SfDataGrid x:Name="AllTestsDataGrid"
-                                        ItemsSource="{Binding AllTests }"
-                                        LiveDataUpdateMode="AllowDataShaping"
-                                        VerticalOptions="Fill"
-                                        HorizontalOptions="Fill"
-                                        AllowResizingColumn="False"
-                                        AutoGenerateColumns="False"
-                                        AllowEditing="False"
-                                        AllowSorting="False"
-                                        NavigationMode="Row"
-                                        SelectionMode="Single"
-                                        AutoExpandGroups="False"
-                                        AllowGroupExpandCollapse="False"
-                                        ColumnSizer="Star"
-                                        VerticalScrollBarVisibility="False"
-                                        HorizontalScrollBarVisibility="False"
-                                        VerticalOverScrollMode="None"
-                                        AllowPullToRefresh="False"
-                                        Margin="0,0,1,0">
-
-                        <xForms:SfDataGrid.Columns>
-
-                            <xForms:GridTextColumn HeaderText="Serial Number" MappingName="DeviceSerialNumber"/>
-
-                            <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                            <xForms:GridTextColumn HeaderText="Date"  MappingName="DateCreated" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                            <xForms:GridTextColumn HeaderText="Result"  MappingName="TestResult" TextAlignment="Start"  Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
-
-                        </xForms:SfDataGrid.Columns>
-
-                    </xForms:SfDataGrid>
-
-                </border:SfBorder>
-
-            </StackLayout>
+                    </StackLayout>
 
 
+                    <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="3">
 
+                        <Button Text="Debug"
+                                Style="{StaticResource TabButtons}"
+                                Clicked="Tab4ButtonClicked"/>
+
+                        <BoxView x:Name="Tab4ButtonBorder" 
+                                 Style="{StaticResource TabButtonUnderline}"
+                                 IsVisible="False"/>
+
+                    </StackLayout>
+
+                </Grid>
+
+                <Grid Grid.Row="2" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="20">
+
+                    <ContentView x:Name="Tab1Content" IsVisible="True">
+                        <Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                        <!--<border:SfBorder Background="LightRed"
+                            BorderColor="LightGray"
+                            BackgroundColor="Transparent" 
+                            HorizontalOptions="Fill" 
+                            VerticalOptions="Fill"
+                            BorderWidth="1">
+
+                            <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                            <xForms:SfDataGrid x:Name="AllDevicesDataGrid"
+                                           ItemsSource="{Binding AllDevices }"
+                                           LiveDataUpdateMode="AllowDataShaping"
+                                           VerticalOptions="Fill"
+                                           HorizontalOptions="Fill"
+                                           AllowResizingColumn="False"
+                                           AutoGenerateColumns="False"
+                                           AllowEditing="False"
+                                           AllowSorting="False"
+                                           NavigationMode="Row"
+                                           SelectionMode="Single"
+                                           AutoExpandGroups="False"
+                                           AllowGroupExpandCollapse="False"
+                                           ColumnSizer="Star"
+                                           VerticalScrollBarVisibility="False"
+                                           HorizontalScrollBarVisibility="False"
+                                           VerticalOverScrollMode="None"
+                                           AllowPullToRefresh="False"
+                                           Margin="0,0,1,0">
+
+                                <xForms:SfDataGrid.Columns>
+
+                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+
+                                </xForms:SfDataGrid.Columns>
+
+                            </xForms:SfDataGrid>
+                            
+                        </border:SfBorder>-->
+                    </ContentView>
+
+                    <ContentView x:Name="Tab2Content" IsVisible="False">
+                        <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <!--<xForms:SfDataGrid Background="LightBlue" x:Name="AllUsersDataGrid"
+                                           ItemsSource="{Binding AllUsers }"
+                                           LiveDataUpdateMode="AllowDataShaping"
+                                           VerticalOptions="Fill"
+                                           HorizontalOptions="Fill"
+                                           AllowResizingColumn="False"
+                                           AutoGenerateColumns="False"
+                                           AllowEditing="False"
+                                           AllowSorting="False"
+                                           NavigationMode="Row"
+                                           SelectionMode="Single"
+                                           AutoExpandGroups="False"
+                                           AllowGroupExpandCollapse="False"
+                                           ColumnSizer="Star"
+                                           VerticalScrollBarVisibility="False"
+                                           HorizontalScrollBarVisibility="False"
+                                           VerticalOverScrollMode="None"
+                                           AllowPullToRefresh="False"
+                                           Margin="0,0,1,0"/>-->
+                    </ContentView>
+
+                    <ContentView x:Name="Tab3Content" IsVisible="False">
+                        <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <!--<xForms:SfDataGrid Background="Yellow" x:Name="AllTestsDataGrid"
+                                            ItemsSource="{Binding AllTests }"
+                                           LiveDataUpdateMode="AllowDataShaping"
+                                           VerticalOptions="Fill"
+                                           HorizontalOptions="Fill"
+                                           AllowResizingColumn="False"
+                                           AutoGenerateColumns="False"
+                                           AllowEditing="False"
+                                           AllowSorting="False"
+                                           NavigationMode="Row"
+                                           SelectionMode="Single"
+                                           AutoExpandGroups="False"
+                                           AllowGroupExpandCollapse="False"
+                                           ColumnSizer="Star"
+                                           VerticalScrollBarVisibility="False"
+                                           HorizontalScrollBarVisibility="False"
+                                           VerticalOverScrollMode="None"
+                                           AllowPullToRefresh="False"
+                                           Margin="0,0,1,0"/>-->
+                    </ContentView>
+
+                    <ContentView x:Name="Tab4Content" IsVisible="False">
+                        <!--<Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>-->
+                        <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
+
+
+                            <!--<Button Text="EXIT"
+                            HorizontalOptions="End"
+                            Margin="0,0,5,0"
+                            Style="{StaticResource defaultButton}"
+                            Command="{Binding ExitToDashboardCommand}"
+                            VerticalOptions="Center"/>-->
+
+                            <Button Style="{StaticResource defaultButton}" Text="Create Mock Database" Command="{Binding CreateMockDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
+                            <Button Style="{StaticResource defaultButton}" Text="Clear Database" Command="{Binding WipeDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
+                        </StackLayout>
+                    </ContentView>
+
+                </Grid>
+
+            </Grid>
 
             <Button Text="Exit"
-                Grid.Row="1"
-                Margin="0,0,60,0"
-                Style="{StaticResource defaultButton}"
-                Command="{Binding ExitToDashboardCommand}"
-                HorizontalOptions="End"/>
+                    Grid.Row="2"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToQCCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
 
         </Grid>
 

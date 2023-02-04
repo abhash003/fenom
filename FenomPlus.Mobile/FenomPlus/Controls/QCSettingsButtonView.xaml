@@ -7,30 +7,6 @@
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
              x:Class="FenomPlus.Controls.QCSettingsButtonView">
 
-    <ContentView.Resources>
-        <ResourceDictionary>
-
-            <Style x:Key="smallButton" TargetType="Button">
-                <Setter Property="WidthRequest" Value="120" />
-                <Setter Property="TextColor" Value="#077DCD" />
-                <Setter Property="FontSize" Value="Small" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="Transparent" />
-                <Setter Property="BorderWidth" Value="0" />
-                <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="Margin" Value="0,0,0,0" />
-            </Style>
-
-            <Style x:Key="smallLabel" TargetType="Label">
-                <Setter Property="TextColor" Value="#333"/>
-                <Setter Property="FontSize" Value="Small" />
-                <Setter Property="BackgroundColor" Value="#fff" />
-                <Setter Property="HorizontalOptions" Value="Center" />
-            </Style>
-
-        </ResourceDictionary>
-    </ContentView.Resources>
-
     <buttons:SfButton x:Name="InnerButton" 
                     HasShadow="True" 
                     BackgroundColor="#F9F9F9"
@@ -41,12 +17,19 @@
 
         <Grid HorizontalOptions="FillAndExpand" 
               VerticalOptions="FillAndExpand" 
-              Grid.Padding="5"
-              x:DataType="controls:QCSettingsButtonViewModel">
+              Grid.Padding="10">
 
             <Image x:Name="ButtonImage"
-                   Source="{Binding ImageName}"
-                   VerticalOptions="CenterAndExpand"
+                   Source="TutStep2"
+                   VerticalOptions="StartAndExpand"
+                   HorizontalOptions="End"
+                   Aspect="AspectFit"/>
+
+            <Image x:Name="SettingsImage"
+                   Source="QCSettings"
+                    Width="10"
+                   VerticalOptions="End"
+                   HorizontalOptions="Start"
                    Aspect="AspectFit"/>
 
         </Grid>

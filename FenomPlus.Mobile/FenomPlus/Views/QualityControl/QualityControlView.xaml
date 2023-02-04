@@ -8,7 +8,7 @@
     xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
     xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
     x:Class="FenomPlus.Views.QualityControlView"
-    Title="Quality Control"
+    Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False"
@@ -134,13 +134,32 @@
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding UpdateUser6Command}"/>
 
-                        <controls:QCSettingsButtonView 
+                        <!--<controls:QCSettingsButtonView 
                                 x:Name="QcSettings"
                                 Grid.Row="1" 
                                 Grid.Column="3"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
-                                Command="{Binding ShowQCSettingsCommand}"/>
+                                Command="{Binding ShowQCSettingsCommand}"/>-->
+                        
+                        <buttons:SfButton x:Name="InnerButton" 
+                            Grid.Row="1" 
+                            Grid.Column="3"
+                            HasShadow="True" 
+                            BackgroundColor="#F9F9F9"
+                            BorderColor="#E7E7E7" 
+                            BorderWidth="1" 
+                            EnableRippleEffect="True"
+                            Margin="10,10,10,0"
+                            Command="{Binding ShowQCSettingsCommand}"
+                            Padding="20">
+                            
+                            <Image x:Name="ButtonImage"
+                                   Source="QCSettings.png"
+                                   VerticalOptions="CenterAndExpand"
+                                   Aspect="AspectFit"/>
+                            
+                        </buttons:SfButton>
 
                     </Grid>
 

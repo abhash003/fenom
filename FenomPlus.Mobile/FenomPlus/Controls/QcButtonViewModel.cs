@@ -1,11 +1,13 @@
 ﻿using FenomPlus.ViewModels;
 using FenomPlus.ViewModels.QualityControl.Models;
 using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace FenomPlus.Controls
 {
-    public partial class QcButtonViewModel : BaseViewModel
+    public partial class QcButtonViewModel : INotifyPropertyChanged
     {
         private QCUser _qcUserModel;
         public QCUser QCUserModel
@@ -16,6 +18,10 @@ namespace FenomPlus.Controls
                 _qcUserModel = value;
 
                 Assigned = _qcUserModel != null;
+                OnPropertyChanged(nameof(UserName));
+                OnPropertyChanged(nameof(CurrentStatus));
+                OnPropertyChanged(nameof(ExpiresDateString));
+                OnPropertyChanged(nameof(NextTestDateString));
             }
         }
 
@@ -59,29 +65,17 @@ namespace FenomPlus.Controls
 
         public QcButtonViewModel()
         {
-                
+
         }
 
-        //public QcButtonViewModel(QCUser userModel)
-        //{
-        //    QCUserModel = userModel;
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
 
-        //    if (QCUserModel != null)
-        //    {
-        //        Assigned = true;
-        //        UserName = QCUserModel.UserName;
-        //        CurrentStatus = QCUserModel.CurrentStatus;
-        //        ExpiresDate = QCUserModel.ExpiresDate;
-        //        NextTestDate = QCUserModel.NextTestDate;
-        //    }
-        //    else
-        //    {
-        //        Assigned = false;
-        //        UserName = string.Empty;
-        //        CurrentStatus = string.Empty;
-        //        ExpiresDateString = string.Empty;
-        //        NextTestDateString = string.Empty;
-        //    }
-        //}
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

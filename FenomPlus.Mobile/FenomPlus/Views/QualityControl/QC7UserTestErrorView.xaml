@@ -4,11 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:FenomPlus.Controls"
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
     x:Class="FenomPlus.Views.QCUserTestErrorView"
     Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False"
+    x:DataType="viewModels:QualityControlViewModel">
 
     <Shell.TitleView>
         <controls:TitleContentView />
@@ -42,7 +44,7 @@
             <Button Text="Exit"
                     Grid.Row="1"
                     Style="{StaticResource defaultButton}"
-                    Command="{Binding ExitToQC}"
+                    Command="{Binding ExitToQCCommand}"
                     HorizontalOptions="End"
                     Margin="0,0,40,0"/>
 

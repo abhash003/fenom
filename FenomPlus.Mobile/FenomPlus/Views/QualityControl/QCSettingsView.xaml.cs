@@ -20,6 +20,60 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
 
+            Tab1Content.IsVisible = true;
+            Tab2Content.IsVisible = false;
+            Tab3Content.IsVisible = false;
+            Tab4Content.IsVisible = false;
+
+            UpdateTabButtonBorder();
+        }
+
+        public void Tab1ButtonClicked(object sender, EventArgs eventArgs)
+        {
+            Tab1Content.IsVisible = true;
+            Tab2Content.IsVisible = false;
+            Tab3Content.IsVisible = false;
+            Tab4Content.IsVisible = false;
+
+            UpdateTabButtonBorder();
+        }
+
+        public void Tab2ButtonClicked(object sender, EventArgs eventArgs)
+        {
+            Tab1Content.IsVisible = false;
+            Tab2Content.IsVisible = true;
+            Tab3Content.IsVisible = false;
+            Tab4Content.IsVisible = false;
+
+            UpdateTabButtonBorder();
+        }
+
+        public void Tab3ButtonClicked(object sender, EventArgs eventArgs)
+        {
+            Tab1Content.IsVisible = false;
+            Tab2Content.IsVisible = false;
+            Tab3Content.IsVisible = true;
+            Tab4Content.IsVisible = false;
+
+            UpdateTabButtonBorder();
+        }
+
+        public void Tab4ButtonClicked(object sender, EventArgs eventArgs)
+        {
+            Tab1Content.IsVisible = false;
+            Tab2Content.IsVisible = false;
+            Tab3Content.IsVisible = false;
+            Tab4Content.IsVisible = true;
+
+            UpdateTabButtonBorder();
+        }
+
+        private void UpdateTabButtonBorder()
+        {
+            Tab1ButtonBorder.IsVisible = Tab1Content.IsVisible;
+            Tab2ButtonBorder.IsVisible = Tab2Content.IsVisible;
+            Tab3ButtonBorder.IsVisible = Tab3Content.IsVisible;
+            Tab4ButtonBorder.IsVisible = Tab4Content.IsVisible;
         }
 
         protected override void OnAppearing()

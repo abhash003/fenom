@@ -38,6 +38,7 @@ namespace FenomPlus.Views
             User4Button.BindingContext = QualityControlViewModel.QcButtonViewModels[4];
             User5Button.BindingContext = QualityControlViewModel.QcButtonViewModels[5];
             User6Button.BindingContext = QualityControlViewModel.QcButtonViewModels[6];
+
         }
 
         protected override void OnDisappearing()
