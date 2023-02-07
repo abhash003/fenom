@@ -75,12 +75,6 @@ namespace FenomPlus.ViewModels
             await Services.Navigation.DashboardView();
         }
 
-        [RelayCommand]
-        public async Task ExitToQC()
-        {
-            await Services.Navigation.QualityControlView();
-        }
-
         public virtual void OnAppearing()
         {
             

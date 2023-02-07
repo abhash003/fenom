@@ -172,9 +172,6 @@
       <SubType>Code</SubType>
       <DependentUpon>StatusButtonView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\DashboardView.xaml.cs">
-      <DependentUpon>DashboardView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Other\DeviceStatusHubView.xaml.cs">
       <DependentUpon>DeviceStatusHubView.xaml</DependentUpon>
     </Compile>
@@ -186,36 +183,6 @@
     </Compile>
     <Compile Update="Views\Other\PastErrorsView.xaml.cs">
       <DependentUpon>PastErrorsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC6UserTestCalculationView.xaml.cs">
-      <DependentUpon>QC6UserTestCalculationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC2NegativeControlResultView.xaml.cs">
-      <DependentUpon>QC2NegativeControlResultView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC1NegativeControlTestView.xaml.cs">
-      <DependentUpon>QC1NegativeControlTestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC7UserTestResultView.xaml.cs">
-      <DependentUpon>QC7UserTestResultView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC4UserTestView.xaml.cs">
-      <DependentUpon>QC4UserTestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC3NegativeControlChartview.xaml.cs">
-      <DependentUpon>QC3NegativeControlChartView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QCSettingsView.xaml.cs">
-      <DependentUpon>QCSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC8UserTestChartView.xaml.cs">
-      <DependentUpon>QC8UserTestChartView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC5UserStopTestView.xaml.cs">
-      <DependentUpon>QC5UserStopTestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\QualityControl\QC7UserTestErrorView.xaml.cs">
-      <DependentUpon>QC7UserTestErrorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -239,27 +206,6 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Other\StatusDeviceInfoView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC2NegativeControlResultView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC1NegativeControlTestView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC3NegativeControlChartView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QCSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC8UserTestChartView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC7UserTestResultView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\QualityControl\QC5UserStopTestView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\QualityControl\QualityControlView.xaml">

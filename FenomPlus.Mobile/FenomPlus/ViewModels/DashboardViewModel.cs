@@ -24,6 +24,13 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
+                if (Services.Config.RunRequiresQC)
+                {
+                    // ToDo: Check QC Status
+                    Services.Dialogs.ShowAlert($"Unable to run test. Quality Control is required and it currently does not pass.", "Quality Control Warning", "Close");
+                    return;
+                }
+
                 DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                 switch (deviceStatus)
@@ -72,6 +79,13 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
+                if (Services.Config.RunRequiresQC)
+                {
+                    // ToDo: Check QC Status
+                    Services.Dialogs.ShowAlert($"Unable to run test. Quality Control is required and it currently does not pass.", "Quality Control Warning", "Close");
+                    return;
+                }
+
                 switch (Services.DeviceService.Current.CheckDeviceBeforeTest())
                 {
                     case DeviceCheckEnum.Ready:

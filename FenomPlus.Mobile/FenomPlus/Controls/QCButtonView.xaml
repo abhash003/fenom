@@ -73,7 +73,7 @@
                     <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Status"
+                <Label Text="Status:"
                        Grid.Column="0"
                        VerticalOptions="Center" 
                        VerticalTextAlignment="Start" 

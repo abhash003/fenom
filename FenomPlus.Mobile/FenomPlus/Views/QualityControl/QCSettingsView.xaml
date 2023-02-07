@@ -72,7 +72,7 @@
 
                         <Button Text="Devices"
                                 Style="{StaticResource TabButtons}"
-                                Clicked="Tab1ButtonClicked"/>
+                                Clicked="DevicesButtonClicked"/>
 
                         <BoxView x:Name="Tab1ButtonBorder" 
                              Style="{StaticResource TabButtonUnderline}"
@@ -84,7 +84,7 @@
 
                         <Button Text="Users"
                                 Style="{StaticResource TabButtons}"
-                                Clicked="Tab2ButtonClicked"/>
+                                Clicked="UsersButtonClicked"/>
 
                         <BoxView x:Name="Tab2ButtonBorder" 
                                  Style="{StaticResource TabButtonUnderline}"
@@ -96,7 +96,7 @@
 
                         <Button Text="Tests"
                                 Style="{StaticResource TabButtons}"
-                                Clicked="Tab3ButtonClicked"/>
+                                Clicked="TestsButtonClicked"/>
 
                         <BoxView x:Name="Tab3ButtonBorder" 
                                  Style="{StaticResource TabButtonUnderline}"
@@ -109,7 +109,7 @@
 
                         <Button Text="Debug"
                                 Style="{StaticResource TabButtons}"
-                                Clicked="Tab4ButtonClicked"/>
+                                Clicked="DebugButtonClicked"/>
 
                         <BoxView x:Name="Tab4ButtonBorder" 
                                  Style="{StaticResource TabButtonUnderline}"
@@ -119,22 +119,25 @@
 
                 </Grid>
 
-                <Grid Grid.Row="2" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="20">
+                <Grid Grid.Row="0" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="20">
 
-                    <ContentView x:Name="Tab1Content" IsVisible="True">
-                        <Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-
-                        <!--<border:SfBorder Background="LightRed"
-                            BorderColor="LightGray"
-                            BackgroundColor="Transparent" 
-                            HorizontalOptions="Fill" 
-                            VerticalOptions="Fill"
-                            BorderWidth="1">
-
+                    <ContentView x:Name="DevicesTabContent" IsVisible="True">
+                        <!--<Label Text="Content 1" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>-->
+                        <StackLayout>
+                            
                             <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        
+                            <!--<border:SfBorder Background="LightRed"
+                                BorderColor="LightGray"
+                                BackgroundColor="Transparent" 
+                                HorizontalOptions="Fill" 
+                                VerticalOptions="Fill"
+                                BorderWidth="1">-->
 
-                            <xForms:SfDataGrid x:Name="AllDevicesDataGrid"
-                                           ItemsSource="{Binding AllDevices }"
+
+
+                            <!--<xForms:SfDataGrid x:Name="AllDevicesDataGrid"
+                                           ItemsSource="{Binding AllQcDevices }"
                                            LiveDataUpdateMode="AllowDataShaping"
                                            VerticalOptions="Fill"
                                            HorizontalOptions="Fill"
@@ -153,66 +156,73 @@
                                            AllowPullToRefresh="False"
                                            Margin="0,0,1,0">
 
-                                <xForms:SfDataGrid.Columns>
+                                    <xForms:SfDataGrid.Columns>
 
-                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
 
-                                </xForms:SfDataGrid.Columns>
+                                    </xForms:SfDataGrid.Columns>
 
-                            </xForms:SfDataGrid>
+                                </xForms:SfDataGrid>-->
                             
-                        </border:SfBorder>-->
+                            <!--</border:SfBorder>-->
+
+                        </StackLayout>
+                            
                     </ContentView>
 
-                    <ContentView x:Name="Tab2Content" IsVisible="False">
-                        <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        <!--<xForms:SfDataGrid Background="LightBlue" x:Name="AllUsersDataGrid"
-                                           ItemsSource="{Binding AllUsers }"
-                                           LiveDataUpdateMode="AllowDataShaping"
-                                           VerticalOptions="Fill"
-                                           HorizontalOptions="Fill"
-                                           AllowResizingColumn="False"
-                                           AutoGenerateColumns="False"
-                                           AllowEditing="False"
-                                           AllowSorting="False"
-                                           NavigationMode="Row"
-                                           SelectionMode="Single"
-                                           AutoExpandGroups="False"
-                                           AllowGroupExpandCollapse="False"
-                                           ColumnSizer="Star"
-                                           VerticalScrollBarVisibility="False"
-                                           HorizontalScrollBarVisibility="False"
-                                           VerticalOverScrollMode="None"
-                                           AllowPullToRefresh="False"
-                                           Margin="0,0,1,0"/>-->
+                    <ContentView x:Name="UsersTabContent" IsVisible="False">
+                        <StackLayout>
+                            <Label Text="Content 2" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <!--<xForms:SfDataGrid Background="LightBlue" x:Name="AllUsersDataGrid"
+                                               ItemsSource="{Binding AllUsers }"
+                                               LiveDataUpdateMode="AllowDataShaping"
+                                               VerticalOptions="Fill"
+                                               HorizontalOptions="Fill"
+                                               AllowResizingColumn="False"
+                                               AutoGenerateColumns="False"
+                                               AllowEditing="False"
+                                               AllowSorting="False"
+                                               NavigationMode="Row"
+                                               SelectionMode="Single"
+                                               AutoExpandGroups="False"
+                                               AllowGroupExpandCollapse="False"
+                                               ColumnSizer="Star"
+                                               VerticalScrollBarVisibility="False"
+                                               HorizontalScrollBarVisibility="False"
+                                               VerticalOverScrollMode="None"
+                                               AllowPullToRefresh="False"
+                                               Margin="0,0,1,0"/>-->
+                        </StackLayout>
                     </ContentView>
 
-                    <ContentView x:Name="Tab3Content" IsVisible="False">
-                        <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        <!--<xForms:SfDataGrid Background="Yellow" x:Name="AllTestsDataGrid"
-                                            ItemsSource="{Binding AllTests }"
-                                           LiveDataUpdateMode="AllowDataShaping"
-                                           VerticalOptions="Fill"
-                                           HorizontalOptions="Fill"
-                                           AllowResizingColumn="False"
-                                           AutoGenerateColumns="False"
-                                           AllowEditing="False"
-                                           AllowSorting="False"
-                                           NavigationMode="Row"
-                                           SelectionMode="Single"
-                                           AutoExpandGroups="False"
-                                           AllowGroupExpandCollapse="False"
-                                           ColumnSizer="Star"
-                                           VerticalScrollBarVisibility="False"
-                                           HorizontalScrollBarVisibility="False"
-                                           VerticalOverScrollMode="None"
-                                           AllowPullToRefresh="False"
-                                           Margin="0,0,1,0"/>-->
+                    <ContentView x:Name="TestsTabContent" IsVisible="False">
+                        <StackLayout>
+                            <Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <!--<xForms:SfDataGrid Background="Yellow" x:Name="AllTestsDataGrid"
+                                                ItemsSource="{Binding AllTests }"
+                                               LiveDataUpdateMode="AllowDataShaping"
+                                               VerticalOptions="Fill"
+                                               HorizontalOptions="Fill"
+                                               AllowResizingColumn="False"
+                                               AutoGenerateColumns="False"
+                                               AllowEditing="False"
+                                               AllowSorting="False"
+                                               NavigationMode="Row"
+                                               SelectionMode="Single"
+                                               AutoExpandGroups="False"
+                                               AllowGroupExpandCollapse="False"
+                                               ColumnSizer="Star"
+                                               VerticalScrollBarVisibility="False"
+                                               HorizontalScrollBarVisibility="False"
+                                               VerticalOverScrollMode="None"
+                                               AllowPullToRefresh="False"
+                                               Margin="0,0,1,0"/>-->
+                        </StackLayout>
                     </ContentView>
 
-                    <ContentView x:Name="Tab4Content" IsVisible="False">
-                        <!--<Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>-->
+                    <ContentView x:Name="DebugTabContent" IsVisible="False">
                         <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
+                            <!--<Label Text="Content 3" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center"/>-->
 
 
                             <!--<Button Text="EXIT"
@@ -222,7 +232,7 @@
                             Command="{Binding ExitToDashboardCommand}"
                             VerticalOptions="Center"/>-->
 
-                            <Button Style="{StaticResource defaultButton}" Text="Create Mock Database" Command="{Binding CreateMockDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
+                            <Button Style="{StaticResource defaultButton}" Text="Create Mock Database" Command="{Binding CreateMockDataBase1Command}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
                             <Button Style="{StaticResource defaultButton}" Text="Clear Database" Command="{Binding WipeDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
                         </StackLayout>
                     </ContentView>

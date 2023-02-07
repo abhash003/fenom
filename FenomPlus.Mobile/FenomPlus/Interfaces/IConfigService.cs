@@ -13,5 +13,6 @@ namespace FenomPlus.Interfaces
         int DaysRemaining { get; set; }
         int TestResultReadyWait { get; set; }
         int StopExhalingReadyWait { get; set; }
+        bool RunRequiresQC { get; set; }
     }
 }

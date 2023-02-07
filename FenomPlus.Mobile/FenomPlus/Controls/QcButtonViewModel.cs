@@ -20,7 +20,9 @@ namespace FenomPlus.Controls
                 Assigned = _qcUserModel != null;
                 OnPropertyChanged(nameof(UserName));
                 OnPropertyChanged(nameof(CurrentStatus));
+                OnPropertyChanged(nameof(ExpiresDate));
                 OnPropertyChanged(nameof(ExpiresDateString));
+                OnPropertyChanged(nameof(NextTestDate));
                 OnPropertyChanged(nameof(NextTestDateString));
             }
         }
@@ -30,13 +32,21 @@ namespace FenomPlus.Controls
         public string UserName
         {
             get => QCUserModel.UserName;
-            set => QCUserModel.UserName = value;
+            set
+            {
+                QCUserModel.UserName = value;
+                OnPropertyChanged(nameof(UserName));
+            }
         }
 
         public string CurrentStatus
         {
             get => QCUserModel.CurrentStatus;
-            set => QCUserModel.CurrentStatus = value;
+            set
+            {
+                QCUserModel.CurrentStatus = value;
+                OnPropertyChanged(nameof(CurrentStatus));
+            }
         }
 
         public DateTime ExpiresDate
@@ -45,11 +55,12 @@ namespace FenomPlus.Controls
             set
             {
                 QCUserModel.ExpiresDate = value;
-                ExpiresDateString = QCUserModel.ExpiresDate != DateTime.MinValue ? QCUserModel.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture) : string.Empty;
+                OnPropertyChanged(nameof(ExpiresDate));
+                OnPropertyChanged(nameof(ExpiresDateString));
             }
         }
 
-        public string ExpiresDateString { get; set; } = string.Empty;
+        public string ExpiresDateString => QCUserModel.ExpiresDate != DateTime.MinValue ? QCUserModel.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture) : string.Empty;
 
         public DateTime NextTestDate
         {
@@ -57,11 +68,12 @@ namespace FenomPlus.Controls
             set
             {
                 QCUserModel.NextTestDate = value;
-                NextTestDateString = QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString(Constants.PrettyHoursFormatString, CultureInfo.CurrentCulture) : string.Empty;
+                OnPropertyChanged(nameof(NextTestDate));
+                OnPropertyChanged(nameof(NextTestDateString));
             }
         }
 
-        public string NextTestDateString { get; set; } = string.Empty;
+        public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture) : string.Empty;
 
         public QcButtonViewModel()
         {

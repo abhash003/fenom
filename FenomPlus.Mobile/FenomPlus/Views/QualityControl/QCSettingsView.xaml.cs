@@ -19,66 +19,75 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
+        }
 
-            Tab1Content.IsVisible = true;
-            Tab2Content.IsVisible = false;
-            Tab3Content.IsVisible = false;
-            Tab4Content.IsVisible = false;
+        public void DevicesButtonClicked(object sender, EventArgs eventArgs)
+        {
+            // Refresh the list of devices
+            QualityControlViewModel.UpdateQcDevicesList();
+
+            DevicesTabContent.IsVisible = true;
+            UsersTabContent.IsVisible = false;
+            TestsTabContent.IsVisible = false;
+            DebugTabContent.IsVisible = false;
 
             UpdateTabButtonBorder();
         }
 
-        public void Tab1ButtonClicked(object sender, EventArgs eventArgs)
+        public void UsersButtonClicked(object sender, EventArgs eventArgs)
         {
-            Tab1Content.IsVisible = true;
-            Tab2Content.IsVisible = false;
-            Tab3Content.IsVisible = false;
-            Tab4Content.IsVisible = false;
+            DevicesTabContent.IsVisible = false;
+            UsersTabContent.IsVisible = true;
+            TestsTabContent.IsVisible = false;
+            DebugTabContent.IsVisible = false;
 
             UpdateTabButtonBorder();
         }
 
-        public void Tab2ButtonClicked(object sender, EventArgs eventArgs)
+        public void TestsButtonClicked(object sender, EventArgs eventArgs)
         {
-            Tab1Content.IsVisible = false;
-            Tab2Content.IsVisible = true;
-            Tab3Content.IsVisible = false;
-            Tab4Content.IsVisible = false;
+            DevicesTabContent.IsVisible = false;
+            UsersTabContent.IsVisible = false;
+            TestsTabContent.IsVisible = true;
+            DebugTabContent.IsVisible = false;
 
             UpdateTabButtonBorder();
         }
 
-        public void Tab3ButtonClicked(object sender, EventArgs eventArgs)
+        public void DebugButtonClicked(object sender, EventArgs eventArgs)
         {
-            Tab1Content.IsVisible = false;
-            Tab2Content.IsVisible = false;
-            Tab3Content.IsVisible = true;
-            Tab4Content.IsVisible = false;
-
-            UpdateTabButtonBorder();
-        }
-
-        public void Tab4ButtonClicked(object sender, EventArgs eventArgs)
-        {
-            Tab1Content.IsVisible = false;
-            Tab2Content.IsVisible = false;
-            Tab3Content.IsVisible = false;
-            Tab4Content.IsVisible = true;
+            DevicesTabContent.IsVisible = false;
+            UsersTabContent.IsVisible = false;
+            TestsTabContent.IsVisible = false;
+            DebugTabContent.IsVisible = true;
 
             UpdateTabButtonBorder();
         }
 
         private void UpdateTabButtonBorder()
         {
-            Tab1ButtonBorder.IsVisible = Tab1Content.IsVisible;
-            Tab2ButtonBorder.IsVisible = Tab2Content.IsVisible;
-            Tab3ButtonBorder.IsVisible = Tab3Content.IsVisible;
-            Tab4ButtonBorder.IsVisible = Tab4Content.IsVisible;
+            Tab1ButtonBorder.IsVisible = DevicesTabContent.IsVisible;
+            Tab2ButtonBorder.IsVisible = UsersTabContent.IsVisible;
+            Tab3ButtonBorder.IsVisible = TestsTabContent.IsVisible;
+            Tab4ButtonBorder.IsVisible = DebugTabContent.IsVisible;
         }
 
         protected override void OnAppearing()
         {
+            // Refresh the list of devices
+            QualityControlViewModel.UpdateQcDevicesList();
+
             base.OnAppearing();
+
+
+            // Set tab page
+            DevicesTabContent.IsVisible = true;
+            UsersTabContent.IsVisible = false;
+            TestsTabContent.IsVisible = false;
+            DebugTabContent.IsVisible = false;
+
+            UpdateTabButtonBorder();
+
         }
 
         protected override void OnDisappearing()

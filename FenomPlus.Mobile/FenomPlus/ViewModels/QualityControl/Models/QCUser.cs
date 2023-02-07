@@ -87,6 +87,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public DateTime NextTestDate { get; set; }  // Next Test date?
 
+        public string Explanation { get; set; }
+
         public List<double> ChartData { get; set; } = new List<double>();  // Next Test date?
 
         public QCUser()
@@ -95,11 +97,13 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DeviceSerialNumber = string.Empty;
             UserName = string.Empty;
             CurrentStatus = string.Empty;
+            DateCreated = DateTime.MinValue;
             ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;
+            ChartData = new List<double>();
         }
 
-        public QCUser(string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
+        public QCUser(string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate, List<double> chartData)
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
@@ -108,11 +112,11 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DateCreated = createDate;
             ExpiresDate = expiresDate;
             NextTestDate = nextDate;
-
+            ChartData = chartData;
         }
 
         [BsonCtor]
-        public QCUser(ObjectId id, string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate)
+        public QCUser(ObjectId id, string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate, List<double> chartData)
         {
             Id = id;
             DeviceSerialNumber = deviceSerialNumber;
@@ -121,6 +125,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DateCreated = createDate;
             ExpiresDate = expiresDate;
             NextTestDate = nextDate;
+            ChartData = chartData;
         }
     }
 }

@@ -15,10 +15,54 @@
         <controls:TitleContentView />
     </Shell.TitleView>
 
+    <ContentPage.Content>
 
-    <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0"  
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="FillAndExpand"
+                         Margin="100,0,100,0">
+
+                <Label Text="Negative Control Test"
+                       FontSize="45"
+                       TextColor="#333333"
+                       HorizontalTextAlignment="Center"/>
+
+                <Label Text="Result"
+                       FontSize="36"
+                       TextColor="#333333"
+                       HorizontalTextAlignment="Center"
+                       Padding="0,0,0,0"/>
+
+                <Label Text="{Binding NegativeControlTestResult}"
+                       FontSize="100"
+                       TextColor="#333333"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"/>
+
+                <Label Text="ppb"
+                       FontSize="36"
+                       TextColor="#333333"
+                       HorizontalTextAlignment="Center"
+                       Padding="0,0,0,15"/>
+
+            </StackLayout>
+
+
+            <Button Text="Exit"
+                    Grid.Row="1"
+                    Style="{StaticResource defaultButton}"
+                    Command="{Binding ExitToQCCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,40,0"/>
+
+        </Grid>
+
+    </ContentPage.Content>
 </views:BaseContentPage>

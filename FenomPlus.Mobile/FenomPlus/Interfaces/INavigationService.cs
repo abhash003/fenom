@@ -18,7 +18,7 @@ namespace FenomPlus.Interfaces
 
         Task QualityControlView();
         Task QCNegativeControlTestView();
-        Task QCNegativeControlResult();
+        Task QCNegativeControlResultView();
         Task QCNegativeControlChartView();
         Task QCUserTestView();
 

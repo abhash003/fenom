@@ -70,9 +70,9 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlTestView)}"), false);
         }
 
-        public async Task QCNegativeControlResult()
+        public async Task QCNegativeControlResultView()
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlResult)}"), false);
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlResultView)}"), false);
         }
 
         public async Task QCNegativeControlChartView()
