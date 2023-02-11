@@ -24,7 +24,7 @@ namespace FenomPlus.Views
         public void DevicesButtonClicked(object sender, EventArgs eventArgs)
         {
             // Refresh the list of devices
-            QualityControlViewModel.UpdateQcDevicesList();
+            QualityControlViewModel.UpdateAllQcDevices();
 
             DevicesTabContent.IsVisible = true;
             UsersTabContent.IsVisible = false;
@@ -75,7 +75,7 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             // Refresh the list of devices
-            QualityControlViewModel.UpdateQcDevicesList();
+            QualityControlViewModel.UpdateAllQcDevices();
 
             base.OnAppearing();
 
