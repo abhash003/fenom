@@ -37,8 +37,8 @@ namespace FenomPlus.ViewModels
         private List<QCUser> QCUsers; // Users assigned to a device with the device's serial number
 
         public int SelectedUserIndex = -1;
-        private string _currentDeviceSerialNumber = string.Empty;
 
+        private string _currentDeviceSerialNumber = string.Empty;
         public string CurrentDeviceSerialNumber
         {
             get => _currentDeviceSerialNumber;
@@ -51,6 +51,20 @@ namespace FenomPlus.ViewModels
         }
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
+
+        private string _currentDeviceStatus = string.Empty;
+        public string CurrentDeviceStatus
+        {
+            get => _currentDeviceStatus;
+            set
+            {
+                _currentDeviceStatus = value;
+                OnPropertyChanged(nameof(CurrentDeviceStatus));
+                OnPropertyChanged(nameof(DeviceStatusString));
+            }
+        }
+
+        public string DeviceStatusString => $"Device Status ({CurrentDeviceStatus})";
 
         public bool RequireQC
         {
