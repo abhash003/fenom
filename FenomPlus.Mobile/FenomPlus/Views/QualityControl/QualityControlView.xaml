@@ -155,7 +155,7 @@
                             Padding="20">
                             
                             <Image x:Name="ButtonImage"
-                                   Source="QCSettings.png"
+                                   Source="TutStep2.png"
                                    VerticalOptions="CenterAndExpand"
                                    Aspect="AspectFit"/>
                             

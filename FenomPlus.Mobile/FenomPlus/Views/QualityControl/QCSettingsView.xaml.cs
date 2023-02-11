@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using Acr.UserDialogs;
 using FenomPlus.ViewModels;
 using FenomPlus.SDK.Core.Models;
@@ -7,6 +8,7 @@ using FenomPlus.Controls;
 using FenomPlus.ViewModels.QualityControl;
 using Xamarin.Forms.Xaml;
 using FenomPlus.Services;
+using Xamarin.CommunityToolkit.UI.Views;
 
 namespace FenomPlus.Views
 {
@@ -21,73 +23,12 @@ namespace FenomPlus.Views
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
         }
 
-        public void DevicesButtonClicked(object sender, EventArgs eventArgs)
-        {
-            // Refresh the list of devices
-            QualityControlViewModel.UpdateAllQcDevices();
-
-            DevicesTabContent.IsVisible = true;
-            UsersTabContent.IsVisible = false;
-            TestsTabContent.IsVisible = false;
-            DebugTabContent.IsVisible = false;
-
-            UpdateTabButtonBorder();
-        }
-
-        public void UsersButtonClicked(object sender, EventArgs eventArgs)
-        {
-            DevicesTabContent.IsVisible = false;
-            UsersTabContent.IsVisible = true;
-            TestsTabContent.IsVisible = false;
-            DebugTabContent.IsVisible = false;
-
-            UpdateTabButtonBorder();
-        }
-
-        public void TestsButtonClicked(object sender, EventArgs eventArgs)
-        {
-            DevicesTabContent.IsVisible = false;
-            UsersTabContent.IsVisible = false;
-            TestsTabContent.IsVisible = true;
-            DebugTabContent.IsVisible = false;
-
-            UpdateTabButtonBorder();
-        }
-
-        public void DebugButtonClicked(object sender, EventArgs eventArgs)
-        {
-            DevicesTabContent.IsVisible = false;
-            UsersTabContent.IsVisible = false;
-            TestsTabContent.IsVisible = false;
-            DebugTabContent.IsVisible = true;
-
-            UpdateTabButtonBorder();
-        }
-
-        private void UpdateTabButtonBorder()
-        {
-            Tab1ButtonBorder.IsVisible = DevicesTabContent.IsVisible;
-            Tab2ButtonBorder.IsVisible = UsersTabContent.IsVisible;
-            Tab3ButtonBorder.IsVisible = TestsTabContent.IsVisible;
-            Tab4ButtonBorder.IsVisible = DebugTabContent.IsVisible;
-        }
-
         protected override void OnAppearing()
         {
-            // Refresh the list of devices
-            QualityControlViewModel.UpdateAllQcDevices();
+            SettingsTabView.SelectedIndex = 0;
+            QualityControlViewModel.UpdateAllQcDevicesCommand.Execute(null);
 
             base.OnAppearing();
-
-
-            // Set tab page
-            DevicesTabContent.IsVisible = true;
-            UsersTabContent.IsVisible = false;
-            TestsTabContent.IsVisible = false;
-            DebugTabContent.IsVisible = false;
-
-            UpdateTabButtonBorder();
-
         }
 
         protected override void OnDisappearing()
@@ -98,6 +39,28 @@ namespace FenomPlus.Views
         public override void NewGlobalData()
         {
             base.NewGlobalData();
+        }
+
+        private void SettingsTabView_OnSelectionChanged(object sender, TabSelectionChangedEventArgs e)
+        {
+            switch (SettingsTabView.SelectedIndex)
+            {
+                case 0:
+                    QualityControlViewModel.UpdateAllQcDevicesCommand.Execute(null);
+                    break;
+
+                case 1:
+                    QualityControlViewModel.UpdateAllQcUsersCommand.Execute(null);
+                    break;
+
+                case 2:
+                    QualityControlViewModel.UpdateAllQcTestsCommand.Execute(null);
+                    break;
+
+                default:
+                    // Nothing to do here
+                    break;
+            }
         }
     }
 }

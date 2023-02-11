@@ -1177,8 +1177,10 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private ObservableCollection<QCUser> AllQcDevices;
+        [ObservableProperty] 
+        private ObservableCollection<QCUser> _allQcDevices;
 
+        [RelayCommand]
         public void UpdateAllQcDevices()
         {
             try
@@ -1203,8 +1205,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-
-        private ObservableCollection<QCUser> AllQcUsers;
+        [ObservableProperty]
+        private ObservableCollection<QCUser> _allQcUsers;
 
         [RelayCommand]
         private void UpdateAllQcUsers()
@@ -1229,7 +1231,8 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private ObservableCollection<QCTest> AllQcTests;
+        [ObservableProperty] 
+        private ObservableCollection<QCTest> _allQcTests;
 
         [RelayCommand]
         private void UpdateAllQcTests()
