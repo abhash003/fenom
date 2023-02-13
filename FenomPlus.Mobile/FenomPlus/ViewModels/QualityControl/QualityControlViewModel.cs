@@ -140,6 +140,8 @@ namespace FenomPlus.ViewModels
                 CreateQcDevice();
             }
 
+            CurrentDeviceStatus = QCDevice?.CurrentStatus;
+
             // Get currently connected device's negative control or create one
             QcButtonViewModels[0].QCUserModel = ReadQcNegativeControl();
 
@@ -199,7 +201,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 var chartData = new List<double>();
-                var newDevice = new QCUser(CurrentDeviceSerialNumber, QCUser.DeviceName, QCUser.DeviceInsufficientData, DateTime.Now, DateTime.MinValue, DateTime.MinValue, chartData);
+                var newDevice = new QCUser(CurrentDeviceSerialNumber, QCUser.DeviceName, QCUser.DeviceInsufficientData);
 
                 using (var db = new LiteDatabase(QCUserRecordsPath))
                 {
@@ -324,7 +326,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 var chartData = new List<double>();
-                var newNegativeControl = new QCUser(CurrentDeviceSerialNumber, QCUser.NegativeControlName, QCUser.NegativeControlNone, DateTime.Now, DateTime.MinValue, DateTime.MinValue, chartData);
+                var newNegativeControl = new QCUser(CurrentDeviceSerialNumber, QCUser.NegativeControlName, QCUser.NegativeControlNone);
 
                 using (var db = new LiteDatabase(QCUserRecordsPath))
                 {
@@ -440,7 +442,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 var chartData = new List<double>();
-                var newQcUser = new QCUser(CurrentDeviceSerialNumber, userName, QCUser.UserNone, DateTime.Now, DateTime.MinValue, DateTime.MinValue, chartData);
+                var newQcUser = new QCUser(CurrentDeviceSerialNumber, userName, QCUser.UserNone);
 
                 using (var db = new LiteDatabase(QCUserRecordsPath))
                 {

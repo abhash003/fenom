@@ -3,6 +3,7 @@ using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Syncfusion.XlsIO.Parser.Biff_Records.Charts;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -75,7 +76,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public ObjectId Id { get; set; }
 
-        public string DeviceSerialNumber { get; set; } = string.Empty;
+        public string DeviceSerialNumber { get; set; }
 
         public string UserName { get; set; }  // User name
 
@@ -89,43 +90,68 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public string Explanation { get; set; }
 
-        public List<double> ChartData { get; set; } = new List<double>();  // Next Test date?
+        //public List<double> ChartData { get; set; } = new List<double>();  // Next Test date?
 
-        public QCUser()
+        public int C1 { get; set; }
+        public DateTime C1Date{ get; set; }
+
+        public int C2 { get; set; }
+        public DateTime C2Date { get; set; }
+
+        public int C3 { get; set; }
+        public DateTime C3Date { get; set; }
+
+        public int Ctx { get; set; }
+
+        public QCUser(string deviceSerialNumber, string userName, string status)
         {
             Id = ObjectId.NewObjectId();
-            DeviceSerialNumber = string.Empty;
-            UserName = string.Empty;
-            CurrentStatus = string.Empty;
-            DateCreated = DateTime.MinValue;
+            DeviceSerialNumber = deviceSerialNumber;
+            UserName = userName;
+            CurrentStatus = status;
+            DateCreated = DateTime.Now;
             ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;
-            ChartData = new List<double>();
+            C1 = 0;
+            C1Date = DateTime.MinValue;
+            C2 = 0;
+            C2Date = DateTime.MinValue;
+            C3 = 0;
+            C3Date = DateTime.MinValue;
+            Ctx = 0;
         }
 
-        public QCUser(string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate, List<double> chartData)
-        {
-            Id = ObjectId.NewObjectId();
-            DeviceSerialNumber = deviceSerialNumber;
-            UserName = userName;
-            CurrentStatus = status;
-            DateCreated = createDate;
-            ExpiresDate = expiresDate;
-            NextTestDate = nextDate;
-            ChartData = chartData;
-        }
-
-        [BsonCtor]
-        public QCUser(ObjectId id, string deviceSerialNumber, string userName, string status, DateTime createDate, DateTime expiresDate, DateTime nextDate, List<double> chartData)
-        {
-            Id = id;
-            DeviceSerialNumber = deviceSerialNumber;
-            UserName = userName;
-            CurrentStatus = status;
-            DateCreated = createDate;
-            ExpiresDate = expiresDate;
-            NextTestDate = nextDate;
-            ChartData = chartData;
-        }
+        // Mapping constructor
+        //[BsonCtor]
+        //public QCUser(ObjectId id, 
+        //    string deviceSerialNumber, 
+        //    string userName, 
+        //    string status, 
+        //    DateTime createDate, 
+        //    DateTime expiresDate, 
+        //    DateTime nextDate, 
+        //    int c1, 
+        //    DateTime c1Date, 
+        //    int c2, 
+        //    DateTime c2Date, 
+        //    int c3, 
+        //    DateTime c3Date, 
+        //    int ctx)
+        //{
+        //    Id = id;
+        //    DeviceSerialNumber = deviceSerialNumber;
+        //    UserName = userName;
+        //    CurrentStatus = status;
+        //    DateCreated = createDate;
+        //    ExpiresDate = expiresDate;
+        //    NextTestDate = nextDate;
+        //    C1 = c1;
+        //    C1Date = c1Date;
+        //    C2 = c2;
+        //    C2Date = c2Date;
+        //    C3 = c3;
+        //    C3Date =c3Date;
+        //    Ctx = ctx;
+        //}
     }
 }
