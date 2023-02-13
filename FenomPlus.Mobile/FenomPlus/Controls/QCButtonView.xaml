@@ -70,7 +70,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Text="Status:"
@@ -82,9 +82,8 @@
                        FontSize="Small"/>
 
                     <Label x:Name="StatusLabel"
-                       Grid.Column="1"
-                       Margin="10,0,0,0"
-                       Text="{Binding CurrentStatus}"
+                           Grid.Column="1"
+                           Text="{Binding CurrentStatus}"
                        VerticalOptions="Center" 
                        VerticalTextAlignment="Start" 
                        HorizontalOptions="Start" 
@@ -98,7 +97,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Text="Expires:"
@@ -111,7 +110,6 @@
 
                 <Label x:Name="ExpiresLabel"
                         Grid.Column="1" 
-                        Margin="10,0,0,0"
                         Text="{Binding ExpiresDateString}"
                         VerticalOptions="Center" 
                         HorizontalOptions="Start" 
@@ -124,7 +122,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Text="Next Test:"
@@ -137,9 +135,8 @@
 
                 <Label x:Name="NextTestLabel"
                         Grid.Column="1" 
-                        Margin="10,0,0,0"
                         Text="{Binding NextTestDateString}"
-                        FontSize="16"
+                        FontSize="Small"
                         TextColor="#333"  
                         HorizontalOptions="Start"
                         VerticalOptions="Center"/>
@@ -150,7 +147,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Text="Chart:"
@@ -163,11 +160,12 @@
 
                 <Image x:Name="Chart"
                        Grid.Column="1"
-                       Margin="10,10,0, 10"
+                       HeightRequest="15"
                        Source="bar_chart"
                        Aspect="AspectFill"
                        HorizontalOptions="Start"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="Center"
+                       Margin="0,0,0,3"/>
 
             </Grid>
 

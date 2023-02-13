@@ -1099,19 +1099,18 @@ namespace FenomPlus.ViewModels
             var negativeControl = CreateQcNegativeControl();
 
             // New User Qualified
-            var newUser = CreateQcUser("Jim");
+            var newUser1 = CreateQcUser("Jim");
+            newUser1.CurrentStatus = QCUser.UserQualified;
+            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser1.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser1);
 
-            var newTest1 = CreateQcTest(newUser.UserName, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-16);
-            UpdateQcTest(newTest1);
-
-            var newTest2 = CreateQcTest(newUser.UserName, 30);
-            newTest2.TestDate = DateTime.Now;
-            UpdateQcTest(newTest2);
-
-            var newTest3 = CreateQcTest(newUser.UserName, 25);
-            newTest3.TestDate = DateTime.Now.AddHours(16);
-            UpdateQcTest(newTest3);
+            var newTest = CreateQcTest(newUser1.UserName, 20);
+            newTest.TestDate = DateTime.Now.AddHours(-16);
+            newTest = CreateQcTest(newUser1.UserName, 30);
+            newTest.TestDate = DateTime.Now;
+            newTest = CreateQcTest(newUser1.UserName, 25);
+            newTest.TestDate = DateTime.Now.AddHours(16);
         }
 
         [RelayCommand]
@@ -1124,21 +1123,31 @@ namespace FenomPlus.ViewModels
             var negativeControl = CreateQcNegativeControl();
 
             // New User Qualified
-            var newUser = CreateQcUser("Jim");
-            var newTest = CreateQcTest(newUser.UserName, 20);
+            var newUser1 = CreateQcUser("Jim");
+            newUser1.CurrentStatus = QCUser.UserQualified;
+            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser1.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser1);
+
+            var newTest = CreateQcTest(newUser1.UserName, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = CreateQcTest(newUser.UserName, 30);
+            newTest = CreateQcTest(newUser1.UserName, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = CreateQcTest(newUser.UserName, 25);
+            newTest = CreateQcTest(newUser1.UserName, 25);
             newTest.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
-            newUser = CreateQcUser("Vinh");
-            newTest = CreateQcTest(newUser.UserName, 20);
+            var newUser2 = CreateQcUser("Vinh");
+            newUser2.CurrentStatus = QCUser.UserDisqualified;
+            newUser2.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser2.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser2);
+
+            newTest = CreateQcTest(newUser2.UserName, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = CreateQcTest(newUser.UserName, 30);
+            newTest = CreateQcTest(newUser2.UserName, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = CreateQcTest(newUser.UserName, 19);
+            newTest = CreateQcTest(newUser2.UserName, 19);
             newTest.TestDate = DateTime.Now.AddHours(16);
         }
 
@@ -1152,30 +1161,45 @@ namespace FenomPlus.ViewModels
             var negativeControl = CreateQcNegativeControl();
 
             // New User Qualified
-            var newUser = CreateQcUser("Jim");
-            var newTest = CreateQcTest(newUser.UserName, 20);
+            var newUser1 = CreateQcUser("Jim");
+            newUser1.CurrentStatus = QCUser.UserQualified;
+            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser1.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser1);
+
+            var newTest = CreateQcTest(newUser1.UserName, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = CreateQcTest(newUser.UserName, 30);
+            newTest = CreateQcTest(newUser1.UserName, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = CreateQcTest(newUser.UserName, 25);
+            newTest = CreateQcTest(newUser1.UserName, 25);
             newTest.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
-            newUser = CreateQcUser("Vinh");
-            newTest = CreateQcTest(newUser.UserName, 20);
+            var newUser2 = CreateQcUser("Vinh");
+            newUser2.CurrentStatus = QCUser.UserDisqualified;
+            newUser2.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser2.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser2);
+
+            newTest = CreateQcTest(newUser2.UserName, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = CreateQcTest(newUser.UserName, 30);
+            newTest = CreateQcTest(newUser2.UserName, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = CreateQcTest(newUser.UserName, 19);
+            newTest = CreateQcTest(newUser2.UserName, 19);
             newTest.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
-            newUser = CreateQcUser("Bob");
-            newTest = CreateQcTest(newUser.UserName, 20);
+            var newUser3 = CreateQcUser("Bob");
+            newUser3.CurrentStatus = QCUser.UserDisqualified;
+            newUser3.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser3.NextTestDate = DateTime.Now.AddHours(16);
+            UpdateQcUser(newUser3);
+
+            newTest = CreateQcTest(newUser3.UserName, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = CreateQcTest(newUser.UserName, 30);
+            newTest = CreateQcTest(newUser3.UserName, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = CreateQcTest(newUser.UserName, 32);
+            newTest = CreateQcTest(newUser3.UserName, 32);
             newTest.TestDate = DateTime.Now.AddHours(16);
         }
 

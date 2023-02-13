@@ -60,7 +60,7 @@ namespace FenomPlus.Controls
             }
         }
 
-        public string ExpiresDateString => QCUserModel.ExpiresDate != DateTime.MinValue ? QCUserModel.ExpiresDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture) : string.Empty;
+        public string ExpiresDateString => QCUserModel.ExpiresDate != DateTime.MinValue ? QCUserModel.ExpiresDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
         public DateTime NextTestDate
         {
@@ -73,7 +73,7 @@ namespace FenomPlus.Controls
             }
         }
 
-        public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString(Constants.PrettyDateFormatString, CultureInfo.CurrentCulture) : string.Empty;
+        public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
         public QcButtonViewModel()
         {

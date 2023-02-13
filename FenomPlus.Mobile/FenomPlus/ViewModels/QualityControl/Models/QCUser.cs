@@ -112,6 +112,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DateCreated = DateTime.Now;
             ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;
+            Explanation = string.Empty;
             C1 = 0;
             C1Date = DateTime.MinValue;
             C2 = 0;
