@@ -187,7 +187,7 @@
 
                         <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
 
-                            <Button Style="{StaticResource defaultButton}" Text="Clear Database" Command="{Binding WipeDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
+                            <Button Style="{StaticResource defaultButton}" Text="Clear Database" Command="{Binding DeleteDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
 
                         </StackLayout>
 

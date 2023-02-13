@@ -51,6 +51,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public const string NegativeControlPass = "Pass";
         public const string NegativeControlFail = "Fail";
+        public const string NegativeControlExpired = "Expired";
         public const string NegativeControlNone = "None";
 
 

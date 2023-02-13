@@ -158,14 +158,11 @@
                        TextColor="#333" 
                        FontSize="Small"/>
 
-                <Image x:Name="Chart"
-                       Grid.Column="1"
-                       HeightRequest="15"
-                       Source="bar_chart"
-                       Aspect="AspectFill"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Center"
-                       Margin="0,0,0,3"/>
+                    <!--<ImageButton Grid.Column="1" Source="bar_chart" HorizontalOptions="Start"
+                                 VerticalOptions="Center" HeightRequest="15" Margin="0,0,0,3"/>-->
+
+                    <Button Grid.Column="1" Text="Show" HorizontalOptions="Start" BorderWidth="0" Background="Transparent"
+                            VerticalOptions="Center" HeightRequest="15" Margin="0,0,0,3" />
 
             </Grid>
 

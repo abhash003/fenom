@@ -165,6 +165,9 @@
     <Compile Update="Controls\QCButtonView.xaml.cs">
       <DependentUpon>QCButtonView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Controls\QCDetailsPopup.xaml.cs">
+      <DependentUpon>QCDetailsPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
       <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
     </Compile>
@@ -193,6 +196,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\QCButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\QCDetailsPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">

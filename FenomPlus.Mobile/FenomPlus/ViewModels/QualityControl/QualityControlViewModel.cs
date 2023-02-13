@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Syncfusion.XlsIO.Implementation;
 using Xamarin.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -30,13 +31,11 @@ namespace FenomPlus.ViewModels
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
         public List<QcButtonViewModel> QcButtonViewModels = new List<QcButtonViewModel>();
 
-        private readonly string QCUserRecordsPath;
-        private readonly string QCTestRecordsPath;
+        private readonly string QCDatabasePath;
+        //private readonly string QCTestRecordsPath;
 
         private QCUser QCDevice; // For a specific device with unique serial number - only one per device
         private List<QCUser> QCUsers; // Users assigned to a device with the device's serial number
-
-        public int SelectedUserIndex = -1;
 
         private string _currentDeviceSerialNumber = string.Empty;
         public string CurrentDeviceSerialNumber
@@ -76,7 +75,22 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public QCUser CurrentQcUser
+        private int _selectedUserIndex = -1;
+        public int SelectedUserIndex
+        {
+            get => _selectedUserIndex;
+            set
+            {
+                _selectedUserIndex = value;
+                OnPropertyChanged(nameof(SelectedQcUser));
+                OnPropertyChanged(nameof(SelectedUserName));
+                OnPropertyChanged(nameof(SelectedCurrentStatus));
+                OnPropertyChanged(nameof(SelectedExplanation));
+                OnPropertyChanged(nameof(SelectedTests));
+            }
+        }
+
+        public QCUser SelectedQcUser
         {
             get
             {
@@ -88,17 +102,22 @@ namespace FenomPlus.ViewModels
                 return null;
             }
         }
+        public string SelectedUserName => SelectedQcUser.UserName;
+        public string SelectedCurrentStatus => SelectedQcUser.CurrentStatus;
+        public string SelectedExplanation => SelectedQcUser.Explanation;
+        public List<QCTest> SelectedTests => ReadQcTests(SelectedUserName);
+
 
         public QualityControlViewModel()
         {
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            QCUserRecordsPath = Path.Combine(localFolder, @"QCUserRecords.db");
-            QCTestRecordsPath = Path.Combine(localFolder, @"QCTestRecords.db");
+            QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
+            //QCTestRecordsPath = Path.Combine(localFolder, @"QCTestRecords.db");
 
-            for (int i = 0; i <= 6; i++) // Negative Control + 6 users
-            {
-                QcButtonViewModels.Add(new QcButtonViewModel());
-            }
+            //for (int i = 0; i <= 6; i++) // Negative Control + 6 users
+            //{
+            //    QcButtonViewModels.Add(new QcButtonViewModel());
+            //}
         }
 
         private QCUser QCNegativeControl => QcButtonViewModels[0].QCUserModel; // For a specific device with unique serial number - only one per device
@@ -129,8 +148,12 @@ namespace FenomPlus.ViewModels
             CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber));
 
-            // ToDo: Read from database
-            CreateMockDataBase3();
+            QcButtonViewModels.Clear();
+            for (int i = 0; i <= 6; i++) // Negative Control + 6 users
+            {
+                // Will force to get new data so its always current
+                QcButtonViewModels.Add(new QcButtonViewModel());
+            }
 
             // Get currently connected device's status or create a new one
             QCDevice = ReadQcDevice();
@@ -154,22 +177,34 @@ namespace FenomPlus.ViewModels
             QCUsers = ReadAllQcUsers();
 
             if (QCUsers.Count > 0)
+            {
                 QcButtonViewModels[1].QCUserModel = QCUsers[0];
+            }
 
             if (QCUsers.Count > 1)
+            {
                 QcButtonViewModels[2].QCUserModel = QCUsers[1];
+            }
 
             if (QCUsers.Count > 2)
+            {
                 QcButtonViewModels[3].QCUserModel = QCUsers[2];
+            }
 
             if (QCUsers.Count > 3)
+            {
                 QcButtonViewModels[4].QCUserModel = QCUsers[3];
+            }
 
             if (QCUsers.Count > 4)
+            {
                 QcButtonViewModels[5].QCUserModel = QCUsers[4];
+            }
 
             if (QCUsers.Count > 5)
+            {
                 QcButtonViewModels[6].QCUserModel = QCUsers[5];
+            }
         }
 
 
@@ -180,7 +215,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(device);
@@ -203,7 +238,7 @@ namespace FenomPlus.ViewModels
                 var chartData = new List<double>();
                 var newDevice = new QCUser(CurrentDeviceSerialNumber, QCUser.DeviceName, QCUser.DeviceInsufficientData);
 
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(newDevice);
@@ -223,7 +258,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
@@ -247,7 +282,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Update(device);
@@ -268,7 +303,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Delete all users for this device including device and negative control
                     var userCollection = db.GetCollection<QCUser>("qcusers");
@@ -305,7 +340,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(negativeControl);
@@ -328,7 +363,7 @@ namespace FenomPlus.ViewModels
                 var chartData = new List<double>();
                 var newNegativeControl = new QCUser(CurrentDeviceSerialNumber, QCUser.NegativeControlName, QCUser.NegativeControlNone);
 
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(newNegativeControl);
@@ -347,7 +382,7 @@ namespace FenomPlus.ViewModels
         private QCUser ReadQcNegativeControl()
         {
             // Only ONE in the collection
-            using (var db = new LiteDatabase(QCUserRecordsPath))
+            using (var db = new LiteDatabase(QCDatabasePath))
             {
                 try
                 {
@@ -370,7 +405,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Update(negativeControl);
@@ -392,7 +427,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
                     var userCollection = db.GetCollection<QCUser>("qcusers");
@@ -418,7 +453,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(newUser);
@@ -444,7 +479,7 @@ namespace FenomPlus.ViewModels
                 var chartData = new List<double>();
                 var newQcUser = new QCUser(CurrentDeviceSerialNumber, userName, QCUser.UserNone);
 
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Insert(newQcUser);
@@ -465,7 +500,7 @@ namespace FenomPlus.ViewModels
             if (string.IsNullOrEmpty(userName))
                 return null;
 
-            using (var db = new LiteDatabase(QCUserRecordsPath))
+            using (var db = new LiteDatabase(QCDatabasePath))
             {
                 try
                 {
@@ -495,7 +530,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Update(user);
@@ -519,7 +554,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
                     var userCollection = db.GetCollection<QCUser>("qcusers");
@@ -539,7 +574,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
@@ -568,7 +603,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     testCollection.Insert(test);
@@ -584,16 +619,17 @@ namespace FenomPlus.ViewModels
             return true;
         }
 
-        private QCTest CreateQcTest(string userName, int result)
+        private QCTest CreateQcTest(string userName, int testValue)
         {
-            if (string.IsNullOrEmpty(userName) || result <= 0)
+            if (string.IsNullOrEmpty(userName) || testValue <= 0)
                 return null;
 
             try
             {
-                var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, result);
+                string testStatus = string.Empty;  // ToDo: Fix!
+                var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, testValue, testStatus, string.Empty);
 
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     testCollection.Insert(newTest);
@@ -616,7 +652,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
@@ -643,7 +679,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     testCollection.Update(test);
@@ -667,7 +703,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
@@ -697,7 +733,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
@@ -833,6 +869,7 @@ namespace FenomPlus.ViewModels
 
         #endregion
 
+
         #region "Negative Control Test"
 
         private Timer TestTimer;
@@ -859,7 +896,7 @@ namespace FenomPlus.ViewModels
 
 
             // Update Device Status DB and in main screen
-            string result = AnalyzeNegativeControlResults(CurrentDeviceSerialNumber);
+            //string result = AnalyzeNegativeControlResults(CurrentDeviceSerialNumber);
 
             Services.Navigation.QCNegativeControlResultView();
         }
@@ -1092,7 +1129,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void CreateMockDataBase1()
         {
-            WipeDataBase();
+            DeleteDataBase();
 
             var newDevice = CreateQcDevice();
 
@@ -1116,7 +1153,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void CreateMockDataBase2()
         {
-            WipeDataBase();
+            DeleteDataBase();
 
             var newDevice = CreateQcDevice();
 
@@ -1154,7 +1191,7 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private void CreateMockDataBase3()
         {
-            WipeDataBase();
+            DeleteDataBase();
 
             var newDevice = CreateQcDevice();
 
@@ -1204,12 +1241,12 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        private void WipeDataBase()
+        private void DeleteDataBase()
         {
             try
             {
-                File.Delete(QCUserRecordsPath);
-                File.Delete(QCTestRecordsPath);
+                File.Delete(QCDatabasePath);
+                File.Delete(QCDatabasePath);
             }
             catch (Exception ex)
             {
@@ -1225,7 +1262,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
@@ -1253,7 +1290,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCUserRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
@@ -1279,7 +1316,7 @@ namespace FenomPlus.ViewModels
         {
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
 
@@ -1303,7 +1340,7 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var testsCollection = db.GetCollection<QCTest>("qctests");
 
@@ -1334,25 +1371,117 @@ namespace FenomPlus.ViewModels
 
         #region "Determine Status Routines"
 
-        private string AnalyzeDeviceStatus(string serialNumber)
+        // Notes:
+
+        // After each negative control test...
+        //  1. Add to database
+        //  2. Determine test status (time > 16h and less than 24h and value)
+        //  2. Update device status
+
+        // After each user test...
+        //  1. Add to database
+        //  2. First 3: determine test status by value and comparing any previous tests (including time and date checks)
+        //  3. After 3 compare value to QTX and set test status
+        //  4. Update device status
+
+        private string UpdateDeviceStatus(string serialNumber)
         {
-            // Temporary!!!!!
-            return string.Empty;
+            string negativeControlStatus = UpdateNegativeControlStatus();
+
+            bool anyQcUserGood = AnyUserStatusPass();
+
+            if (negativeControlStatus == "Expired" || anyQcUserGood)
+            {
+                return "Expired";
+            }
+
+            if (negativeControlStatus != "Pass" || !AnyUserStatusPass())
+                return "Fail";
+
+            return "Pass";
         }
 
-        private string AnalyzeNegativeControlResults(string serialNumber)
+        private string UpdateNegativeControlStatus()
         {
-            if (string.IsNullOrEmpty(serialNumber))
-                return string.Empty;
+            // Returns "Pass", "Fail", "Expired", or "Insufficient Data"
+            QCTest negativeControlTest = GetLastNegativeControlTest();
+
+            TimeSpan timeSpan = DateTime.Now - negativeControlTest.TestDate;
+            bool timeSpanOK = timeSpan <= TimeSpan.FromHours(24);
+
+            if (!timeSpanOK)
+                return QCUser.NegativeControlExpired;
+
+            if (negativeControlTest.TestValue > 5)
+                return QCUser.NegativeControlFail;
+            else
+                return QCUser.NegativeControlPass;
+        }
+
+        // Called after each user test and when QC view is shown
+        private string UpdateUserStatus(string userName)
+        {
+            // Status for User...
+            //•	Conditionally Qualified
+            //     - Fewer than 4 tests have been performed by the QC User.
+            //     - All tests within the Qualification Period are “Pass”.
+            //•	Qualified
+            //     - Latest test is within the expected range for the QC User.
+            //•	Disqualified
+            //      - Latest test is outside the expected range for the QC User.
+            //•	None
+            //      - QC User test is required.
+
+            List<QCTest> tests = GetLast3Tests(userName).ToList();
+
+            if (tests.Count < 4 && AllUserQualificationTestsPassed(tests))
+                return QCUser.UserConditionallyQualified;
+
+            if (tests[tests.Count - 1].TestStatus == QCTest.TestPass)
+                return QCUser.UserQualified;
+
+            return QCUser.UserDisqualified;
+        }
+
+        private bool AllUserQualificationTestsPassed(List<QCTest> tests)
+        {
+            foreach (var test in tests)
+            {
+                if (test.TestStatus == QCTest.TestFail)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool AnyUserStatusPass()
+        {
+            // Refresh list
+            QCUsers = ReadAllQcUsers();
+
+            foreach (var user in QCUsers)
+            {
+                if (user.CurrentStatus is QCUser.UserConditionallyQualified or QCUser.UserQualified)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private IEnumerable<QCTest> GetLast3Tests(string userName)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
             try
             {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
+                using (var db = new LiteDatabase(QCDatabasePath))
                 {
-                    // Get all user records for this device
+                    // Get all user records for this device and user
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == QCUser.NegativeControlName)
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
                         .OrderByDescending(x => x.TestDate).ToList();
 
                     var last3Tests = tests.TakeLast(3);
@@ -1361,44 +1490,14 @@ namespace FenomPlus.ViewModels
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return string.Empty;
+                return null;
             }
 
-            // Temporary!!!!!!
-            return string.Empty;
-        }
-
-        private string AnalyzeUserTests(string serialNumber, string userName)
-        {
-            if (string.IsNullOrEmpty(serialNumber) || string.IsNullOrEmpty(userName))
-                return string.Empty;
-
-            try
-            {
-                using (var db = new LiteDatabase(QCTestRecordsPath))
-                {
-                    // Get all user records for this device
-                    var testCollection = db.GetCollection<QCTest>("qctests");
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == serialNumber && x.UserName == userName)
-                        .OrderByDescending(x => x.TestDate).ToList();
-
-                    var last3Tests = tests.TakeLast(3);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return string.Empty;
-            }
-
-            // Temporary!!!!!!
-            return string.Empty;
+            return null;
         }
 
         #endregion
     }
-
 
     // Extension method to get the last 3 items in an array
     public static class Extensions
