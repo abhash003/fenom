@@ -26,7 +26,7 @@ namespace FenomPlus.Views
             base.OnAppearing();
 
             // Must reset on each new appearing
-            QualityControlViewModel.ResetSelectedUserIndex();
+            QualityControlViewModel.SelectedUserIndex = -1;
 
             // Refresh Data - ToDo: Later optimize and only refresh when needed?
             QualityControlViewModel.LoadData();

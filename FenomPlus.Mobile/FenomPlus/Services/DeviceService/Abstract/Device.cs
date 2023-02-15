@@ -115,7 +115,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DebugMsg DebugMsg { get; set; }
 
-        public float FenomValue { get; set; }
+        public int FenomValue { get; set; }
 
         public int BatteryLevel { get; set; }
 

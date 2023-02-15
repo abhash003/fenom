@@ -4,6 +4,8 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace FenomPlus.Controls
 {
@@ -27,7 +29,7 @@ namespace FenomPlus.Controls
             }
         }
 
-        public bool Assigned { get; set; } = false;
+        public bool Assigned { get; set; }
 
         public string UserName
         {
@@ -75,7 +77,14 @@ namespace FenomPlus.Controls
 
         public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
+        public RelayCommand OpenChartCommand;
+
         public QcButtonViewModel()
+        {
+            OpenChartCommand = new RelayCommand(OpenChart);
+        }
+
+        private void OpenChart()
         {
 
         }

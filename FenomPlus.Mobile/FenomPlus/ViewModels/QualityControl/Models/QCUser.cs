@@ -102,7 +102,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public int C3 { get; set; }
         public DateTime C3Date { get; set; }
 
-        public int Ctx { get; set; }
+        public int QCT { get; set; }
 
         public QCUser(string deviceSerialNumber, string userName, string status)
         {
@@ -120,40 +120,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             C2Date = DateTime.MinValue;
             C3 = 0;
             C3Date = DateTime.MinValue;
-            Ctx = 0;
+            QCT = 0;
         }
-
-        // Mapping constructor
-        //[BsonCtor]
-        //public QCUser(ObjectId id, 
-        //    string deviceSerialNumber, 
-        //    string userName, 
-        //    string status, 
-        //    DateTime createDate, 
-        //    DateTime expiresDate, 
-        //    DateTime nextDate, 
-        //    int c1, 
-        //    DateTime c1Date, 
-        //    int c2, 
-        //    DateTime c2Date, 
-        //    int c3, 
-        //    DateTime c3Date, 
-        //    int ctx)
-        //{
-        //    Id = id;
-        //    DeviceSerialNumber = deviceSerialNumber;
-        //    UserName = userName;
-        //    CurrentStatus = status;
-        //    DateCreated = createDate;
-        //    ExpiresDate = expiresDate;
-        //    NextTestDate = nextDate;
-        //    C1 = c1;
-        //    C1Date = c1Date;
-        //    C2 = c2;
-        //    C2Date = c2Date;
-        //    C3 = c3;
-        //    C3Date =c3Date;
-        //    Ctx = ctx;
-        //}
     }
 }

@@ -47,5 +47,10 @@ namespace FenomPlus.Controls
                 qcButton.InnerButton.CommandParameter = newValue;
             }
         }
+
+        void OnChartTapGestureRecognizerTapped(object sender, EventArgs args)
+        {
+            var imageSender = (Image)sender;
+        }
     }
 }

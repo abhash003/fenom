@@ -100,7 +100,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         float BreathFlow { get; set; }
 
-        float FenomValue { get; set; }
+        int FenomValue { get; set; }
 
         event EventHandler BreathFlowChanged;
     }
