@@ -167,8 +167,7 @@
                     <Image Grid.Column="1" Source="bar_chart" HorizontalOptions="Start" VerticalOptions="Center" HeightRequest="15" Margin="0,0,0,3">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer
-                            Tapped="OnChartTapGestureRecognizerTapped"
-                            NumberOfTapsRequired="2" />
+                            Tapped="OnChartTapGestureRecognizerTapped"/>
                     </Image.GestureRecognizers>
                 </Image>
 
