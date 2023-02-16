@@ -82,5 +82,29 @@ namespace FenomPlus.Views
                     break;
             }
         }
+
+
+        private void AllDevicesDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+        {
+            DeleteDeviceButton.IsEnabled = AllUsersDataGrid.SelectedIndex >= 0;
+        }
+
+        private void AllUsersDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+        {
+            DeleteUserButton.IsEnabled = AllUsersDataGrid.SelectedIndex >= 0;
+        }
+
+
+        private void DeleteDeviceButton_OnClicked(object sender, EventArgs e)
+        {
+            QualityControlViewModel.DeleteDeviceCommand.Execute(AllUsersDataGrid.SelectedIndex);
+            AllDevicesDataGrid.Refresh();
+        }
+
+        private void DeleteUserButton_OnClicked(object sender, EventArgs e)
+        {
+            QualityControlViewModel.DeleteUserCommand.Execute(AllUsersDataGrid.SelectedIndex);
+            AllUsersDataGrid.Refresh();
+        }
     }
 }

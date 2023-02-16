@@ -13,6 +13,10 @@ namespace FenomPlus.Interfaces
     {
         public void ShowAlert(string message, string title, string buttonLabel);
 
+        public Task ShowAlertAsync(string message, string title, string buttonLabel);
+
+        public Task<bool> ShowConfirmYesNo(string message, string title);
+
         // Indicates if a cancellation was requested in NotifyDevicePurgingAsync
         public bool PurgeCancelRequest { get; set; }
 

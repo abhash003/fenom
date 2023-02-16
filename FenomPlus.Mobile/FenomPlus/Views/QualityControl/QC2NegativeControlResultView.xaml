@@ -28,22 +28,22 @@
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="FillAndExpand"
                          Margin="100,0,100,0"
-                         Spacing="20">
+                         Spacing="10">
 
                 <Label Text="Negative Control Test Result"
                        FontSize="45"
                        TextColor="#333333"
-                       HorizontalTextAlignment="Center"/>
+                       HorizontalTextAlignment="Center"
+                       Margin="0,0,0,50"/>
 
                 <Label Text="{Binding NegativeControlStatus}"
-                       FontSize="60"
+                       FontSize="80"
                        TextColor="#333333"
                        HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center"
-                       Margin="0,0,0,40"/>
+                       VerticalTextAlignment="Center"/>
 
                 <Label Text="{Binding NegativeControlTestResultString}"
-                           FontSize="60"
+                           FontSize="40"
                            TextColor="#333333"
                            HorizontalTextAlignment="Center"
                            VerticalTextAlignment="Center"/>

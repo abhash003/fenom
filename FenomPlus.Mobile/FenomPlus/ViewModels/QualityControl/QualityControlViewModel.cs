@@ -25,6 +25,7 @@ using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using Xamarin.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using FenomPlus.Services.DeviceService.Abstract;
+using System.Reflection;
 
 namespace FenomPlus.ViewModels
 {
@@ -552,7 +553,18 @@ namespace FenomPlus.ViewModels
             {
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
-                    // Get all user records for this device
+                    // Delete all tests for this user
+                    var testsCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testsCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == user.DeviceSerialNumber && x.UserName == user.UserName)
+                        .ToList();
+
+                    foreach (var t in tests)
+                    {
+                        testsCollection.Delete(t.Id);
+                    }
+
+                    // Delete user
                     var userCollection = db.GetCollection<QCUser>("qcusers");
                     userCollection.Delete(user.Id);
 
@@ -786,23 +798,27 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                // Open user name dialog and create user, then open breath test view
-                string userName = await Services.Dialogs.UserNamePromptAsync();
 
-                if (!string.IsNullOrEmpty(userName))
-                {
-                    if (QCUsers.Any(user => userName == user.UserName))
-                    {
-                        Services.Dialogs.ShowAlert($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
+                    // Open user name dialog and create user, then open breath test view
+                    string userName = await Services.Dialogs.UserNamePromptAsync();
+
+                    if (userName == "cancel")
                         return;
+
+                    if (!string.IsNullOrEmpty(userName))
+                    {
+                        if (QCUsers.Any(user => userName.ToLower() == user.UserName.ToLower()))
+                        {
+                            await Services.Dialogs.ShowAlertAsync($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
+                        }
+                        else
+                        {
+                            QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
+
+                            // Open and run new breath test for this user
+                            await StartUserBreathTest();
+                        }
                     }
-
-                    QCUser newUserModel = DbCreateQcUser(userName);
-                    QcButtonViewModels[userIndex].QCUserModel = newUserModel;
-
-                    // Open and run new breath test for this user
-                    await StartUserBreathTest();
-                }
             }
         }
 
@@ -869,7 +885,7 @@ namespace FenomPlus.ViewModels
         private int _negativeControlTestResult = 0;
 
         [ObservableProperty]
-        private string _negativeControlTestResultString = "0 ppb";
+        private string _negativeControlTestResultString = "(0 ppb)";
 
         [ObservableProperty]
         private string _negativeControlStatus;
@@ -896,7 +912,7 @@ namespace FenomPlus.ViewModels
             UiTimer.Dispose();
 
             int negativeControlTestResult = 5; // ToDo: Temporary until we have real value from hardware
-            NegativeControlTestResultString = $"{negativeControlTestResult} ppb";
+            NegativeControlTestResultString = $"({negativeControlTestResult} ppb)";
 
             // Update NegativeControl in DB
             QCTest negativeControlTest = DbCreateQcTest(QCUser.NegativeControlName, negativeControlTestResult);
@@ -1037,15 +1053,8 @@ namespace FenomPlus.ViewModels
 
         public void InitUserStopBreathTest()
         {
-            //Stop = false;
-            //Seconds = Config.StopExhalingReadyWait;
             PlaySounds.PlaySuccessSound();
 
-            //UiTimer = new Timer(1000);
-            //UiTimer.Elapsed += (sender, e) => StopBreathCompleted();
-            //UiTimer.Start();
-
-            //UiTimer.Stop();
             Task.Delay(Config.StopExhalingReadyWait);
 
             if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
@@ -1299,6 +1308,25 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        [RelayCommand]
+        private void DeleteDevice(object parameter)
+        {
+            int index = (int)parameter;
+
+            if (AllQcDevices[index - 1].DeviceSerialNumber == CurrentDeviceSerialNumber)
+            {
+                Services.Dialogs.ShowAlert("You cannot delete the current device.", "Current Device", "OK");
+                return;
+            }
+
+            if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
+            {
+                // Delete device, user and tests also
+                DbDeleteQcDevice(AllQcDevices[index - 1]);// SfDataGrid apparently is one based on the index
+                UpdateAllQcDevices();
+            }
+        }
+
         [ObservableProperty]
         private ObservableCollection<QCUser> _allQcUsers;
 
@@ -1322,6 +1350,19 @@ namespace FenomPlus.ViewModels
             {
                 Console.WriteLine(ex.Message);
                 return;
+            }
+        }
+
+        [RelayCommand]
+        private void DeleteUser(object parameter)
+        {
+            int index = (int)parameter;
+
+            if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
+            {
+                // Delete User and tests
+                DbDeleteQcUser(AllQcUsers[index - 1]); // SfDataGrid apparently is one based on the index
+                UpdateAllQcUsers();
             }
         }
 
