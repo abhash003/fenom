@@ -1233,12 +1233,12 @@ namespace FenomPlus.ViewModels
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser1);
 
-            var newTest = DbCreateQcTest(newUser1.UserName, 20);
-            newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser1.UserName, 30);
-            newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser1.UserName, 25);
-            newTest.TestDate = DateTime.Now.AddHours(16);
+            var newTest1 = DbCreateQcTest(newUser1.UserName, 20);
+            newTest1.TestDate = DateTime.Now.AddHours(-16);
+            var newTest2 = DbCreateQcTest(newUser1.UserName, 30);
+            newTest2.TestDate = DateTime.Now;
+            var newTest3 = DbCreateQcTest(newUser1.UserName, 25);
+            newTest3.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
@@ -1247,12 +1247,12 @@ namespace FenomPlus.ViewModels
             newUser2.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser2);
 
-            newTest = DbCreateQcTest(newUser2.UserName, 20);
-            newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser2.UserName, 30);
-            newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser2.UserName, 19);
-            newTest.TestDate = DateTime.Now.AddHours(16);
+            newTest1 = DbCreateQcTest(newUser2.UserName, 20);
+            newTest1.TestDate = DateTime.Now.AddHours(-16);
+            newTest2 = DbCreateQcTest(newUser2.UserName, 30);
+            newTest2.TestDate = DateTime.Now;
+            newTest3 = DbCreateQcTest(newUser2.UserName, 19);
+            newTest3.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
             var newUser3 = DbCreateQcUser("Bob");
@@ -1261,12 +1261,12 @@ namespace FenomPlus.ViewModels
             newUser3.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser3);
 
-            newTest = DbCreateQcTest(newUser3.UserName, 20);
-            newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser3.UserName, 30);
-            newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser3.UserName, 32);
-            newTest.TestDate = DateTime.Now.AddHours(16);
+            newTest1 = DbCreateQcTest(newUser3.UserName, 20);
+            newTest1.TestDate = DateTime.Now.AddHours(-16);
+            newTest2 = DbCreateQcTest(newUser3.UserName, 30);
+            newTest2.TestDate = DateTime.Now;
+            newTest3 = DbCreateQcTest(newUser3.UserName, 32);
+            newTest3.TestDate = DateTime.Now.AddHours(16);
         }
 
         [RelayCommand]
@@ -1586,6 +1586,10 @@ namespace FenomPlus.ViewModels
 
                     SelectedQcUser.QCT = median;
 
+                    bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
+                                          tests[1].TestStatus == QCTest.TestPass &&
+                                          tests[2].TestStatus == QCTest.TestPass;
+
                     testValuesWithinRange = (max - min) <= 10;
 
                     var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
@@ -1594,7 +1598,7 @@ namespace FenomPlus.ViewModels
                     var lastTestTimeSpanHours = TimeSpanHours(DateTime.Now, tests[0].TestDate);
                     var lastTestTimeSpanGood = lastTestTimeSpanHours <= UserTimeoutMaxHours;
 
-                    if (tests[0].TestStatus == QCTest.TestPass && tests[1].TestStatus == QCTest.TestPass && tests[2].TestStatus == QCTest.TestPass && timeSpanQualificationGood && lastTestTimeSpanGood && testValuesWithinRange)
+                    if (allTestsPassed && timeSpanQualificationGood && lastTestTimeSpanGood && testValuesWithinRange)
                     {
                         userStatus = QCUser.UserQualified;
                     }
@@ -1622,7 +1626,7 @@ namespace FenomPlus.ViewModels
             // Update the user in the database
             SelectedQcUser.CurrentStatus = userStatus;
             SelectedQcUser.ExpiresDate = tests[0].TestDate.AddHours(UserTimeoutMaxHours);
-            SelectedQcUser.NextTestDate = tests[0].TestDate.AddHours(UserTimeoutMinHours) // ToDo: Is this correct?????
+            SelectedQcUser.NextTestDate = tests[0].TestDate.AddHours(UserTimeoutMinHours);
             DbUpdateQcUser(SelectedQcUser);
         }
 
