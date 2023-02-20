@@ -9,36 +9,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 {
     public class QCUser
     {
-        // Unique User Names stored in Users Table
-        public const string DeviceName = "Device";
         public const string NegativeControlName = "Negative Control";
-
-        // Status for Device...
-
-        //•	Pass
-        //    - Negative Control status is “Pass” and
-        //    - QC User status is “Conditionally Qualified” or “Qualified”.
-        //    - Both tests were done in the last 24 hours.
-
-        //•	Fail
-        //    - Negative Control status is “Fail” or
-        //    - QC User status is “Disqualified”.
-        //o Both tests were done in the last 24 hours.
-
-        //•	Expired
-        //    - Negative Control status is “Pass” and
-        //    - QC User Qualification or Validity period is “Expired”.
-        //o No tests have been done in the last 24 hours.
-
-        //•	Insufficient Data
-        //    - Negative Control status is “None”, test is required or
-        //    - QC User test is “None”, test is required.
-
-        public const string DevicePass = "Pass";
-        public const string DeviceFail = "Fail";
-        public const string DeviceExpired = "Expired";
-        public const string DeviceInsufficientData = "Insufficient Data";
-
 
         // Status for Negative Control...
 
@@ -91,8 +62,6 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public string Explanation { get; set; }
 
-        //public List<double> ChartData { get; set; } = new List<double>();  // Next Test date?
-
         public int C1 { get; set; }
         public DateTime C1Date{ get; set; }
 
@@ -104,12 +73,12 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public int QCT { get; set; }
 
-        public QCUser(string deviceSerialNumber, string userName, string status)
+        public QCUser(string deviceSerialNumber, string userName)
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             UserName = userName;
-            CurrentStatus = status;
+            CurrentStatus = UserNone;
             DateCreated = DateTime.Now;
             ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;

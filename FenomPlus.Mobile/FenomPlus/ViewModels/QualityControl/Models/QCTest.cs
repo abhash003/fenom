@@ -25,7 +25,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public string Explanation { get; set; }
 
-        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation)
+        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation = "")
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
@@ -36,17 +36,17 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             Explanation = string.Empty;
         }
 
-        [BsonCtor]
-        public QCTest(ObjectId id, string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation)
-        {
-            Id = id;
-            DeviceSerialNumber = deviceSerialNumber;
-            UserName = userName;
-            TestDate = testDate;
-            TestValue = testValue;
-            TestStatus = testStatus;
-            Explanation = explanation;
-        }
+        //[BsonCtor]
+        //public QCTest(ObjectId id, string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation)
+        //{
+        //    Id = id;
+        //    DeviceSerialNumber = deviceSerialNumber;
+        //    UserName = userName;
+        //    TestDate = testDate;
+        //    TestValue = testValue;
+        //    TestStatus = testStatus;
+        //    Explanation = explanation;
+        //}
     }
 
 }
