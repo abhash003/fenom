@@ -61,7 +61,6 @@
     <ShellContent FlyoutItemIsVisible="False" Title="Tutorial"                      Route="TutorialView"                ContentTemplate="{DataTemplate pages:TutorialView}" />
 
     <!--QC Views-->
-    <!--<ShellContent FlyoutItemIsVisible="False" Title="Quality Control"                Route="QualityControlView"                ContentTemplate="{DataTemplate pages:QualityControlView}" />-->
     <ShellContent FlyoutItemIsVisible="False" Title="Negative Control Test"          Route="QCNegativeControlTestView"         ContentTemplate="{DataTemplate pages:QCNegativeControlTestView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Negative Control Result"        Route="QCNegativeControlResultView"       ContentTemplate="{DataTemplate pages:QCNegativeControlResultView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="Negative Control Chart"         Route="QCNegativeControlChartView"        ContentTemplate="{DataTemplate pages:QCNegativeControlChartView}" />

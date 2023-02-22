@@ -83,8 +83,11 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged(nameof(SelectedCurrentStatus));
                 OnPropertyChanged(nameof(SelectedExplanation));
                 OnPropertyChanged(nameof(SelectedTests));
+                OnPropertyChanged(nameof(SelectedTests));
             }
         }
+
+        public bool ShowChartOption => SelectedQcUser.CurrentStatus == QCUser.UserQualified;
 
         public QCUser SelectedQcUser
         {
@@ -102,6 +105,7 @@ namespace FenomPlus.ViewModels
         public string SelectedCurrentStatus => SelectedQcUser.CurrentStatus;
         public string SelectedExplanation => SelectedQcUser.Explanation;
         public List<QCTest> SelectedTests => DbReadQcTests(SelectedUserName);
+
 
 
         public QualityControlViewModel()
@@ -736,31 +740,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private List<QCTest> DbReadAllQcTests(string userName)
-        {
-            if (string.IsNullOrEmpty(userName))
-                return new List<QCTest>(); // Empty
-
-            try
-            {
-                using (var db = new LiteDatabase(QCDatabasePath))
-                {
-                    // Get all user records for this device
-                    var testCollection = db.GetCollection<QCTest>("qctests");
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                        .OrderBy(x => x.UserName)
-                        .ToList();
-                    return tests;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return new List<QCTest>(); // Empty
-            }
-        }
-
         #endregion
 
 
@@ -824,11 +803,23 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        private async Task ChartUserAsync()
+        {
+            Services.Navigation.ShowQCChartPopup(this);
+        }
+
         [RelayCommand]
         private async Task UpdateUser1Async()
         {
             SelectedUserIndex = 1;
             await UpdateUserAsync(SelectedUserIndex);
+        }
+
+        [RelayCommand]
+        private async Task ChartUser1Async()
+        {
+            SelectedUserIndex = 1;
+            await ChartUserAsync();
         }
 
         [RelayCommand]
@@ -839,6 +830,14 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
+        private async Task ChartUser2Async()
+        {
+            SelectedUserIndex = 2;
+            await ChartUserAsync();
+        }
+
+
+        [RelayCommand]
         private async Task UpdateUser3Async()
         {
             SelectedUserIndex = 3;
@@ -846,10 +845,25 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
+        private async Task ChartUser3Async()
+        {
+            SelectedUserIndex = 3;
+            await ChartUserAsync();
+        }
+
+
+        [RelayCommand]
         private async Task UpdateUser4Async()
         {
             SelectedUserIndex = 4;
             await UpdateUserAsync(SelectedUserIndex);
+        }
+
+        [RelayCommand]
+        private async Task ChartUser4Async()
+        {
+            SelectedUserIndex = 4;
+            await ChartUserAsync();
         }
 
         [RelayCommand]
@@ -860,10 +874,24 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
+        private async Task ChartUser5Async()
+        {
+            SelectedUserIndex = 5;
+            await ChartUserAsync();
+        }
+
+        [RelayCommand]
         private async Task UpdateUser6Async()
         {
             SelectedUserIndex = 6;
             await UpdateUserAsync(SelectedUserIndex);
+        }
+
+        [RelayCommand]
+        private async Task ChartUser6Async()
+        {
+            SelectedUserIndex = 6;
+            await ChartUserAsync();
         }
 
         [RelayCommand]
@@ -1606,6 +1634,7 @@ namespace FenomPlus.ViewModels
                     {
                         userStatus = QCUser.UserDisqualified;
                     }
+                    SelectedQcUser.ShowChartOption = true;
                     break;
 
                 default:
@@ -1619,6 +1648,7 @@ namespace FenomPlus.ViewModels
                         int deltaValue = Math.Abs(SelectedQcUser.QCT - lastTest.TestValue);
 
                         userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
+                        SelectedQcUser.ShowChartOption = true;
                     }
                     break;
             }
@@ -1719,6 +1749,75 @@ namespace FenomPlus.ViewModels
         }
 
         #endregion
+
+
+        #region "Chart Routines"
+
+        [ObservableProperty]
+        private List<XYData> _userTestData;
+
+        [ObservableProperty]
+        private List<XYData> _upperBoundsData;
+
+        [ObservableProperty]
+        private List<XYData> _lowerBoundsData;
+
+        public void InitializeUserDataForChart()
+        {
+            UserTestData = new List<XYData>();
+            UpperBoundsData = new List<XYData>();
+            LowerBoundsData = new List<XYData>();
+
+            List<QCTest> allUserTests = DbReadAllQcTests(SelectedQcUser.UserName);
+
+
+            int dataCount = allUserTests.Count - 1;
+            for (int i = 0; i <= dataCount; i++)
+            {
+                UserTestData.Add(new XYData(i+1, allUserTests[i].TestValue));
+            }
+
+            int qct = SelectedQcUser.QCT;
+
+            UpperBoundsData = new List<XYData>
+            {
+                new XYData(0, qct + 10),
+                new XYData(dataCount, qct + 10)
+            };
+
+            LowerBoundsData = new List<XYData>
+            {
+                new XYData(0, qct - 10),
+                new XYData(dataCount, qct - 10)
+            };
+        }
+
+        private List<QCTest> DbReadAllQcTests(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+                return new List<QCTest>(); // Empty
+
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    // Get all user records for this device
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .OrderBy(x => x.TestDate)
+                        .ToList();
+                    return tests;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return new List<QCTest>(); // Empty
+            }
+        }
+
+        #endregion
     }
 
     // Extension method to get the last 3 items in an array
@@ -1741,6 +1840,18 @@ namespace FenomPlus.ViewModels
             }
 
             return temp;
+        }
+    }
+
+    public class XYData
+    {
+        public int X;
+        public int Y;
+
+        public XYData(int x, int y)
+        {
+            x = x;
+            Y = y;
         }
     }
 

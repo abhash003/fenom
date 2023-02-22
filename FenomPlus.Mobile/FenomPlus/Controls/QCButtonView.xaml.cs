@@ -52,5 +52,10 @@ namespace FenomPlus.Controls
         {
             var imageSender = (Image)sender;
         }
+
+        private void ChartImage_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

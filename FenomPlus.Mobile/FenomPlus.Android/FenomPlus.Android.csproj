@@ -81,6 +81,9 @@
     <PackageReference Include="Syncfusion.Xamarin.DataGridExport">
       <Version>20.4.0.44</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfChart">
+      <Version>20.4.0.44</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer">
       <Version>20.4.0.44</Version>
     </PackageReference>

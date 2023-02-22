@@ -62,6 +62,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public string Explanation { get; set; }
 
+        public bool  ShowChartOption { get; set; }
+
         public int C1 { get; set; }
         public DateTime C1Date{ get; set; }
 
@@ -83,6 +85,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;
             Explanation = string.Empty;
+            ShowChartOption = false;
             C1 = 0;
             C1Date = DateTime.MinValue;
             C2 = 0;
