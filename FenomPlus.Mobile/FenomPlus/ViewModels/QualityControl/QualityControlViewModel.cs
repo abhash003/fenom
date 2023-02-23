@@ -114,10 +114,14 @@ namespace FenomPlus.ViewModels
             QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
 
 
-            // Todo: Remove sanity check for routines
-            int range1 = GetRange(20, 30);
-            int range2 = GetRange(30, 20);
-            (int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
+            // Todo: Debugging only
+            DeleteDataBase();
+
+            //int range1 = GetRange(20, 30);
+            //int range2 = GetRange(30, 20);
+            //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
+
+
         }
 
         private bool CheckDeviceConnection()
@@ -153,7 +157,7 @@ namespace FenomPlus.ViewModels
 
             if (QCDevice == null)
             {
-                DbCreateQcDevice();
+                QCDevice = DbCreateQcDevice();
             }
 
             // Get currently connected device's negative control or create one

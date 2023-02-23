@@ -107,7 +107,8 @@
                            VerticalTextAlignment="Start" 
                            HorizontalOptions="End" 
                            TextColor="#333" 
-                           FontSize="Small"/>
+                           FontSize="Small"
+                           IsVisible="{Binding ExpiresVisible}"/>
 
                     <Label x:Name="ExpiresLabel"
                             Grid.Column="1" 
@@ -115,7 +116,8 @@
                             VerticalOptions="Center" 
                             HorizontalOptions="Start" 
                             TextColor="#333" 
-                            FontSize="Small"/>
+                            FontSize="Small"
+                            IsVisible="{Binding ExpiresVisible}"/>
 
                 </Grid>
 
@@ -132,7 +134,8 @@
                            VerticalTextAlignment="Start" 
                            HorizontalOptions="End" 
                            TextColor="#333" 
-                           FontSize="Small"/>
+                           FontSize="Small"
+                           IsVisible="{Binding NextTestVisible}"/>
 
                     <Label x:Name="NextTestLabel"
                             Grid.Column="1" 
@@ -140,7 +143,8 @@
                             FontSize="Small"
                             TextColor="#333"  
                             HorizontalOptions="Start"
-                            VerticalOptions="Center"/>
+                            VerticalOptions="Center"
+                            IsVisible="{Binding NextTestVisible}"/>
 
                 </Grid>
 
