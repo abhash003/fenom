@@ -178,30 +178,54 @@ namespace FenomPlus.ViewModels
             {
                 QcButtonViewModels[1].QCUserModel = QCUsers[0];
             }
+            else
+            {
+                QcButtonViewModels[1].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            }
 
             if (QCUsers.Count > 1)
             {
                 QcButtonViewModels[2].QCUserModel = QCUsers[1];
+            }
+            else
+            {
+                QcButtonViewModels[2].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
             }
 
             if (QCUsers.Count > 2)
             {
                 QcButtonViewModels[3].QCUserModel = QCUsers[2];
             }
+            else
+            {
+                QcButtonViewModels[3].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            }
 
             if (QCUsers.Count > 3)
             {
                 QcButtonViewModels[4].QCUserModel = QCUsers[3];
+            }
+            else
+            {
+                QcButtonViewModels[4].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
             }
 
             if (QCUsers.Count > 4)
             {
                 QcButtonViewModels[5].QCUserModel = QCUsers[4];
             }
+            else
+            {
+                QcButtonViewModels[5].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            }
 
             if (QCUsers.Count > 5)
             {
                 QcButtonViewModels[6].QCUserModel = QCUsers[5];
+            }
+            else
+            {
+                QcButtonViewModels[6].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
             }
         }
 

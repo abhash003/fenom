@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Xamarin.Forms;
 
 namespace FenomPlus.Controls
 {
@@ -30,7 +31,7 @@ namespace FenomPlus.Controls
             }
         }
 
-        public bool Assigned { get; set; }
+        public bool Assigned { get; set; } = false;
 
         public string UserName
         {
@@ -73,10 +74,11 @@ namespace FenomPlus.Controls
         public const string UserDisqualified = "Disqualified";
         public const string UserNone = "None";
 
-        public bool ExpiresVisible => QCUserModel.ExpiresDate != DateTime.MinValue && 
-                                      QCUserModel.ExpiresDate != DateTime.MaxValue && 
-                                      CurrentStatus == QCUser.UserConditionallyQualified &&
-                                      CurrentStatus == QCUser.UserNone;
+        public bool ExpiresVisible => true;
+            //ExpiresDate != DateTime.MinValue && 
+            //                          ExpiresDate != DateTime.MaxValue && 
+            //                          CurrentStatus == QCUser.UserConditionallyQualified &&
+            //                          CurrentStatus == QCUser.UserNone;
 
         public DateTime NextTestDate
         {
@@ -91,17 +93,20 @@ namespace FenomPlus.Controls
 
         public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
-        public bool NextTestVisible => QCUserModel.NextTestDate != DateTime.MinValue &&
-                                       QCUserModel.NextTestDate != DateTime.MaxValue &&
-                                       CurrentStatus == QCUser.UserConditionallyQualified &&
-                                       CurrentStatus == QCUser.UserNone;
+        public bool NextTestVisible => true;
+            //NextTestDate != DateTime.MinValue &&
+            //                           NextTestDate != DateTime.MaxValue &&
+            //                           CurrentStatus == QCUser.UserConditionallyQualified &&
+            //                           CurrentStatus == QCUser.UserNone;
 
-        public bool ShowChartOption => QCUserModel.CurrentStatus == QCUser.UserQualified;
+        public bool ShowChartOption => QCUserModel is { CurrentStatus: QCUser.UserQualified };
 
         public RelayCommand OpenChartCommand;
 
         public QcButtonViewModel()
         {
+            // Don't assign through property when initializing because it is not being assigned a valid model yet
+            _qcUserModel = new QCUser(string.Empty, string.Empty);
             OpenChartCommand = new RelayCommand(OpenChart);
         }
 
