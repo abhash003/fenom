@@ -115,7 +115,7 @@ namespace FenomPlus.ViewModels
 
 
             // Todo: Debugging only
-            DeleteDataBase();
+            //DeleteDataBase();
 
             //int range1 = GetRange(20, 30);
             //int range2 = GetRange(30, 20);
@@ -178,55 +178,55 @@ namespace FenomPlus.ViewModels
             {
                 QcButtonViewModels[1].QCUserModel = QCUsers[0];
             }
-            else
-            {
-                QcButtonViewModels[1].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[1].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
 
             if (QCUsers.Count > 1)
             {
                 QcButtonViewModels[2].QCUserModel = QCUsers[1];
             }
-            else
-            {
-                QcButtonViewModels[2].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[2].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
 
             if (QCUsers.Count > 2)
             {
                 QcButtonViewModels[3].QCUserModel = QCUsers[2];
             }
-            else
-            {
-                QcButtonViewModels[3].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[3].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
 
             if (QCUsers.Count > 3)
             {
                 QcButtonViewModels[4].QCUserModel = QCUsers[3];
             }
-            else
-            {
-                QcButtonViewModels[4].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[4].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
 
             if (QCUsers.Count > 4)
             {
                 QcButtonViewModels[5].QCUserModel = QCUsers[4];
             }
-            else
-            {
-                QcButtonViewModels[5].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[5].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
 
             if (QCUsers.Count > 5)
             {
                 QcButtonViewModels[6].QCUserModel = QCUsers[5];
             }
-            else
-            {
-                QcButtonViewModels[6].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            }
+            //else
+            //{
+            //    QcButtonViewModels[6].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
+            //}
         }
 
 
@@ -1323,6 +1323,13 @@ namespace FenomPlus.ViewModels
             newTest2.TestDate = DateTime.Now;
             newTest3 = DbCreateQcTest(newUser3.UserName, 32);
             newTest3.TestDate = DateTime.Now.AddHours(16);
+
+            // New User Disqualified
+            var newUser4 = DbCreateQcUser("New");
+            newUser4.CurrentStatus = QCUser.UserConditionallyQualified;
+            newUser4.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser4.NextTestDate = DateTime.Now.AddHours(16);
+            DbUpdateQcUser(newUser4);
         }
 
         [RelayCommand]
