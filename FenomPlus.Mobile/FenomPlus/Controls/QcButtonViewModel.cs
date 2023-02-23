@@ -74,10 +74,7 @@ namespace FenomPlus.Controls
         public const string UserDisqualified = "Disqualified";
         public const string UserNone = "None";
 
-        public bool ExpiresVisible => ExpiresDate != DateTime.MinValue && 
-                                      ExpiresDate != DateTime.MaxValue && 
-                                      CurrentStatus == QCUser.UserConditionallyQualified &&
-                                      CurrentStatus == QCUser.UserNone;
+        public bool ExpiresVisible => CurrentStatus == QCUser.UserConditionallyQualified;
 
         public DateTime NextTestDate
         {
@@ -92,12 +89,9 @@ namespace FenomPlus.Controls
 
         public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
-        public bool NextTestVisible => NextTestDate != DateTime.MinValue &&
-                                       NextTestDate != DateTime.MaxValue &&
-                                       CurrentStatus == QCUser.UserConditionallyQualified &&
-                                       CurrentStatus == QCUser.UserNone;
+        public bool NextTestVisible => CurrentStatus == QCUser.UserConditionallyQualified;
 
-        public bool ShowChartOption => QCUserModel is { CurrentStatus: QCUser.UserQualified };
+        public bool ShowChartOption => true; //QCUserModel is { CurrentStatus: QCUser.UserQualified };
 
         public RelayCommand OpenChartCommand;
 

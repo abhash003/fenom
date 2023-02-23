@@ -223,7 +223,7 @@
 
                                 <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (1 User)" Command="{Binding CreateMockDataBase1Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
                                 <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (2 Users)" Command="{Binding CreateMockDataBase2Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
-                                <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (3 Users)" Command="{Binding CreateMockDataBase3Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
+                                <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (4 Users)" Command="{Binding CreateMockDataBase3Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
 
                             </StackLayout>
 

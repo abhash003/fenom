@@ -87,8 +87,6 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public bool ShowChartOption => SelectedQcUser.CurrentStatus == QCUser.UserQualified;
-
         public QCUser SelectedQcUser
         {
             get
@@ -1291,10 +1289,13 @@ namespace FenomPlus.ViewModels
 
             var newTest1 = DbCreateQcTest(newUser1.UserName, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
+            DbUpdateQcTest(newTest1);
             var newTest2 = DbCreateQcTest(newUser1.UserName, 30);
             newTest2.TestDate = DateTime.Now;
+            DbUpdateQcTest(newTest2);
             var newTest3 = DbCreateQcTest(newUser1.UserName, 25);
             newTest3.TestDate = DateTime.Now.AddHours(16);
+            DbUpdateQcTest(newTest3);
 
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
@@ -1305,10 +1306,13 @@ namespace FenomPlus.ViewModels
 
             newTest1 = DbCreateQcTest(newUser2.UserName, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
+            DbUpdateQcTest(newTest1);
             newTest2 = DbCreateQcTest(newUser2.UserName, 30);
             newTest2.TestDate = DateTime.Now;
+            DbUpdateQcTest(newTest2);
             newTest3 = DbCreateQcTest(newUser2.UserName, 19);
             newTest3.TestDate = DateTime.Now.AddHours(16);
+            DbUpdateQcTest(newTest3);
 
             // New User Disqualified
             var newUser3 = DbCreateQcUser("Bob");
@@ -1319,10 +1323,13 @@ namespace FenomPlus.ViewModels
 
             newTest1 = DbCreateQcTest(newUser3.UserName, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
+            DbUpdateQcTest(newTest1);
             newTest2 = DbCreateQcTest(newUser3.UserName, 30);
             newTest2.TestDate = DateTime.Now;
+            DbUpdateQcTest(newTest2);
             newTest3 = DbCreateQcTest(newUser3.UserName, 32);
             newTest3.TestDate = DateTime.Now.AddHours(16);
+            DbUpdateQcTest(newTest3);
 
             // New User Disqualified
             var newUser4 = DbCreateQcUser("New");
@@ -1330,6 +1337,10 @@ namespace FenomPlus.ViewModels
             newUser4.ExpiresDate = DateTime.Now.AddDays(7);
             newUser4.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser4);
+
+            newTest1 = DbCreateQcTest(newUser4.UserName, 20);
+            newTest1.TestDate = DateTime.Now.AddHours(-16);
+            DbUpdateQcTest(newTest1);
         }
 
         [RelayCommand]
