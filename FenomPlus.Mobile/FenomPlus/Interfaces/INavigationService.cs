@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using FenomPlus.ViewModels;
 using Xamarin.Forms;
+using FenomPlus.ViewModels.QualityControl.Models;
 
 namespace FenomPlus.Interfaces
 {
@@ -37,9 +38,10 @@ namespace FenomPlus.Interfaces
         Task TutorialView();
 
         void DisplayAlert(string title, string message, string cancel);
+
         Task ShowStatusDetailsPopup(StatusButtonViewModel viewModel);
 
-        Task ShowQCChartPopup(QualityControlViewModel viewModel);
+        Task ShowQCChartPopup(QualityControlViewModel viewModel, QCUser user);
 
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FenomPlus.Controls;
 using FenomPlus.Interfaces;
 using FenomPlus.ViewModels;
+using FenomPlus.ViewModels.QualityControl.Models;
 using FenomPlus.Views;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
@@ -168,9 +169,9 @@ namespace FenomPlus.Services
             await Shell.Current.ShowPopupAsync(new StatusDetailsPopup(viewModel));
         }
 
-        public async Task ShowQCChartPopup(QualityControlViewModel viewModel)
+        public async Task ShowQCChartPopup(QualityControlViewModel viewModel, QCUser user)
         {
-            await Shell.Current.ShowPopupAsync(new QCChartPopup(viewModel));
+            await Shell.Current.ShowPopupAsync(new QCChartPopup(viewModel, user));
         }
     }
 }

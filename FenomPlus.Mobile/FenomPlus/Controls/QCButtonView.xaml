@@ -135,10 +135,11 @@
         </buttons:SfButton>
 
         <StackLayout Orientation="Horizontal"
-                     HorizontalOptions="Center" 
+                     HorizontalOptions="Center"
                      VerticalOptions="End" 
                      IsVisible="{Binding ShowChartOption}" 
-                     Margin="0,0,0,10">
+                     Background="LightGray"
+                     Padding="75,10,75,10">
 
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped"/>

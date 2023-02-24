@@ -7,6 +7,9 @@ using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Xamarin.Forms;
+using FenomPlus.Services;
+using FenomPlus.Interfaces;
+using TinyIoC;
 
 namespace FenomPlus.Controls
 {
@@ -91,7 +94,7 @@ namespace FenomPlus.Controls
 
         public bool NextTestVisible => CurrentStatus == QCUser.UserConditionallyQualified;
 
-        public bool ShowChartOption => true; //QCUserModel is { CurrentStatus: QCUser.UserQualified };
+        public bool ShowChartOption => QCUserModel is { CurrentStatus: QCUser.UserQualified };
 
         public RelayCommand OpenChartCommand;
 
@@ -104,7 +107,9 @@ namespace FenomPlus.Controls
 
         private void OpenChart()
         {
-
+            var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
+            var vm = TinyIoCContainer.Current.Resolve<QualityControlViewModel>();
+            navigation.ShowQCChartPopup(vm, QCUserModel);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -5,79 +5,59 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
-    xmlns:xForms="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
+    xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
     xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
     IsLightDismissEnabled="True"
     x:Class="FenomPlus.Controls.QCChartPopup"
-    WidthRequest="300">
+    WidthRequest="971"
+    HeightRequest="600">
 
-    <StackLayout BackgroundColor="#F9F9F9" Padding="20">
+    <Grid BackgroundColor="#F9F9F9" Padding="20">
 
-        <Label x:Name="InfoBlockTitle"
-               Text="{Binding Header}"
-               VerticalOptions="Center" 
-               VerticalTextAlignment="Center" 
-               HorizontalOptions="Center" 
-               TextColor="#333" 
-               FontSize="20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <xForms:SfChart x:Name="QualityControlUserResults">
+        <chart:SfChart Grid.Row="0" 
+                       HorizontalOptions="FillAndExpand" 
+                       VerticalOptions="FillAndExpand"
+                       Series="{Binding SeriesCollection}"
+                       AreaBackgroundColor="Beige">
 
-            <xForms:SfChart.PrimaryAxis>
-                <xForms:NumericalAxis>
-                    <xForms:NumericalAxis.Title>
-                        <xForms:ChartAxisTitle Text ="Test Number"/>
-                    </xForms:NumericalAxis.Title>
-                </xForms:NumericalAxis>
-            </xForms:SfChart.PrimaryAxis>
+            <chart:SfChart.PrimaryAxis>
+                <chart:NumericalAxis Minimum="{Binding XMin}" Maximum="{Binding XMax}" Interval="1" RangePadding="Round">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text ="Test Number"/>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
 
-            <xForms:SfChart.SecondaryAxis>
-                <xForms:NumericalAxis>
-                    <xForms:NumericalAxis.Title>
-                        <xForms:ChartAxisTitle Text ="Test Result"/>
-                    </xForms:NumericalAxis.Title>
-                </xForms:NumericalAxis>
-            </xForms:SfChart.SecondaryAxis>
 
-            <xForms:SfChart.Series>
+            </chart:SfChart.PrimaryAxis>
 
-                <xForms:ScatterSeries 
-                    ItemsSource="{Binding UserTestData}" 
-                    XBindingPath="Index" 
-                    YBindingPath="Value"  
-                    Label="Test Results"
-                    EnableDataPointSelection = "false"
-                    Color="#0000FF"/>
+            <chart:SfChart.SecondaryAxis>
+                <chart:NumericalAxis Minimum="{Binding YMin}" Maximum="{Binding YMax}">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text ="Breath Result"/>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfChart.SecondaryAxis>
 
-                <!--Upper Bounds-->
-                <xForms:LineSeries 
-                    ItemsSource="{Binding UpperBoundsData}" 
-                    XBindingPath="Index" 
-                    YBindingPath="Value" 
-                    Label="Upper Bounds"
-                    EnableDataPointSelection = "false"
-                    Color="#FF0000"/>
+            <chart:SfChart.Title>
+                <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Blue"/>
+            </chart:SfChart.Title>
 
-                <!--Lower Bounds-->
-                <xForms:LineSeries 
-                    ItemsSource="{Binding LowerBoundsData}" 
-                    XBindingPath="Index" 
-                    YBindingPath="Value" 
-                    Label="Lower Bounds"
-                    EnableDataPointSelection = "false"
-                    Color="#FF0000"/>
+        </chart:SfChart>
 
-            </xForms:SfChart.Series>
-
-        </xForms:SfChart>
-
-            <Button x:Name="CloseButton" 
+        <Button x:Name="CloseButton" 
+                Grid.Row="1"
+                Margin="0,10,0,0"
                 Style="{StaticResource defaultButton}"
                 Text="Close" 
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"
                 Clicked="CloseButton_OnClicked"/>
 
-    </StackLayout>
+    </Grid>
 
 </xct:Popup>

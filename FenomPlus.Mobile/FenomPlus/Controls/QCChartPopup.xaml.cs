@@ -1,17 +1,18 @@
 ﻿using FenomPlus.ViewModels;
+using FenomPlus.ViewModels.QualityControl.Models;
 using Xamarin.CommunityToolkit.UI.Views;
 
 namespace FenomPlus.Controls
 {
     public partial class QCChartPopup : Popup
     {
-        private readonly QualityControlViewModel QualityControlViewModel;
-
-        public QCChartPopup(QualityControlViewModel viewModel)
+        public QCChartPopup(QualityControlViewModel viewModel, QCUser user)
         {
             InitializeComponent();
-            QualityControlViewModel = viewModel;
-            BindingContext = QualityControlViewModel;
+            BindingContext = viewModel;
+
+            // Load Test Data for the specified user
+            viewModel.InitializeUserDataForChart(user);
         }
 
         private void CloseButton_OnClicked(object sender, System.EventArgs e)

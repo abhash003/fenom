@@ -48,19 +48,10 @@ namespace FenomPlus.Controls
             }
         }
 
-        void OnChartTapGestureRecognizerTapped(object sender, EventArgs args)
-        {
-            var imageSender = (Image)sender;
-        }
-
-        private void ChartImage_Clicked(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (BindingContext is QcButtonViewModel vm) 
+                vm.OpenChartCommand.Execute(null);
         }
     }
 }

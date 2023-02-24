@@ -192,7 +192,7 @@ namespace FenomPlus.ViewModels
 
             
 
-            UpdateQualityControlExpiration(7); // ToDo:  Need value here
+            UpdateQualityControlExpiration(7);
 
             RefreshInProgress = false;
         }

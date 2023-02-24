@@ -17,6 +17,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Syncfusion.SfChart.XForms;
+using System.ComponentModel;
+using System.Xml.Schema;
+using Syncfusion.Drawing;
+using Color = Xamarin.Forms.Color;
+using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 
 namespace FenomPlus.ViewModels
 {
@@ -176,55 +182,31 @@ namespace FenomPlus.ViewModels
             {
                 QcButtonViewModels[1].QCUserModel = QCUsers[0];
             }
-            //else
-            //{
-            //    QcButtonViewModels[1].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
 
             if (QCUsers.Count > 1)
             {
                 QcButtonViewModels[2].QCUserModel = QCUsers[1];
             }
-            //else
-            //{
-            //    QcButtonViewModels[2].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
 
             if (QCUsers.Count > 2)
             {
                 QcButtonViewModels[3].QCUserModel = QCUsers[2];
             }
-            //else
-            //{
-            //    QcButtonViewModels[3].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
 
             if (QCUsers.Count > 3)
             {
                 QcButtonViewModels[4].QCUserModel = QCUsers[3];
             }
-            //else
-            //{
-            //    QcButtonViewModels[4].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
 
             if (QCUsers.Count > 4)
             {
                 QcButtonViewModels[5].QCUserModel = QCUsers[4];
             }
-            //else
-            //{
-            //    QcButtonViewModels[5].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
 
             if (QCUsers.Count > 5)
             {
                 QcButtonViewModels[6].QCUserModel = QCUsers[5];
             }
-            //else
-            //{
-            //    QcButtonViewModels[6].QCUserModel = new QCUser(CurrentDeviceSerialNumber, string.Empty);
-            //}
         }
 
 
@@ -829,10 +811,10 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private async Task ChartUserAsync()
-        {
-            Services.Navigation.ShowQCChartPopup(this);
-        }
+        //private async Task ChartUserAsync()
+        //{
+        //    Services.Navigation.ShowQCChartPopup(this);
+        //}
 
         [RelayCommand]
         private async Task UpdateUser1Async()
@@ -841,12 +823,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser1Async()
-        {
-            SelectedUserIndex = 1;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser1Async()
+        //{
+        //    SelectedUserIndex = 1;
+        //    await ChartUserAsync();
+        //}
 
         [RelayCommand]
         private async Task UpdateUser2Async()
@@ -855,12 +837,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser2Async()
-        {
-            SelectedUserIndex = 2;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser2Async()
+        //{
+        //    SelectedUserIndex = 2;
+        //    await ChartUserAsync();
+        //}
 
 
         [RelayCommand]
@@ -870,12 +852,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser3Async()
-        {
-            SelectedUserIndex = 3;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser3Async()
+        //{
+        //    SelectedUserIndex = 3;
+        //    await ChartUserAsync();
+        //}
 
 
         [RelayCommand]
@@ -885,12 +867,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser4Async()
-        {
-            SelectedUserIndex = 4;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser4Async()
+        //{
+        //    SelectedUserIndex = 4;
+        //    await ChartUserAsync();
+        //}
 
         [RelayCommand]
         private async Task UpdateUser5Async()
@@ -899,12 +881,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser5Async()
-        {
-            SelectedUserIndex = 5;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser5Async()
+        //{
+        //    SelectedUserIndex = 5;
+        //    await ChartUserAsync();
+        //}
 
         [RelayCommand]
         private async Task UpdateUser6Async()
@@ -913,12 +895,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        [RelayCommand]
-        private async Task ChartUser6Async()
-        {
-            SelectedUserIndex = 6;
-            await ChartUserAsync();
-        }
+        //[RelayCommand]
+        //private async Task ChartUser6Async()
+        //{
+        //    SelectedUserIndex = 6;
+        //    await ChartUserAsync();
+        //}
 
         [RelayCommand]
         private async Task ShowQCSettings()
@@ -1285,16 +1267,23 @@ namespace FenomPlus.ViewModels
             newUser1.CurrentStatus = QCUser.UserQualified;
             newUser1.ExpiresDate = DateTime.Now.AddDays(7);
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
+            newUser1.C1 = 20;
+            newUser1.C1Date = DateTime.Now.AddHours(-48);
+            newUser1.C2 = 30;
+            newUser1.C2Date = DateTime.Now.AddHours(-24);
+            newUser1.C3 = 25;
+            newUser1.C3Date = DateTime.Now;
+            newUser1.QCT = 25;
             DbUpdateQcUser(newUser1);
 
             var newTest1 = DbCreateQcTest(newUser1.UserName, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-16);
+            newTest1.TestDate = DateTime.Now.AddHours(-48);
             DbUpdateQcTest(newTest1);
             var newTest2 = DbCreateQcTest(newUser1.UserName, 30);
-            newTest2.TestDate = DateTime.Now;
+            newTest2.TestDate = DateTime.Now.AddHours(-24); ;
             DbUpdateQcTest(newTest2);
             var newTest3 = DbCreateQcTest(newUser1.UserName, 25);
-            newTest3.TestDate = DateTime.Now.AddHours(16);
+            newTest3.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest3);
 
             // New User Disqualified
@@ -1800,42 +1789,111 @@ namespace FenomPlus.ViewModels
         #region "Chart Routines"
 
         [ObservableProperty]
-        private List<XYData> _userTestData;
+        private string _chartTitle = string.Empty;
 
-        [ObservableProperty]
-        private List<XYData> _upperBoundsData;
+        [ObservableProperty] 
+        private double _xMin;
 
-        [ObservableProperty]
-        private List<XYData> _lowerBoundsData;
+        [ObservableProperty] 
+        private double _xMax;
 
-        public void InitializeUserDataForChart()
+        [ObservableProperty] 
+        private double _yMin;
+
+        [ObservableProperty] 
+        private double _yMax;
+
+        [ObservableProperty] 
+        private ChartSeriesCollection _seriesCollection;
+
+        private ObservableCollection<ChartDataPoint> UserTestData { get; set; }
+
+        private ObservableCollection<ChartDataPoint> UpperBoundsData { get; set; }
+
+        private ObservableCollection<ChartDataPoint> LowerBoundsData { get; set; }
+
+        public void InitializeUserDataForChart(QCUser user)
         {
-            UserTestData = new List<XYData>();
-            UpperBoundsData = new List<XYData>();
-            LowerBoundsData = new List<XYData>();
+            ChartTitle = $"Test Data for {user.UserName}";
 
-            List<QCTest> allUserTests = DbReadAllQcTests(SelectedQcUser.UserName);
+            UserTestData = new ObservableCollection<ChartDataPoint>();
 
+            List<QCTest> allUserTests = DbReadAllQcTests(user.UserName);
 
-            int dataCount = allUserTests.Count - 1;
-            for (int i = 0; i <= dataCount; i++)
+            int qct = user.QCT;
+            XMin = 1;
+            XMax = allUserTests.Count;
+            YMax = qct + 10 + 5;
+            YMin = qct - 10 - 5;
+
+            for (int i = 0; i <= allUserTests.Count - 1; i++)
             {
-                UserTestData.Add(new XYData(i+1, allUserTests[i].TestValue));
+                UserTestData.Add(new ChartDataPoint(i+1, allUserTests[i].TestValue));
             }
 
-            int qct = SelectedQcUser.QCT;
-
-            UpperBoundsData = new List<XYData>
+            UpperBoundsData = new ObservableCollection<ChartDataPoint>
             {
-                new XYData(0, qct + 10),
-                new XYData(dataCount, qct + 10)
+                new ChartDataPoint(0, qct + 10),
+                new ChartDataPoint(XMax, qct + 10)
             };
 
-            LowerBoundsData = new List<XYData>
+            LowerBoundsData = new ObservableCollection<ChartDataPoint>
             {
-                new XYData(0, qct - 10),
-                new XYData(dataCount, qct - 10)
+                new ChartDataPoint(0, qct - 10),
+                new ChartDataPoint(XMax, qct - 10)
             };
+
+
+            SeriesCollection = new ChartSeriesCollection();
+
+            LineSeries testSeriesLine = new LineSeries()
+            {
+                ItemsSource = UserTestData,
+                XBindingPath = "XValue",
+                YBindingPath = "YValue",
+                Color = Color.LightBlue,
+            };
+
+            SeriesCollection.Add(testSeriesLine);
+
+            LineSeries upperBoundsSeries = new LineSeries()
+            {
+                ItemsSource = UpperBoundsData,
+                XBindingPath = "XValue",
+                YBindingPath = "YValue",
+                Color = Color.Red,
+                StrokeDashArray = new double[2] { 3, 3},
+                StrokeWidth = 3
+            };
+            ScatterSeries testSeriesPoints = new ScatterSeries()
+            {
+                ItemsSource = UserTestData,
+                XBindingPath = "XValue",
+                YBindingPath = "YValue",
+                Color = Color.Blue,
+                StrokeColor = Color.Black,
+                StrokeWidth = 1,
+                ScatterHeight = 8,
+                ScatterWidth = 8,
+                ShapeType = ChartScatterShapeType.Ellipse
+            };
+
+            SeriesCollection.Add(testSeriesPoints);
+
+            SeriesCollection.Add(upperBoundsSeries);
+
+
+            LineSeries lowerBoundsSeries = new LineSeries()
+            {
+                ItemsSource = LowerBoundsData,
+                XBindingPath = "XValue",
+                YBindingPath = "YValue",
+                Color = Color.Red,
+                StrokeDashArray = new double[2] { 2, 3 },
+                StrokeWidth = 3
+            };
+
+            SeriesCollection.Add(lowerBoundsSeries);
         }
 
         private List<QCTest> DbReadAllQcTests(string userName)
@@ -1867,38 +1925,25 @@ namespace FenomPlus.ViewModels
     }
 
     // Extension method to get the last 3 items in an array
-    public static class Extensions
-    {
-        public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> collection, int n)
-        {
-            if (collection == null)
-                throw new ArgumentNullException(nameof(collection));
-            if (n < 0)
-                throw new ArgumentOutOfRangeException(nameof(n), $"{nameof(n)} must be 0 or greater");
+    //public static class Extensions
+    //{
+    //    public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> collection, int n)
+    //    {
+    //        if (collection == null)
+    //            throw new ArgumentNullException(nameof(collection));
+    //        if (n < 0)
+    //            throw new ArgumentOutOfRangeException(nameof(n), $"{nameof(n)} must be 0 or greater");
 
-            LinkedList<T> temp = new LinkedList<T>();
+    //        LinkedList<T> temp = new LinkedList<T>();
 
-            foreach (var value in collection)
-            {
-                temp.AddLast(value);
-                if (temp.Count > n)
-                    temp.RemoveFirst();
-            }
+    //        foreach (var value in collection)
+    //        {
+    //            temp.AddLast(value);
+    //            if (temp.Count > n)
+    //                temp.RemoveFirst();
+    //        }
 
-            return temp;
-        }
-    }
-
-    public class XYData
-    {
-        public int X;
-        public int Y;
-
-        public XYData(int x, int y)
-        {
-            x = x;
-            Y = y;
-        }
-    }
-
+    //        return temp;
+    //    }
+    //}
 }
