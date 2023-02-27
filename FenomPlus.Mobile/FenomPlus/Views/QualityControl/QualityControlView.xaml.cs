@@ -7,6 +7,7 @@ using FenomPlus.Enums;
 using FenomPlus.Controls;
 using Xamarin.Forms.Xaml;
 using FenomPlus.Services;
+using FenomPlus.SDK.Core.Utils;
 
 namespace FenomPlus.Views
 {
@@ -31,6 +32,10 @@ namespace FenomPlus.Views
             // Refresh Data - ToDo: Later optimize and only refresh when needed?
             QualityControlViewModel.LoadData();
 
+            if (string.IsNullOrEmpty(QualityControlViewModel.CurrentDeviceSerialNumber))
+                return;
+
+            // Don't assign in case device is not connected
             NegativeControlButton.BindingContext = QualityControlViewModel.QcButtonViewModels[0];
             User1Button.BindingContext = QualityControlViewModel.QcButtonViewModels[1];
             User2Button.BindingContext = QualityControlViewModel.QcButtonViewModels[2];

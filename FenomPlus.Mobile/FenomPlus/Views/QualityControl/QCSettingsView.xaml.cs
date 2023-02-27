@@ -43,7 +43,10 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             SettingsTabView.SelectedIndex = 0;
-            QualityControlViewModel.GetAllQcDevicesCommand.Execute(null);
+
+            QualityControlViewModel.UpdateQcDeviceList();
+            QualityControlViewModel.UpdateQcUserList();
+            QualityControlViewModel.UpdateQcTestList();
 
             base.OnAppearing();
         }
@@ -63,17 +66,17 @@ namespace FenomPlus.Views
             switch (SettingsTabView.SelectedIndex)
             {
                 case 0:
-                    QualityControlViewModel.GetAllQcDevicesCommand.Execute(null);
+                    QualityControlViewModel.UpdateQcDeviceList();
                     AllDevicesDataGrid.RefreshColumns();
                     break;
 
                 case 1:
-                    QualityControlViewModel.GetAllQcUsersCommand.Execute(null);
+                    QualityControlViewModel.UpdateQcUserList();
                     AllUsersDataGrid.RefreshColumns();
                     break;
 
                 case 2:
-                    QualityControlViewModel.GetAllQcTestsCommand.Execute(null);
+                    QualityControlViewModel.UpdateQcTestList();
                     AllTestsDataGrid.RefreshColumns();
                     break;
 

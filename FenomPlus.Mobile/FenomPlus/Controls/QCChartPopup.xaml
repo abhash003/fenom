@@ -12,46 +12,51 @@
     WidthRequest="971"
     HeightRequest="600">
 
-    <Grid BackgroundColor="#F9F9F9" Padding="20">
+    <Grid BackgroundColor="#F9F9F9" Padding="0,0,20,0">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <chart:SfChart Grid.Row="0" 
-                       HorizontalOptions="FillAndExpand" 
-                       VerticalOptions="FillAndExpand"
-                       Series="{Binding SeriesCollection}"
-                       AreaBackgroundColor="Beige">
+        <Grid Grid.Row="0" Background="White">
 
-            <chart:SfChart.PrimaryAxis>
-                <chart:NumericalAxis Minimum="{Binding XMin}" Maximum="{Binding XMax}" Interval="1" RangePadding="Round">
-                    <chart:NumericalAxis.Title>
-                        <chart:ChartAxisTitle Text ="Test Number"/>
-                    </chart:NumericalAxis.Title>
-                </chart:NumericalAxis>
+            <chart:SfChart 
+                           HorizontalOptions="FillAndExpand" 
+                           VerticalOptions="FillAndExpand"
+                           Series="{Binding SeriesCollection}"
+                           AreaBackgroundColor="White"
+                           ChartPadding="10,10,20,10">
+
+                <chart:SfChart.PrimaryAxis>
+                    <chart:NumericalAxis Minimum="{Binding XMin}" Maximum="{Binding XMax}" Interval="1" RangePadding="Round">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text ="Test Number"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
 
 
-            </chart:SfChart.PrimaryAxis>
+                </chart:SfChart.PrimaryAxis>
 
-            <chart:SfChart.SecondaryAxis>
-                <chart:NumericalAxis Minimum="{Binding YMin}" Maximum="{Binding YMax}">
-                    <chart:NumericalAxis.Title>
-                        <chart:ChartAxisTitle Text ="Breath Result"/>
-                    </chart:NumericalAxis.Title>
-                </chart:NumericalAxis>
-            </chart:SfChart.SecondaryAxis>
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis Minimum="{Binding YMin}" Maximum="{Binding YMax}">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text ="Breath Result"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
 
-            <chart:SfChart.Title>
-                <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Blue"/>
-            </chart:SfChart.Title>
+                <chart:SfChart.Title>
+                    <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Blue"/>
+                </chart:SfChart.Title>
 
-        </chart:SfChart>
+            </chart:SfChart>
+
+        </Grid>
 
         <Button x:Name="CloseButton" 
                 Grid.Row="1"
-                Margin="0,10,0,0"
+                Margin="0,10,0,20"
                 Style="{StaticResource defaultButton}"
                 Text="Close" 
                 VerticalOptions="Center" 

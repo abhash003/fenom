@@ -35,9 +35,8 @@ namespace FenomPlus.ViewModels
 
         private QCDevice QCDevice; // For a specific device with unique serial number - only one per device
 
-        private QCUser QCNegativeControl => QcButtonViewModels[0].QCUserModel; 
+        private QCUser QCNegativeControl => QcButtonViewModels[0].QCUserModel;
 
-        private List<QCUser> QCUsers; // Users assigned to a device with the device's serial number
 
         private string _currentDeviceSerialNumber = string.Empty;
         public string CurrentDeviceSerialNumber
@@ -138,11 +137,21 @@ namespace FenomPlus.ViewModels
 
         public void LoadData()
         {
+            //if (!CheckDeviceConnection())
+            //{
+            //    // ToDo: Put up alert
+            //    Services.Dialogs.ShowAlert("You must have a connection to a device to continue.", "Device Not Connected", "OK");
+            //    Services.Navigation.DashboardView();
+            //    return;
+            //}
+
             if (!CheckDeviceConnection())
             {
+                CurrentDeviceSerialNumber = string.Empty;
+                CurrentDeviceStatus = "Device Not Connected";
+                //QcUserList = ReadAllQcUsers();
                 // ToDo: Put up alert
-                Services.Dialogs.ShowAlert("You must have a connection to a device to continue.", "Device Not Connected", "OK");
-                Services.Navigation.DashboardView();
+                Services.Navigation.QCSettingsView();
                 return;
             }
 
@@ -176,36 +185,37 @@ namespace FenomPlus.ViewModels
             CurrentDeviceStatus = UpdateDeviceStatus();
 
             // Get all users for this currently connected device
-            QCUsers = ReadAllQcUsers();
+            //QcUserList = ReadAllQcUsers();
+            UpdateQcUserList();
 
-            if (QCUsers.Count > 0)
+            if (QcUserList.Count > 0)
             {
-                QcButtonViewModels[1].QCUserModel = QCUsers[0];
+                QcButtonViewModels[1].QCUserModel = QcUserList[0];
             }
 
-            if (QCUsers.Count > 1)
+            if (QcUserList.Count > 1)
             {
-                QcButtonViewModels[2].QCUserModel = QCUsers[1];
+                QcButtonViewModels[2].QCUserModel = QcUserList[1];
             }
 
-            if (QCUsers.Count > 2)
+            if (QcUserList.Count > 2)
             {
-                QcButtonViewModels[3].QCUserModel = QCUsers[2];
+                QcButtonViewModels[3].QCUserModel = QcUserList[2];
             }
 
-            if (QCUsers.Count > 3)
+            if (QcUserList.Count > 3)
             {
-                QcButtonViewModels[4].QCUserModel = QCUsers[3];
+                QcButtonViewModels[4].QCUserModel = QcUserList[3];
             }
 
-            if (QCUsers.Count > 4)
+            if (QcUserList.Count > 4)
             {
-                QcButtonViewModels[5].QCUserModel = QCUsers[4];
+                QcButtonViewModels[5].QCUserModel = QcUserList[4];
             }
 
-            if (QCUsers.Count > 5)
+            if (QcUserList.Count > 5)
             {
-                QcButtonViewModels[6].QCUserModel = QCUsers[5];
+                QcButtonViewModels[6].QCUserModel = QcUserList[5];
             }
         }
 
@@ -330,6 +340,44 @@ namespace FenomPlus.ViewModels
                 return false;
             }
         }
+
+
+
+        //private ObservableCollection<QCUser> ReadAllQcDevices()
+        //{
+        //    try
+        //    {
+        //        using (var db = new LiteDatabase(QCDatabasePath))
+        //        {
+        //            var userCollection = db.GetCollection<QCUser>("qcusers");
+
+        //            List<QCUser> users;
+
+        //            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+        //            {
+        //                users = userCollection.Query()
+        //                    .Where(x => x.UserName != QCUser.NegativeControlName)
+        //                    .OrderBy(x => x.UserName)
+        //                    .ToList();
+        //            }
+        //            else
+        //            {
+        //                // Return all users if device not connected (No device serial number)
+        //                users = userCollection.Query()
+        //                    .Where(x => x.UserName != QCUser.NegativeControlName)
+        //                    .OrderBy(x => x.UserName)
+        //                    .ToList();
+        //            }
+
+        //            return new ObservableCollection<QCUser>(users);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        return new ObservableCollection<QCUser>(); // Empty
+        //    }
+        //}
 
         #endregion
 
@@ -580,6 +628,43 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        #endregion
+
+
+        //--------------------------------------------------------------------------------------
+
+        public ObservableCollection<QCDevice> QcDeviceList { get; set; }
+
+        private ObservableCollection<QCDevice> ReadAllQcDevices()
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
+
+                    var devices = deviceCollection.FindAll().ToList();
+
+                    return new ObservableCollection<QCDevice>(devices);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new ObservableCollection<QCDevice>();
+            }
+        }
+
+
+        public void UpdateQcDeviceList()
+        {
+            QcDeviceList = ReadAllQcDevices();
+        }
+
+        //--------------------------------------------------------------------------------------
+
+        public List<QCUser> QcUserList { get; set; }
+
         private List<QCUser> ReadAllQcUsers()
         {
             try
@@ -588,12 +673,26 @@ namespace FenomPlus.ViewModels
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
-                    var users = userCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName)
-                        .OrderBy(x => x.UserName)
-                        .ToList();
+                    if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+                    {
+                        var users = userCollection.Query()
+                            .Where(x => x.UserName != QCUser.NegativeControlName)
+                            .OrderBy(x => x.UserName)
+                            .ToList();
 
-                    return users;
+                        return users;
+                    }
+                    else
+                    {
+                        // Return all users if device not connected (No device serial number)
+                        var users = userCollection.Query()
+                            .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber &&
+                                        x.UserName != QCUser.NegativeControlName)
+                            .OrderBy(x => x.UserName)
+                            .ToList();
+
+                        return users;
+                    }
                 }
             }
             catch (Exception e)
@@ -603,7 +702,64 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        #endregion
+        public void UpdateQcUserList()
+        {
+            QcUserList = ReadAllQcUsers();
+        }
+
+        //--------------------------------------------------------------------------------------
+
+        public List<QCTest> QcTestList { get; set; }
+
+        private List<QCTest> ReadAllQcTests()
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    // Get all user records for this device
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.FindAll()
+                        .OrderBy(x => x.TestDate)
+                        .ToList();
+
+                    return tests;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return new List<QCTest>();
+            }
+        }
+
+        private List<QCTest> ReadUserQcTests(string name)
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    // Get all user records for this device
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == name)
+                        .OrderBy(x => x.TestDate)
+                        .ToList();
+
+                    return tests;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return new List<QCTest>();
+            }
+        }
+
+        public void UpdateQcTestList()
+        {
+            QcTestList = ReadAllQcTests();
+        }
 
 
         #region "QCTests CRUD"
@@ -716,27 +872,15 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool DbDeleteAllQcTests(string userName)
+        private bool DbDeleteQcTest(QCTest test)
         {
-            if (string.IsNullOrEmpty(userName))
-            {
-                return false;
-            }
-
             try
             {
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                        .ToList();
-
-                    foreach (var t in tests)
-                    {
-                        testCollection.Delete(t.Id);
-                    }
+                    testCollection.Delete(test.Id);
 
                     return true;
                 }
@@ -796,7 +940,7 @@ namespace FenomPlus.ViewModels
 
                     if (!string.IsNullOrEmpty(userName))
                     {
-                        if (QCUsers.Any(user => userName.ToLower() == user.UserName.ToLower()))
+                        if (QcUserList.Any(user => userName.ToLower() == user.UserName.ToLower()))
                         {
                             await Services.Dialogs.ShowAlertAsync($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
                         }
@@ -811,24 +955,12 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        //private async Task ChartUserAsync()
-        //{
-        //    Services.Navigation.ShowQCChartPopup(this);
-        //}
-
         [RelayCommand]
         private async Task UpdateUser1Async()
         {
             SelectedUserIndex = 1;
             await UpdateUserAsync(SelectedUserIndex);
         }
-
-        //[RelayCommand]
-        //private async Task ChartUser1Async()
-        //{
-        //    SelectedUserIndex = 1;
-        //    await ChartUserAsync();
-        //}
 
         [RelayCommand]
         private async Task UpdateUser2Async()
@@ -837,28 +969,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        //[RelayCommand]
-        //private async Task ChartUser2Async()
-        //{
-        //    SelectedUserIndex = 2;
-        //    await ChartUserAsync();
-        //}
-
-
         [RelayCommand]
         private async Task UpdateUser3Async()
         {
             SelectedUserIndex = 3;
             await UpdateUserAsync(SelectedUserIndex);
         }
-
-        //[RelayCommand]
-        //private async Task ChartUser3Async()
-        //{
-        //    SelectedUserIndex = 3;
-        //    await ChartUserAsync();
-        //}
-
 
         [RelayCommand]
         private async Task UpdateUser4Async()
@@ -867,13 +983,6 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        //[RelayCommand]
-        //private async Task ChartUser4Async()
-        //{
-        //    SelectedUserIndex = 4;
-        //    await ChartUserAsync();
-        //}
-
         [RelayCommand]
         private async Task UpdateUser5Async()
         {
@@ -881,26 +990,12 @@ namespace FenomPlus.ViewModels
             await UpdateUserAsync(SelectedUserIndex);
         }
 
-        //[RelayCommand]
-        //private async Task ChartUser5Async()
-        //{
-        //    SelectedUserIndex = 5;
-        //    await ChartUserAsync();
-        //}
-
         [RelayCommand]
         private async Task UpdateUser6Async()
         {
             SelectedUserIndex = 6;
             await UpdateUserAsync(SelectedUserIndex);
         }
-
-        //[RelayCommand]
-        //private async Task ChartUser6Async()
-        //{
-        //    SelectedUserIndex = 6;
-        //    await ChartUserAsync();
-        //}
 
         [RelayCommand]
         private async Task ShowQCSettings()
@@ -911,7 +1006,16 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         public async Task ExitToQC()
         {
-            await Services.Navigation.QualityControlView();
+            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                await Services.Navigation.DashboardView();
+            }
+            else
+            {
+                await Services.Navigation.QualityControlView();
+            }
+
+
         }
 
         #endregion
@@ -1268,23 +1372,33 @@ namespace FenomPlus.ViewModels
             newUser1.ExpiresDate = DateTime.Now.AddDays(7);
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             newUser1.C1 = 20;
-            newUser1.C1Date = DateTime.Now.AddHours(-48);
+            newUser1.C1Date = DateTime.Now.AddHours(-120);
             newUser1.C2 = 30;
-            newUser1.C2Date = DateTime.Now.AddHours(-24);
+            newUser1.C2Date = DateTime.Now.AddHours(-96);
             newUser1.C3 = 25;
-            newUser1.C3Date = DateTime.Now;
+            newUser1.C3Date = DateTime.Now.AddHours(-72);
             newUser1.QCT = 25;
             DbUpdateQcUser(newUser1);
 
             var newTest1 = DbCreateQcTest(newUser1.UserName, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-48);
+            newTest1.TestDate = DateTime.Now.AddHours(-120);
             DbUpdateQcTest(newTest1);
             var newTest2 = DbCreateQcTest(newUser1.UserName, 30);
-            newTest2.TestDate = DateTime.Now.AddHours(-24); ;
+            newTest2.TestDate = DateTime.Now.AddHours(-96); ;
             DbUpdateQcTest(newTest2);
             var newTest3 = DbCreateQcTest(newUser1.UserName, 25);
-            newTest3.TestDate = DateTime.Now;
+            newTest3.TestDate = DateTime.Now.AddHours(-72);
             DbUpdateQcTest(newTest3);
+
+            var newTest4 = DbCreateQcTest(newUser1.UserName, 23);
+            newTest4.TestDate = DateTime.Now.AddHours(-48);
+            DbUpdateQcTest(newTest4);
+            var newTest5 = DbCreateQcTest(newUser1.UserName, 29);
+            newTest5.TestDate = DateTime.Now.AddHours(-24); ;
+            DbUpdateQcTest(newTest5);
+            var newTest6 = DbCreateQcTest(newUser1.UserName, 26);
+            newTest6.TestDate = DateTime.Now;
+            DbUpdateQcTest(newTest6);
 
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
@@ -1330,6 +1444,31 @@ namespace FenomPlus.ViewModels
             newTest1 = DbCreateQcTest(newUser4.UserName, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
             DbUpdateQcTest(newTest1);
+
+            //--------------------------------
+
+            var newUser5 = DbCreateQcUser("Scott");
+            newUser5.CurrentStatus = QCUser.UserQualified;
+            newUser5.ExpiresDate = DateTime.Now.AddDays(7);
+            newUser5.NextTestDate = DateTime.Now.AddHours(16);
+            newUser5.C1 = 20;
+            newUser5.C1Date = DateTime.Now.AddHours(-120);
+            newUser5.C2 = 30;
+            newUser5.C2Date = DateTime.Now.AddHours(-96);
+            newUser5.C3 = 25;
+            newUser5.C3Date = DateTime.Now.AddHours(-72);
+            newUser5.QCT = 25;
+            DbUpdateQcUser(newUser5);
+
+            newTest1 = DbCreateQcTest(newUser5.UserName, 20);
+            newTest1.TestDate = DateTime.Now.AddHours(-120);
+            DbUpdateQcTest(newTest1);
+            newTest2 = DbCreateQcTest(newUser5.UserName, 30);
+            newTest2.TestDate = DateTime.Now.AddHours(-96); ;
+            DbUpdateQcTest(newTest2);
+            newTest3 = DbCreateQcTest(newUser5.UserName, 25);
+            newTest3.TestDate = DateTime.Now.AddHours(-72);
+            DbUpdateQcTest(newTest3);
         }
 
         [RelayCommand]
@@ -1346,38 +1485,12 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        [ObservableProperty]
-        private ObservableCollection<QCDevice> _allQcDevices;
-
-        [RelayCommand]
-        public void GetAllQcDevices()
-        {
-            try
-            {
-                using (var db = new LiteDatabase(QCDatabasePath))
-                {
-                    var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
-
-                    var devices = deviceCollection.FindAll().ToList();
-
-                    AllQcDevices = new ObservableCollection<QCDevice>(devices);
-
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
-            }
-        }
-
         [RelayCommand]
         private void DeleteDevice(object parameter)
         {
             int index = (int)parameter;
 
-            if (AllQcDevices[index - 1].DeviceSerialNumber == CurrentDeviceSerialNumber)
+            if (QcDeviceList[index - 1].DeviceSerialNumber == CurrentDeviceSerialNumber)
             {
                 Services.Dialogs.ShowAlert("You cannot delete the current device.", "Current Device", "OK");
                 return;
@@ -1386,34 +1499,8 @@ namespace FenomPlus.ViewModels
             if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
             {
                 // Delete device, user and tests also
-                DbDeleteQcDevice(AllQcDevices[index - 1]);// SfDataGrid apparently is one based on the index
-                GetAllQcDevices();
-            }
-        }
-
-        [ObservableProperty]
-        private ObservableCollection<QCUser> _allQcUsers;
-
-        [RelayCommand]
-        private void GetAllQcUsers()
-        {
-            try
-            {
-                using (var db = new LiteDatabase(QCDatabasePath))
-                {
-                    var userCollection = db.GetCollection<QCUser>("qcusers");
-
-                    var user = userCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName)
-                        .ToList();
-
-                    AllQcUsers = new ObservableCollection<QCUser>(user);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
+                DbDeleteQcDevice(QcDeviceList[index - 1]);// SfDataGrid apparently is one based on the index
+                UpdateQcDeviceList();
             }
         }
 
@@ -1425,34 +1512,8 @@ namespace FenomPlus.ViewModels
             if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
             {
                 // Delete User and tests
-                DbDeleteQcUser(AllQcUsers[index - 1]); // SfDataGrid apparently is one based on the index
-                GetAllQcUsers();
-            }
-        }
-
-        [ObservableProperty]
-        private ObservableCollection<QCTest> _allQcTests;
-
-        [RelayCommand]
-        private void GetAllQcTests()
-        {
-            try
-            {
-                using (var db = new LiteDatabase(QCDatabasePath))
-                {
-                    var testCollection = db.GetCollection<QCTest>("qctests");
-
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber)
-                        .ToList();
-
-                    AllQcTests = new ObservableCollection<QCTest>(tests);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
+                DbDeleteQcUser(QcUserList[index - 1]); // SfDataGrid apparently is one based on the index
+                UpdateQcUserList();
             }
         }
 
@@ -1719,11 +1780,11 @@ namespace FenomPlus.ViewModels
         private bool AnyUserQualified()
         {
             // Refresh list
-            QCUsers = ReadAllQcUsers();
+            QcUserList = ReadAllQcUsers();
 
             DateTime lastTestDate = DateTime.MinValue;
 
-            foreach (var user in QCUsers)
+            foreach (var user in QcUserList)
             {
                 var tests = GetLast3Tests(user.UserName).ToList();
 
@@ -1733,7 +1794,7 @@ namespace FenomPlus.ViewModels
 
             bool lastTestDateOK = TimeSpanHours(DateTime.Now, lastTestDate) <= 24;
 
-            foreach (var user in QCUsers)
+            foreach (var user in QcUserList)
             {
                 if (user.CurrentStatus is QCUser.UserConditionallyQualified or QCUser.UserQualified && lastTestDateOK)
                     return true;
@@ -1806,7 +1867,7 @@ namespace FenomPlus.ViewModels
         [ObservableProperty] 
         private ChartSeriesCollection _seriesCollection;
 
-        private ObservableCollection<ChartDataPoint> UserTestData { get; set; }
+        private ObservableCollection<ChartDataPoint> ChartData { get; set; }
 
         private ObservableCollection<ChartDataPoint> UpperBoundsData { get; set; }
 
@@ -1816,19 +1877,19 @@ namespace FenomPlus.ViewModels
         {
             ChartTitle = $"Test Data for {user.UserName}";
 
-            UserTestData = new ObservableCollection<ChartDataPoint>();
+            ChartData = new ObservableCollection<ChartDataPoint>();
 
-            List<QCTest> allUserTests = DbReadAllQcTests(user.UserName);
+            List<QCTest> allUserTests = ReadUserQcTests(user.UserName);
 
             int qct = user.QCT;
-            XMin = 1;
-            XMax = allUserTests.Count;
+            XMin = 0;
+            XMax = allUserTests.Count + 1;
             YMax = qct + 10 + 5;
             YMin = qct - 10 - 5;
 
             for (int i = 0; i <= allUserTests.Count - 1; i++)
             {
-                UserTestData.Add(new ChartDataPoint(i+1, allUserTests[i].TestValue));
+                ChartData.Add(new ChartDataPoint(i+1, allUserTests[i].TestValue));
             }
 
             UpperBoundsData = new ObservableCollection<ChartDataPoint>
@@ -1848,7 +1909,7 @@ namespace FenomPlus.ViewModels
 
             LineSeries testSeriesLine = new LineSeries()
             {
-                ItemsSource = UserTestData,
+                ItemsSource = ChartData,
                 XBindingPath = "XValue",
                 YBindingPath = "YValue",
                 Color = Color.LightBlue,
@@ -1856,18 +1917,9 @@ namespace FenomPlus.ViewModels
 
             SeriesCollection.Add(testSeriesLine);
 
-            LineSeries upperBoundsSeries = new LineSeries()
-            {
-                ItemsSource = UpperBoundsData,
-                XBindingPath = "XValue",
-                YBindingPath = "YValue",
-                Color = Color.Red,
-                StrokeDashArray = new double[2] { 3, 3},
-                StrokeWidth = 3
-            };
             ScatterSeries testSeriesPoints = new ScatterSeries()
             {
-                ItemsSource = UserTestData,
+                ItemsSource = ChartData,
                 XBindingPath = "XValue",
                 YBindingPath = "YValue",
                 Color = Color.Blue,
@@ -1879,6 +1931,28 @@ namespace FenomPlus.ViewModels
             };
 
             SeriesCollection.Add(testSeriesPoints);
+
+
+            //ColumnSeries testSeries = new ColumnSeries()
+            //{
+            //    ItemsSource = UserTestData,
+            //    XBindingPath = "XValue",
+            //    YBindingPath = "YValue",
+            //    Color = Color.LightBlue,
+            //};
+
+            //SeriesCollection.Add(testSeries);
+
+            LineSeries upperBoundsSeries = new LineSeries()
+            {
+                ItemsSource = UpperBoundsData,
+                XBindingPath = "XValue",
+                YBindingPath = "YValue",
+                Color = Color.Red,
+                StrokeDashArray = new double[2] { 3, 3},
+                StrokeWidth = 3
+            };
+
 
             SeriesCollection.Add(upperBoundsSeries);
 
@@ -1896,54 +1970,6 @@ namespace FenomPlus.ViewModels
             SeriesCollection.Add(lowerBoundsSeries);
         }
 
-        private List<QCTest> DbReadAllQcTests(string userName)
-        {
-            if (string.IsNullOrEmpty(userName))
-                return new List<QCTest>(); // Empty
-
-            try
-            {
-                using (var db = new LiteDatabase(QCDatabasePath))
-                {
-                    // Get all user records for this device
-                    var testCollection = db.GetCollection<QCTest>("qctests");
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                        .OrderBy(x => x.TestDate)
-                        .ToList();
-                    return tests;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return new List<QCTest>(); // Empty
-            }
-        }
-
         #endregion
     }
-
-    // Extension method to get the last 3 items in an array
-    //public static class Extensions
-    //{
-    //    public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> collection, int n)
-    //    {
-    //        if (collection == null)
-    //            throw new ArgumentNullException(nameof(collection));
-    //        if (n < 0)
-    //            throw new ArgumentOutOfRangeException(nameof(n), $"{nameof(n)} must be 0 or greater");
-
-    //        LinkedList<T> temp = new LinkedList<T>();
-
-    //        foreach (var value in collection)
-    //        {
-    //            temp.AddLast(value);
-    //            if (temp.Count > n)
-    //                temp.RemoveFirst();
-    //        }
-
-    //        return temp;
-    //    }
-    //}
 }
