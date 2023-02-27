@@ -23,6 +23,7 @@ using System.Xml.Schema;
 using Syncfusion.Drawing;
 using Color = Xamarin.Forms.Color;
 using Syncfusion.XlsIO.Implementation.PivotAnalysis;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FenomPlus.ViewModels
 {
@@ -633,7 +634,8 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        public ObservableCollection<QCDevice> QcDeviceList { get; set; }
+        [ObservableProperty] 
+        private ObservableCollection<QCDevice> _qcDeviceList;
 
         private ObservableCollection<QCDevice> ReadAllQcDevices()
         {
@@ -663,9 +665,10 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        public List<QCUser> QcUserList { get; set; }
+        [ObservableProperty] 
+        private ObservableCollection<QCUser> _qcUserList;
 
-        private List<QCUser> ReadAllQcUsers()
+        private ObservableCollection<QCUser> ReadAllQcUsers()
         {
             try
             {
@@ -680,7 +683,7 @@ namespace FenomPlus.ViewModels
                             .OrderBy(x => x.UserName)
                             .ToList();
 
-                        return users;
+                        return new ObservableCollection<QCUser>(users);
                     }
                     else
                     {
@@ -691,14 +694,14 @@ namespace FenomPlus.ViewModels
                             .OrderBy(x => x.UserName)
                             .ToList();
 
-                        return users;
+                        return new ObservableCollection<QCUser>(users);
                     }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return new List<QCUser>(); // Empty
+                return new ObservableCollection<QCUser>(); // Empty
             }
         }
 
@@ -709,9 +712,10 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        public List<QCTest> QcTestList { get; set; }
+        [ObservableProperty] 
+        private ObservableCollection<QCTest> _qcTestList;
 
-        private List<QCTest> ReadAllQcTests()
+        private ObservableCollection<QCTest> ReadAllQcTests()
         {
             try
             {
@@ -723,17 +727,17 @@ namespace FenomPlus.ViewModels
                         .OrderBy(x => x.TestDate)
                         .ToList();
 
-                    return tests;
+                    return new ObservableCollection<QCTest>(tests);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return new List<QCTest>();
+                return new ObservableCollection<QCTest>();
             }
         }
 
-        private List<QCTest> ReadUserQcTests(string name)
+        private ObservableCollection<QCTest> ReadUserQcTests(string name)
         {
             try
             {
@@ -746,13 +750,13 @@ namespace FenomPlus.ViewModels
                         .OrderBy(x => x.TestDate)
                         .ToList();
 
-                    return tests;
+                    return new ObservableCollection<QCTest>(tests);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return new List<QCTest>();
+                return new ObservableCollection<QCTest>();
             }
         }
 
@@ -806,6 +810,41 @@ namespace FenomPlus.ViewModels
                 }
 
                 var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, testValue, testStatus);
+
+                if (DbCreateQcTest(newTest))
+                {
+                    return newTest;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        private QCTest DbCreateNegativeControlTest(int testValue)
+        {
+            Debug.Assert(testValue >= 0);
+
+            try
+            {
+                string testStatus;
+
+                if (testValue < TestThresholdMin)
+                {
+                    testStatus = QCTest.TestPass;
+                }
+                else
+                {
+                    testStatus = QCTest.TestFail;
+                }
+
+                var newTest = new QCTest(CurrentDeviceSerialNumber, QCUser.NegativeControlName, DateTime.Now, testValue, testStatus);
 
                 if (DbCreateQcTest(newTest))
                 {
@@ -1046,18 +1085,18 @@ namespace FenomPlus.ViewModels
             // Notes:
 
             // After each negative control test...
-            //  1. Determine negative control test status (time > 16h and less than 24h and value <= 5)
+            //  1. Determine negative control test status (time > 16h and less than 24h and value < 5)
             //  2. Update negative control in database
             //  3. Update device status in database
 
             UiTimer.Stop();
             UiTimer.Dispose();
 
-            int negativeControlTestResult = 5; // ToDo: Temporary until we have real value from hardware
+            int negativeControlTestResult = 0; // ToDo: Temporary until we have real value from hardware
             NegativeControlTestResultString = $"({negativeControlTestResult} ppb)";
 
             // Update NegativeControl in DB
-            QCTest negativeControlTest = DbCreateQcTest(QCUser.NegativeControlName, negativeControlTestResult);
+            QCTest negativeControlTest = DbCreateNegativeControlTest(negativeControlTestResult);
 
             // Update Negative Control Result View
             NegativeControlStatus = negativeControlTest.TestStatus;
@@ -1879,7 +1918,7 @@ namespace FenomPlus.ViewModels
 
             ChartData = new ObservableCollection<ChartDataPoint>();
 
-            List<QCTest> allUserTests = ReadUserQcTests(user.UserName);
+            ObservableCollection<QCTest> allUserTests = ReadUserQcTests(user.UserName);
 
             int qct = user.QCT;
             XMin = 0;

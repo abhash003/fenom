@@ -12,21 +12,21 @@
     WidthRequest="971"
     HeightRequest="600">
 
-    <Grid BackgroundColor="#F9F9F9" Padding="0,0,20,0">
+    <Grid BackgroundColor="#F9F9F9">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="White">
+        <Grid Grid.Row="0" Background="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
             <chart:SfChart 
                            HorizontalOptions="FillAndExpand" 
                            VerticalOptions="FillAndExpand"
                            Series="{Binding SeriesCollection}"
                            AreaBackgroundColor="White"
-                           ChartPadding="10,10,20,10">
+                           Margin="0,0,10,0">
 
                 <chart:SfChart.PrimaryAxis>
                     <chart:NumericalAxis Minimum="{Binding XMin}" Maximum="{Binding XMax}" Interval="1" RangePadding="Round">
@@ -47,7 +47,7 @@
                 </chart:SfChart.SecondaryAxis>
 
                 <chart:SfChart.Title>
-                    <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Blue"/>
+                    <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Black"/>
                 </chart:SfChart.Title>
 
             </chart:SfChart>
