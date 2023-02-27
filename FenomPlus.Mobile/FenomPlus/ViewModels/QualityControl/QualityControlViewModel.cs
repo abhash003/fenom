@@ -60,6 +60,13 @@ namespace FenomPlus.ViewModels
             set
             {
                 _currentDeviceStatus = value;
+
+                if (QCDevice != null)
+                {
+                    QCDevice.CurrentStatus = _currentDeviceStatus;
+                    DbUpdateQcDevice(QCDevice);
+                }
+                
                 OnPropertyChanged(nameof(CurrentDeviceStatus));
                 OnPropertyChanged(nameof(DeviceStatusString));
             }
@@ -69,10 +76,12 @@ namespace FenomPlus.ViewModels
 
         public bool RequireQC
         {
-            get => Services.Config.RunRequiresQC;
+            get => QCDevice.RequireQC;
             set
             {
-                Services.Config.RunRequiresQC = value;
+                QCDevice.RequireQC = value;
+                DbUpdateQcDevice(QCDevice);
+
                 OnPropertyChanged(nameof(RequireQC));
             }
         }
@@ -641,11 +650,17 @@ namespace FenomPlus.ViewModels
         {
             try
             {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
 
                     var devices = deviceCollection.FindAll().ToList();
+
+                    watch.Stop();
+                    var ms = watch.ElapsedMilliseconds;
 
                     return new ObservableCollection<QCDevice>(devices);
                 }
@@ -672,6 +687,10 @@ namespace FenomPlus.ViewModels
         {
             try
             {
+
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
@@ -683,6 +702,9 @@ namespace FenomPlus.ViewModels
                             .OrderBy(x => x.UserName)
                             .ToList();
 
+                        watch.Stop();
+                        var ms = watch.ElapsedMilliseconds;
+
                         return new ObservableCollection<QCUser>(users);
                     }
                     else
@@ -693,6 +715,9 @@ namespace FenomPlus.ViewModels
                                         x.UserName != QCUser.NegativeControlName)
                             .OrderBy(x => x.UserName)
                             .ToList();
+
+                        watch.Stop();
+                        var ms = watch.ElapsedMilliseconds;
 
                         return new ObservableCollection<QCUser>(users);
                     }
@@ -719,6 +744,9 @@ namespace FenomPlus.ViewModels
         {
             try
             {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
@@ -726,6 +754,9 @@ namespace FenomPlus.ViewModels
                     var tests = testCollection.FindAll()
                         .OrderBy(x => x.TestDate)
                         .ToList();
+
+                    watch.Stop();
+                    var ms = watch.ElapsedMilliseconds;
 
                     return new ObservableCollection<QCTest>(tests);
                 }
@@ -741,6 +772,9 @@ namespace FenomPlus.ViewModels
         {
             try
             {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     // Get all user records for this device
@@ -749,6 +783,9 @@ namespace FenomPlus.ViewModels
                         .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == name)
                         .OrderBy(x => x.TestDate)
                         .ToList();
+
+                    watch.Stop();
+                    var ms = watch.ElapsedMilliseconds;
 
                     return new ObservableCollection<QCTest>(tests);
                 }
@@ -988,7 +1025,7 @@ namespace FenomPlus.ViewModels
                             QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
 
                             // Open and run new breath test for this user
-                            await StartUserBreathTest();
+                        await StartUserBreathTest();
                         }
                     }
             }
@@ -1298,7 +1335,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                QCTest test = DbCreateQcTest(QCUser.NegativeControlName, Services.DeviceService.Current.FenomValue);
+                QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
 
                 UpdateUserStatus();
                 UpdateNegativeControlStatus();
@@ -1820,23 +1857,29 @@ namespace FenomPlus.ViewModels
         {
             // Refresh list
             QcUserList = ReadAllQcUsers();
-
+            
             DateTime lastTestDate = DateTime.MinValue;
 
             foreach (var user in QcUserList)
             {
                 var tests = GetLast3Tests(user.UserName).ToList();
 
+                if (tests.Count <= 0)
+                    continue;
+
                 if (tests[0].TestDate > lastTestDate)
                     lastTestDate = tests[0].TestDate;
             }
 
-            bool lastTestDateOK = TimeSpanHours(DateTime.Now, lastTestDate) <= 24;
-
-            foreach (var user in QcUserList)
+            if (lastTestDate != DateTime.MinValue)
             {
-                if (user.CurrentStatus is QCUser.UserConditionallyQualified or QCUser.UserQualified && lastTestDateOK)
-                    return true;
+                bool lastTestDateOK = TimeSpanHours(DateTime.Now, lastTestDate) <= 24;
+
+                foreach (var user in QcUserList)
+                {
+                    if (user.CurrentStatus is QCUser.UserConditionallyQualified or QCUser.UserQualified && lastTestDateOK)
+                        return true;
+                }
             }
 
             return false;

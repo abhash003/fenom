@@ -24,12 +24,12 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                if (Services.Config.RunRequiresQC)
-                {
-                    // ToDo: Check QC Status
-                    Services.Dialogs.ShowAlert($"Unable to run test. Quality Control is required and it currently does not pass.", "Quality Control Warning", "Close");
-                    return;
-                }
+                //if (Services.Config.RunRequiresQC && QualityControl is expired)
+                //{
+                //    // ToDo: Check QC Status
+                //    Services.Dialogs.ShowAlert($"Quality Control for this device is expired.", "QC Expired", "Close");
+                //    return;
+                //}
 
                 DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
@@ -79,12 +79,12 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                if (Services.Config.RunRequiresQC)
-                {
-                    // ToDo: Check QC Status
-                    Services.Dialogs.ShowAlert($"Unable to run test. Quality Control is required and it currently does not pass.", "Quality Control Warning", "Close");
-                    return;
-                }
+                //if (Services.Config.RunRequiresQC && QualityControl is expired)
+                //{
+                //    // ToDo: Check QC Status
+                //    Services.Dialogs.ShowAlert($"Quality Control for this device is expired.", "QC Expired", "Close");
+                //    return;
+                //}
 
                 switch (Services.DeviceService.Current.CheckDeviceBeforeTest())
                 {

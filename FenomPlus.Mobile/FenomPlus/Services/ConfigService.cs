@@ -14,7 +14,7 @@ namespace FenomPlus.Services
         public int DaysRemaining { get; set; }
         public int TestResultReadyWait { get; set; }
         public int StopExhalingReadyWait { get; set; }
-        public bool RunRequiresQC { get; set; }
+        //public bool RunRequiresQC { get; set; }
 
         public ConfigService(IAppServices services) : base(services)
         {
@@ -27,7 +27,7 @@ namespace FenomPlus.Services
             DaysRemaining = 60;             // days
             TestResultReadyWait = 23;       // seconds
             StopExhalingReadyWait = 3;      // seconds
-            RunRequiresQC = false;
+            //RunRequiresQC = false;
         }
     }
 }
