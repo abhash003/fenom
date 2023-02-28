@@ -1228,10 +1228,10 @@ namespace FenomPlus.ViewModels
                 Services.DeviceService.Current.IsNotConnectedRedirect();
 
                 GaugeData = Services.DeviceService.Current!.BreathFlow = 0;
-                GaugeSeconds = 6; // ToDo: change to 10 after debugging
+                GaugeSeconds = 10; // ToDo: change to 10 after debugging
                 GaugeStatus = "Start Blowing";
 
-                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second); // ToDo: Change tp 10 after debugging
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second); // ToDo: Change tp 10 after debugging
             }
         }
 

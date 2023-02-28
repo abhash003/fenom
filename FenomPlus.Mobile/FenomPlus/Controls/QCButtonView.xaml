@@ -146,7 +146,7 @@
 
             <Label Text="Chart" VerticalOptions="Center" TextColor="#333" FontSize="Small"/>
 
-            <Image x:Name="ChartImage" Source="line_chart" HorizontalOptions="Start" VerticalOptions="Center" HeightRequest="22"/>
+            <Image x:Name="ChartImage" Source="line_chart" Margin="10,0,0,01"  VerticalOptions="Center" HeightRequest="22"/>
 
         </StackLayout>
 
