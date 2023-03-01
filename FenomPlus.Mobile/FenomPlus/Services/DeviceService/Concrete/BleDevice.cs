@@ -73,12 +73,15 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         if (device.State != DeviceState.Connected)
                         {
-                            throw new Exception("ConnectToDeviceAsync()");
+                            throw new Exception("ConnectToDeviceAsync() error");
                         }
                         else
                         {
                             Helper.WriteDebug($"Connection state: {device.State}");
                         }
+
+                        int mtu = await device.RequestMtuAsync(156);
+                    
 
                         await Task.Delay(1000);
 
@@ -127,7 +130,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             }
                         };
 
-
                         envChar.ValueUpdated += (sender, e) =>
                         {
                             lock (_handlerLock)
@@ -161,7 +163,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeDeviceStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine("updated characteristic: device status");
+                                Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode})");
                             }
                         };
 
@@ -171,7 +173,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             {
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine($"updated characteristic: error status (value={e.Characteristic.Value[0]})");
+                                Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode})");
                             }
                         };
 
