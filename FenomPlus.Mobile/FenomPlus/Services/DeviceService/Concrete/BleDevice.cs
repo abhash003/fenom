@@ -80,11 +80,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             Helper.WriteDebug($"Connection state: {device.State}");
                         }
 
-                        int mtu = await device.RequestMtuAsync(156);
-                    
-
-                        await Task.Delay(1000);
-
                         // get service
                         var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
 
