@@ -8,20 +8,85 @@ namespace FenomPlus.SDK.Core.Models
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class EnvironmentalInfo : BaseCharacteristic
     {
-        // ToDo: New Code
-        //public static int Min = 13;
-        public static int Min = 4;
+        private const int COMM_AMBIENT_TEMPERATURE_ID     = (0x20);
+        private const int COMM_AMBIENT_TEMPERATURE_SIZE   = 4;
+        private const int COMM_AMBIENT_PRESSURE_ID        = (0x21);
+        private const int COMM_AMBIENT_PRESSURE_SIZE      = 4;
+        private const int COMM_AMBIENT_HUMIDITY_ID        = (0x22);
+        private const int COMM_AMBIENT_HUMIDITY_SIZE      = 4;
+        private const int COMM_BATTERY_LEVEL_ID           = (0x23);
+        private const int COMM_BATTERY_LEVEL_SIZE         = 4;
+        private const int COMM_ENVIRONMENTAL_ITEMS        = 4;
+        private const int COMM_ENVIRONMENTAL_PAYLOAD_SIZE = (COMM_AMBIENT_TEMPERATURE_SIZE
+                                                            + COMM_AMBIENT_PRESSURE_SIZE
+                                                            + COMM_AMBIENT_HUMIDITY_SIZE
+                                                            + COMM_BATTERY_LEVEL_SIZE);
 
-        // ToDo: New Code
-        //public float Temperature;
-        //public float Humidity;
-        //public float Pressure;
-        //public byte BatteryLevel;
+        public float Temperature;
+        public float Pressure;
+        public float Humidity;
+        public int BatteryLevel;
 
-        public byte Temperature;
-        public byte Humidity;
-        public byte Pressure;
-        public byte BatteryLevel;
+        public EnvironmentalInfo Decode(byte[] data)
+        {
+            int totalSize = COMM_ENVIRONMENTAL_PAYLOAD_SIZE + (COMM_ENVIRONMENTAL_ITEMS * 2) + 1;
+
+            if (data.Length != totalSize)
+                throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
+
+            int offset = 0;
+
+            int itemCount = data[offset++];
+
+            if (itemCount != COMM_ENVIRONMENTAL_ITEMS)
+                throw new ArgumentException($"Payload count mismatch (expected: {COMM_ENVIRONMENTAL_ITEMS}, saw: {itemCount})");
+
+            while (offset < totalSize)
+            {
+                int type = data[offset++];
+                int size = data[offset++];
+
+                switch (type)
+                {
+                    case COMM_AMBIENT_TEMPERATURE_ID:
+                        if (size != COMM_AMBIENT_TEMPERATURE_SIZE)
+                        {
+                            throw new ArgumentException($"Unexpected payload item size (expected: {COMM_AMBIENT_TEMPERATURE_SIZE}, saw: {size})");
+                        }
+                        Temperature = ToFloat(data,offset);
+                        break;
+
+                    case COMM_AMBIENT_PRESSURE_ID:
+                        if (size != COMM_AMBIENT_PRESSURE_SIZE)
+                        {
+                            throw new ArgumentException($"Unexpected payload item size (expected: {COMM_AMBIENT_PRESSURE_SIZE}, saw: {size})");
+                        }
+                        Pressure = ToFloat(data, offset) / 1000;
+                        break;
+
+                    case COMM_AMBIENT_HUMIDITY_ID:
+                        if (size != COMM_AMBIENT_HUMIDITY_SIZE)
+                        {
+                            throw new ArgumentException($"Unexpected payload item size (expected: {COMM_AMBIENT_HUMIDITY_SIZE}, saw: {size})");
+                        }
+                        Humidity = ToFloat(data, offset);
+                        break;
+
+                    case COMM_BATTERY_LEVEL_ID:
+                        if (size != COMM_BATTERY_LEVEL_SIZE)
+                        {
+                            throw new ArgumentException($"Unexpected payload item size (expected: {COMM_BATTERY_LEVEL_SIZE}, saw: {size})");
+                        }
+
+                        BatteryLevel = (short) ToFloat(data, offset);
+                        break;
+                }
+
+                offset += size;
+            }
+
+            return this;
+        }
 
         public EnvironmentalInfo()
         {
@@ -32,50 +97,6 @@ namespace FenomPlus.SDK.Core.Models
             EnvironmentalInfo environmentalInfo = new EnvironmentalInfo();
             return environmentalInfo.Decode(data);
         }
-
-        public EnvironmentalInfo Decode(byte[] data)
-        {
-            try
-            {
-                Data = data;
-
-                // ToDo: New Code
-                //if ((data != null) && (data.Length >= Min))
-                //{
-                //    Temperature = System.BitConverter.ToSingle(data, 0);
-                //    Humidity = System.BitConverter.ToSingle(data, 4);
-                //    Pressure = System.BitConverter.ToSingle(data, 8);
-                //    BatteryLevel = Data[12];
-                //}
-
-                if ((data != null) && (data.Length >= Min))
-                {
-                    Temperature = Data[0];
-                    Humidity = Data[1];
-                    Pressure = Data[2];
-                    BatteryLevel = Data[3];
-                }
-            }
-            finally { }
-
-            return this;
-        }
-
-        //Little-endian D2-02-96-49
-        //Big-endian	49-96-02-D2
-
-        // Code to swap endians...
-        public float floatConversion(byte[] bytes)
-        {
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes); // Convert big endian to little endian
-            }
-
-            float myFloat = BitConverter.ToSingle(bytes, 0);
-            return myFloat;
-        }
-
     }
 }
 

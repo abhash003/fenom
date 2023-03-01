@@ -3,6 +3,7 @@ using FenomPlus.Enums;
 using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
+using Syncfusion.CompoundFile.Net;
 using System;
 using System.Globalization;
 using Xamarin.Essentials;
@@ -30,8 +31,9 @@ namespace FenomPlus.Models
 
             var db = new BreathManeuverErrorDBModel();
 
-            db.ErrorCode = ErrorCodeLookup.Lookup(statusCode).Code;
-            db.Description = ErrorCodeLookup.Lookup(statusCode).Message;
+            var error = ErrorCodeLookup.Lookup(statusCode);
+            db.ErrorCode = error.Code;
+            db.Description = error.Message;
             db.SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber;
 
             db.Software = VersionTracking.CurrentVersion;

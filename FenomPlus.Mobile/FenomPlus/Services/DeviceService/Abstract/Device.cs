@@ -21,6 +21,7 @@ using FenomPlus.Helpers;
 using System.Text;
 using System.Diagnostics;
 using FenomPlus.SDK.Core.Features;
+using Polly.Utilities;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -29,7 +30,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
         // Fields
 
         protected object _nativeDevice = null;
-        private int calls = 0;
 
         // Constructor
 
@@ -124,7 +124,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
         private float _breathFlow { get; set; }
         public float BreathFlow
         {
-            get => _breathFlow / 1000;
+            get => _breathFlow;
             set { _breathFlow = value; }
         }
 
@@ -227,11 +227,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 return DeviceCheckEnum.DevicePurging;
             }
 
-            // 0x4a -- not charging
-            // 0x4b -- charging
-            // 0x00 -- unknown
-            // If battery is critical but is charging then dont raise the error
-            if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && !(DeviceStatusInfo.StatusCode == 0x4b))
+            if (EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
             {
                 return DeviceCheckEnum.BatteryCriticallyLow;
             }
@@ -336,33 +332,16 @@ namespace FenomPlus.Services.DeviceService.Abstract
         {
             try
             {
-                //data[0] = 20; // temp
-                //data[1] = 60; // humidity
-                //data[2] = 90; // pressure
-                //data[3] = 80; // battery
                 EnvironmentalInfo ??= new EnvironmentalInfo();
-
-                if (data[1] == 0)
-                {
-                    data[1] = 60;
-                    EnvironmentalInfo.Humidity = data[1];
-                }
-                else if (data[1] == 100)
-                {
-                    data[1] /= 2;
-                }
-
-                EnvironmentalInfo.Temperature = data[0];
-                EnvironmentalInfo.Humidity = data[1];
-                EnvironmentalInfo.Pressure = data[2];
-                EnvironmentalInfo.BatteryLevel = data[3];
-
-                BatteryLevel = EnvironmentalInfo.BatteryLevel;
+                EnvironmentalInfo.Decode(data);
             }
+
             catch (Exception ex)
             {
-                throw ex;
+                throw; // bubble up
             }
+
+            return;
         }        
 
         public DeviceInfo DecodeDeviceInfo(byte[] data)
@@ -384,7 +363,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 }
 
                 // setup firmware version
-                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
+                Firmware = $"{DeviceInfo.FirmwareVersionMajor}.{DeviceInfo.FirmwareVersionMinor}";
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);

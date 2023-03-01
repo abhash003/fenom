@@ -160,7 +160,7 @@ namespace FenomPlus.ViewModels
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool DeviceInfoTimer()
+        public async Task<bool> DeviceInfoTimer()
         {            
             if (Services.DeviceService.Current == null) return true;
             if (Services.DeviceService.Current.DeviceInfo == null) return true;
@@ -168,7 +168,7 @@ namespace FenomPlus.ViewModels
             //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device            
 
-            (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
+            await (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }

@@ -34,5 +34,21 @@ namespace FenomPlus.SDK.Core.Models
         {
             return ExtractFloat(Data, index * 4);
         }
+
+        protected float ToFloat(byte[] bytes, int index = 0)
+        {
+            return BitConverter.ToSingle(bytes, index);
+        }
+
+        protected short ToShort(byte[] bytes, int index = 0)
+        {
+            return BitConverter.ToInt16(bytes, index);
+        }
+
+        protected byte ToByte(byte[] bytes, int index = 0)
+        {
+            return bytes[index];
+        }
+
     }
 }
