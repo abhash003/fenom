@@ -22,9 +22,23 @@ namespace FenomPlus.Services
             await UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
         }
 
+        //public async Task<string> UserNamePromptAsync()
+        //{
+
+        //    var result = await UserDialogs.Instance.PromptAsync("User Name", "Create new QC User", "Create", "Cancel", "", InputType.Name);
+
+        //    if (!result.Ok)
+        //        return "cancel";
+
+        //    return result.Text;
+        //}
+
         public async Task<bool> ShowConfirmYesNo(string message, string title)
         {
-            return await UserDialogs.Instance.ConfirmAsync(message, title, "Yes","No" );
+            //var result = UserDialogs.Instance.ConfirmAsync(message, title, "Yes", "No");
+
+            var r = await UserDialogs.Instance.ConfirmAsync("message", title);
+            return r;
         }
 
         public bool PurgeCancelRequest { get; set; }

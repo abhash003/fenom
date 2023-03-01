@@ -24,6 +24,7 @@ using Syncfusion.Drawing;
 using Color = Xamarin.Forms.Color;
 using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using static System.Net.Mime.MediaTypeNames;
+using Plugin.BLE.Abstractions.Contracts;
 
 namespace FenomPlus.ViewModels
 {
@@ -601,7 +602,6 @@ namespace FenomPlus.ViewModels
                 return false;
             }
         }
-
         private bool DbDeleteQcUser(QCUser user)
         {
             if (user == null)
@@ -1110,9 +1110,9 @@ namespace FenomPlus.ViewModels
 
         private async Task StartNegativeControlTest()
         {
-            UiTimer = new Timer(Config.TestResultReadyWait * 1000);
-            UiTimer.Elapsed += (sender, e) => NegativeControlTestCompleted();
-            UiTimer.Start();
+            CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
+            CalculationsTimer.Elapsed += (sender, e) => NegativeControlTestCompleted();
+            CalculationsTimer.Start();
 
             await Services.Navigation.QCNegativeControlTestView();
         }
@@ -1126,8 +1126,8 @@ namespace FenomPlus.ViewModels
             //  2. Update negative control in database
             //  3. Update device status in database
 
-            UiTimer.Stop();
-            UiTimer.Dispose();
+            CalculationsTimer.Stop();
+            CalculationsTimer.Dispose();
 
             int negativeControlTestResult = 0; // ToDo: Temporary until we have real value from hardware
             NegativeControlTestResultString = $"({negativeControlTestResult} ppb)";
@@ -1275,17 +1275,20 @@ namespace FenomPlus.ViewModels
 
             Task.Delay(Config.StopExhalingReadyWait);
 
-            if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+            if (Services.DeviceService.Current != null)
             {
-                var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
-                ErrorsRepo.Insert(model);
+                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+                {
+                    var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                    ErrorsRepo.Insert(model);
 
-                PlaySounds.PlayFailedSound();
-                Services.Navigation.TestErrorView();
-            }
-            else
-            {
-                Services.Navigation.QCUserTestCalculationView();
+                    PlaySounds.PlayFailedSound();
+                    Services.Navigation.TestErrorView();
+                }
+                else
+                {
+                    Services.Navigation.QCUserTestCalculationView();
+                }
             }
         }
 
@@ -1294,13 +1297,14 @@ namespace FenomPlus.ViewModels
 
         #region "QC User Test Calculation View"
 
-        private Timer UiTimer;
+        private Timer CalculationsTimer;
 
         public void StartUserTestCalculations()
         {
-            UiTimer = new Timer(Config.TestResultReadyWait * 1000);
-            UiTimer.Elapsed += (sender, e) => UserTestCompleted();
-            UiTimer.Start();
+            int milliseconds = Config.TestResultReadyWait * 1000 + 1000; // ToDo: Is adding 1000 necessary?
+            CalculationsTimer = new Timer(milliseconds);
+            CalculationsTimer.Elapsed += (sender, e) => UserTestCompleted();
+            CalculationsTimer.Start();
         }
 
         [ObservableProperty]
@@ -1318,12 +1322,20 @@ namespace FenomPlus.ViewModels
             //  3. After 3 compare value to QTX and set test status, update User table in database
             //  4. Update device status in database
 
-            UiTimer.Stop();
-            UiTimer.Dispose();
+            CalculationsTimer.Stop();
+            CalculationsTimer.Dispose();
 
             if (Services.DeviceService.Current is { FenomReady: false }) // ToDo: Is this the best way to handle this
-                return;
+            {
+                Services.Dialogs.ShowAlert("An error has occurred and breath calculation was not completed.", "Device Not Ready", "OK");
+                Services.Navigation.QCUserTestResultView();
+            }
 
+            QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
+
+            UpdateUserStatus();
+            UpdateNegativeControlStatus();
+            UpdateDeviceStatus();
 
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
             {
@@ -1335,11 +1347,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
 
-                UpdateUserStatus();
-                UpdateNegativeControlStatus();
-                UpdateDeviceStatus();
 
                 Services.Navigation.QCUserTestResultView();
             }
@@ -1572,12 +1580,12 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
-            {
+            //ToDo: if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
+            //{
                 // Delete device, user and tests also
                 DbDeleteQcDevice(QcDeviceList[index - 1]);// SfDataGrid apparently is one based on the index
                 UpdateQcDeviceList();
-            }
+            //}
         }
 
         [RelayCommand]
@@ -1585,12 +1593,14 @@ namespace FenomPlus.ViewModels
         {
             int index = (int)parameter;
 
-            if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
-            {
+            //ToDo: var result = Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this user?", "Delete User").Result;
+
+            //if (result)
+            //{
                 // Delete User and tests
                 DbDeleteQcUser(QcUserList[index - 1]); // SfDataGrid apparently is one based on the index
                 UpdateQcUserList();
-            }
+            //}
         }
 
         private QCTest GetLastNegativeControlTest()
@@ -1762,7 +1772,7 @@ namespace FenomPlus.ViewModels
 
                 case 2:
                     SelectedQcUser.C2 = tests[0].TestValue; // Latest test
-
+                    
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
