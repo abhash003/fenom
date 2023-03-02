@@ -996,10 +996,35 @@ namespace FenomPlus.ViewModels
         {
             if (QcButtonViewModels[userIndex].Assigned)
             {
-                if (SelectedQcUser.CurrentStatus == QCUser.UserDisqualified)
+                QCTest lastTest = GetLastTest(SelectedQcUser.UserName);
+
+                switch (SelectedQcUser.CurrentStatus)
                 {
-                    Services.Dialogs.ShowAlert($"'{SelectedQcUser.UserName}' is currently disqualified and no further tests are allowed.", "User Disqualified", "OK");
-                    return;
+                    case QCUser.UserDisqualified:
+                        await Services.Dialogs.ShowAlertAsync($"'{SelectedQcUser.UserName}' is currently disqualified and no further tests are allowed.", "User Disqualified", "OK");
+                        return;
+
+                    case QCUser.UserConditionallyQualified:
+                        if (DateTime.Now < lastTest.TestDate.AddHours(16))
+                        {
+                            await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass from your last Qualifying test before another test can be performed.", "More Time Required", "OK");
+                            return;
+                        }
+                        else if (DateTime.Now > lastTest.TestDate.AddHours(24))
+                        {
+                            SelectedQcUser.CurrentStatus = QCUser.UserDisqualified;
+                            await Services.Dialogs.ShowAlertAsync($"More than 24 hours has passed since your last qualifying test. You are now disqualified.", "User Disqualified", "OK");
+                            return;
+                        }
+                        break;
+
+                    case QCUser.UserQualified:
+                        if (DateTime.Now < lastTest.TestDate.AddHours(24))
+                        {
+                            await Services.Dialogs.ShowAlertAsync("At least 24 hours must pass before another test can be performed.", "More Time Required", "OK");
+                            return;
+                        }
+                        break;
                 }
 
                 // Open and run new breath test for this user
@@ -1007,27 +1032,26 @@ namespace FenomPlus.ViewModels
             }
             else
             {
+                // Open user name dialog and create user, then open breath test view
+                string userName = await Services.Dialogs.UserNamePromptAsync();
 
-                    // Open user name dialog and create user, then open breath test view
-                    string userName = await Services.Dialogs.UserNamePromptAsync();
+                if (userName == "cancel")
+                    return;
 
-                    if (userName == "cancel")
-                        return;
-
-                    if (!string.IsNullOrEmpty(userName))
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    if (QcUserList.Any(user => userName.ToLower() == user.UserName.ToLower()))
                     {
-                        if (QcUserList.Any(user => userName.ToLower() == user.UserName.ToLower()))
-                        {
-                            await Services.Dialogs.ShowAlertAsync($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
-                        }
-                        else
-                        {
-                            QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
-
-                            // Open and run new breath test for this user
-                        await StartUserBreathTest();
-                        }
+                        await Services.Dialogs.ShowAlertAsync($"User name [{userName}] already exists.", "Conflicting User Name", "OK");
                     }
+                    else
+                    {
+                        QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
+
+                        // Open and run new breath test for this user
+                    await StartUserBreathTest();
+                    }
+                }
             }
         }
 
@@ -1923,6 +1947,37 @@ namespace FenomPlus.ViewModels
             }
 
             return false;
+        }
+
+        private QCTest GetLastTest(string userName)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
+
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    // Get all user records for this device and user
+                    var testCollection = db.GetCollection<QCTest>("qctests");
+                    var tests = testCollection.Query()
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .OrderByDescending(x => x.TestDate).ToList();
+
+                    if (tests != null)
+                    {
+                        return tests[0];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
         }
 
         private List<QCTest> GetLast3Tests(string userName)
