@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -17,13 +18,14 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         // "User Name" or "Negative Control" or "Device"
         public string UserName { get; set; }
 
-        public DateTime TestDate { get; set; }
+        public DateTime TestDate { get; set; } = DateTime.MinValue;
 
         public int TestValue { get; set; }
 
         public string TestStatus { get; set; } // Pass or Fail
 
         public string Explanation { get; set; }
+
 
         public QCTest(string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation = "")
         {

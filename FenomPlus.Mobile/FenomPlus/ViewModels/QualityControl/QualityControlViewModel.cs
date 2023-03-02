@@ -1347,10 +1347,6 @@ namespace FenomPlus.ViewModels
 
                 QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
 
-                UpdateUserStatus();
-                UpdateNegativeControlStatus();
-                UpdateDeviceStatus();
-
                 Debug.WriteLine( $"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
 
                 if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
@@ -1392,6 +1388,10 @@ namespace FenomPlus.ViewModels
             QCUserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
                 (Services.DeviceService.Current.FenomValue) > 40 ? "> 40" :
                 Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
+
+            UpdateUserStatus();
+            UpdateNegativeControlStatus();
+            UpdateDeviceStatus();
 
             Services.DeviceService.Current.ReadyForTest = false;
         }
@@ -1721,30 +1721,39 @@ namespace FenomPlus.ViewModels
         {
             // Returns: "Pass", "Fail", "Expired"
 
-            QCTest negativeControlTest = GetLastNegativeControlTest();
-
-            int timeSpanHours = TimeSpanHours(DateTime.Now, negativeControlTest.TestDate);
-
-            bool timeSpanOK = timeSpanHours <= NegativeControlTimeoutHours;
-
             string negativeControlStatus;
 
-            if (timeSpanHours > NegativeControlTimeoutHours)
+            QCTest negativeControlTest = GetLastNegativeControlTest();
+
+            if (negativeControlTest != null)
             {
-                negativeControlStatus = QCUser.NegativeControlExpired;
-            }
-            else if (negativeControlTest.TestValue >= NegativeControlMaxThreshold)
-            {
-                negativeControlStatus = QCUser.NegativeControlFail;
+                int timeSpanHours = TimeSpanHours(DateTime.Now, negativeControlTest.TestDate);
+
+                bool timeSpanOK = timeSpanHours <= NegativeControlTimeoutHours;
+
+                if (timeSpanHours > NegativeControlTimeoutHours)
+                {
+                    negativeControlStatus = QCUser.NegativeControlExpired;
+                }
+                else if (negativeControlTest.TestValue >= NegativeControlMaxThreshold)
+                {
+                    negativeControlStatus = QCUser.NegativeControlFail;
+                }
+                else
+                {
+                    negativeControlStatus = QCUser.NegativeControlPass;
+                }
+
+                QCNegativeControl.ExpiresDate = negativeControlTest.TestDate.AddHours(NegativeControlTimeoutHours);
+                QCNegativeControl.NextTestDate = QCNegativeControl.ExpiresDate;
             }
             else
             {
-                negativeControlStatus = QCUser.NegativeControlPass;
+                negativeControlStatus = QCUser.NegativeControlNone;
             }
 
             QCNegativeControl.CurrentStatus = negativeControlStatus;
-            QCNegativeControl.ExpiresDate = negativeControlTest.TestDate.AddHours(NegativeControlTimeoutHours);
-            QCNegativeControl.NextTestDate = QCNegativeControl.ExpiresDate;
+
             DbUpdateQcNegativeControl(QCNegativeControl);
         }
 
