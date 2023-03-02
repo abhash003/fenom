@@ -5,11 +5,11 @@
                        xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
                        xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
                        x:Class="FenomPlus.Views.QCUserStopTestView"
-                       x:DataType="viewModels:QualityControlViewModel"
                        Title="{Binding Title}"
                        Shell.NavBarIsVisible="True"
                        NavigationPage.HasBackButton="False"
-                       NavigationPage.HasNavigationBar="False">
+                       NavigationPage.HasNavigationBar="False"
+                       x:DataType="viewModels:QualityControlViewModel">
 
     <Shell.TitleView>
         <controls:TitleContentView />

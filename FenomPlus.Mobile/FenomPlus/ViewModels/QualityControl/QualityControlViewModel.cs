@@ -1228,10 +1228,10 @@ namespace FenomPlus.ViewModels
                 Services.DeviceService.Current.IsNotConnectedRedirect();
 
                 GaugeData = Services.DeviceService.Current!.BreathFlow = 0;
-                GaugeSeconds = 10; // ToDo: change to 10 after debugging
+                GaugeSeconds = 10;
                 GaugeStatus = "Start Blowing";
 
-                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second); // ToDo: Change tp 10 after debugging
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
             }
         }
 
@@ -1271,12 +1271,17 @@ namespace FenomPlus.ViewModels
 
         public void InitUserStopBreathTest()
         {
-            PlaySounds.PlaySuccessSound();
-
-            Task.Delay(Config.StopExhalingReadyWait);
-
             if (Services.DeviceService.Current != null)
             {
+                PlaySounds.PlaySuccessSound();
+
+                Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
+                Services.DeviceService.Current.BreathFlow = 0;
+
+                PlaySounds.StopAll();
+
+                Task.Delay(Config.StopExhalingReadyWait);
+
                 if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
                 {
                     var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
@@ -1325,31 +1330,48 @@ namespace FenomPlus.ViewModels
             CalculationsTimer.Stop();
             CalculationsTimer.Dispose();
 
-            if (Services.DeviceService.Current is { FenomReady: false }) // ToDo: Is this the best way to handle this
+            //if (Services.DeviceService.Current is { FenomReady: false }) // ToDo: Is this the best way to handle this
+            //{
+            //    Services.Dialogs.ShowAlert("An error has occurred and breath calculation was not completed.", "Device Not Ready", "OK");
+            //    Services.Navigation.QCUserTestResultView();
+            //}
+
+
+            while(Services.DeviceService.Current.FenomReady == false)
             {
-                Services.Dialogs.ShowAlert("An error has occurred and breath calculation was not completed.", "Device Not Ready", "OK");
-                Services.Navigation.QCUserTestResultView();
+
             }
 
-            QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
-
-            UpdateUserStatus();
-            UpdateNegativeControlStatus();
-            UpdateDeviceStatus();
-
-            if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+            if (Services.DeviceService.Current.FenomReady == true)
             {
-                // ToDo: How to handle fail here?
-                PlaySounds.PlayFailedSound();
 
-                // Don't add this test with error to the database
-                Services.Navigation.QCUserTestErrorView();
+                QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
+
+                UpdateUserStatus();
+                UpdateNegativeControlStatus();
+                UpdateDeviceStatus();
+
+                Debug.WriteLine( $"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
+
+                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+                {
+                    // ToDo: How to handle fail here?
+                    PlaySounds.PlayFailedSound();
+
+                    // Don't add this test with error to the database
+                    Services.Navigation.QCUserTestErrorView();
+                }
+                else
+                {
+                    Services.Navigation.QCUserTestResultView();
+                }
+
             }
             else
             {
+                Debugger.Break();
+                Debug.WriteLine("Device reports its not ready with calculation");
 
-
-                Services.Navigation.QCUserTestResultView();
             }
         }
 
@@ -1654,7 +1676,6 @@ namespace FenomPlus.ViewModels
         }
 
         #endregion
-
 
 
         #region "Determine Status Routines"
