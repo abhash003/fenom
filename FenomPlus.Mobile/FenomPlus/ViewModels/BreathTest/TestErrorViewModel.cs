@@ -32,11 +32,12 @@ namespace FenomPlus.ViewModels
         private void UpdateError()
         {
             var bm = Services.DeviceService.Current.BreathManeuver;
+            var esi = Services.DeviceService.Current.ErrorStatusInfo;
 
             int statusCode = 0;
-            if ((bm.TimeRemaining == 0 || bm.TimeRemaining == 0xfe) && bm.StatusCode != 0)
+            if ((bm.TimeRemaining == 0 || bm.TimeRemaining == 0xfe) && esi.ErrorCode != 0)
             {
-                statusCode = bm.StatusCode;
+                statusCode = esi.ErrorCode;
             }
             else
             {

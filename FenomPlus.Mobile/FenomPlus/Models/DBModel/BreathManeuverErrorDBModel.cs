@@ -22,9 +22,9 @@ namespace FenomPlus.Models
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static BreathManeuverErrorDBModel Create(BreathManeuver input)
+        public static BreathManeuverErrorDBModel Create(BreathManeuver input, ErrorStatusInfo esi)
         {
-            int statusCode = input.StatusCode;
+            int statusCode = esi.ErrorCode;
 
             // Get current version of software
             VersionTracking.Track();

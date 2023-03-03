@@ -32,13 +32,6 @@ namespace FenomPlus.SDK.Core.Models
         // not implemented yet in firmware
         public short TestNumber;
         public byte TestState;
-        public byte Temperature; // u
-        public byte Pressure; // u
-        public byte AnalysisTimeLeft; // u
-        public byte StatusCode;
-        public byte BreathGaugePressure; // u
-        public short NOCounts; // u
-        public byte SampleMassFlow; // u
 
 
         public BreathManeuver Decode(byte[] data)

@@ -251,13 +251,13 @@ namespace FenomPlus.Services.DeviceService.Abstract
             }
 
             // Decoded byte for 0x70 is 112 => NO Sensor Missing.
-            if (BreathManeuver.StatusCode == 112 || ErrorStatusInfo.ErrorCode == 112)
+            if (ErrorStatusInfo.ErrorCode == 112)
             {
                 return DeviceCheckEnum.NoSensorMissing;
             }
 
-            // Decoded byte for 0x70 is 113 => No Sensor Communication Failed.
-            if (BreathManeuver.StatusCode == 113 || ErrorStatusInfo.ErrorCode == 113)
+            // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
+            if (ErrorStatusInfo.ErrorCode == 113)
             {
                 return DeviceCheckEnum.NoSensorCommunicationFailed;
             }

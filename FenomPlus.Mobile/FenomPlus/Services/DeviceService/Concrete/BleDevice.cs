@@ -138,9 +138,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         {
                             lock (_handlerLock)
                             {
-                                LastStatusCode = BreathManeuver.StatusCode;
                                 DecodeBreathManeuver(e.Characteristic.Value);
-                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} status: {BreathManeuver.StatusCode}) score: {BreathManeuver.NOScore}");
+                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore})");
                             }
                         };
 
