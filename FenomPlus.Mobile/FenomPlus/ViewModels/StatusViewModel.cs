@@ -175,8 +175,7 @@ namespace FenomPlus.ViewModels
                 if (Services.DeviceService.Current.SensorExpireDate != new DateTime(1,1,1))
                     UpdateSensor(Services.DeviceService.Current.SensorExpireDate);
 
-                if (Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0)
-                    UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
+                UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
 
                 if (Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0)
                     UpdatePressure(Services.DeviceService.Current.EnvironmentalInfo.Pressure);
