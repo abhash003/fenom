@@ -263,78 +263,81 @@ namespace FenomPlus.ViewModels
                 SensorViewModel.Description = string.Empty;
                 return;
             }
-
-            // ToDo: Remove hard coded value
-            int month = (Services.DeviceService.Current.DeviceInfo.SensorExpDateMonth);
-            int day = (Services.DeviceService.Current.DeviceInfo.SensorExpDateDay);
-            int year = (Services.DeviceService.Current.DeviceInfo.SensorExpDateYear);
-
-            // TODO
-            // temp fix: the status view should not be displayed until we have valid values
-            //           until that's done, give some valid values...
-            if (month == 0 || day == 0 || year == 0)
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.SensorExpireDate != new DateTime(1, 1, 1))
             {
-                month = 01;
-                day   = 02;
-                year  = 03;
-            }
+                // ToDo: Remove hard coded value
+                int month = (Services.DeviceService.Current.DeviceInfo.SensorExpDateMonth);
+                int day = (Services.DeviceService.Current.DeviceInfo.SensorExpDateDay);
+                int year = (Services.DeviceService.Current.DeviceInfo.SensorExpDateYear);
 
-            DateTime expirationDate = new DateTime(year, month, day);
+                // TODO
+                // temp fix: the status view should not be displayed until we have valid values
+                //           until that's done, give some valid values...
+                if (month == 0 || day == 0 || year == 0)
+                {
+                    month = 01;
+                    day = 02;
+                    year = 03;
+                }
 
-            int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
+                DateTime expirationDate = new DateTime(year, month, day);
 
-            SensorBarIconVisible = true;
-            SensorViewModel.ButtonText = "Order";
+                int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
 
-            if (daysRemaining <= Constants.SensorExpired)
-            {
-                // low
-                SensorBarIcon = "wo_sensor_red.png";
-                SensorViewModel.ImagePath = "sensor_red.png";
-                SensorViewModel.ValueColor = Color.Red;
-                SensorViewModel.Description = "The nitric oxide sensor has expired. Replace it with a new sensor.";
-                SensorViewModel.Value = $"{daysRemaining}";
-                SensorViewModel.Label = "Days Left";
+                SensorBarIconVisible = true;
+                SensorViewModel.ButtonText = "Order";
+
+                if (daysRemaining <= Constants.SensorExpired)
+                {
+                    // low
+                    SensorBarIcon = "wo_sensor_red.png";
+                    SensorViewModel.ImagePath = "sensor_red.png";
+                    SensorViewModel.ValueColor = Color.Red;
+                    SensorViewModel.Description = "The nitric oxide sensor has expired. Replace it with a new sensor.";
+                    SensorViewModel.Value = $"{daysRemaining}";
+                    SensorViewModel.Label = "Days Left";
+                }
+                else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorMissing)
+                {
+                    // error
+                    SensorBarIcon = "wo_sensor_red.png";
+                    SensorViewModel.ImagePath = "sensor_red.png";
+                    SensorViewModel.ValueColor = Color.Red;
+                    SensorViewModel.Description = "Nitrous Oxide Sensor is missing.  Install a F150 sensor.";
+                    SensorViewModel.Value = $"{daysRemaining}";
+                    SensorViewModel.Label = "Days Left";
+                }
+                else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorCommunicationFailed)
+                {
+                    // error
+                    SensorBarIcon = "wo_sensor_red.png";
+                    SensorViewModel.ImagePath = "sensor_red.png";
+                    SensorViewModel.ValueColor = Color.Red;
+                    SensorViewModel.Description = "Nitrous Oxide Sensor communication failed.";
+                    SensorViewModel.Value = $"{daysRemaining}";
+                    SensorViewModel.Label = "Days Left";
+                }
+                else if (daysRemaining <= Constants.SensorWarning60Days)
+                {
+                    // warning
+                    SensorBarIcon = "wo_sensor_yellow.png";
+                    SensorViewModel.ImagePath = "sensor_yellow.png";
+                    SensorViewModel.ValueColor = Color.FromHex("#333");
+                    SensorViewModel.Description = "The sensor will expire in less than 60 days. Contact Customer Service.";
+                    SensorViewModel.Value = $"{daysRemaining}";
+                    SensorViewModel.Label = "Days Left";
+                }
+                else
+                {
+                    SensorBarIconVisible = false;
+                    SensorViewModel.ImagePath = "sensor_green.png";
+                    SensorViewModel.ValueColor = Color.FromHex("#333");
+                    SensorViewModel.Description = $"Sensor is good for another {daysRemaining} days.";
+                    SensorViewModel.Value = $"{daysRemaining / 30}";
+                    SensorViewModel.Label = "Months Left";
+                }
             }
-            else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorMissing)
-            {
-                // error
-                SensorBarIcon = "wo_sensor_red.png";
-                SensorViewModel.ImagePath = "sensor_red.png";
-                SensorViewModel.ValueColor = Color.Red;
-                SensorViewModel.Description = "Nitrous Oxide Sensor is missing.  Install a F150 sensor.";
-                SensorViewModel.Value = $"{daysRemaining}";
-                SensorViewModel.Label = "Days Left";
-            }
-            else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorCommunicationFailed)
-            {
-                // error
-                SensorBarIcon = "wo_sensor_red.png";
-                SensorViewModel.ImagePath = "sensor_red.png";
-                SensorViewModel.ValueColor = Color.Red;
-                SensorViewModel.Description = "Nitrous Oxide Sensor communication failed.";
-                SensorViewModel.Value = $"{daysRemaining}";
-                SensorViewModel.Label = "Days Left";
-            }
-            else if (daysRemaining <= Constants.SensorWarning60Days)
-            {
-                // warning
-                SensorBarIcon = "wo_sensor_yellow.png";
-                SensorViewModel.ImagePath = "sensor_yellow.png";
-                SensorViewModel.ValueColor = Color.FromHex("#333");
-                SensorViewModel.Description = "The sensor will expire in less than 60 days. Contact Customer Service.";
-                SensorViewModel.Value = $"{daysRemaining}";
-                SensorViewModel.Label = "Days Left";
-            }
-            else
-            {
-                SensorBarIconVisible = false;
-                SensorViewModel.ImagePath = "sensor_green.png";
-                SensorViewModel.ValueColor = Color.FromHex("#333");
-                SensorViewModel.Description = $"Sensor is good for another {daysRemaining} days.";
-                SensorViewModel.Value = $"{daysRemaining / 30}";
-                SensorViewModel.Label = "Months Left";
-            }
+            
         }
 
         public void UpdateQualityControlExpiration(int value)
@@ -417,7 +420,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            if (Services.DeviceService.Current != null)
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0)
             {
                 double value = Services.DeviceService.Current.EnvironmentalInfo.Pressure;
 
@@ -487,7 +490,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            if (Services.DeviceService.Current != null)
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0)
             {
                 double value = Services.DeviceService.Current.EnvironmentalInfo.Temperature;
 
@@ -537,7 +540,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            if (Services.DeviceService.Current != null)
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
             {
                 double value = Services.DeviceService.Current.EnvironmentalInfo.Humidity;
 
