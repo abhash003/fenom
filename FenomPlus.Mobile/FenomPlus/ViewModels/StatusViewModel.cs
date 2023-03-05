@@ -170,24 +170,15 @@ namespace FenomPlus.ViewModels
 
             UpdateDevice(Services.Cache.DeviceExpireDate);
 
-            if (Services.DeviceService.Current != null)
-            {
-                if (Services.DeviceService.Current.SensorExpireDate != new DateTime(1,1,1))
-                    UpdateSensor(Services.DeviceService.Current.SensorExpireDate);
+            UpdateSensor();
 
-                UpdateBattery(Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel);
+            UpdateBattery();
 
-                if (Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0)
-                    UpdatePressure(Services.DeviceService.Current.EnvironmentalInfo.Pressure);
+            UpdatePressure();
 
-                if (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
-                    UpdateHumidity(Services.DeviceService.Current.EnvironmentalInfo.Humidity);
+            UpdateHumidity();
 
-                if (Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0)
-                    UpdateTemperature(Services.DeviceService.Current.EnvironmentalInfo.Temperature);
-            }
-
-            
+            UpdateTemperature();
 
             UpdateQualityControlExpiration(7); // ToDo:  Need value here
 
@@ -259,7 +250,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public void UpdateSensor(DateTime expirationDate)
+        public void UpdateSensor()
         {
             if (!BluetoothConnected)
             {
@@ -288,7 +279,7 @@ namespace FenomPlus.ViewModels
                 year  = 03;
             }
 
-            expirationDate = new DateTime(year, month, day);
+            DateTime expirationDate = new DateTime(year, month, day);
 
             int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
 
@@ -413,7 +404,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public void UpdatePressure(double value)
+        public void UpdatePressure()
         {
             if (!BluetoothConnected)
             {
@@ -426,56 +417,63 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            PressureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} kPa";
-            PressureViewModel.ButtonText = "Info";
+            if (Services.DeviceService.Current != null)
+            {
+                double value = Services.DeviceService.Current.EnvironmentalInfo.Pressure;
 
-            if (value < Constants.PressureLow75)
-            {
-                PressureBarIconVisible = true;
-                PressureBarIcon = "wo_pressure_red.png";
-                PressureViewModel.ImagePath = "pressure_red.png";
-                PressureViewModel.ValueColor = Color.Red;
-                PressureViewModel.Label = "Out of Range";
-                PressureViewModel.Description = "The ambient pressure is too low. FeNO testing is disabled until the pressure is higher.";
+                PressureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} kPa";
+                PressureViewModel.ButtonText = "Info";
+
+                if (value < Constants.PressureLow75)
+                {
+                    PressureBarIconVisible = true;
+                    PressureBarIcon = "wo_pressure_red.png";
+                    PressureViewModel.ImagePath = "pressure_red.png";
+                    PressureViewModel.ValueColor = Color.Red;
+                    PressureViewModel.Label = "Out of Range";
+                    PressureViewModel.Description = "The ambient pressure is too low. FeNO testing is disabled until the pressure is higher.";
+                }
+                else if (value < Constants.PressureWarning78)
+                {
+                    PressureBarIconVisible = true;
+                    PressureBarIcon = "wo_pressure_yellow.png";
+                    HumidityViewModel.ImagePath = "pressure_yellow.png";
+                    PressureViewModel.ValueColor = Color.FromHex("#333");
+                    PressureViewModel.Label = "Warning Range";
+                    PressureViewModel.Description = "The ambient pressure is near low limit.";
+                }
+                else if (value > Constants.PressureHigh110)
+                {
+                    PressureBarIconVisible = true;
+                    PressureBarIcon = "wo_pressure_red.png";
+                    PressureViewModel.ImagePath = "pressure_red.png";
+                    PressureViewModel.ValueColor = Color.Red;
+                    PressureViewModel.Label = "Out of Range";
+                    PressureViewModel.Description = "The ambient pressure is too high. FeNO testing is disabled until the pressure is lower.";
+                }
+                else if (value > Constants.PressureWarning108)
+                {
+                    PressureBarIconVisible = true;
+                    PressureBarIcon = "wo_pressure_yellow.png";
+                    HumidityViewModel.ImagePath = "pressure_yellow.png";
+                    PressureViewModel.ValueColor = Color.FromHex("#333");
+                    PressureViewModel.Label = "Warning Range";
+                    PressureViewModel.Description = "The ambient pressure is near high limit.";
+                }
+                else
+                {
+                    PressureBarIconVisible = false;
+                    PressureViewModel.ImagePath = "pressure_green.png";
+                    PressureViewModel.ValueColor = Color.Green;
+                    PressureViewModel.Label = "Within Range";
+                    PressureViewModel.Description = "The ambient pressure is within operating range.";
+                }
             }
-            else if (value < Constants.PressureWarning78)
-            {
-                PressureBarIconVisible = true;
-                PressureBarIcon = "wo_pressure_yellow.png";
-                HumidityViewModel.ImagePath = "pressure_yellow.png";
-                PressureViewModel.ValueColor = Color.FromHex("#333");
-                PressureViewModel.Label = "Warning Range";
-                PressureViewModel.Description = "The ambient pressure is near low limit.";
-            }
-            else if (value > Constants.PressureHigh110)
-            {
-                PressureBarIconVisible = true;
-                PressureBarIcon = "wo_pressure_red.png";
-                PressureViewModel.ImagePath = "pressure_red.png";
-                PressureViewModel.ValueColor = Color.Red;
-                PressureViewModel.Label = "Out of Range";
-                PressureViewModel.Description = "The ambient pressure is too high. FeNO testing is disabled until the pressure is lower.";
-            }
-            else if (value > Constants.PressureWarning108)
-            {
-                PressureBarIconVisible = true;
-                PressureBarIcon = "wo_pressure_yellow.png";
-                HumidityViewModel.ImagePath = "pressure_yellow.png";
-                PressureViewModel.ValueColor = Color.FromHex("#333");
-                PressureViewModel.Label = "Warning Range";
-                PressureViewModel.Description = "The ambient pressure is near high limit.";
-            }
-            else
-            {
-                PressureBarIconVisible = false;
-                PressureViewModel.ImagePath = "pressure_green.png";
-                PressureViewModel.ValueColor = Color.Green;
-                PressureViewModel.Label = "Within Range";
-                PressureViewModel.Description = "The ambient pressure is within operating range.";
-            }
+
+            
         }
 
-        public void UpdateTemperature(double value)
+        public void UpdateTemperature()
         {
             if (!BluetoothConnected)
             {
@@ -489,38 +487,43 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            TemperatureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} °C";
-            TemperatureViewModel.ButtonText = "Info";
+            if (Services.DeviceService.Current != null)
+            {
+                double value = Services.DeviceService.Current.EnvironmentalInfo.Temperature;
 
-            if (value < Constants.TemperatureLow14)
-            {
-                TemperatureBarIconVisible = true;
-                TemperatureBarIcon = "wo_temperature_red.png";
-                TemperatureViewModel.ImagePath = "temperature_red.png";
-                TemperatureViewModel.ValueColor = Color.Red;
-                TemperatureViewModel.Label = "Out of Range";
-                TemperatureViewModel.Description = "The device is too cold. Move the device to a warmer location. FeNO testing is disabled until it has warmed up.";
-            }
-            else if (value > Constants.TemperatureHigh35)
-            {
-                TemperatureBarIconVisible = true;
-                TemperatureBarIcon = "wo_temperature_red.png";
-                TemperatureViewModel.ImagePath = "temperature_red.png";
-                TemperatureViewModel.ValueColor = Color.FromHex("#333");
-                TemperatureViewModel.Label = "Out of Range";
-                TemperatureViewModel.Description = "The device is too warm. Move the device to a cooler location. FeNO testing is disabled until it has cooled down.";
-            }
-            else
-            {
-                TemperatureBarIconVisible = false;
-                TemperatureViewModel.ImagePath = "temperature_green.png";
-                TemperatureViewModel.ValueColor = Color.FromHex("#333");
-                TemperatureViewModel.Label = "Within Range";
-                TemperatureViewModel.Description = "The device temperature is within operating range.";
-            }
+                TemperatureViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)} °C";
+                TemperatureViewModel.ButtonText = "Info";
+
+                if (value < Constants.TemperatureLow14)
+                {
+                    TemperatureBarIconVisible = true;
+                    TemperatureBarIcon = "wo_temperature_red.png";
+                    TemperatureViewModel.ImagePath = "temperature_red.png";
+                    TemperatureViewModel.ValueColor = Color.Red;
+                    TemperatureViewModel.Label = "Out of Range";
+                    TemperatureViewModel.Description = "The device is too cold. Move the device to a warmer location. FeNO testing is disabled until it has warmed up.";
+                }
+                else if (value > Constants.TemperatureHigh35)
+                {
+                    TemperatureBarIconVisible = true;
+                    TemperatureBarIcon = "wo_temperature_red.png";
+                    TemperatureViewModel.ImagePath = "temperature_red.png";
+                    TemperatureViewModel.ValueColor = Color.FromHex("#333");
+                    TemperatureViewModel.Label = "Out of Range";
+                    TemperatureViewModel.Description = "The device is too warm. Move the device to a cooler location. FeNO testing is disabled until it has cooled down.";
+                }
+                else
+                {
+                    TemperatureBarIconVisible = false;
+                    TemperatureViewModel.ImagePath = "temperature_green.png";
+                    TemperatureViewModel.ValueColor = Color.FromHex("#333");
+                    TemperatureViewModel.Label = "Within Range";
+                    TemperatureViewModel.Description = "The device temperature is within operating range.";
+                }
+            }            
         }
 
-        public void UpdateHumidity(double value)
+        public void UpdateHumidity()
         {
             if (!BluetoothConnected)
             {
@@ -534,56 +537,61 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            HumidityViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)}%";
-            HumidityViewModel.ButtonText = "Info";
+            if (Services.DeviceService.Current != null)
+            {
+                double value = Services.DeviceService.Current.EnvironmentalInfo.Humidity;
 
-            if (value < Constants.HumidityLow18)
-            {
-                HumidityBarIconVisible = true;
-                HumidityBarIcon = "wo_humidity_red.png";
-                HumidityViewModel.ImagePath = "humidity_red.png";
-                HumidityViewModel.ValueColor = Color.Red;
-                HumidityViewModel.Label = "Out of Range";
-                HumidityViewModel.Description = "The ambient humidity is too low. Move the device to a more humid location. FeNO testing is disabled until the humidity is higher.";
-            }
-            else if (value < Constants.HumidityWarning25)
-            {
-                HumidityBarIconVisible = true;
-                HumidityBarIcon = "wo_humidity_yellow.png";
-                HumidityViewModel.ImagePath = "humidity_yellow.png";
-                HumidityViewModel.ValueColor = Color.FromHex("#333");
-                HumidityViewModel.Label = "Warning Range";
-                HumidityViewModel.Description = "The ambient humidity is low. Move the device to a more humid location.";
-            }
-            else if (value > Constants.HumidityHigh92)
-            {
-                HumidityBarIconVisible = true;
-                HumidityBarIcon = "wo_humidity_red.png";
-                HumidityViewModel.ImagePath = "humidity_red.png";
-                HumidityViewModel.ValueColor = Color.Red;
-                HumidityViewModel.Label = "Out of Range";
-                HumidityViewModel.Description = "The ambient humidity is too high. Move the device to a drier location. FeNO testing is disabled until the humidity is lower.";
-            }
-            else if (value > Constants.HumidityWarning85)
-            {
-                HumidityBarIconVisible = true;
-                HumidityBarIcon = "wo_humidity_yellow.png";
-                HumidityViewModel.ImagePath = "humidity_yellow.png";
-                HumidityViewModel.ValueColor = Color.FromHex("#333");
-                HumidityViewModel.Label = "Warning Range";
-                HumidityViewModel.Description = "The ambient humidity is high. Move the device to a less humid location.";
-            }
-            else
-            {
-                HumidityBarIconVisible = false;
-                HumidityViewModel.ImagePath = "humidity_green.png";
-                HumidityViewModel.ValueColor = Color.FromHex("#333");
-                HumidityViewModel.Label = "Within Range";
-                HumidityViewModel.Description = "The ambient humidity is within operating range.";
-            }
+                HumidityViewModel.Value = $"{value.ToString("N1", CultureInfo.CurrentCulture)}%";
+                HumidityViewModel.ButtonText = "Info";
+
+                if (value < Constants.HumidityLow18)
+                {
+                    HumidityBarIconVisible = true;
+                    HumidityBarIcon = "wo_humidity_red.png";
+                    HumidityViewModel.ImagePath = "humidity_red.png";
+                    HumidityViewModel.ValueColor = Color.Red;
+                    HumidityViewModel.Label = "Out of Range";
+                    HumidityViewModel.Description = "The ambient humidity is too low. Move the device to a more humid location. FeNO testing is disabled until the humidity is higher.";
+                }
+                else if (value < Constants.HumidityWarning25)
+                {
+                    HumidityBarIconVisible = true;
+                    HumidityBarIcon = "wo_humidity_yellow.png";
+                    HumidityViewModel.ImagePath = "humidity_yellow.png";
+                    HumidityViewModel.ValueColor = Color.FromHex("#333");
+                    HumidityViewModel.Label = "Warning Range";
+                    HumidityViewModel.Description = "The ambient humidity is low. Move the device to a more humid location.";
+                }
+                else if (value > Constants.HumidityHigh92)
+                {
+                    HumidityBarIconVisible = true;
+                    HumidityBarIcon = "wo_humidity_red.png";
+                    HumidityViewModel.ImagePath = "humidity_red.png";
+                    HumidityViewModel.ValueColor = Color.Red;
+                    HumidityViewModel.Label = "Out of Range";
+                    HumidityViewModel.Description = "The ambient humidity is too high. Move the device to a drier location. FeNO testing is disabled until the humidity is lower.";
+                }
+                else if (value > Constants.HumidityWarning85)
+                {
+                    HumidityBarIconVisible = true;
+                    HumidityBarIcon = "wo_humidity_yellow.png";
+                    HumidityViewModel.ImagePath = "humidity_yellow.png";
+                    HumidityViewModel.ValueColor = Color.FromHex("#333");
+                    HumidityViewModel.Label = "Warning Range";
+                    HumidityViewModel.Description = "The ambient humidity is high. Move the device to a less humid location.";
+                }
+                else
+                {
+                    HumidityBarIconVisible = false;
+                    HumidityViewModel.ImagePath = "humidity_green.png";
+                    HumidityViewModel.ValueColor = Color.FromHex("#333");
+                    HumidityViewModel.Label = "Within Range";
+                    HumidityViewModel.Description = "The ambient humidity is within operating range.";
+                }
+            }            
         }
 
-        public void UpdateBattery(int value)
+        public void UpdateBattery()
         {
             if (!BluetoothConnected)
             {
@@ -595,88 +603,92 @@ namespace FenomPlus.ViewModels
                 BatteryViewModel.Description = string.Empty;
                 return;
             }
-
-            BatteryViewModel.Value = $"{value}%";
-            BatteryViewModel.ButtonText = "Info";
-
-            BatteryBarIconVisible = true; // Always visible when device is connected
-
-            // 0x4a -- not charging
-            // 0x4b -- charging
-            // 0x00 -- unknown
-            bool batteryCharging = (Services.DeviceService.Current?.DeviceStatusInfo.StatusCode == 0x4b);
-
-            if (batteryCharging)
+            if (Services.DeviceService.Current != null)
             {
-                // ToDo; Need to finish implementation
-                if (value > Constants.BatteryWarning20)
+                int value = Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel;
+                BatteryViewModel.Value = $"{value}%";
+                BatteryViewModel.ButtonText = "Info";
+
+                BatteryBarIconVisible = true; // Always visible when device is connected
+
+                // 0x4a -- not charging
+                // 0x4b -- charging
+                // 0x00 -- unknown
+                bool batteryCharging = (Services.DeviceService.Current?.DeviceStatusInfo.StatusCode == 0x4b);
+
+                if (batteryCharging)
                 {
-                    BatteryBarIcon = "wo_battery_charge_green.png";
-                    BatteryViewModel.ImagePath = "battery_charge_green.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Charge";
-                    BatteryViewModel.Description = "Battery charge OK.";
-                }
-                else if (value > Constants.BatteryCritical3)
-                {
-                    BatteryBarIcon = "wo_battery_charge_yellow.png";
-                    BatteryViewModel.ImagePath = "battery_charge_yellow.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Warning";
-                    BatteryViewModel.Description = "Battery charge is low. Now Charging.";
+                    // ToDo; Need to finish implementation
+                    if (value > Constants.BatteryWarning20)
+                    {
+                        BatteryBarIcon = "wo_battery_charge_green.png";
+                        BatteryViewModel.ImagePath = "battery_charge_green.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Charge";
+                        BatteryViewModel.Description = "Battery charge OK.";
+                    }
+                    else if (value > Constants.BatteryCritical3)
+                    {
+                        BatteryBarIcon = "wo_battery_charge_yellow.png";
+                        BatteryViewModel.ImagePath = "battery_charge_yellow.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Warning";
+                        BatteryViewModel.Description = "Battery charge is low. Now Charging.";
+                    }
+                    else
+                    {
+                        BatteryBarIcon = "wo_battery_charge_red.png";
+                        BatteryViewModel.ImagePath = "battery_charge_red.png";
+                        BatteryViewModel.ValueColor = (System.Drawing.Color)Color.Red;
+                        BatteryViewModel.Label = "Low";
+                        BatteryViewModel.Description = "Battery charge is critically low. Charging.";
+                    }
                 }
                 else
                 {
-                    BatteryBarIcon = "wo_battery_charge_red.png";
-                    BatteryViewModel.ImagePath = "battery_charge_red.png";
-                    BatteryViewModel.ValueColor = (System.Drawing.Color) Color.Red;
-                    BatteryViewModel.Label = "Low";
-                    BatteryViewModel.Description = "Battery charge is critically low. Charging.";
+                    if (value > Constants.BatteryLevel75)
+                    {
+                        BatteryBarIcon = "wo_battery_green_100.png";
+                        BatteryViewModel.ImagePath = "battery_green_100.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Charge";
+                        BatteryViewModel.Description = "Battery charge OK.";
+                    }
+                    else if (value > Constants.BatteryLevel50)
+                    {
+                        BatteryBarIcon = "wo_battery_green_75.png";
+                        BatteryViewModel.ImagePath = "battery_green_75.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Charge";
+                        BatteryViewModel.Description = "Battery charge OK.";
+                    }
+                    else if (value > Constants.BatteryWarning20)
+                    {
+                        BatteryBarIcon = "wo_battery_green_50.png";
+                        BatteryViewModel.ImagePath = "battery_green_50.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Charge";
+                        BatteryViewModel.Description = "Battery charge OK.";
+                    }
+                    else if (value > Constants.BatteryCritical3)
+                    {
+                        BatteryBarIcon = "wo_battery_charge_yellow.png";
+                        BatteryViewModel.ImagePath = "battery_yellow.png";
+                        BatteryViewModel.ValueColor = Color.FromHex("#333");
+                        BatteryViewModel.Label = "Warning";
+                        BatteryViewModel.Description = "Battery charge is low. Connect the device to an outlet with the supplied USB-C cord.";
+                    }
+                    else
+                    {
+                        BatteryBarIcon = "wo_battery_charge_red.png";
+                        BatteryViewModel.ImagePath = "battery_red.png";
+                        BatteryViewModel.ValueColor = Color.Red;
+                        BatteryViewModel.Label = "Critical";
+                        BatteryViewModel.Description = "Battery charge is critically low. Connect the device to an outlet with the supplied USB-C cord.";
+                    }
                 }
             }
-            else
-            {
-                if (value > Constants.BatteryLevel75)
-                {
-                    BatteryBarIcon = "wo_battery_green_100.png";
-                    BatteryViewModel.ImagePath = "battery_green_100.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Charge";
-                    BatteryViewModel.Description = "Battery charge OK.";
-                }
-                else if (value > Constants.BatteryLevel50)
-                {
-                    BatteryBarIcon = "wo_battery_green_75.png";
-                    BatteryViewModel.ImagePath = "battery_green_75.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Charge";
-                    BatteryViewModel.Description = "Battery charge OK.";
-                }
-                else if (value > Constants.BatteryWarning20)
-                {
-                    BatteryBarIcon = "wo_battery_green_50.png";
-                    BatteryViewModel.ImagePath = "battery_green_50.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Charge";
-                    BatteryViewModel.Description = "Battery charge OK.";
-                }
-                else if (value > Constants.BatteryCritical3)
-                {
-                    BatteryBarIcon = "wo_battery_charge_yellow.png";
-                    BatteryViewModel.ImagePath = "battery_yellow.png";
-                    BatteryViewModel.ValueColor = Color.FromHex("#333");
-                    BatteryViewModel.Label = "Warning";
-                    BatteryViewModel.Description = "Battery charge is low. Connect the device to an outlet with the supplied USB-C cord.";
-                }
-                else
-                {
-                    BatteryBarIcon = "wo_battery_charge_red.png";
-                    BatteryViewModel.ImagePath = "battery_red.png";
-                    BatteryViewModel.ValueColor = Color.Red;
-                    BatteryViewModel.Label = "Critical";
-                    BatteryViewModel.Description = "Battery charge is critically low. Connect the device to an outlet with the supplied USB-C cord.";
-                }
-            }
+            
         }
 
         [RelayCommand]
