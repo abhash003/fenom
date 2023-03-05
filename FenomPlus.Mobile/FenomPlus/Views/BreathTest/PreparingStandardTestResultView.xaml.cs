@@ -42,5 +42,10 @@ namespace FenomPlus.Views
         {
             base.NewGlobalData();
         }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return false;
+        }
     }
 }

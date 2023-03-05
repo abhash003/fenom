@@ -31,6 +31,8 @@ namespace FenomPlus.ViewModels
 
         private void UpdateError()
         {
+            if (Services.DeviceService.Current == null) return;
+
             var bm = Services.DeviceService.Current.BreathManeuver;
             var esi = Services.DeviceService.Current.ErrorStatusInfo;
 
