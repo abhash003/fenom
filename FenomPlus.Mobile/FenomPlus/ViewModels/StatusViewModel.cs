@@ -128,7 +128,14 @@ namespace FenomPlus.ViewModels
             else
             {
                 BluetoothCheckCount = 0; // Reset counter
-            }            
+
+                if (App.GetCurrentPage() is not DevicePowerOnView)
+                {
+                    await Services.Navigation.DevicePowerOnView();
+                }
+            }
+
+            //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
             await RefreshStatusAsync();
         }
