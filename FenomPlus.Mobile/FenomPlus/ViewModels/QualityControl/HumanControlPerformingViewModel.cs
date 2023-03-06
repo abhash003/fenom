@@ -17,6 +17,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
+            if (Services.DeviceService.Current == null) return;
             TestTime = 10;
             Services.DeviceService.Current.BreathFlow = 0;
             TestSeconds = TestTime * (1000 / Services.Cache.BreathFlowTimer);

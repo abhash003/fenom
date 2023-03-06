@@ -38,61 +38,67 @@ namespace FenomPlus.ViewModels
 
         private async void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
-            GaugeData = Services.DeviceService.Current.BreathFlow;
-            GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
-
-            if (GaugeSeconds <= 0)
+            if (Services.DeviceService.Current != null)
             {
-                if (Services.DeviceService.Current != null && Services.DeviceService.Current is BleDevice)
+                GaugeData = Services.DeviceService.Current.BreathFlow;
+                GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
+
+                if (GaugeSeconds <= 0)
                 {
                     await Services.DeviceService.Current.StopTest();
-                }                
-                await Services.Navigation.StopExhalingView();
-                return;
-            }
+                    await Services.Navigation.StopExhalingView();
+                    return;
+                }
 
-            if (GaugeData < Config.GaugeDataLow)
-            {
-                GaugeStatus = "Exhale Harder";
-            }
-            else if (GaugeData > Config.GaugeDataHigh)
-            {
-                GaugeStatus = "Exhale Softer";
-            }
-            else
-            {
-                GaugeStatus = "Good Job!";
-            }
+                if (GaugeData < Config.GaugeDataLow)
+                {
+                    GaugeStatus = "Exhale Harder";
+                }
+                else if (GaugeData > Config.GaugeDataHigh)
+                {
+                    GaugeStatus = "Exhale Softer";
+                }
+                else
+                {
+                    GaugeStatus = "Good Job!";
+                }
+            }            
         }
 
         public override void OnAppearing()
         {
             base.OnAppearing();
 
-            // Allows Updating the Breath Gauge in UI
-            Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
-
-            Services.DeviceService.Current?.IsNotConnectedRedirect();
-
-            if (Services.Cache.TestType == TestTypeEnum.Standard)
+            if (Services.DeviceService.Current != null)
             {
-                TestType = "10-second Test";
-                TestTime = 10;
-            }
-            else
-            {
-                TestType = "6-second Test";
-                TestTime = 6;
-            }
+                // Allows Updating the Breath Gauge in UI
+                Services.DeviceService.Current.BreathFlowChanged += Cache_BreathFlowChanged;
 
-            GaugeData = Services.DeviceService.Current.BreathFlow = 0;
-            GaugeSeconds = TestTime;
-            GaugeStatus = "Start Blowing";
+                Services.DeviceService.Current.IsNotConnectedRedirect();
+
+                if (Services.Cache.TestType == TestTypeEnum.Standard)
+                {
+                    TestType = "10-second Test";
+                    TestTime = 10;
+                }
+                else
+                {
+                    TestType = "6-second Test";
+                    TestTime = 6;
+                }
+
+                GaugeData = Services.DeviceService.Current.BreathFlow = 0;
+                GaugeSeconds = TestTime;
+                GaugeStatus = "Start Blowing";
+            }            
         }
 
         public override void OnDisappearing()
         {
-            Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
+            if (Services.DeviceService.Current != null)
+            {
+                Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
+            }            
 
             base.OnDisappearing();
             PlaySounds.StopAll();
