@@ -206,19 +206,22 @@ namespace FenomPlus.ViewModels
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
         {
-            if (Services.DeviceService.Current != null) GaugeData = Services.DeviceService.Current.BreathFlow;
+            if (Services.DeviceService.Current != null)
+            {
+                GaugeData = Services.DeviceService.Current.BreathFlow;
 
-            if (GaugeData < Config.GaugeDataLow)
-            {
-                GaugeStatus = "Exhale Harder";
-            }
-            else if (GaugeData > Config.GaugeDataHigh)
-            {
-                GaugeStatus = "Exhale Softer";
-            }
-            else
-            {
-                GaugeStatus = "Good Job!";
+                if (GaugeData < Config.GaugeDataLow)
+                {
+                    GaugeStatus = "Exhale Harder";
+                }
+                else if (GaugeData > Config.GaugeDataHigh)
+                {
+                    GaugeStatus = "Exhale Softer";
+                }
+                else
+                {
+                    GaugeStatus = "Good Job!";
+                }
             }
         }
 
@@ -288,7 +291,7 @@ namespace FenomPlus.ViewModels
             }
             else // Not asking for breath test page
             {
-                if (Services.DeviceService.Current?.BreathTestInProgress == true)
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
@@ -360,7 +363,7 @@ namespace FenomPlus.ViewModels
             }
             else // Not asking for breath test page
             {
-                if (Services.DeviceService.Current?.BreathTestInProgress == true)
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
