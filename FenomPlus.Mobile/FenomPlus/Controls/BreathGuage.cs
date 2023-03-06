@@ -50,6 +50,9 @@ namespace FenomPlus.Controls
         public static readonly BindableProperty IsShowStepProperty =
             BindableProperty.Create(nameof(IsShowStep), typeof(bool), typeof(BreathGauge));
 
+        float startAngle = -180;
+        float angle = 0f;
+
         public bool IsShowStep
         {
             get => (bool)GetValue(IsShowStepProperty);
@@ -288,8 +291,7 @@ namespace FenomPlus.Controls
 
         void DrawNeedle(SKCanvas canvas, float value)
         {
-            float startAngle = -180;
-            float angle = 0f;
+            
 
                  if (value >= 0.0        && value < White1Top)  angle = startAngle + 22.5f;
             else if (value >= White1Top  && value < Red1Top)    angle = startAngle + 22.5f  + ((value - White1Top)  * (67.5f - 0) / (Red1Top    - White1Top))  + 0;

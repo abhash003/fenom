@@ -41,18 +41,20 @@ namespace FenomPlus.ViewModels
 
         private async Task<bool> CalculationsCompleted()
         {
-            if (Services.DeviceService.Current.FenomReady == true)
+            var device = Services.DeviceService.Current;
+            
+            if (device.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                var model = BreathManeuverResultDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);
                 ResultsRepo.Insert(model);
 
                 var str = ResultsRepo.ToString();
 
-                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
+                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {device.ErrorStatusInfo.ErrorCode}");
 
-                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00 || Services.DeviceService.Current.LastStatusCode != 0)
+                if (device.ErrorStatusInfo.ErrorCode != 0x00 || device.LastErrorCode != 0)
                 {
-                    var errorModel = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                    var errorModel = BreathManeuverErrorDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);
                     ErrorsRepo.Insert(errorModel);
 
                     PlaySounds.PlayFailedSound();
@@ -64,7 +66,7 @@ namespace FenomPlus.ViewModels
                 }
             }
 
-            return (Services.DeviceService.Current.FenomReady == false);
+            return (device.FenomReady == false);
         }
         
     }

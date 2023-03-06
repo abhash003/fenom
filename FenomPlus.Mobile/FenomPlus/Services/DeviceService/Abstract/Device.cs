@@ -21,6 +21,7 @@ using FenomPlus.Helpers;
 using System.Text;
 using System.Diagnostics;
 using FenomPlus.SDK.Core.Features;
+using Polly.Utilities;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -29,7 +30,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
         // Fields
 
         protected object _nativeDevice = null;
-        private int calls = 0;
 
         // Constructor
 
@@ -124,7 +124,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
         private float _breathFlow { get; set; }
         public float BreathFlow
         {
-            get => _breathFlow / 1000;
+            get => _breathFlow;
             set { _breathFlow = value; }
         }
 
@@ -251,13 +251,13 @@ namespace FenomPlus.Services.DeviceService.Abstract
             }
 
             // Decoded byte for 0x70 is 112 => NO Sensor Missing.
-            if (BreathManeuver.StatusCode == 112 || ErrorStatusInfo.ErrorCode == 112)
+            if (ErrorStatusInfo.ErrorCode == 112)
             {
                 return DeviceCheckEnum.NoSensorMissing;
             }
 
-            // Decoded byte for 0x70 is 113 => No Sensor Communication Failed.
-            if (BreathManeuver.StatusCode == 113 || ErrorStatusInfo.ErrorCode == 113)
+            // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
+            if (ErrorStatusInfo.ErrorCode == 113)
             {
                 return DeviceCheckEnum.NoSensorCommunicationFailed;
             }
@@ -332,33 +332,16 @@ namespace FenomPlus.Services.DeviceService.Abstract
         {
             try
             {
-                //data[0] = 20; // temp
-                //data[1] = 60; // humidity
-                //data[2] = 90; // pressure
-                //data[3] = 80; // battery
                 EnvironmentalInfo ??= new EnvironmentalInfo();
-
-                if (data[1] == 0)
-                {
-                    data[1] = 60;
-                    EnvironmentalInfo.Humidity = data[1];
-                }
-                else if (data[1] == 100)
-                {
-                    data[1] /= 2;
-                }
-
-                EnvironmentalInfo.Temperature = data[0];
-                EnvironmentalInfo.Humidity = data[1];
-                EnvironmentalInfo.Pressure = data[2];
-                EnvironmentalInfo.BatteryLevel = data[3];
-
-                BatteryLevel = EnvironmentalInfo.BatteryLevel;
+                EnvironmentalInfo.Decode(data);
             }
+
             catch (Exception ex)
             {
-                throw ex;
+                throw; // bubble up
             }
+
+            return;
         }        
 
         public DeviceInfo DecodeDeviceInfo(byte[] data)
@@ -380,7 +363,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 }
 
                 // setup firmware version
-                Firmware = $"{DeviceInfo.MajorVersion}.{DeviceInfo.MinorVersion}";
+                Firmware = $"{DeviceInfo.FirmwareVersionMajor}.{DeviceInfo.FirmwareVersionMinor}";
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);

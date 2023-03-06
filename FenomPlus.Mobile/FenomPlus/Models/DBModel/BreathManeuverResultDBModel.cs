@@ -17,16 +17,14 @@ namespace FenomPlus.Models
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static BreathManeuverResultDBModel Create(BreathManeuver input)
+        public static BreathManeuverResultDBModel Create(BreathManeuver input, ErrorStatusInfo esi)
         {
             return new BreathManeuverResultDBModel()
             {
                 BreathFlow = input.BreathFlow,
                 DateOfTest = DateTime.Now.ToString(Constants.DateTimeFormatString, CultureInfo.CurrentCulture),
                 NOScore = input.NOScore,
-                Pressure = input.Pressure,
-                StatusCode = input.StatusCode,
-                Temperature = input.Temperature,
+                StatusCode = esi.ErrorCode,
                 TestNumber = input.TestNumber,
                 
                 SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber,

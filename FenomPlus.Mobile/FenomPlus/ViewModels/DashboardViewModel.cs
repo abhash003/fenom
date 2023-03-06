@@ -118,12 +118,7 @@ namespace FenomPlus.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-
-            if (Services.DeviceService.Current.Connected)
-            {
-            }                
-
-            //Services.Device.IsConnected();
+            
         }
 
         public override void OnDisappearing()
