@@ -43,6 +43,11 @@ namespace FenomPlus.ViewModels
         {
             var device = Services.DeviceService.Current;
             
+            if (device == null)
+            {
+                return false;
+            }
+
             if (device.FenomReady == true)
             {
                 var model = BreathManeuverResultDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);
