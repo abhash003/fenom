@@ -227,27 +227,35 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 return DeviceCheckEnum.DevicePurging;
             }
 
+            // battery lockout
+
             if (EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
             {
                 return DeviceCheckEnum.BatteryCriticallyLow;
             }
 
-            if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
-                EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
-            {
-                return DeviceCheckEnum.HumidityOutOfRange;
-            }
+            // environmental lockouts
+            bool appEnvironmentalLockouts = false;
 
-            if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
-                EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            if (appEnvironmentalLockouts)
             {
-                return DeviceCheckEnum.PressureOutOfRange;
-            }
+                if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                    EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+                {
+                    return DeviceCheckEnum.HumidityOutOfRange;
+                }
 
-            if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
-                EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
-            {
-                return DeviceCheckEnum.TemperatureOutOfRange;
+                if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                    EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+                {
+                    return DeviceCheckEnum.PressureOutOfRange;
+                }
+
+                if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                    EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+                {
+                    return DeviceCheckEnum.TemperatureOutOfRange;
+                }
             }
 
             // Decoded byte for 0x70 is 112 => NO Sensor Missing.
