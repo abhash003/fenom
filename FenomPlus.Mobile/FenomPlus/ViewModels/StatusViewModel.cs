@@ -118,18 +118,7 @@ namespace FenomPlus.ViewModels
                 {
                     // Only navigate if during startup
                     await Services.Navigation.DashboardView();
-                }
-
-                if (BluetoothCheckCount == 0)
-                {
-                    if (Services is { DeviceService: { Current: { } } })
-                    {
-                        //await Services.DeviceService.Current.RequestDeviceInfo();
-                        //await Services.DeviceService.Current.RequestEnvironmentalInfo();
-                    }
-
-                    Debug.WriteLine("UpdateDeviceAndEnvironmentalInfoAsync");
-                }
+                }                
 
                 BluetoothCheckCount++;
 
@@ -139,6 +128,11 @@ namespace FenomPlus.ViewModels
             else
             {
                 BluetoothCheckCount = 0; // Reset counter
+
+                if (App.GetCurrentPage() is not DevicePowerOnView)
+                {
+                    await Services.Navigation.DevicePowerOnView();
+                }
             }
 
             //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
@@ -252,7 +246,7 @@ namespace FenomPlus.ViewModels
 
         public void UpdateSensor()
         {
-            if (!BluetoothConnected)
+            if (!BluetoothConnected || Services.DeviceService.Current == null)
             {
                 SensorBarIconVisible = false;
 
@@ -596,7 +590,7 @@ namespace FenomPlus.ViewModels
 
         public void UpdateBattery()
         {
-            if (!BluetoothConnected)
+            if (!BluetoothConnected || Services.DeviceService.Current == null)
             {
                 BatteryBarIconVisible = false;
                 BatteryViewModel.ImagePath = "battery_red.png";

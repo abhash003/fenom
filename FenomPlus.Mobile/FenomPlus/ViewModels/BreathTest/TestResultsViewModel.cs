@@ -24,6 +24,8 @@ namespace FenomPlus.ViewModels
                 TestType = "6-second";
             }
 
+            if (Services.DeviceService.Current == null) return;
+
             TestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
                         (Services.DeviceService.Current.FenomValue) > 300 ? "> 300":
                         Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
