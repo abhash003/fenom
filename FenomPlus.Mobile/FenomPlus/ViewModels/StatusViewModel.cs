@@ -484,7 +484,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            if (Services.DeviceService.Current != null && Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0)
+            if (Services.DeviceService.Current != null)
             {
                 double value = Services.DeviceService.Current.EnvironmentalInfo.Temperature;
 
