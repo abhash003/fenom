@@ -54,7 +54,7 @@
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidKeyStore>true</AndroidKeyStore>
-    <AndroidSigningKeyStore>C:\Users\jcarter\AppData\Local\Xamarin\Mono for Android\Keystore\VegaDevX\VegaDevX.keystore</AndroidSigningKeyStore>
+    <AndroidSigningKeyStore>..\..\Keystore\VegaDevX_Keystore\VegaDevX.keystore</AndroidSigningKeyStore>
     <AndroidSigningKeyAlias>vegadevx</AndroidSigningKeyAlias>
     <AndroidSigningStorePass>vegadevx</AndroidSigningStorePass>
     <AndroidSigningKeyPass>vegadevx</AndroidSigningKeyPass>
