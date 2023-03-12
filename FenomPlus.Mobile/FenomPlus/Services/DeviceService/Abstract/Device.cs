@@ -257,17 +257,24 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     return DeviceCheckEnum.TemperatureOutOfRange;
                 }
             }
-
-            // Decoded byte for 0x70 is 112 => NO Sensor Missing.
-            if (ErrorStatusInfo.ErrorCode == 112)
+            else
             {
-                return DeviceCheckEnum.NoSensorMissing;
-            }
+                switch (ErrorStatusInfo.ErrorCode)
+                {
+                    case 0x00:
+                        break;
+                    
+                    // Decoded byte for 0x70 is 112 => NO Sensor Missing.
+                    case 0x70:
+                        return DeviceCheckEnum.NoSensorMissing;
 
-            // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
-            if (ErrorStatusInfo.ErrorCode == 113)
-            {
-                return DeviceCheckEnum.NoSensorCommunicationFailed;
+                    // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
+                    case 0x71:
+                        return DeviceCheckEnum.NoSensorCommunicationFailed;
+
+                    default:
+                        return DeviceCheckEnum.Unknown;
+                }
             }
 
             return DeviceCheckEnum.Ready;
