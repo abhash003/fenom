@@ -278,11 +278,12 @@ namespace FenomPlus.ViewModels
 
                 int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
 
-                SensorBarIconVisible = true;
+                
                 SensorViewModel.ButtonText = "Order";
 
                 if (daysRemaining <= Constants.SensorExpired)
                 {
+                    SensorBarIconVisible = true;
                     // low
                     SensorBarIcon = "wo_sensor_red.png";
                     SensorViewModel.ImagePath = "sensor_red.png";
@@ -293,6 +294,7 @@ namespace FenomPlus.ViewModels
                 }
                 else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorMissing)
                 {
+                    SensorBarIconVisible = true;
                     // error
                     SensorBarIcon = "wo_sensor_red.png";
                     SensorViewModel.ImagePath = "sensor_red.png";
@@ -303,6 +305,7 @@ namespace FenomPlus.ViewModels
                 }
                 else if (Services.DeviceService.Current?.ErrorStatusInfo.ErrorCode == Constants.NoSensorCommunicationFailed)
                 {
+                    SensorBarIconVisible = true;
                     // error
                     SensorBarIcon = "wo_sensor_red.png";
                     SensorViewModel.ImagePath = "sensor_red.png";
@@ -313,6 +316,7 @@ namespace FenomPlus.ViewModels
                 }
                 else if (daysRemaining <= Constants.SensorWarning60Days)
                 {
+                    SensorBarIconVisible = true;
                     // warning
                     SensorBarIcon = "wo_sensor_yellow.png";
                     SensorViewModel.ImagePath = "sensor_yellow.png";
