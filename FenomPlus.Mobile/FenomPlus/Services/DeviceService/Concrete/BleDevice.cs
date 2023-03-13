@@ -52,7 +52,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     _bleAdapter.ConnectToDeviceAsync(_bleDevice);
                 }
 
-                return ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                bool connected = ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                if (connected)
+                {
+                    ReadyForTest = true;
+                }
+                return connected;
             }
         }
 
