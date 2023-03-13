@@ -606,7 +606,7 @@ namespace FenomPlus.ViewModels
             }
             if (Services.DeviceService.Current != null)
             {
-                int value = Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel;
+                float value = Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel;
                 BatteryViewModel.Value = $"{value}%";
                 BatteryViewModel.ButtonText = "Info";
 
