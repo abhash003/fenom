@@ -29,15 +29,15 @@ namespace FenomPlus.ViewModels
             TestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
                         (Services.DeviceService.Current.FenomValue) > 300 ? "> 300":
                         Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
-
-            Services.DeviceService.Current.ReadyForTest = false;
+                      
         }
 
         /// <summary>
         /// 
         /// </summary>
         public override void OnDisappearing()
-        {
+        {           
+            
             base.OnDisappearing();
         }
 
