@@ -628,7 +628,7 @@ namespace FenomPlus.ViewModels
                         BatteryViewModel.Label = "Charge";
                         BatteryViewModel.Description = "Battery charge OK.";
                     }
-                    else if (value > Constants.BatteryCritical3)
+                    else if (value >= Constants.BatteryCritical3)
                     {
                         BatteryBarIcon = "wo_battery_charge_yellow.png";
                         BatteryViewModel.ImagePath = "battery_charge_yellow.png";
@@ -671,7 +671,7 @@ namespace FenomPlus.ViewModels
                         BatteryViewModel.Label = "Charge";
                         BatteryViewModel.Description = "Battery charge OK.";
                     }
-                    else if (value > Constants.BatteryCritical3)
+                    else if (value >= Constants.BatteryCritical3)
                     {
                         BatteryBarIcon = "wo_battery_charge_yellow.png";
                         BatteryViewModel.ImagePath = "battery_yellow.png";

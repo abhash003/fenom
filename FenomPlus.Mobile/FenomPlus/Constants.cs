@@ -31,7 +31,7 @@ namespace FenomPlus
         public static double HumidityWarning85 = 85;
         public static double HumidityHigh92 = 92;
 
-        public static int BatteryCritical3 = 5;
+        public static int BatteryCritical3 = 6;
         public static int BatteryWarning20 = 20;
         public static int BatteryLevel50 = 50;
         public static int BatteryLevel75 = 75;
