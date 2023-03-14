@@ -5,17 +5,31 @@ using FenomPlus.Enums;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
 using System.Threading.Tasks;
+using System;
 
 namespace FenomPlus.ViewModels
 {
     public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
+        public bool Callback()
+        {
+            var device = Services.DeviceService.Current;
+
+            if (device.ErrorStatusInfo.ErrorCode != 0x00)
+            {
+                CalculationsTimer.Stop();
+                CalculationsCompleted();
+                return true;
+            }
+
+            return false;
+        }
+
         [ObservableProperty]
         private string _testType;
 
         public PreparingStandardTestResultViewModel()
         {
-
         }
 
         private Timer CalculationsTimer;

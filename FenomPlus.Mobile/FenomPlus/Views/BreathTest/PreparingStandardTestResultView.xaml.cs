@@ -1,4 +1,5 @@
-﻿using FenomPlus.ViewModels;
+﻿using FenomPlus.Controls;
+using FenomPlus.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace FenomPlus.Views
@@ -12,6 +13,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new PreparingStandardTestResultViewModel();
+            MarigoldProgressWheel.Callback = model.Callback;
         }
 
         /// <summary>
