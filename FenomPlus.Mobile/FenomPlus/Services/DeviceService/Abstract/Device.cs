@@ -105,7 +105,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DeviceInfo DeviceInfo { get; set; }
 
-        public int NOScore { get; set; }
+        public int? NOScore { get; set; }
 
         public ErrorStatusInfo ErrorStatusInfo { get; set; }
 
@@ -117,7 +117,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DebugMsg DebugMsg { get; set; }
 
-        public float FenomValue { get; set; }
+        public float? FenomValue { get; set; }
 
         public int BatteryLevel { get; set; }
 

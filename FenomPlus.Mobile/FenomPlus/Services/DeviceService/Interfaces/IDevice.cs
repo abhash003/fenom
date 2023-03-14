@@ -98,11 +98,11 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         DateTime SensorExpireDate { get; set; }
 
-        int NOScore { get; set; }
+        int? NOScore { get; set; }
 
         float BreathFlow { get; set; }
 
-        float FenomValue { get; set; }
+        float? FenomValue { get; set; }
 
         event EventHandler BreathFlowChanged;
     }

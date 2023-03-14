@@ -27,7 +27,7 @@ namespace FenomPlus.SDK.Core.Models
         // implemented in firmware
         public byte TimeRemaining;     // 0-done (??) F0 - | FE-FenomReady | FF-ready
         public float BreathFlow;
-        public short NOScore;
+        public short? NOScore;
 
         // not implemented yet in firmware
         public short TestNumber;
@@ -93,8 +93,8 @@ namespace FenomPlus.SDK.Core.Models
                         {
                             throw new ArgumentException($"Unexpected payload item size (expected: {COMM_FENO_SCORE_SIZE}, saw: {size})");
                         }
-
-                        NOScore = ToShort(data, offset);
+                        // Only read the score when receiving the special code "0xFE" meaning "score ready" in the 'time remaining' field.
+                        NOScore = TimeRemaining == 0xFE ?  ToShort(data, offset) : null;
                         break;
                 }
 
