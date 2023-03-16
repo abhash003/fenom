@@ -20,14 +20,14 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public DateTime TestDate { get; set; } = DateTime.MinValue;
 
-        public int TestValue { get; set; }
+        public float? TestValue { get; set; }
 
         public string TestStatus { get; set; } // Pass or Fail
 
         public string Explanation { get; set; }
 
 
-        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, int testValue, string testStatus, string explanation = "")
+        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, string explanation = "")
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;

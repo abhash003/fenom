@@ -64,16 +64,16 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public bool  ShowChartOption { get; set; }
 
-        public int C1 { get; set; }
+        public float? C1 { get; set; }
         public DateTime C1Date{ get; set; }
 
-        public int C2 { get; set; }
+        public float? C2 { get; set; }
         public DateTime C2Date { get; set; }
 
-        public int C3 { get; set; }
+        public float? C3 { get; set; }
         public DateTime C3Date { get; set; }
 
-        public int QCT { get; set; }
+        public float? QCT { get; set; }
 
         public QCUser(string deviceSerialNumber, string userName)
         {

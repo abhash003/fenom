@@ -829,7 +829,7 @@ namespace FenomPlus.ViewModels
             return true;
         }
 
-        private QCTest DbCreateQcTest(string userName, int testValue)
+        private QCTest DbCreateQcTest(string userName, float? testValue)
         {
             Debug.Assert(!string.IsNullOrEmpty(userName) && testValue >= 0);
 
@@ -1306,9 +1306,9 @@ namespace FenomPlus.ViewModels
 
                 Task.Delay(Config.StopExhalingReadyWait);
 
-                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+                if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
                 {
-                    var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver);
+                    var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                     ErrorsRepo.Insert(model);
 
                     PlaySounds.PlayFailedSound();
@@ -1371,9 +1371,9 @@ namespace FenomPlus.ViewModels
 
                 QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
 
-                Debug.WriteLine( $"Cache.BreathManeuver.StatusCode = {Services.DeviceService.Current.BreathManeuver.StatusCode}");
+                Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.DeviceStatusInfo.StatusCode}");
 
-                if (Services.DeviceService.Current.BreathManeuver.StatusCode != 0x00)
+                if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
                 {
                     // ToDo: How to handle fail here?
                     PlaySounds.PlayFailedSound();
@@ -1411,7 +1411,7 @@ namespace FenomPlus.ViewModels
 
             QCUserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
                 (Services.DeviceService.Current.FenomValue) > 40 ? "> 40" :
-                Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
+                Services.DeviceService.Current.FenomValue.ToString();
 
             UpdateUserStatus();
             UpdateNegativeControlStatus();
@@ -1685,9 +1685,9 @@ namespace FenomPlus.ViewModels
             return Math.Abs(a - b);
         }
 
-        private (int min, int max, int median) GetRangeAndMedian(int a, int b, int c)
+        private (float? min, float? max, float? median) GetRangeAndMedian(float? a, float? b, float? c)
         {
-            int[] numbers = { a, b, c };
+            float?[] numbers = { a, b, c };
             Array.Sort(numbers);
 
             return (numbers[0], numbers[2], numbers[1]);
@@ -1830,7 +1830,7 @@ namespace FenomPlus.ViewModels
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
-                    testValuesWithinRange = Math.Abs(SelectedQcUser.C1 - SelectedQcUser.C2) <= 10;
+                    testValuesWithinRange = Math.Abs((decimal)(SelectedQcUser.C1 - SelectedQcUser.C2)) <= 10;
 
                     if (tests[0].TestStatus == QCTest.TestPass && tests[1].TestStatus == QCTest.TestPass && testTimeSpanGood && testValuesWithinRange) 
                     {
@@ -1846,7 +1846,7 @@ namespace FenomPlus.ViewModels
                 case 3:
                     SelectedQcUser.C3 = tests[0].TestValue; // Latest test
 
-                    (int min, int max, int median) = GetRangeAndMedian(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
+                    (float? min, float? max, float? median) = GetRangeAndMedian(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
 
                     SelectedQcUser.QCT = median;
 
@@ -1881,7 +1881,7 @@ namespace FenomPlus.ViewModels
                         QCTest lastTest = tests[0];
 
                         // ToDo: Calculate result based on QCT
-                        int deltaValue = Math.Abs(SelectedQcUser.QCT - lastTest.TestValue);
+                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.QCT - lastTest.TestValue));
 
                         userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
                         SelectedQcUser.ShowChartOption = true;
@@ -2058,27 +2058,27 @@ namespace FenomPlus.ViewModels
 
             ObservableCollection<QCTest> allUserTests = ReadUserQcTests(user.UserName);
 
-            int qct = user.QCT;
+            float? qct = user.QCT;
             XMin = 0;
             XMax = allUserTests.Count + 1;
-            YMax = qct + 10 + 5;
-            YMin = qct - 10 - 5;
+            YMax = (double)(qct + 10 + 5);
+            YMin = (double)(qct - 10 - 5);
 
             for (int i = 0; i <= allUserTests.Count - 1; i++)
             {
-                ChartData.Add(new ChartDataPoint(i+1, allUserTests[i].TestValue));
+                ChartData.Add(new ChartDataPoint(i+1, (double)allUserTests[i].TestValue));
             }
 
             UpperBoundsData = new ObservableCollection<ChartDataPoint>
             {
-                new ChartDataPoint(0, qct + 10),
-                new ChartDataPoint(XMax, qct + 10)
+                new ChartDataPoint(0, (double)(qct + 10)),
+                new ChartDataPoint(XMax, (double)(qct + 10))
             };
 
             LowerBoundsData = new ObservableCollection<ChartDataPoint>
             {
-                new ChartDataPoint(0, qct - 10),
-                new ChartDataPoint(XMax, qct - 10)
+                new ChartDataPoint(0, (double)(qct - 10)),
+                new ChartDataPoint(XMax, (double)(qct - 10))
             };
 
 
