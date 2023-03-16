@@ -802,6 +802,8 @@ namespace FenomPlus.ViewModels
                 case PreparingStandardTestResultView preparingStandardTestResultView:
                 case StopExhalingView stopExhalingView:
                 case TestResultsView testResultsView:
+                // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
+                case DevicePowerOnView devicePowerOnView:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
                     break;
                 default:
