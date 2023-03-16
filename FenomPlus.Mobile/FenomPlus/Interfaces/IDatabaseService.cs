@@ -11,8 +11,8 @@ namespace FenomPlus.Interfaces
         ILiteDatabase DB { get; }
         IBreathManeuverErrorRepository BreathManeuverErrorRepo { get; }
         IBreathManeuverResultRepository BreathManeuverResultRepo { get; }
-        IQualityControlRepository QualityControlRepo { get; }
-        IQualityControlDevicesRepository QualityControlDevicesRepo { get; }
-        IQualityControlUsersRepository QualityControlUsersRepo { get; } 
+        //IQualityControlRepository QualityControlRepo { get; }
+        //IQualityControlDevicesRepository QualityControlDevicesRepo { get; }
+        //IQualityControlUsersRepository QualityControlUsersRepo { get; } 
     }
 }

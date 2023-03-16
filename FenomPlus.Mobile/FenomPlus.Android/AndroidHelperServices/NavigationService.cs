@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using FenomPlus.Controls;
 using FenomPlus.Interfaces;
+using FenomPlus.ViewModels;
+using FenomPlus.ViewModels.QualityControl.Models;
 using FenomPlus.Views;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
@@ -50,41 +52,6 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(DeviceReadyView)}"), false);
         }
 
-        public async Task HumanControlDisqualifiedView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlDisqualifiedView)}"), false);
-        }
-
-        public async Task HumanControlPassedView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPassedView)}"), false);
-        }
-
-        public async Task HumanControlPreparingView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPreparingView)}"), false);
-        }
-
-        public async Task HumanControlPerformingView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(HumanControlPerformingView)}"), false);
-        }
-
-        public async Task NegativeControlFailView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlFailView)}"), false);
-        }
-
-        public async Task NegativeControlPassView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlPassView)}"), false);
-        }
-
-        public async Task NegativeControlPerformView()
-        {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(NegativeControlPerformView)}"), false);
-        }
-
         public async Task PairingView()
         {
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(PairingView)}"), false);
@@ -100,14 +67,54 @@ namespace FenomPlus.Services
             await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlView)}"), false);
         }
 
-        public async Task QualityControlUsersView()
+        public async Task QCNegativeControlTestView()
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlUsersView)}"), false);
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlTestView)}"), false);
         }
 
-        public async Task QualityControlDevicesView()
+        public async Task QCNegativeControlResultView()
         {
-            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QualityControlDevicesView)}"), false);
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlResultView)}"), false);
+        }
+
+        public async Task QCNegativeControlChartView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCNegativeControlChartView)}"), false);
+        }
+
+        public async Task QCUserTestView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestView)}"), false);
+        }
+
+        public async Task QCUserStopTestView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserStopTestView)}"), false);
+        }
+
+        public async Task QCUserTestCalculationView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestCalculationView)}"), false);
+        }
+
+        public async Task QCUserTestResultView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestResultView)}"), false);
+        }
+
+        public async Task QCUserTestErrorView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestErrorView)}"), false);
+        }
+
+        public async Task QCUserTestChartView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCUserTestChartView)}"), false);
+        }
+
+        public async Task QCSettingsView()
+        {
+            await Shell.Current.GoToAsync(new ShellNavigationState($"///{nameof(QCSettingsView)}"), false);
         }
 
         public async Task StatusDeviceInfoView()
@@ -160,6 +167,11 @@ namespace FenomPlus.Services
         public async Task ShowStatusDetailsPopup(StatusButtonViewModel viewModel)
         {
             await Shell.Current.ShowPopupAsync(new StatusDetailsPopup(viewModel));
+        }
+
+        public async Task ShowQCChartPopup(QualityControlViewModel viewModel, QCUser user)
+        {
+            await Shell.Current.ShowPopupAsync(new QCChartPopup(viewModel, user));
         }
     }
 }

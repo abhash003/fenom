@@ -17,6 +17,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.DataGridExport" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfPdfViewer" Version="20.4.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="20.4.0.44" />
     <PackageReference Include="TinySvgHelper" Version="1.0.266" />
@@ -39,6 +40,10 @@
     <PackageReference Include="Xamarin.Forms.Svg" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Database\Repository\QCDevicesRepository" />
+    <None Remove="DataSet1.xsc" />
+    <None Remove="DataSet1.xsd" />
+    <None Remove="DataSet1.xss" />
     <None Remove="Microsoft.Extensions.Logging" />
     <None Remove="Plugin.BLE" />
     <None Remove="Polly" />
@@ -65,9 +70,7 @@
     <None Remove="Syncfusion.Xamarin.SfBusyIndicator" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Database\" />
     <Folder Include="TinyIoC\" />
-    <Folder Include="Models\DBModel\" />
     <Folder Include="Models\GridDataModel\" />
     <Folder Include="Enums\" />
   </ItemGroup>
@@ -79,43 +82,99 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controls\TitleContentViewModel.cs" />
+    <Compile Remove="Database\Adapters\QCDevicesAdapter.cs" />
+    <Compile Remove="Database\Adapters\QCResultsAdapter.cs" />
+    <Compile Remove="Database\Repository\Interfaces\IQualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Repository\Interfaces\IQualityControlRepository.cs" />
+    <Compile Remove="Database\Repository\QualityControlDevicesRepository.cs" />
+    <Compile Remove="Database\Repository\QualityControlRepository.cs" />
+    <Compile Remove="Database\Tables\QCDeviceTable.cs" />
+    <Compile Remove="Database\Tables\QCResultTable.cs" />
+    <Compile Remove="Database\Tables\QualityControlDevicesTb.cs" />
+    <Compile Remove="Database\Tables\QualityControlTable.cs" />
+    <Compile Remove="Database\Tables\QualityControlTb.cs" />
+    <Compile Remove="Database\Tables\QualityControlUsersTb.cs" />
+    <Compile Remove="DataSet1.Designer.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
     <Compile Remove="Interfaces\IBleHubService.cs" />
     <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
+    <Compile Remove="Models\DBModel\QCNegativeDBModel.cs" />
+    <Compile Remove="Models\DBModel\QualityControlDeviceDBModel.cs" />
+    <Compile Remove="Models\DBModel\QualityControlUsersDBModel.cs" />
     <Compile Remove="Models\DeviceStatus.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlDataModel.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlDevicesDataModel.cs" />
+    <Compile Remove="Models\GridDataModel\QualityControlUsersDataModel.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
     <Compile Remove="Services\BleHubService.cs" />
     <Compile Remove="Services\DeviceStatusService.cs" />
     <Compile Remove="ViewModels\BreathTest\StartTestViewModel.cs" />
     <Compile Remove="ViewModels\MainViewModel.cs" />
     <Compile Remove="ViewModels\Other\StatusDeviceInfoViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\HumanControlDisqualifiedViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\HumanControlPassedViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\HumanControlPerformingViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\HumanControlPreparingViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\NegativeControlFailViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\NegativeControlPassViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\NegativeControlPerformViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC1NegativeControlTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC2NegativeControlResultViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC3NegativeControlChartViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC4UserTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC5UserStopTestViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC6UserTestCalculationViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC7UserTestResultViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QC8UserTestChartViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCDevice.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCNegativeControlViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCSettingsViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QCUserViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QualityControlDevicesViewModel.cs" />
+    <Compile Remove="ViewModels\QualityControl\QualityControlUsersViewModel.cs" />
     <Compile Remove="Views\BreathTest\StartTestView.xaml.cs" />
-    <Compile Remove="Views\QualityControl\QCTabView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\NegativeControlFailView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\NegativeControlPerformView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCDevicesView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCNewUserView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCUserDisqualifiedView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCUserPassedView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCUserPerformingView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCUserPreparingView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QCUsersView.xaml.cs" />
+    <Compile Remove="Views\QualityControl\QualityControlUsersView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\BreathTest\StartTestView.xaml" />
-    <EmbeddedResource Remove="Views\QualityControl\QCTabView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCDevicesView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCNewUserView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCPerformTestView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCUserDisqualifiedView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCUserPassedView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCUserPerformingView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCUserPreparingView.xaml" />
+    <EmbeddedResource Remove="Views\QualityControl\QCUsersView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Controls\ImageButtonView.xaml.cs">
-      <DependentUpon>ImageButtonView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
-      <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
+    <Compile Update="Controls\QCSettingsButtonView.xaml.cs">
+      <DependentUpon>QCSettingsButtonView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Controls\QCButtonView.xaml.cs">
       <DependentUpon>QCButtonView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Controls\QCChartPopup.xaml.cs">
+      <DependentUpon>QCChartPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\StatusDetailsPopup.xaml.cs">
+      <DependentUpon>StatusDetailsPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\StatusButtonView.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>StatusButtonView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\DashboardView.xaml.cs">
-      <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Other\DeviceStatusHubView.xaml.cs">
       <DependentUpon>DeviceStatusHubView.xaml</DependentUpon>
@@ -129,21 +188,21 @@
     <Compile Update="Views\Other\PastErrorsView.xaml.cs">
       <DependentUpon>PastErrorsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\QualityControl\QualityControlView.xaml.cs">
-      <DependentUpon>QualityControlView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Controls\MarigoldActivityWheel.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\ImageButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
+    <EmbeddedResource Update="Controls\QCSettingsButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\QCButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\QCChartPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\StatusDetailsPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\StatusButtonView.xaml">
@@ -155,6 +214,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Other\StatusDeviceInfoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QualityControl\QualityControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems" Label="Shared" Condition="Exists('..\..\FenomPlus.SDK\FenomPlus.SDK.Core\FenomPlus.SDK.Core.projitems')" />
