@@ -55,45 +55,17 @@ namespace FenomPlus.ViewModels
             Services.Navigation.DevicePowerOnView();
         }
 
-        async void DeviceDiscoveredHandler(object sender, EventArgs e)
-        {
-            try
-            {
-                Services.DeviceService.StopDiscovery();
-
-                var ea = (DeviceServiceEventArgs)e;
-                Helper.WriteDebug("Device discovered.");
-                try
-                {
-                    await ea.Device.ConnectAsync();
-                    await FoundDevice(ea.Device);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
-                    throw;
-                }
-                
-            }
-            catch (Exception ex)
-            {                
-                Debug.WriteLine("Exception at DeviceDiscoveredHandler: " + ex.Message);
-            }
-            
-        }
 
         private void WireEventHandlers()
         {
             Services.DeviceService.DeviceConnected += DeviceConnectedHandler;
             Services.DeviceService.DeviceConnectionLost += DeviceConnectionLostHandler;
-            Services.DeviceService.DeviceDiscovered += DeviceDiscoveredHandler;
         }
 
         private void UnwireEventHandlers()
         {
             Services.DeviceService.DeviceConnected -= DeviceConnectedHandler;
             Services.DeviceService.DeviceConnectionLost -= DeviceConnectionLostHandler;
-            Services.DeviceService.DeviceDiscovered -= DeviceDiscoveredHandler;
         }
 
         /// <summary>
@@ -109,21 +81,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StartScan()
         {
-            Seconds = 20;
+            Seconds = 10;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
             Services.DeviceService.StartDiscovery();
-        }
-
-        public async Task FoundDevice(IDevice device)
-        {
-            Helper.WriteDebug("enter: FoundDevice()");
-            if (Services.DeviceService.Current == null) 
-                return;
-            
-            Stop = true;
-            
-            await Services.Navigation.DashboardView();
-            Helper.WriteDebug("exit:FoundDevice()");
         }
 
         /// <summary>

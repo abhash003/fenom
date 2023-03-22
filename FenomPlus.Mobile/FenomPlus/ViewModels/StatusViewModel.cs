@@ -103,13 +103,8 @@ namespace FenomPlus.ViewModels
 
         private bool CheckDeviceConnection()
         {
-            if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
-                return false;
-
-            bool deviceIsConnected = Services.DeviceService.Current.Connected;
-
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
-            return deviceIsConnected;
+            return Services?.DeviceService?.Current?.Connected ?? false;
         }
 
         private int BluetoothCheckCount = 0;
