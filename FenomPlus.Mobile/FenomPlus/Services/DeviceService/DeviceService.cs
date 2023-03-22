@@ -22,6 +22,9 @@ using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Abstract;
 using Device = FenomPlus.Services.DeviceService.Abstract.Device;
 using System.Timers;
+using Xamarin.Forms;
+using FenomPlus.ViewModels;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -49,6 +52,24 @@ namespace FenomPlus.Services.DeviceService
         Thread _workerThread;
 
         Action<IDevice> _deviceFoundAction;
+        public readonly object _lock = new object();
+
+        private bool _dismiss;
+        private bool _deviceNotFound;
+        public bool DeviceNotFound
+        {
+            get { return _deviceNotFound; }
+            set
+            {
+                if (value == _deviceNotFound) return;
+                lock (_lock)
+                {
+                    _deviceNotFound = value;
+                    Monitor.Pulse(_lock);
+                }
+            }
+        }
+
 
         // Constructors
 
@@ -71,7 +92,26 @@ namespace FenomPlus.Services.DeviceService
                 DeviceReadyTimer = new Timer(1000);
                 DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
 
+                _dismiss = false;
+                MessagingCenter.Subscribe<DevicePowerOnViewModel>(this, "DeviceNotFound", async (sender) => {
+                    await Task.Run(() =>
+                    {
+                        DeviceNotFound = true;
+                    });
+                });
+
+                _workerThread = new Thread(new ThreadStart(DiscoveryWorker));
+                _workerThread.Start();
+
                 trace.Trace("device service all setup");
+            }
+        }
+        ~DeviceService()
+        {
+            lock (_lock)
+            {
+                _dismiss = true;
+                Monitor.Pulse(_lock);
             }
         }
 
@@ -83,7 +123,7 @@ namespace FenomPlus.Services.DeviceService
 
         // Methods
 
-        public void StartDiscovery(Action<IDevice> deviceFoundAction)
+        public void StartDiscovery()
         {
             if (!_discovering)
             {
@@ -91,23 +131,16 @@ namespace FenomPlus.Services.DeviceService
                 {
                     dd.StartDiscovery();
                 }
-
                 _shouldStopDiscovering = false;
-                _deviceFoundAction = deviceFoundAction;
-
-                //_workerThread = new Thread(new ThreadStart(DiscoveryWorker));
-                //_workerThread.Start();
-
                 _discovering = true;
             }
         }
 
         public void StopDiscovery()
         {
-            if (_workerThread != null && _discovering)
+            if (_discovering)
             {
                 _shouldStopDiscovering = true;
-                //_workerThread?.Join();
             }
 
             foreach (var dd in _deviceDiscoverers)
@@ -123,40 +156,25 @@ namespace FenomPlus.Services.DeviceService
 
         protected void DiscoveryWorker()
         {
-            Helper.WriteDebug("ENTERING MONITOR THREAD");
-
-            try
+            Helper.WriteDebug("ENTERING BACKGROUND DEVICE DISCOVERING THREAD");
+            lock(_lock)
             {
-                //_devices.Clear();
-                _discovering = true;
-
-                while (_shouldStopDiscovering == false)
+                while (!_deviceNotFound && !_dismiss)
                 {
-#if false
-                    if (((CancellationTokenSource)cancelToken).IsCancellationRequested)
+                    Monitor.Wait(_lock);  // it block here
+                    if (_deviceNotFound)
                     {
-                        Helper.WriteDebug("CANCELLATION SIGNALED FOR MONITOR THREAD");
+                        // background discovering here
+                        Helper.WriteDebug("start background discovering");
+                        _deviceNotFound = false;
+                    }
+                    if (_dismiss)
+                    {
                         break;
                     }
-#endif
-
-                    Helper.WriteDebug("HEART BEAT");
-                    Thread.Sleep(10000);
                 }
-
-                // cleanup
-
-                _discovering = false;
-                //_shouldStopDiscovering = true;
             }
-            catch (ThreadAbortException ex)
-            {
-                // thread aborted
-                Helper.WriteDebug("ABORTED MONITOR THREAD " + ex.Message);
-            }
-
-            // exit monitor
-            Helper.WriteDebug("EXITING MONITOR THREAD");
+            Helper.WriteDebug("EXITTING BACKGROUND DEVICE DISCOVERING THREAD");
         }
 
 

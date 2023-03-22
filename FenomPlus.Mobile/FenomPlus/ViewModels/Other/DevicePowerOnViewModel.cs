@@ -109,39 +109,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StartScan()
         {
-            Seconds = 5;
+            Seconds = 20;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-
-            Services.DeviceService.StartDiscovery(async (IDevice device) =>
-            {
-                try
-                {
-                    if (device.Name != null)
-                    {
-                        if (Services.DeviceService.IsDeviceFenomDevice(device.Name))
-                        {
-                            Stop = true;
-                            try
-                            {
-                                await device.ConnectAsync();
-                                await FoundDevice(device);
-                            }
-                            catch(Exception ex)
-                            {
-                                Debug.WriteLine("Exception at DevicePowerOnViewModel StartScan : " + ex.Message);
-                            }
-                            
-                        }
-                    }
-
-                    Console.WriteLine("id: {0} name: {1}", device.Id, (device.Name != null) ? device.Name : "<null>");
-                }
-
-                catch(Exception ex)
-                {
-                    Console.WriteLine("exception: {0}", ex.Message);
-                }
-            });
+            Services.DeviceService.StartDiscovery();
         }
 
         public async Task FoundDevice(IDevice device)
@@ -195,7 +165,7 @@ namespace FenomPlus.ViewModels
             if (Seconds <= 0)
             {
                 StopScan();
-                StartScan();
+                MessagingCenter.Send(this, "DeviceNotFound");
                 return false;
             }
 
