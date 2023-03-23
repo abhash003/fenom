@@ -19,6 +19,17 @@ namespace FenomPlus.ViewModels
         public DashboardViewModel()
         {
         }
+        public bool TestConductable
+        {
+            get { 
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
+                {
+                    DeviceCheckEnum dc = Services.DeviceService.Current.CheckDeviceBeforeTest();
+                    return (dc == DeviceCheckEnum.Ready || dc == DeviceCheckEnum.DevicePurging);
+                }
+                return false;
+            }
+        }  
 
         [RelayCommand]
         private async Task StartStandardTest()
