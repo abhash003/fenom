@@ -1,19 +1,20 @@
 ﻿using System.ComponentModel;
 namespace FenomPlus.QualityControl.Enums
 {
-    public enum NegativeControlStatus
+    public enum NegativeControlStatus // 2 bit
     {
         [Description("Negative Control test is required")]
-        None,
+        None = 0,
         [Description("Greater or Equal than 5 ppb on Negative Control Value")]
         Fail,
         [Description("Less Than 5 ppb on Negative Control Value")]
         Pass,
     }
-    public enum UserStatus
+    public enum UserStatus // 2 bit
     {
         [Description("QC User test is required")]
         None = 0,
+
         [Description("Latest test is out of the expected range for the QC User")]
         Disqualified = 1,
 
@@ -24,24 +25,32 @@ namespace FenomPlus.QualityControl.Enums
         Qualified = 3,
     }
 
-    public enum PeriodStatus
+    public enum ElapsedHrSinceLastPassingTest // 1 bit
+    {
+        [Description("Less Than 24 hr elapsed since last passing test ")]
+        LT_24 = 0,
+        [Description("Greater or Equal 24 hr elapsed since last passing test ")]
+        GE_24,
+    }
+
+    public enum PeriodStatus // 3 bit
     {
         [Description("n/a")]
-        None,
+        None = 0,
 
-        [Description("Greater or Equal than 24 hr elapsed since last passing test by a Qaulified User")]
-        ExpiredValidity,
+        [Description("Greater or Equal than 24 hr elapsed since last passing test by a Qualified User")]
+        ExpiredValidity = UserStatus.Qualified << 1 | ElapsedHrSinceLastPassingTest.GE_24,
 
-        [Description("Greater or Equal than 24 hr elapsed since last passing test by a Conditionally Qaulified User")]
-        ExpiredUserQualification,
+        [Description("Greater or Equal than 24 hr elapsed since last passing test by a Conditionally Qualified User")]
+        ExpiredUserQualification = UserStatus.ConditionallyQualified << 1 | ElapsedHrSinceLastPassingTest.GE_24,
 
-        [Description("Less Than 24 hr elapsed since last passing test by a Qaulified User")]
-        WithinValidity,
+        [Description("Less Than 24 hr elapsed since last passing test by a Qualified User")]
+        WithinValidity = UserStatus.Qualified << 1 | ElapsedHrSinceLastPassingTest.LT_24,
 
-        [Description("Less Than 24 hr elapsed since last passing test by a Conditionally Qaulified User")]
-        WithinUserQualification,
+        [Description("Less Than 24 hr elapsed since last passing test by a Conditionally Qualified User")]
+        WithinUserQualification = UserStatus.ConditionallyQualified << 1 | ElapsedHrSinceLastPassingTest.LT_24
     }
-    public enum Last24HrTestStatus
+    public enum Last24HrTestCount
     {
         [Description("No test performed in the last 24 hr")]
         Zero = 0,
@@ -52,19 +61,19 @@ namespace FenomPlus.QualityControl.Enums
     public enum DeviceStatus
     {
         [Description("NegativeControlStatus.None || UserStatus.None i.e. test is required")]
-        InsufficientData = -3,
+        InsufficientData = 0,
 
         [Description("NegativeControlStatus.Pass && ( UserStatus.Qualified || PeriodStatus.ExpiredValidity ) " +
             "&& No test performed in the last 24 hr")]
-        Expired = -2,
+        Expired = 1,
 
         [Description("( NegativeControlStatus.Fail || UserStatus.Disqualified ) " +
             "&& Both tests performed in the last 24 hr")]
-        Fail = -1,
+        Fail = 2,
 
         [Description("NegativeControlStatus.Pass && (UserStatus.ConditionalyQualified || UserStatus.Qualified) " +
             "&& Both tests performed in the last 24 hr")]
-        Pass = 1,
+        Pass = 3,
     }
 }
 
