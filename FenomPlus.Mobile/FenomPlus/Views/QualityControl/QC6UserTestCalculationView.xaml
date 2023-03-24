@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<views:BaseContentPage
+    xmlns:views="clr-namespace:FenomPlus.Views"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls" xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+    x:Class="FenomPlus.Views.QCUserTestCalculationView"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="True"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    x:DataType="viewModels:QualityControlViewModel">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" AutoPlay="True" AutoHide="False"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>
+

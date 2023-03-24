@@ -1,6 +1,10 @@
 ﻿using FenomPlus.Controls;
+using FenomPlus.Views;
 using System;
 using System.Threading.Tasks;
+using FenomPlus.ViewModels;
+using Xamarin.Forms;
+using FenomPlus.ViewModels.QualityControl.Models;
 
 namespace FenomPlus.Interfaces
 {
@@ -12,22 +16,32 @@ namespace FenomPlus.Interfaces
         Task DeviceStatusHubView();
         Task DevicePowerOnView();
         Task DeviceReadyView();
-        Task HumanControlDisqualifiedView();
-        Task HumanControlPassedView();
-        Task HumanControlPreparingView();
-        Task HumanControlPerformingView();
-        Task NegativeControlFailView();
-        Task NegativeControlPassView();
-        Task NegativeControlPerformView();
         Task PreparingStandardTestResultView();
+
         Task QualityControlView();
+        Task QCNegativeControlTestView();
+        Task QCNegativeControlResultView();
+        Task QCNegativeControlChartView();
+        Task QCUserTestView();
+
+        Task QCUserStopTestView();
+        Task QCUserTestCalculationView();
+        Task QCUserTestResultView();
+        Task QCUserTestErrorView();
+        Task QCUserTestChartView();
+        Task QCSettingsView();
+
         Task StopExhalingView();
         Task TestErrorView();
         Task TestFailedView();
         Task TestResultsView();
         Task TutorialView();
+
         void DisplayAlert(string title, string message, string cancel);
+
         Task ShowStatusDetailsPopup(StatusButtonViewModel viewModel);
+
+        Task ShowQCChartPopup(QualityControlViewModel viewModel, QCUser user);
 
     }
 }

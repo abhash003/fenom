@@ -8,7 +8,7 @@
     xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
     xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
     x:Class="FenomPlus.Views.QualityControlView"
-    Title="Quality Control"
+    Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False"
@@ -43,6 +43,8 @@
                     </Grid.RowDefinitions>
 
                     <Label Text="Quality Control" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0"/>
+                    <Label Text="{Binding DeviceStatusString}" FontSize="16" FontAttributes="Bold" Grid.Row="0" HorizontalOptions="Center" Margin="20,0"/>
+                    <Label Text="{Binding SerialNumberString}" Grid.Row="0" HorizontalOptions="End" Margin="20,0"/>
 
                     <Grid x:Name="InfoBoxesGrid"
                               Grid.Row="1" 
@@ -68,33 +70,37 @@
 
                         <!--Individual Items Row 1-->
 
-                        <controls:QCButtonView 
+                        <controls:QCButtonView  
                                 x:Name="NegativeControlButton"
                                 Grid.Row="0" 
                                 Grid.Column="0"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateNegativeControlCommand}"/>
 
                         <controls:QCButtonView 
                                 x:Name="User1Button"
                                 Grid.Row="0" 
                                 Grid.Column="1"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser1Command}"/>
 
                         <controls:QCButtonView 
                                 x:Name="User2Button"
                                 Grid.Row="0" 
                                 Grid.Column="2"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser2Command}"/>
 
                         <controls:QCButtonView 
                                 x:Name="User3Button"
                                 Grid.Row="0" 
                                 Grid.Column="3"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser3Command}"/>
 
                         <!--Individual Items Row 2-->
 
@@ -103,34 +109,80 @@
                                 Grid.Row="1" 
                                 Grid.Column="0"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser4Command}"/>
 
                         <controls:QCButtonView 
                                 x:Name="User5Button"
                                 Grid.Row="1" 
                                 Grid.Column="1"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser5Command}"/>
 
                         <controls:QCButtonView 
                                 x:Name="User6Button"
                                 Grid.Row="1" 
                                 Grid.Column="2"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding UpdateUser6Command}"/>
 
-                        <controls:ImageButtonView 
-                                x:Name="ImageButton"
+                        <!--<controls:QCSettingsButtonView 
+                                x:Name="QcSettings"
                                 Grid.Row="1" 
                                 Grid.Column="3"
                                 VerticalOptions="FillAndExpand"
-                                HorizontalOptions="FillAndExpand"/>
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding ShowQCSettingsCommand}"/>-->
+                        
+                        <buttons:SfButton x:Name="InnerButton" 
+                            Grid.Row="1" 
+                            Grid.Column="3"
+                            HasShadow="True" 
+                            BackgroundColor="#F9F9F9"
+                            BorderColor="#E7E7E7" 
+                            BorderWidth="1" 
+                            EnableRippleEffect="True"
+                            Margin="10,10,10,0"
+                            Command="{Binding ShowQCSettingsCommand}"
+                            Padding="20">
+                            
+                            <Image x:Name="ButtonImage"
+                                   Source="TutStep2.png"
+                                   VerticalOptions="CenterAndExpand"
+                                   Aspect="AspectFit"/>
+                            
+                        </buttons:SfButton>
 
                     </Grid>
 
                 </Grid>
 
             </border:SfBorder>
+
+            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="60,0,0,0">
+
+                <Label Text="Require Quality Control:" Margin="0,0,20,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#333" FontSize="18"/>
+
+                <Switch x:Name="ToggleSwitch"
+                        OnColor="CornflowerBlue" 
+                        ThumbColor="Green" 
+                        Scale="1.4"
+                        IsToggled="{Binding RequireQC}"
+                        Margin="0,0,10,0"/>
+
+                <Label Text="Off" FontAttributes="None" VerticalOptions="Center" TextColor="#333" FontSize="18">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference ToggleSwitch}, Path=IsToggled}" Value="true">
+                            <Setter Property="Text" Value="On" />
+                            <Setter Property="FontAttributes" Value="Bold" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+            </StackLayout>
+
 
             <Button Text="Exit"
                 Grid.Row="1"
