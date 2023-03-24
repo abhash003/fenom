@@ -16,11 +16,24 @@
     </Shell.TitleView>
 
     <ContentPage.Resources>
-
-        <Style TargetType="Label">
-            <Setter Property="TextColor" Value="#333" />
-        </Style>
-
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#333" />
+            </Style>
+            <Style TargetType="Frame" x:Key="TestsFrameStyle">
+                <Setter Property="HeightRequest" Value="140" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="WidthRequest" Value="200" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="StartAndExpand" />
+                <Setter Property="Background" Value="White" />
+                <Style.Triggers>
+                    <DataTrigger TargetType="Frame" Binding="{Binding TestConductable}" Value="False">
+                        <Setter Property="Background" Value="LightGray" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
@@ -32,11 +45,7 @@
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="20">
 
                     <!--Standard 10s Test-->
-                    <Frame HeightRequest="140"
-                           Padding="20"
-                           WidthRequest="200"
-                           HorizontalOptions="Start"
-                           VerticalOptions="StartAndExpand">
+                    <Frame Style="{StaticResource TestsFrameStyle}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnStandardTest"/>
                         </Frame.GestureRecognizers>
@@ -51,11 +60,7 @@
                     <Frame WidthRequest="5" BorderColor="Transparent" />
 
                     <!--Quick 6s Test-->
-                    <Frame HeightRequest="140"
-                           Padding="20"
-                           WidthRequest="200"
-                           HorizontalOptions="Start"
-                           VerticalOptions="StartAndExpand">
+                    <Frame Style="{StaticResource TestsFrameStyle}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnShortTest" />
                         </Frame.GestureRecognizers>

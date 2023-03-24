@@ -71,6 +71,8 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer;
 
+        private bool _DeviceNotFound;
+
         public StatusViewModel()
         {
             VersionTracking.Track();
@@ -90,17 +92,19 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
+
+            MessagingCenter.Subscribe<DevicePowerOnViewModel>(this, "DeviceNotFound", async (sender) => {
+                await Task.Run(() =>
+                {
+                    _DeviceNotFound = true;
+                });
+            });
         }
 
         private bool CheckDeviceConnection()
         {
-            if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
-                return false;
-
-            bool deviceIsConnected = Services.DeviceService.Current.Connected;
-
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
-            return deviceIsConnected;
+            return Services?.DeviceService?.Current?.Connected ?? false;
         }
 
         private int BluetoothCheckCount = 0;
@@ -118,14 +122,14 @@ namespace FenomPlus.ViewModels
                 {
                     // Only navigate if during startup
                     await Services.Navigation.DashboardView();
-                }                
+                }
 
                 BluetoothCheckCount++;
 
                 if (BluetoothCheckCount >= RequestNewStatusInterval)
                     BluetoothCheckCount = 0;
             }
-            else
+            else if (Services.DeviceService.Discovering)
             {
                 BluetoothCheckCount = 0; // Reset counter
 
@@ -134,7 +138,15 @@ namespace FenomPlus.ViewModels
                     await Services.Navigation.DevicePowerOnView();
                 }
             }
-
+            // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
+            else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+            {
+                BluetoothCheckCount = 0; // Reset counter
+                if (App.GetCurrentPage() is not DashboardView)
+                {
+                    await Services.Navigation.DashboardView();
+                }
+            }
             //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
             await RefreshStatusAsync();
