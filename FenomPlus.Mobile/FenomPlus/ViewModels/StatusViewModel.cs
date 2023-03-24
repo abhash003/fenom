@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Views;
@@ -186,7 +186,7 @@ namespace FenomPlus.ViewModels
 
             UpdateTemperature();
 
-            UpdateQualityControlExpiration(7); // ToDo:  Need value here
+            UpdateQualityControlExpiration(7);
 
             RefreshInProgress = false;
         }
@@ -814,6 +814,11 @@ namespace FenomPlus.ViewModels
                 case PreparingStandardTestResultView preparingStandardTestResultView:
                 case StopExhalingView stopExhalingView:
                 case TestResultsView testResultsView:
+                case QCNegativeControlTestView qCNegativeControlTestView:
+                case QCNegativeControlResultView qCNegativeControlResultView:
+                case QCUserTestView qCUserTestView:
+                case QCUserStopTestView qCUserStopTestView:
+                case QCUserTestResultView qCUserTestResultView:
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
                 case DevicePowerOnView devicePowerOnView:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)

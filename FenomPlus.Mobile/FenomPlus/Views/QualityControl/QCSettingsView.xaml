@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<views:BaseContentPage
+    xmlns:views="clr-namespace:FenomPlus.Views"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:FenomPlus.Controls"
+    xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:xForms="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:views1="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="FenomPlus.Views.QCSettingsView"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="True"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
+    x:DataType="viewModels:QualityControlViewModel">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Text="Quality Control Settings" FontSize="24" Margin="10" HorizontalOptions="Center"/>
+
+
+            <views1:TabView Grid.Row="1" x:Name="SettingsTabView" 
+                            SelectionChanged="SettingsTabView_OnSelectionChanged"
+                            TabStripPlacement="Top"
+                            TabStripBackgroundColor="White"
+                            TabStripHeight="40"
+                            TabIndicatorColor="Blue"
+                            TabContentBackgroundColor="White"
+                            IsSwipeEnabled="False"
+                            SelectedIndex="0"
+                            HorizontalOptions="FillAndExpand" 
+                            VerticalOptions="FillAndExpand"
+                            Margin="0,0,0,0">
+
+                    <views1:TabViewItem Text="Devices" FontSize="16" FontAttributes="Bold" TextColor="#333">
+
+                        <Grid BackgroundColor="White">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <xForms:SfDataGrid  x:Name="AllDevicesDataGrid"
+                                            Grid.Row="0"
+                                            x:DataType="viewModels:QualityControlViewModel"
+                                            ItemsSource="{Binding QcDeviceList }"
+                                            LiveDataUpdateMode="AllowDataShaping"
+                                            HorizontalOptions="Fill"
+                                            AllowResizingColumn="False"
+                                            AutoGenerateColumns="False"
+                                            AllowEditing="False"
+                                            AllowSorting="False"
+                                            NavigationMode="Row"
+                                            SelectionMode="Single"
+                                            AutoExpandGroups="False"
+                                            AllowGroupExpandCollapse="False"
+                                            ColumnSizer="Star"
+                                            VerticalScrollBarVisibility="True"
+                                            HorizontalScrollBarVisibility="False"
+                                            VerticalOverScrollMode="None"
+                                            AllowPullToRefresh="False"
+                                            Margin="0,0,1,0"
+                                            SelectionChanged="AllDevicesDataGrid_OnSelectionChanged">
+
+                                <xForms:SfDataGrid.Columns>
+                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Current Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
+                                </xForms:SfDataGrid.Columns>
+
+                            </xForms:SfDataGrid>
+
+                        <Button x:Name="DeleteDeviceButton"
+                                Grid.Row="1" 
+                                Text="Delete Device"
+                                Style="{StaticResource defaultButton}"
+                                Clicked="DeleteDeviceButton_OnClicked"
+                                IsEnabled="False"
+                                HorizontalOptions="Center"
+                                VerticalOptions="End"
+                                Margin="0,0,40,0"/>
+
+                            <Button Grid.Row="1" Text="Exit"
+                                    Style="{StaticResource defaultButton}"
+                                    Command="{Binding ExitToQCCommand}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="End"
+                                    Margin="0,0,40,0"/>
+
+                        </Grid>
+
+                    </views1:TabViewItem>
+
+                    <views1:TabViewItem Text="Users" FontSize="16" FontAttributes="Bold" TextColor="#333">
+                        <Grid BackgroundColor="White">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <xForms:SfDataGrid x:Name="AllUsersDataGrid"
+                                               Grid.Row="0"
+                                               x:DataType="viewModels:QualityControlViewModel"
+                                               ItemsSource="{Binding QcUserList }"
+                                               LiveDataUpdateMode="AllowDataShaping"
+                                               HorizontalOptions="Fill"
+                                               AllowResizingColumn="False"
+                                               AutoGenerateColumns="False"
+                                               AllowEditing="False"
+                                               AllowSorting="False"
+                                               NavigationMode="Row"
+                                               SelectionMode="Single"
+                                               AutoExpandGroups="False"
+                                               AllowGroupExpandCollapse="False"
+                                               ColumnSizer="Star"
+                                               VerticalScrollBarVisibility="True"
+                                               HorizontalScrollBarVisibility="False"
+                                               VerticalOverScrollMode="None"
+                                               AllowPullToRefresh="False"
+                                               Margin="0,0,1,0"
+                                               SelectionChanged="AllUsersDataGrid_OnSelectionChanged">
+
+                                    <xForms:SfDataGrid.Columns>
+
+                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Date Created" MappingName="DateCreated" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Expiration Date" MappingName="ExpiresDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Next Test Date" MappingName="NextTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
+
+                                    </xForms:SfDataGrid.Columns>
+
+                                </xForms:SfDataGrid>
+
+                            <Button x:Name="DeleteUserButton" 
+                                    Grid.Row="1" 
+                                    Text="Delete User"
+                                    Style="{StaticResource defaultButton}"
+                                    Clicked="DeleteUserButton_OnClicked"
+                                    IsEnabled="False"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="End"
+                                    Margin="0,0,40,0"/>
+
+                            <Button Grid.Row="1" Text="Exit"
+                                    Style="{StaticResource defaultButton}"
+                                    Command="{Binding ExitToQCCommand}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="End"
+                                    Margin="0,0,40,0"/>
+
+                        </Grid>
+                    </views1:TabViewItem>
+
+                    <views1:TabViewItem Text="Tests" FontSize="16" FontAttributes="Bold" TextColor="#333">
+                        <Grid BackgroundColor="White">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <xForms:SfDataGrid x:Name="AllTestsDataGrid"
+                                               Grid.Row="0"
+                                               x:DataType="viewModels:QualityControlViewModel"
+                                               ItemsSource="{Binding QcTestList}"
+                                               LiveDataUpdateMode="AllowDataShaping"
+                                               HorizontalOptions="Fill"
+                                               AllowResizingColumn="False"
+                                               AutoGenerateColumns="False"
+                                               AllowEditing="False"
+                                               AllowSorting="False"
+                                               NavigationMode="Row"
+                                               SelectionMode="Single"
+                                               GroupingMode="Single"
+                                               AutoExpandGroups="False"
+                                               AllowGroupExpandCollapse="False"
+                                               ColumnSizer="Star"
+                                               VerticalScrollBarVisibility="true"
+                                               HorizontalScrollBarVisibility="False"
+                                               VerticalOverScrollMode="None"
+                                               AllowPullToRefresh="False"
+                                               Margin="0,0,1,10">
+
+                                    <xForms:SfDataGrid.Columns>
+
+                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Result" MappingName="TestResult" Padding="10,0,10,0"/>
+
+                                    </xForms:SfDataGrid.Columns>
+
+                                </xForms:SfDataGrid>
+
+                            <Button Grid.Row="1" Text="Exit"
+                                    Style="{StaticResource defaultButton}"
+                                    Command="{Binding ExitToQCCommand}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="End"
+                                    Margin="0,0,40,0"/>
+
+                        </Grid>
+                    </views1:TabViewItem>
+
+                    <views1:TabViewItem Text="Debug" FontSize="16" FontAttributes="Bold" TextColor="#333">
+                        <StackLayout  BackgroundColor="White">
+                            <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
+
+                                <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (1 User)" Command="{Binding CreateMockDataBase1Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
+                                <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (2 Users)" Command="{Binding CreateMockDataBase2Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
+                                <Button Style="{StaticResource defaultButton}" Text="Create Mock Database (4 Users)" Command="{Binding CreateMockDataBase3Command}" WidthRequest="300" HeightRequest="60" VerticalOptions="Start"/>
+
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
+
+                                <Button Style="{StaticResource defaultButton}" Text="Clear Database" Command="{Binding DeleteDataBaseCommand}" WidthRequest="400" HeightRequest="60" VerticalOptions="Start"/>
+
+                            </StackLayout>
+
+                            <Button Text="Exit"
+                                    Style="{StaticResource defaultButton}"
+                                    Command="{Binding ExitToQCCommand}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="End"
+                                    Margin="0,0,40,0"/>
+
+                    </StackLayout>
+                    </views1:TabViewItem>
+
+                </views1:TabView>
+
+                <!--<Button Grid.Row="1" Text="Exit"
+                        Style="{StaticResource defaultButton}"
+                        Command="{Binding ExitToQCCommand}"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Margin="0,0,40,0"/>-->
+
+            </Grid>
+
+    </ContentPage.Content>
+
+</views:BaseContentPage>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Interfaces;
 using Xamarin.Forms;
+using System.Threading;
 
 namespace FenomPlus.Services
 {
@@ -14,6 +15,30 @@ namespace FenomPlus.Services
         public void ShowAlert(string message, string title, string buttonLabel)
         {
            UserDialogs.Instance.Alert(message, title, buttonLabel);
+        }
+
+        public async Task ShowAlertAsync(string message, string title, string buttonLabel)
+        {
+            await UserDialogs.Instance.AlertAsync(message, title, buttonLabel);
+        }
+
+        //public async Task<string> UserNamePromptAsync()
+        //{
+
+        //    var result = await UserDialogs.Instance.PromptAsync("User Name", "Create new QC User", "Create", "Cancel", "", InputType.Name);
+
+        //    if (!result.Ok)
+        //        return "cancel";
+
+        //    return result.Text;
+        //}
+
+        public async Task<bool> ShowConfirmYesNo(string message, string title)
+        {
+            //var result = UserDialogs.Instance.ConfirmAsync(message, title, "Yes", "No");
+
+            var r = await UserDialogs.Instance.ConfirmAsync("message", title);
+            return r;
         }
 
         public bool PurgeCancelRequest { get; set; }
@@ -71,6 +96,17 @@ namespace FenomPlus.Services
         public async Task DatePromptAsync(string message, DateTime defaultDateTime)
         {
             await UserDialogs.Instance.DatePromptAsync(message, defaultDateTime);
+        }
+
+        public async Task<string> UserNamePromptAsync()
+        {
+
+            var result = await UserDialogs.Instance.PromptAsync("User Name", "Create new QC User", "Create", "Cancel", "", InputType.Name);
+
+            if (!result.Ok)
+                return "cancel";
+
+            return result.Text;
         }
     }
 }

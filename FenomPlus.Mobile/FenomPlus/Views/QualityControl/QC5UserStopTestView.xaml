@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:FenomPlus.Views;assembly=FenomPlus"
+                       xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+                       xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+                       x:Class="FenomPlus.Views.QCUserStopTestView"
+                       Title="{Binding Title}"
+                       Shell.NavBarIsVisible="True"
+                       NavigationPage.HasBackButton="False"
+                       NavigationPage.HasNavigationBar="False"
+                       x:DataType="viewModels:QualityControlViewModel">
+
+    <Shell.TitleView>
+        <controls:TitleContentView />
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <Image Source="StopSign"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   WidthRequest="400"
+                   HeightRequest="400"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+</views:BaseContentPage>

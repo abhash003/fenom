@@ -69,7 +69,7 @@ namespace FenomPlus.ViewModels
 
                 var str = ResultsRepo.ToString();
 
-                Debug.WriteLine($"Cache.BreathManeuver.StatusCode = {device.ErrorStatusInfo.ErrorCode}");
+                Debug.WriteLine($"Cache.DeviceStatusInfo.StatusCode = {device.ErrorStatusInfo.ErrorCode}");
 
                 if (device.ErrorStatusInfo.ErrorCode != 0x00)
                 {

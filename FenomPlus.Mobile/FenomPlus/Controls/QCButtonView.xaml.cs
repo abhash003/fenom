@@ -1,4 +1,5 @@
-﻿using Syncfusion.XForms.Buttons;
+﻿using Syncfusion.SfDataGrid.XForms.DataPager;
+using Syncfusion.XForms.Buttons;
 using System;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,11 +11,8 @@ namespace FenomPlus.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QCButtonView
     {
-        //public event EventHandler Clicked = delegate { };
-
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(StatusButtonView), propertyChanged: CommandUpdated);
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(StatusButtonView), propertyChanged: CommandParameterUpdated);
-        public static readonly BindableProperty EnabledProperty = BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(StatusButtonView), propertyChanged: EnabledUpdated);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(QCButtonView), propertyChanged: CommandUpdated);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(QCButtonView), propertyChanged: CommandParameterUpdated);
 
         public ICommand Command
         {
@@ -28,22 +26,10 @@ namespace FenomPlus.Controls
             set => this.SetValue(CommandParameterProperty, value);
         }
 
-        public bool Enabled
-        {
-            get => (bool)this.GetValue(EnabledProperty);
-            set => this.SetValue(EnabledProperty, value);
-        }
-
-
         public QCButtonView()
         {
             InitializeComponent();
-
-            //this.InnerButton.BindingContext = this;
-            //this.InnerButton.Clicked += this.OnClicked;
         }
-
-
 
 
         private static void CommandUpdated(object sender, object oldValue, object newValue)
@@ -62,18 +48,10 @@ namespace FenomPlus.Controls
             }
         }
 
-        private static void EnabledUpdated(object sender, object oldValue, object newValue)
+        private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
         {
-            if (sender is QCButtonView qcButton && newValue != null)
-            {
-                qcButton.InnerButton.IsEnabled = (bool)newValue;
-            }
+            if (BindingContext is QcButtonViewModel vm) 
+                vm.OpenChartCommand.Execute(null);
         }
-
-        //private void OnClicked(object sender, EventArgs args)
-        //{
-        //    Command.Execute(null);
-        //    //this.Clicked?.Invoke(sender, args);
-        //}
     }
 }

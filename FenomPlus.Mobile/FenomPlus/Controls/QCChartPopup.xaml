@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:controls="clr-namespace:FenomPlus.Controls;assembly=FenomPlus"
+    xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
+    xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+    IsLightDismissEnabled="True"
+    x:Class="FenomPlus.Controls.QCChartPopup"
+    WidthRequest="971"
+    HeightRequest="600">
+
+    <Grid BackgroundColor="#F9F9F9">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+            <chart:SfChart 
+                           HorizontalOptions="FillAndExpand" 
+                           VerticalOptions="FillAndExpand"
+                           Series="{Binding SeriesCollection}"
+                           AreaBackgroundColor="White"
+                           Margin="0,0,10,0">
+
+                <chart:SfChart.PrimaryAxis>
+                    <chart:NumericalAxis Minimum="{Binding XMin}" Maximum="{Binding XMax}" Interval="1" RangePadding="Round">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text ="Test Number"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+
+
+                </chart:SfChart.PrimaryAxis>
+
+                <chart:SfChart.SecondaryAxis>
+                    <chart:NumericalAxis Minimum="{Binding YMin}" Maximum="{Binding YMax}">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text ="Breath Result"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfChart.SecondaryAxis>
+
+                <chart:SfChart.Title>
+                    <chart:ChartTitle Text="{Binding ChartTitle}" TextColor="Black"/>
+                </chart:SfChart.Title>
+
+            </chart:SfChart>
+
+        </Grid>
+
+        <Button x:Name="CloseButton" 
+                Grid.Row="1"
+                Margin="0,10,0,20"
+                Style="{StaticResource defaultButton}"
+                Text="Close" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Clicked="CloseButton_OnClicked"/>
+
+    </Grid>
+
+</xct:Popup>

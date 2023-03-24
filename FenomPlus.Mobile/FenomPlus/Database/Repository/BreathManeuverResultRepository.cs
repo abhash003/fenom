@@ -20,10 +20,10 @@ namespace FenomPlus.Database.Repository
 
         }
 
-        public BreathManeuverResultRepository(LiteDatabase db) : base(TblName, db)
-        {
+        //public BreathManeuverResultRepository(LiteDatabase db) : base(TblName, db)
+        //{
 
-        }
+        //}
 
 
         /// <summary>

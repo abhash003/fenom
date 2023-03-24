@@ -73,14 +73,6 @@ namespace FenomPlus.Services.DeviceService
 
                 DeviceDiscovered += DeviceDiscoveredHandler;
 
-                ReadyForTest = true;
-
-                DeviceReadyTimer = new Timer(1000);
-                DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
-
-                DiscoveryWorkerTimer = new Timer(10_000) { Enabled = true };
-                DiscoveryWorkerTimer.Elapsed += Timer_Elapsed;
-
                 trace.Trace("device service all setup");
             }
         }
@@ -187,43 +179,6 @@ namespace FenomPlus.Services.DeviceService
         {
             Helper.WriteDebug("Invoking DeviceDiscovered");
                DeviceDiscovered?.Invoke(this, new DeviceServiceEventArgs(device));
-        }
-
-        #region Fields
-
-        private readonly Timer DeviceReadyTimer;
-        private Timer DiscoveryWorkerTimer;
-
-        #endregion
-
-        public int DeviceReadyCountDown { get; set; }
-
-        private bool _readyForTest;
-        public bool ReadyForTest
-        {
-            get => _readyForTest;
-            set
-            {
-                _readyForTest = value;
-
-                if (_readyForTest == false)
-                {
-                    DeviceReadyCountDown = 32;
-                    DeviceReadyTimer.Start();
-                }
-            }
-        }
-
-        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            Helper.WriteDebug($"DeviceReadyTimerOnElapsed: DeviceReadyCountDown: {DeviceReadyCountDown}, ReadyForTest: {ReadyForTest}");
-            DeviceReadyCountDown -= 1;
-
-            if (DeviceReadyCountDown <= 0)
-            {
-                ReadyForTest = true;
-                DeviceReadyTimer.Stop();
-            }
         }
 
         public bool IsDeviceFenomDevice(string deviceName)

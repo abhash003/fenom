@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusButtonView"
+             xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
+             x:Class="FenomPlus.Controls.QCSettingsButtonView">
+
+    <buttons:SfButton x:Name="InnerButton" 
+                    HasShadow="True" 
+                    BackgroundColor="#F9F9F9"
+                    BorderColor="#E7E7E7" 
+                    BorderWidth="1" 
+                    EnableRippleEffect="True"
+                    Margin="10,10,10,0">
+
+        <Grid HorizontalOptions="FillAndExpand" 
+              VerticalOptions="FillAndExpand" 
+              Grid.Padding="10">
+
+            <Image x:Name="ButtonImage"
+                   Source="TutStep2"
+                   VerticalOptions="StartAndExpand"
+                   HorizontalOptions="End"
+                   Aspect="AspectFit"/>
+
+            <Image x:Name="SettingsImage"
+                   Source="QCSettings"
+                    Width="10"
+                   VerticalOptions="End"
+                   HorizontalOptions="Start"
+                   Aspect="AspectFit"/>
+
+        </Grid>
+
+    </buttons:SfButton>
+
+</ContentView>
