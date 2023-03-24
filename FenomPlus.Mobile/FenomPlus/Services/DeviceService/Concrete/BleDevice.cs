@@ -52,7 +52,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     _bleAdapter.ConnectToDeviceAsync(_bleDevice);
                 }
 
-                return ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                bool connected = ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                if (connected)
+                {
+                    ReadyForTest = true;
+                }
+                return connected;
             }
         }
 
@@ -157,7 +162,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeDeviceStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode})");
+                                Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode:X})");
                             }
                         };
 
@@ -167,7 +172,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             {
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode})");
+                                Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode:X})");
                             }
                         };
 

@@ -105,7 +105,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DeviceInfo DeviceInfo { get; set; }
 
-        public int NOScore { get; set; }
+        public int? NOScore { get; set; }
 
         public ErrorStatusInfo ErrorStatusInfo { get; set; }
 
@@ -117,7 +117,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DebugMsg DebugMsg { get; set; }
 
-        public float FenomValue { get; set; }
+        public float? FenomValue { get; set; }
 
         public int BatteryLevel { get; set; }
 
@@ -227,39 +227,58 @@ namespace FenomPlus.Services.DeviceService.Abstract
                 return DeviceCheckEnum.DevicePurging;
             }
 
-            if (EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3)
+            // battery lockout
+
+            // 0x4a -- not charging
+            // 0x4b -- charging
+            // 0x00 -- unknown
+            // If battery is critical but is charging then dont raise the error
+            if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
                 return DeviceCheckEnum.BatteryCriticallyLow;
             }
 
-            if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
-                EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
-            {
-                return DeviceCheckEnum.HumidityOutOfRange;
-            }
+            // environmental lockouts
+            bool appEnvironmentalLockouts = false;
 
-            if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
-                EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+            if (appEnvironmentalLockouts)
             {
-                return DeviceCheckEnum.PressureOutOfRange;
-            }
+                if (EnvironmentalInfo.Humidity < Constants.HumidityLow18 ||
+                    EnvironmentalInfo.Humidity > Constants.HumidityHigh92)
+                {
+                    return DeviceCheckEnum.HumidityOutOfRange;
+                }
 
-            if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
-                EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
-            {
-                return DeviceCheckEnum.TemperatureOutOfRange;
-            }
+                if (EnvironmentalInfo.Pressure < Constants.PressureLow75 ||
+                    EnvironmentalInfo.Pressure > Constants.PressureHigh110)
+                {
+                    return DeviceCheckEnum.PressureOutOfRange;
+                }
 
-            // Decoded byte for 0x70 is 112 => NO Sensor Missing.
-            if (ErrorStatusInfo.ErrorCode == 112)
-            {
-                return DeviceCheckEnum.NoSensorMissing;
+                if (EnvironmentalInfo.Temperature < Constants.TemperatureLow14 ||
+                    EnvironmentalInfo.Temperature > Constants.TemperatureHigh35)
+                {
+                    return DeviceCheckEnum.TemperatureOutOfRange;
+                }
             }
-
-            // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
-            if (ErrorStatusInfo.ErrorCode == 113)
+            else
             {
-                return DeviceCheckEnum.NoSensorCommunicationFailed;
+                switch (ErrorStatusInfo.ErrorCode)
+                {
+                    case 0x00:
+                        break;
+                    
+                    // Decoded byte for 0x70 is 112 => NO Sensor Missing.
+                    case 0x70:
+                        return DeviceCheckEnum.NoSensorMissing;
+
+                    // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
+                    case 0x71:
+                        return DeviceCheckEnum.NoSensorCommunicationFailed;
+
+                    default:
+                        return DeviceCheckEnum.Unknown;
+                }
             }
 
             return DeviceCheckEnum.Ready;

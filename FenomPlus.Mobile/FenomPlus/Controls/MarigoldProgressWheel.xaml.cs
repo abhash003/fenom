@@ -122,6 +122,10 @@ namespace FenomPlus.Controls
             AnimationTimer.Stop();
         }
 
+        public delegate bool callback();
+
+        public callback Callback { get; set; }
+
         private Task IncrementMarigoldPetals()
         {
             if (PetalIndex < PetalImageFileNames.Count - 1)
@@ -136,6 +140,15 @@ namespace FenomPlus.Controls
             else
             {
                 StopAnimation();
+            }
+
+            if (Callback != null)
+            {
+                bool terminate = Callback();
+                if (terminate)
+                {
+                    StopAnimation();
+                }
             }
 
             return Task.CompletedTask;

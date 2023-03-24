@@ -24,18 +24,19 @@ namespace FenomPlus.ViewModels
                 TestType = "6-second";
             }
 
-            TestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
-                        (Services.DeviceService.Current.FenomValue) > 300 ? "> 300":
-                        Services.DeviceService.Current.FenomValue.ToString(CultureInfo.InvariantCulture);
+            if (Services.DeviceService.Current == null) return;
 
-            Services.DeviceService.Current.ReadyForTest = false;
+            string tmp = Services.DeviceService.Current.FenomValue?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
+            TestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
+                        (Services.DeviceService.Current.FenomValue) > 300 ? "> 300" : tmp;
         }
 
         /// <summary>
         /// 
         /// </summary>
         public override void OnDisappearing()
-        {
+        {           
+            
             base.OnDisappearing();
         }
 

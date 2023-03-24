@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.Helpers;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services.DeviceService.Enums;
@@ -206,19 +207,22 @@ namespace FenomPlus.ViewModels
 
         private void CacheOnBreathFlowChanged(object sender, EventArgs e)
         {
-            if (Services.DeviceService.Current != null) GaugeData = Services.DeviceService.Current.BreathFlow;
+            if (Services.DeviceService.Current != null)
+            {
+                GaugeData = Services.DeviceService.Current.BreathFlow;
 
-            if (GaugeData < Config.GaugeDataLow)
-            {
-                GaugeStatus = "Exhale Harder";
-            }
-            else if (GaugeData > Config.GaugeDataHigh)
-            {
-                GaugeStatus = "Exhale Softer";
-            }
-            else
-            {
-                GaugeStatus = "Good Job!";
+                if (GaugeData < Config.GaugeDataLow)
+                {
+                    GaugeStatus = "Exhale Harder";
+                }
+                else if (GaugeData > Config.GaugeDataHigh)
+                {
+                    GaugeStatus = "Exhale Softer";
+                }
+                else
+                {
+                    GaugeStatus = "Good Job!";
+                }
             }
         }
 
@@ -281,6 +285,11 @@ namespace FenomPlus.ViewModels
                             Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
 
+                        case DeviceCheckEnum.Unknown:
+                            var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                            Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                            return;
+
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -288,7 +297,7 @@ namespace FenomPlus.ViewModels
             }
             else // Not asking for breath test page
             {
-                if (Services.DeviceService.Current?.BreathTestInProgress == true)
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
@@ -360,7 +369,7 @@ namespace FenomPlus.ViewModels
             }
             else // Not asking for breath test page
             {
-                if (Services.DeviceService.Current?.BreathTestInProgress == true)
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.BreathTestInProgress == true)
                 {
                     await Services.DeviceService.Current.StartTest(BreathTestEnum.Stop);
                 }
