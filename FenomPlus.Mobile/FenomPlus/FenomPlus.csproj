@@ -72,7 +72,6 @@
   <ItemGroup>
     <Folder Include="TinyIoC\" />
     <Folder Include="Models\GridDataModel\" />
-    <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AppShell.xaml">
