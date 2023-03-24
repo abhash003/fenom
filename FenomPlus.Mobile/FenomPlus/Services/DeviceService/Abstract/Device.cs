@@ -321,9 +321,14 @@ namespace FenomPlus.Services.DeviceService.Abstract
             get => _readyForTest;
             set
             {
-                _readyForTest = value;
+                if (value == _readyForTest) { return; }
 
-                if (_readyForTest == false)
+                // it already set as 'not ready for test',during the count down time, cannot revoke it to 'ready for test' 
+                if (value == true && DeviceReadyCountDown > 0)  
+                {
+                    return;
+                }
+                if ((_readyForTest = value) == false)
                 {
                     DeviceReadyCountDown = 32;
                     DeviceReadyTimer.Start();
