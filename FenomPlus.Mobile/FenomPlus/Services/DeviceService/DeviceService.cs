@@ -73,6 +73,9 @@ namespace FenomPlus.Services.DeviceService
 
                 DeviceDiscovered += DeviceDiscoveredHandler;
 
+                DiscoveryWorkerTimer = new Timer(10_000) { Enabled = true };
+                DiscoveryWorkerTimer.Elapsed += Timer_Elapsed;
+
                 trace.Trace("device service all setup");
             }
         }
@@ -181,6 +184,11 @@ namespace FenomPlus.Services.DeviceService
                DeviceDiscovered?.Invoke(this, new DeviceServiceEventArgs(device));
         }
 
+        #region Fields
+
+        private Timer DiscoveryWorkerTimer;
+
+        #endregion
         public bool IsDeviceFenomDevice(string deviceName)
         {
             if (string.IsNullOrEmpty(deviceName))
