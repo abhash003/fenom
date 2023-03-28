@@ -1259,33 +1259,36 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        public async void Cache_BreathFlowChanged(object sender, EventArgs e)
+        public void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
-            if (Services.DeviceService.Current != null)
+            _ = Task.Run(async () => 
             {
-                GaugeData = Services.DeviceService.Current.BreathFlow;
-                GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
-
-                if (GaugeSeconds <= 0)
+                if (Services.DeviceService.Current != null)
                 {
-                    await Services.DeviceService.Current.StopTest();
-                    await Services.Navigation.QCUserStopTestView();
-                    return;
-                }
-            }
+                    GaugeData = Services.DeviceService.Current.BreathFlow;
+                    GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
 
-            if (GaugeData < Config.GaugeDataLow)
-            {
-                GaugeStatus = "Exhale Harder";
-            }
-            else if (GaugeData > Config.GaugeDataHigh)
-            {
-                GaugeStatus = "Exhale Softer";
-            }
-            else
-            {
-                GaugeStatus = "Good Job!";
-            }
+                    if (GaugeSeconds <= 0)
+                    {
+                        await Services.DeviceService.Current.StopTest();
+                        await Services.Navigation.QCUserStopTestView();
+                        return;
+                    }
+                }
+
+                if (GaugeData < Config.GaugeDataLow)
+                {
+                    GaugeStatus = "Exhale Harder";
+                }
+                else if (GaugeData > Config.GaugeDataHigh)
+                {
+                    GaugeStatus = "Exhale Softer";
+                }
+                else
+                {
+                    GaugeStatus = "Good Job!";
+                }
+            });
         }
 
         #endregion

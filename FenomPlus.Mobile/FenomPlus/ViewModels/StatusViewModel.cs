@@ -109,47 +109,50 @@ namespace FenomPlus.ViewModels
 
         private int BluetoothCheckCount = 0;
 
-        private async void BluetoothCheck(object sender, ElapsedEventArgs e)
+        private  void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
-            // Note:  All device status parameters are conditional on the bluetooth connection
-
-            BluetoothConnected = CheckDeviceConnection();
-            //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
-
-            if (BluetoothConnected)
+            _ = Task.Run(async () =>
             {
-                if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                // Note:  All device status parameters are conditional on the bluetooth connection
+
+                BluetoothConnected = CheckDeviceConnection();
+                //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
+
+                if (BluetoothConnected)
                 {
-                    // Only navigate if during startup
-                    await Services.Navigation.DashboardView();
+                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                    {
+                        // Only navigate if during startup
+                        await Services.Navigation.DashboardView();
+                    }
+
+                    BluetoothCheckCount++;
+
+                    if (BluetoothCheckCount >= RequestNewStatusInterval)
+                        BluetoothCheckCount = 0;
                 }
-
-                BluetoothCheckCount++;
-
-                if (BluetoothCheckCount >= RequestNewStatusInterval)
-                    BluetoothCheckCount = 0;
-            }
-            else if (Services.DeviceService.Discovering)
-            {
-                BluetoothCheckCount = 0; // Reset counter
-
-                if (App.GetCurrentPage() is not DevicePowerOnView)
+                else if (Services.DeviceService.Discovering)
                 {
-                    await Services.Navigation.DevicePowerOnView();
-                }
-            }
-            // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
-            else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
-            {
-                BluetoothCheckCount = 0; // Reset counter
-                if (App.GetCurrentPage() is not DashboardView)
-                {
-                    await Services.Navigation.DashboardView();
-                }
-            }
-            //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
+                    BluetoothCheckCount = 0; // Reset counter
 
-            await RefreshStatusAsync();
+                    if (App.GetCurrentPage() is not DevicePowerOnView)
+                    {
+                        await Services.Navigation.DevicePowerOnView();
+                    }
+                }
+                // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
+                else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+                {
+                    BluetoothCheckCount = 0; // Reset counter
+                    if (App.GetCurrentPage() is not DashboardView)
+                    {
+                        await Services.Navigation.DashboardView();
+                    }
+                }
+                //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
+
+                await RefreshStatusAsync();
+            });
         }
 
         private bool RefreshInProgress = false;

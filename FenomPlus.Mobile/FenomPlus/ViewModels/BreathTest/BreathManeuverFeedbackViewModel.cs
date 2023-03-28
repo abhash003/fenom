@@ -36,10 +36,12 @@ namespace FenomPlus.ViewModels
         {
         }
 
-        private async void Cache_BreathFlowChanged(object sender, EventArgs e)
+        private void Cache_BreathFlowChanged(object sender, EventArgs e)
         {
-            if (Services.DeviceService.Current != null)
+            _ = Task.Run(async () =>
             {
+                if (Services.DeviceService.Current == null) return;
+
                 GaugeData = Services.DeviceService.Current.BreathFlow;
                 GaugeSeconds = Services.DeviceService.Current.BreathManeuver.TimeRemaining;
 
@@ -47,22 +49,23 @@ namespace FenomPlus.ViewModels
                 {
                     await Services.DeviceService.Current.StopTest();
                     await Services.Navigation.StopExhalingView();
-                    return;
-                }
-
-                if (GaugeData < Config.GaugeDataLow)
-                {
-                    GaugeStatus = "Exhale Harder";
-                }
-                else if (GaugeData > Config.GaugeDataHigh)
-                {
-                    GaugeStatus = "Exhale Softer";
                 }
                 else
                 {
-                    GaugeStatus = "Good Job!";
+                    if (GaugeData < Config.GaugeDataLow)
+                    {
+                        GaugeStatus = "Exhale Harder";
+                    }
+                    else if (GaugeData > Config.GaugeDataHigh)
+                    {
+                        GaugeStatus = "Exhale Softer";
+                    }
+                    else
+                    {
+                        GaugeStatus = "Good Job!";
+                    }
                 }
-            }            
+            });
         }
 
         public override void OnAppearing()
