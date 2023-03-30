@@ -21,6 +21,7 @@ using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Abstract;
 using Device = FenomPlus.Services.DeviceService.Abstract.Device;
 using System.Timers;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -83,21 +84,24 @@ namespace FenomPlus.Services.DeviceService
         {
             DeviceDiscovered -= DeviceDiscoveredHandler;
         }
-        async void DeviceDiscoveredHandler(object sender, EventArgs e)
+        void DeviceDiscoveredHandler(object sender, EventArgs e)
         {
-            try
+            _ = Task.Run(async () =>
             {
-                Services.DeviceService.StopDiscovery();
-                var ea = (DeviceServiceEventArgs)e;
-                Helper.WriteDebug("Device discovered.");
-                await ea.Device.ConnectAsync();
-                // await FoundDevice(ea.Device);
-            }
-            catch (Exception ex)
-            {                
-                Helper.WriteDebug($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
-                Helper.WriteDebug("Exception at DeviceDiscoveredHandler: " + ex.Message);
-            }
+                try
+                {
+                    Services.DeviceService.StopDiscovery();
+                    var ea = (DeviceServiceEventArgs)e;
+                    Helper.WriteDebug("Device discovered.");
+                    await ea.Device.ConnectAsync();
+                    // await FoundDevice(ea.Device);
+                }
+                catch (Exception ex)
+                {                
+                    Helper.WriteDebug($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
+                    Helper.WriteDebug("Exception at DeviceDiscoveredHandler: " + ex.Message);
+                }
+            });
         }
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {

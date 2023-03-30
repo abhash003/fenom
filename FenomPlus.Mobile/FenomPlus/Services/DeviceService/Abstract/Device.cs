@@ -60,6 +60,11 @@ namespace FenomPlus.Services.DeviceService.Abstract
             // write path to debug
             DebugList.Insert(0, DebugLog.Create("App Starting"));
             DebugList.Insert(0, DebugLog.Create(IOC.Services.DebugLogFile.GetFilePath()));
+
+
+            // start the log cleaner 
+            LogCleaningTimer = new Timer(60_000);
+            LogCleaningTimer.Elapsed += LogCleaningTimerOnElapsed;
         }
 
         // Properties
@@ -172,9 +177,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public event EventHandler BreathFlowChanged;
 
-        static volatile object _s_debugLogLock = new object();
-        static volatile bool _s_logFileWriterWorkerStarted = false;
-        static volatile bool _s_logFileWriterWorkerStop = false;
+        private static object _s_debugLogLock = new object();
 
         #endregion
 
@@ -283,35 +286,18 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
             return DeviceCheckEnum.Ready;
         }
-
-        private void LogFileWriterWorker()
-        {
-            _s_logFileWriterWorkerStarted = true;
-
-            var current = DateTime.Now;
-
-            while (_s_logFileWriterWorkerStop == false)
-            {
-                if ((DateTime.Now - current).TotalSeconds > 60)
-                {
-                    // flush the log
-                    var debugList = DebugList;
-
-                    lock (_s_debugLogLock)
-                    {
-                        Console.WriteLine(debugList);
-                        debugList.Clear();
-                    }
-
-                    // reset the time
-                    current = DateTime.Now;
-                }
-            }
-        }
-
         #endregion
 
         #region Timer
+        private readonly Timer LogCleaningTimer;
+        private void LogCleaningTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (_s_debugLogLock)
+            {
+                Console.WriteLine(DebugList);
+                DebugList.Clear();
+            }
+        }
 
         private bool _readyForTest;
         public int DeviceReadyCountDown { get; set; }
@@ -466,13 +452,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
-            if (_s_logFileWriterWorkerStarted == false)
-            {
-                // start the worker
-                Thread workerThread = new Thread(LogFileWriterWorker);
-                workerThread.Start();
-            }
-
             try
             {
                 DebugMsg ??= new DebugMsg();
@@ -503,7 +482,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public void Dispose()
         {
-            _s_logFileWriterWorkerStop = true;
+            DeviceReadyTimer.Dispose();
+            LogCleaningTimer.Dispose();
         }
 
         #endregion
