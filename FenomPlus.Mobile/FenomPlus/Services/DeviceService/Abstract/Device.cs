@@ -236,10 +236,10 @@ namespace FenomPlus.Services.DeviceService.Abstract
             // 0x4b -- charging
             // 0x00 -- unknown
             // If battery is critical but is charging then dont raise the error
-            //if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
+            
+            if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
-                // jac: remove this before checking in
-                //return DeviceCheckEnum.BatteryCriticallyLow;
+                return DeviceCheckEnum.BatteryCriticallyLow;
             }
 
             // environmental lockouts
