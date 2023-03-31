@@ -10,7 +10,7 @@ namespace FenomPlus.SDK.Core.Models
     public class DeviceInfo : BaseCharacteristic
     {
         // Device characteristic items
-        private const int COMM_PCBA_VERSION_ID                =        (0x00);
+        private const int COMM_PCBA_VERSION_ID                =        (0x10);
         private const int COMM_PCBA_VERSION_SIZE              =            1 ;
         private const int COMM_FIRMWARE_VERSION_MAJOR_ID      =        (0x01);
         private const int COMM_FIRMWARE_VERSION_MAJOR_SIZE    =            1 ;
@@ -70,17 +70,11 @@ namespace FenomPlus.SDK.Core.Models
 
         public DeviceInfo Decode(byte[] data)
         {
-            int totalSize = COMM_DEVICE_PAYLOAD_SIZE + (COMM_DEVICE_ITEMS * 2) + 1;
-            
-            if (data.Length != totalSize)
-                throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
-
             int offset = 0;
 
             int itemCount = data[offset++];
 
-            if (itemCount != COMM_DEVICE_ITEMS)
-                throw new ArgumentException($"Payload count mismatch (expected: {COMM_DEVICE_ITEMS}, saw: {itemCount})");
+            int totalSize = data.Length; // COMM_DEVICE_PAYLOAD_SIZE + (itemCount * 2) + 1;
 
             while (offset < totalSize)
             {
@@ -136,6 +130,10 @@ namespace FenomPlus.SDK.Core.Models
                         }
                         serialNumber = new byte[COMM_DEVICE_SERIAL_NUMBER_SIZE];
                         Array.Copy(data, offset, serialNumber, 0, serialNumber.Length);
+                        break;
+
+                    default:
+                        // log unexpected item and skip it
                         break;
                 }
 
