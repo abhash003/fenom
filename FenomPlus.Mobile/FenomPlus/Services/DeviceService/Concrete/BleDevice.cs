@@ -268,43 +268,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
             return await WRITEREQUEST(message, 1);
         }
 
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> TRAININGMODE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override async Task<bool> DEBUGMSG()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMSG);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> DEBUGMANUEVERTYPE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override async Task<bool> MESSAGE(MESSAGE message)
+        public override async Task<bool> WriteRequest(MESSAGE message)
         {
             return await WRITEREQUEST(message, 1);
         }
@@ -434,11 +403,11 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<bool> SendMessage(MESSAGE message)
+        public override bool SendMessage(MESSAGE message)
         {
             if (IsConnected())
             {
-                return await MESSAGE(message);
+                return WriteRequest(message).Result;
             }
             return false;
         }
