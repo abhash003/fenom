@@ -19,14 +19,18 @@ namespace FenomPlus.SDK.Core.Features
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
 
-            IDVAR = new byte[1];            // If IDVAR is NULL App crashes
+            IDVAR = new byte[8];            // If IDVAR is NULL App crashes
+
+            BitConverter.GetBytes(val).CopyTo(IDVAR, 0);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Int32 val)
         {
             IDMSG = (ushort)_IDMSG;
             IDSUB = (ushort)_IDSUB;
-            //IDVAR = val;
+            IDVAR = new byte[4];            // If IDVAR is NULL App crashes
+
+            BitConverter.GetBytes(val).CopyTo(IDVAR, 0);
         }
 
         public MESSAGE(ID_MESSAGE _IDMSG, ID_SUB _IDSUB, Byte val)

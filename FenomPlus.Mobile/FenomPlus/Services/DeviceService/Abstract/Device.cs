@@ -95,9 +95,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> SERIALNUMBER(string SerailNumber);
 
-        public abstract Task<bool> MESSAGE(MESSAGE message);
-
-        public abstract Task<bool> DEBUGMSG();
+        public abstract Task<bool> WriteRequest(MESSAGE message);
 
         public abstract Task<bool> ENVIROMENTALINFO();
 
@@ -489,5 +487,49 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #endregion
 
+
+        #region Device Communication
+
+        public abstract bool SendMessage(MESSAGE message);
+
+        #endregion
+
+        #region Quality Control (QC)
+
+        public bool EnableQC()
+        {
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);
+            bool result = SendMessage(msg);
+            return result;
+        }
+
+        public bool DisableQC()
+        {
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);
+            bool result = SendMessage(msg);
+            return result;
+        }
+
+        public bool IsQCEnabled()
+        {
+            // if qc is populated in last device info update
+            if (DeviceInfo.QcValidity == 0xBEEF)
+                return false;
+            
+            return true;
+        }
+
+        public bool GetQCHoursRemaining(ref int hours)
+        {
+            // >=0 : valid, <=-1 : expired, = 0x8000 : failed
+            return true;
+        }
+
+        public bool ExtendQC(int hours)
+        {
+            return true;
+        }
+
+        #endregion
     }
 }

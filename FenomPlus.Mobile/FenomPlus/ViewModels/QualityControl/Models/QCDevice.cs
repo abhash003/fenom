@@ -52,7 +52,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             CurrentStatus = DeviceInsufficientData;
-            RequireQC = false;
+            RequireQC = false; // check current device and call IsQCEnabled, also call Device.EnableQC, Device.DisableQC when toggle is changed
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now; 
         }

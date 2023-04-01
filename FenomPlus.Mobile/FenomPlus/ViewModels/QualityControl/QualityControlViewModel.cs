@@ -1255,7 +1255,7 @@ namespace FenomPlus.ViewModels
                 GaugeSeconds = 10;
                 GaugeStatus = "Start Blowing";
 
-                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
             }
         }
 
