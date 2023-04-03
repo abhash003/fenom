@@ -89,6 +89,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> DEVICEINFO();
 
+        public abstract bool RequestDeviceInfoSync();
+
         public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
 
         public abstract Task<bool> DATETIME(string date, string time);
@@ -237,7 +239,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             
             if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
-                return DeviceCheckEnum.BatteryCriticallyLow;
+                //return DeviceCheckEnum.BatteryCriticallyLow;
             }
 
             // environmental lockouts
