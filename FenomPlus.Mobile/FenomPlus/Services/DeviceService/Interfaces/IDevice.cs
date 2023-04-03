@@ -41,6 +41,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size);
 
         Task<bool> DEVICEINFO();
+        bool RequestDeviceInfoSync();
 
         Task ConnectAsync();
 

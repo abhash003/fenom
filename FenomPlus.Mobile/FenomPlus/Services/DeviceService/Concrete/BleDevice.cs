@@ -238,6 +238,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
             return await WRITEREQUEST(message, 1);
         }
 
+        public override bool RequestDeviceInfoSync()
+        {
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
+            return WRITEREQUEST(message, 1).Result;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -407,7 +413,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
         {
             if (IsConnected())
             {
-                return WriteRequest(message).Result;
+                _ = WriteRequest(message);
+                return true;
             }
             return false;
         }
