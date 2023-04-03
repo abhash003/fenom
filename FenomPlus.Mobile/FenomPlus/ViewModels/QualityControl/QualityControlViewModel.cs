@@ -12,19 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Syncfusion.SfChart.XForms;
-using System.ComponentModel;
-using System.Xml.Schema;
-using Syncfusion.Drawing;
 using Color = Xamarin.Forms.Color;
-using Syncfusion.XlsIO.Implementation.PivotAnalysis;
-using static System.Net.Mime.MediaTypeNames;
-using Plugin.BLE.Abstractions.Contracts;
 
 namespace FenomPlus.ViewModels
 {
@@ -80,8 +73,20 @@ namespace FenomPlus.ViewModels
             get => QCDevice.RequireQC;
             set
             {
-                QCDevice.RequireQC = value;
+                QCDevice.RequireQC = value;               
+                                
                 DbUpdateQcDevice(QCDevice);
+                if (Services.DeviceService != null && Services.DeviceService.Current != null)
+                {
+                    if (value == true)
+                    {
+                        Services.DeviceService.Current.EnableQC();
+                    }
+                    else
+                    {
+                        Services.DeviceService.Current.DisableQC();
+                    }
+                }
 
                 OnPropertyChanged(nameof(RequireQC));
             }

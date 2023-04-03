@@ -163,7 +163,7 @@
 
             <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="60,0,0,0">
 
-                <Label Text="Require Quality Control:" Margin="0,0,20,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#333" FontSize="18"/>
+                <Label Text="Enable/Disable Quality Control:" Margin="0,0,20,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#333" FontSize="18"/>
 
                 <Switch x:Name="ToggleSwitch"
                         OnColor="CornflowerBlue" 
