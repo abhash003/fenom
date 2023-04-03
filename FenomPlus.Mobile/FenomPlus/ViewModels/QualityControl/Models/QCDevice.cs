@@ -1,9 +1,7 @@
-﻿using FenomPlus.Models;
-using LiteDB;
+﻿using LiteDB;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Syncfusion.XlsIO.Parser.Biff_Records.Charts;
+using FenomPlus.Services;
+using FenomPlus.Interfaces;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -35,6 +33,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public const string DeviceExpired = "Expired";
         public const string DeviceInsufficientData = "Insufficient Data";
 
+        public IAppServices Services => IOC.Services;
+
         public ObjectId Id { get; set; }
 
         public string DeviceSerialNumber { get; set; }
@@ -52,7 +52,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             CurrentStatus = DeviceInsufficientData;
-            RequireQC = false; // check current device and call IsQCEnabled, also call Device.EnableQC, Device.DisableQC when toggle is changed
+            RequireQC = Services.DeviceService.Current.IsQCEnabled();
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now; 
         }
