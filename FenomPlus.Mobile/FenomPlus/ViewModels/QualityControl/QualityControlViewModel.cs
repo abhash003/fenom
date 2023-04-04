@@ -1982,7 +1982,7 @@ namespace FenomPlus.ViewModels
                         .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
                         .OrderByDescending(x => x.TestDate).ToList();
 
-                    if (tests != null)
+                    if (tests != null && tests.Count > 0)
                     {
                         return tests[0];
                     }
