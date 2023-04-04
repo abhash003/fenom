@@ -83,7 +83,7 @@ namespace FenomPlus.ViewModels
                 {
                     if (value == true)
                     {
-                        device.RequestDeviceInfoSync();
+                        //device.RequestDeviceInfoSync();
                         if (!device.IsQCEnabled())
                         {
                             device.EnableQC();
@@ -91,7 +91,7 @@ namespace FenomPlus.ViewModels
                     }
                     else
                     {
-                        device.DEVICEINFO();
+                        //device.DEVICEINFO();
                         if (device.IsQCEnabled())
                         {
                             device.DisableQC();
