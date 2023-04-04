@@ -484,7 +484,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> RequestDeviceInfo()
+        public override async Task<bool> RequestDeviceInfo()
         {
             if (IsConnected())
             {
