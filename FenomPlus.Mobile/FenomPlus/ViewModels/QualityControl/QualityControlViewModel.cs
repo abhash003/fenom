@@ -1137,6 +1137,18 @@ namespace FenomPlus.ViewModels
 
 
         }
+        [RelayCommand]
+        public async Task ExitToQCBM()
+        {
+            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                await Services.Navigation.DashboardView();
+            }
+            else
+            {
+                await Services.Navigation.QCUserTestView();
+            }
+        }
 
         #endregion
 
@@ -1221,20 +1233,13 @@ namespace FenomPlus.ViewModels
                 switch (deviceStatus)
                 {
                     case DeviceCheckEnum.Ready:
-                        // await InitializeBreathGauge();
-                        // await Services.Navigation.QCUserTestView();
-                        /*
-                        Services.Cache.TestType = TestTypeEnum.Standard;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                        await Services.Navigation.BreathManeuverFeedbackView();
-                        */
+                        await InitializeBreathGauge();
                         break;
                     case DeviceCheckEnum.DevicePurging:
                         await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                         if (Services.Dialogs.PurgeCancelRequest)
                             return;
-                        // await InitializeBreathGauge();
-                        // await Services.Navigation.QCUserTestView();
+                        await InitializeBreathGauge();
                         break;
                     case DeviceCheckEnum.HumidityOutOfRange:
                         Services.Dialogs.ShowAlert(
