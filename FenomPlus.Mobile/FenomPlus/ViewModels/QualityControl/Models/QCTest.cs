@@ -26,7 +26,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public string Explanation { get; set; }
 
-
+        public QCTest() { }
         public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, string explanation = "")
         {
             Id = ObjectId.NewObjectId();
