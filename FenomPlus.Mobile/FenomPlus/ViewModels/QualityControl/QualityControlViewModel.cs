@@ -1043,6 +1043,8 @@ namespace FenomPlus.ViewModels
                         break;
                 }
 
+                // Open and run negative control test for this user
+                await StartNegativeControl();
                 // Open and run new breath test for this user
                 await StartUserBreathTest();
             }
@@ -1064,8 +1066,10 @@ namespace FenomPlus.ViewModels
                     {
                         QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
 
+                        // Open and run negative control test for this user
+                        await StartNegativeControl();
                         // Open and run new breath test for this user
-                    await StartUserBreathTest();
+                        await StartUserBreathTest();
                     }
                 }
             }
@@ -1155,6 +1159,7 @@ namespace FenomPlus.ViewModels
             CalculationsTimer.Start();
 
             await Services.Navigation.QCNegativeControlTestView();
+            await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }
 
         private void NegativeControlTestCompleted()
@@ -1209,48 +1214,89 @@ namespace FenomPlus.ViewModels
 
         public async Task StartUserBreathTest()
         {
-            if (Services.DeviceService.Current != null)
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
-                {
-                    DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
-                    switch (deviceStatus)
-                    {
-                        case DeviceCheckEnum.Ready:
-                            await InitializeBreathGauge();
-                            await Services.Navigation.QCUserTestView();
-                            break;
-                        case DeviceCheckEnum.DevicePurging:
-                            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
-                            if (Services.Dialogs.PurgeCancelRequest)
-                                return;
-                            await InitializeBreathGauge();
-                            await Services.Navigation.QCUserTestView();
-                            break;
-                        case DeviceCheckEnum.HumidityOutOfRange:
-                            Services.Dialogs.ShowAlert(
-                                $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
-                                "Humidity Warning", "Close");
-                            break;
-                        case DeviceCheckEnum.PressureOutOfRange:
-                            Services.Dialogs.ShowAlert(
-                                $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
-                                "Pressure Warning", "Close");
-                            break;
-                        case DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert(
-                                $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
-                                "Temperature Warning", "Close");
-                            break;
-                        case DeviceCheckEnum.BatteryCriticallyLow:
-                            Services.Dialogs.ShowAlert(
-                                $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
-                                "Battery Warning", "Close");
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                switch (deviceStatus)
+                {
+                    case DeviceCheckEnum.Ready:
+                        // await InitializeBreathGauge();
+                        // await Services.Navigation.QCUserTestView();
+                        /*
+                        Services.Cache.TestType = TestTypeEnum.Standard;
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        await Services.Navigation.BreathManeuverFeedbackView();
+                        */
+                        break;
+                    case DeviceCheckEnum.DevicePurging:
+                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                        if (Services.Dialogs.PurgeCancelRequest)
+                            return;
+                        // await InitializeBreathGauge();
+                        // await Services.Navigation.QCUserTestView();
+                        break;
+                    case DeviceCheckEnum.HumidityOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
+                            "Humidity Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.PressureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
+                            "Pressure Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.TemperatureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
+                            "Temperature Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.BatteryCriticallyLow:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
+                            "Battery Warning", "Close");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public async Task StartNegativeControl()
+        {
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
+            {
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
+
+                switch (deviceStatus)
+                {
+                    case DeviceCheckEnum.Ready:
+                        await StartNegativeControlTest();
+                        break;
+                    case DeviceCheckEnum.DevicePurging:
+                        break;
+                    case DeviceCheckEnum.HumidityOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
+                            "Humidity Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.PressureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
+                            "Pressure Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.TemperatureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
+                            "Temperature Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.BatteryCriticallyLow:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
+                            "Battery Warning", "Close");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -1271,7 +1317,8 @@ namespace FenomPlus.ViewModels
                 GaugeSeconds = 10;
                 GaugeStatus = "Start Blowing";
 
-                await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
+                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                // await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
             }
         }
 
