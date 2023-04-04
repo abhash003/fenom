@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Syncfusion.SfChart.XForms;
 using Color = Xamarin.Forms.Color;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -60,7 +61,7 @@ namespace FenomPlus.ViewModels
                     QCDevice.CurrentStatus = _currentDeviceStatus;
                     DbUpdateQcDevice(QCDevice);
                 }
-                
+
                 OnPropertyChanged(nameof(CurrentDeviceStatus));
                 OnPropertyChanged(nameof(DeviceStatusString));
             }
@@ -76,7 +77,7 @@ namespace FenomPlus.ViewModels
                 var device = Services.DeviceService?.Current;
 
                 QCDevice.RequireQC = value;
-                
+
                 //DbUpdateQcDevice(QCDevice);
 
                 if (device != null)
@@ -150,6 +151,13 @@ namespace FenomPlus.ViewModels
             //int range1 = GetRange(20, 30);
             //int range2 = GetRange(30, 20);
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
+            MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
+            {
+                if (int.TryParse(arg, out int tmp))
+                {
+                    NegativeControlTestResult = tmp;
+                }
+            });
 
 
         }
@@ -659,7 +667,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCDevice> _qcDeviceList;
 
         private ObservableCollection<QCDevice> ReadAllQcDevices()
@@ -696,7 +704,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCUser> _qcUserList;
 
         private ObservableCollection<QCUser> ReadAllQcUsers()
@@ -753,7 +761,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCTest> _qcTestList;
 
         private ObservableCollection<QCTest> ReadAllQcTests()
@@ -1155,11 +1163,17 @@ namespace FenomPlus.ViewModels
 
         #region "Negative Control Test"
 
-        [ObservableProperty]
-        private int _negativeControlTestResult = 0;
-
-        [ObservableProperty]
-        private string _negativeControlTestResultString = "(0 ppb)";
+        private int _negativeControlTestResult = 0; 
+        public int NegativeControlTestResult 
+        {
+            get { return _negativeControlTestResult; }
+            set 
+            {
+                if (value == _negativeControlTestResult) return;
+                _negativeControlTestResult = value;
+                OnPropertyChanged(nameof(NegativeControlTestResult));
+            }
+        }
 
         [ObservableProperty]
         private string _negativeControlStatus;
@@ -1187,7 +1201,6 @@ namespace FenomPlus.ViewModels
             CalculationsTimer.Dispose();
 
             int negativeControlTestResult = 0; // ToDo: Temporary until we have real value from hardware
-            NegativeControlTestResultString = $"({negativeControlTestResult} ppb)";
 
             // Update NegativeControl in DB
             QCTest negativeControlTest = DbCreateNegativeControlTest(negativeControlTestResult);
