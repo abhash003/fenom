@@ -76,7 +76,8 @@
                                 Grid.Column="0"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
-                                Command="{Binding UpdateNegativeControlCommand}"/>
+                                BackgroundColor="LightGray"/>
+                                <!--Command="{Binding UpdateNegativeControlCommand}"/-->
 
                         <controls:QCButtonView 
                                 x:Name="User1Button"
