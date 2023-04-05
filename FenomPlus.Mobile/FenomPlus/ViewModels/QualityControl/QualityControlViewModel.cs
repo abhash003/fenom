@@ -78,14 +78,14 @@ namespace FenomPlus.ViewModels
                 var device = Services.DeviceService?.Current;
 
                 QCDevice.RequireQC = value;
-
                 //DbUpdateQcDevice(QCDevice);
 
                 if (device != null)
                 {
                     if (value == true)
                     {
-                        //device.RequestDeviceInfoSync();
+                        
+                        device.RequestDeviceInfo().GetAwaiter();
                         if (!device.IsQCEnabled())
                         {
                             device.EnableQC();
@@ -93,7 +93,7 @@ namespace FenomPlus.ViewModels
                     }
                     else
                     {
-                        //device.DEVICEINFO();
+                        device.RequestDeviceInfo().GetAwaiter();
                         if (device.IsQCEnabled())
                         {
                             device.DisableQC();

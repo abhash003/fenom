@@ -110,5 +110,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         float? FenomValue { get; set; }
 
         event EventHandler BreathFlowChanged;
+
+        Task<bool> RequestDeviceInfo();
     }
 }
