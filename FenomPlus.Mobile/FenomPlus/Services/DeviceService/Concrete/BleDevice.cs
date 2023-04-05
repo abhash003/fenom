@@ -144,7 +144,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeBreathManeuver(e.Characteristic.Value);
-                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore})");
+                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore}, time_remaining : {BreathManeuver.TimeRemaining})");
                             }
                         };
 

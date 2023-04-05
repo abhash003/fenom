@@ -42,7 +42,7 @@
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"/>
 
-                <Label Text="{Binding NegativeControlTestResultString}"
+                <Label Text= "{Binding NegativeControlTestResult, StringFormat='({0} ppb)'}"
                            FontSize="40"
                            TextColor="#333333"
                            HorizontalTextAlignment="Center"
@@ -51,10 +51,10 @@
             </StackLayout>
 
 
-            <Button Text="Exit"
+            <Button Text="Next"
                     Grid.Row="1"
                     Style="{StaticResource defaultButton}"
-                    Command="{Binding ExitToQCCommand}"
+                    Command="{Binding ExitToQCBMCommand}"
                     HorizontalOptions="End"
                     Margin="0,0,40,0"/>
 

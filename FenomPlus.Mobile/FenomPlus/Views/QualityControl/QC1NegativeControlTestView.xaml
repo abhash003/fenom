@@ -19,7 +19,7 @@
 
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
-            <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" AutoPlay="True" AutoHide="False"/>
+            <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" AutoPlay="True" AutoHide="False" Recurring="True"/>
 
         </StackLayout>
 

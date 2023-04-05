@@ -18,6 +18,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using Syncfusion.SfChart.XForms;
 using Color = Xamarin.Forms.Color;
+using Xamarin.Forms;
+using FenomPlus.Views;
 
 namespace FenomPlus.ViewModels
 {
@@ -60,7 +62,7 @@ namespace FenomPlus.ViewModels
                     QCDevice.CurrentStatus = _currentDeviceStatus;
                     DbUpdateQcDevice(QCDevice);
                 }
-                
+
                 OnPropertyChanged(nameof(CurrentDeviceStatus));
                 OnPropertyChanged(nameof(DeviceStatusString));
             }
@@ -74,7 +76,6 @@ namespace FenomPlus.ViewModels
             set
             {
                 var device = Services.DeviceService?.Current;
-
                 QCDevice.RequireQC = value;
 
                 if (device != null)
@@ -149,6 +150,20 @@ namespace FenomPlus.ViewModels
             //int range1 = GetRange(20, 30);
             //int range2 = GetRange(30, 20);
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
+            MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
+            {
+                if (int.TryParse(arg, out int tmp))
+                {
+                    NegativeControlTestResult = tmp;
+                    // also need to tell the Marigold Flower to stop Animation and disappear
+                    if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
+                    {
+                        // Only navigate if during startup
+                        Services.Navigation.QCNegativeControlResultView();
+                    }
+
+                }
+            });
 
 
         }
@@ -658,7 +673,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCDevice> _qcDeviceList;
 
         private ObservableCollection<QCDevice> ReadAllQcDevices()
@@ -695,7 +710,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCUser> _qcUserList;
 
         private ObservableCollection<QCUser> ReadAllQcUsers()
@@ -752,7 +767,7 @@ namespace FenomPlus.ViewModels
 
         //--------------------------------------------------------------------------------------
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private ObservableCollection<QCTest> _qcTestList;
 
         private ObservableCollection<QCTest> ReadAllQcTests()
@@ -1136,20 +1151,48 @@ namespace FenomPlus.ViewModels
 
 
         }
+        [RelayCommand]
+        public async Task ExitToQCBM()
+        {
+            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                await Services.Navigation.DashboardView();
+            }
+            else
+            {
+                await InitializeBreathGauge();
+                await Services.Navigation.QCUserTestView();
+            }
+        }
 
         #endregion
 
 
         #region "Negative Control Test"
 
-        [ObservableProperty]
-        private int _negativeControlTestResult = 0;
-
-        [ObservableProperty]
-        private string _negativeControlTestResultString = "(0 ppb)";
-
-        [ObservableProperty]
-        private string _negativeControlStatus;
+        private int _negativeControlTestResult = 0; 
+        public int NegativeControlTestResult 
+        {
+            get { return _negativeControlTestResult; }
+            set 
+            {
+                if (value == _negativeControlTestResult) return;
+                _negativeControlTestResult = value;
+                NegativeControlStatus = value < 5 ? "Pass" : "Fail";
+                OnPropertyChanged(nameof(NegativeControlTestResult));
+            }
+        }
+        private string _negativeControlStatus = "None";
+        public string NegativeControlStatus 
+        {
+            get { return _negativeControlStatus; }
+            set 
+            {
+                if (value == _negativeControlStatus) return;
+                _negativeControlStatus = value;
+                OnPropertyChanged(nameof(NegativeControlStatus));
+            }
+        }
 
         private async Task StartNegativeControlTest()
         {
@@ -1174,7 +1217,6 @@ namespace FenomPlus.ViewModels
             CalculationsTimer.Dispose();
 
             int negativeControlTestResult = 0; // ToDo: Temporary until we have real value from hardware
-            NegativeControlTestResultString = $"({negativeControlTestResult} ppb)";
 
             // Update NegativeControl in DB
             QCTest negativeControlTest = DbCreateNegativeControlTest(negativeControlTestResult);
@@ -1186,7 +1228,7 @@ namespace FenomPlus.ViewModels
             UpdateNegativeControlStatus();
             UpdateDeviceStatus(); // Also calls UpdateNegativeControlStatus
 
-            Services.Navigation.QCNegativeControlResultView();
+            // Services.Navigation.QCNegativeControlResultView();
         }
 
         #endregion
@@ -1220,20 +1262,13 @@ namespace FenomPlus.ViewModels
                 switch (deviceStatus)
                 {
                     case DeviceCheckEnum.Ready:
-                        // await InitializeBreathGauge();
-                        // await Services.Navigation.QCUserTestView();
-                        /*
-                        Services.Cache.TestType = TestTypeEnum.Standard;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                        await Services.Navigation.BreathManeuverFeedbackView();
-                        */
+                        await InitializeBreathGauge();
                         break;
                     case DeviceCheckEnum.DevicePurging:
                         await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                         if (Services.Dialogs.PurgeCancelRequest)
                             return;
-                        // await InitializeBreathGauge();
-                        // await Services.Navigation.QCUserTestView();
+                        await InitializeBreathGauge();
                         break;
                     case DeviceCheckEnum.HumidityOutOfRange:
                         Services.Dialogs.ShowAlert(
