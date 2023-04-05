@@ -76,9 +76,7 @@ namespace FenomPlus.ViewModels
             set
             {
                 var device = Services.DeviceService?.Current;
-
                 QCDevice.RequireQC = value;
-                //DbUpdateQcDevice(QCDevice);
 
                 if (device != null)
                 {
