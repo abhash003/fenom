@@ -1160,6 +1160,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
+                await InitializeBreathGauge();
                 await Services.Navigation.QCUserTestView();
             }
         }
