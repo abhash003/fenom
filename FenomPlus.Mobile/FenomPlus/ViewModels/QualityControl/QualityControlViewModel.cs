@@ -19,6 +19,7 @@ using System.Timers;
 using Syncfusion.SfChart.XForms;
 using Color = Xamarin.Forms.Color;
 using Xamarin.Forms;
+using FenomPlus.Views;
 
 namespace FenomPlus.ViewModels
 {
@@ -156,6 +157,13 @@ namespace FenomPlus.ViewModels
                 if (int.TryParse(arg, out int tmp))
                 {
                     NegativeControlTestResult = tmp;
+                    // also need to tell the Marigold Flower to stop Animation and disappear
+                    if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
+                    {
+                        // Only navigate if during startup
+                        Services.Navigation.QCNegativeControlResultView();
+                    }
+
                 }
             });
 
@@ -1212,7 +1220,7 @@ namespace FenomPlus.ViewModels
             UpdateNegativeControlStatus();
             UpdateDeviceStatus(); // Also calls UpdateNegativeControlStatus
 
-            Services.Navigation.QCNegativeControlResultView();
+            // Services.Navigation.QCNegativeControlResultView();
         }
 
         #endregion
