@@ -99,7 +99,7 @@ namespace FenomPlus.SDK.Core.Models
                         if (NOScore != null)
                         {
                             MessagingCenter.Send<BreathManeuver, string>(this, "NOScore", NOScore.ToString());
-                        )
+                        }
                         break;
                 }
 
