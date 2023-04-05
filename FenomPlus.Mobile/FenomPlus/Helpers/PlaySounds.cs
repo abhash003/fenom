@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.NetworkInformation;
+using System.Diagnostics;
 using FenomPlus.Controls;
 using FenomPlus.Enums;
 using Plugin.SimpleAudioPlayer;
@@ -23,8 +23,8 @@ namespace FenomPlus.Helpers
         /// </summary>
         public static void InitSound()
         {
-            if (green_high == null)
-            {
+            try
+            { 
                 red_low = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 red_low.Load("red_low.wav");
                 red_low.Loop = false;
@@ -61,14 +61,16 @@ namespace FenomPlus.Helpers
                 test_success.Load("test_success.wav");
                 test_success.Loop = false;
             }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         private static SoundsEnum CurrentSound = SoundsEnum.none;
 
         public static void PlaySound(float gaugeData)
         {
-            InitSound();
-
             // play none
             if ((gaugeData <= BreathGaugeValues.White1Top) || (gaugeData >= BreathGaugeValues.Red4Top))
             {
@@ -205,7 +207,6 @@ namespace FenomPlus.Helpers
         /// <param name="sound"></param>
         public static void PlaySound(SoundsEnum sound, double volume)
         {
-            InitSound();
             switch (sound)
             {
                 case SoundsEnum.red_low:
@@ -410,6 +411,17 @@ namespace FenomPlus.Helpers
                 green_high.Stop();
             }
         }
+        public static void Close()
+        {
+            green_high.Dispose();
+            green_mid.Dispose();
+            green_low.Dispose();
 
+            yellow_high.Dispose();
+            yellow_low.Dispose();
+
+            red_high.Dispose();
+            red_low.Dispose();
+        }
     }
 }
