@@ -1178,12 +1178,21 @@ namespace FenomPlus.ViewModels
             {
                 if (value == _negativeControlTestResult) return;
                 _negativeControlTestResult = value;
+                NegativeControlStatus = value < 5 ? "Pass" : "Fail";
                 OnPropertyChanged(nameof(NegativeControlTestResult));
             }
         }
-
-        [ObservableProperty]
-        private string _negativeControlStatus;
+        private string _negativeControlStatus = "None";
+        public string NegativeControlStatus 
+        {
+            get { return _negativeControlStatus; }
+            set 
+            {
+                if (value == _negativeControlStatus) return;
+                _negativeControlStatus = value;
+                OnPropertyChanged(nameof(NegativeControlStatus));
+            }
+        }
 
         private async Task StartNegativeControlTest()
         {
