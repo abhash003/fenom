@@ -60,6 +60,11 @@ namespace FenomPlus.Services.DeviceService.Abstract
             // write path to debug
             DebugList.Insert(0, DebugLog.Create("App Starting"));
             DebugList.Insert(0, DebugLog.Create(IOC.Services.DebugLogFile.GetFilePath()));
+
+
+            // start the log cleaner 
+            LogCleaningTimer = new Timer(60_000);
+            LogCleaningTimer.Elapsed += LogCleaningTimerOnElapsed;
         }
 
         // Properties
@@ -84,15 +89,15 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> DEVICEINFO();
 
+        public abstract bool RequestDeviceInfoSync();
+
         public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
 
         public abstract Task<bool> DATETIME(string date, string time);
 
         public abstract Task<bool> SERIALNUMBER(string SerailNumber);
 
-        public abstract Task<bool> MESSAGE(MESSAGE message);
-
-        public abstract Task<bool> DEBUGMSG();
+        public abstract Task<bool> WriteRequest(MESSAGE message);
 
         public abstract Task<bool> ENVIROMENTALINFO();
 
@@ -172,9 +177,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public event EventHandler BreathFlowChanged;
 
-        static volatile object _s_debugLogLock = new object();
-        static volatile bool _s_logFileWriterWorkerStarted = false;
-        static volatile bool _s_logFileWriterWorkerStop = false;
+        private static object _s_debugLogLock = new object();
 
         #endregion
 
@@ -187,6 +190,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public abstract Task ConnectToKnownDeviceAsync(Guid Id);
 
         public abstract Task DisconnectAsync();
+
+        public abstract Task<bool> RequestDeviceInfo();
 
         /// <summary>
         /// 
@@ -233,9 +238,10 @@ namespace FenomPlus.Services.DeviceService.Abstract
             // 0x4b -- charging
             // 0x00 -- unknown
             // If battery is critical but is charging then dont raise the error
+            
             if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
-                return DeviceCheckEnum.BatteryCriticallyLow;
+                //return DeviceCheckEnum.BatteryCriticallyLow;
             }
 
             // environmental lockouts
@@ -283,35 +289,18 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
             return DeviceCheckEnum.Ready;
         }
-
-        private void LogFileWriterWorker()
-        {
-            _s_logFileWriterWorkerStarted = true;
-
-            var current = DateTime.Now;
-
-            while (_s_logFileWriterWorkerStop == false)
-            {
-                if ((DateTime.Now - current).TotalSeconds > 60)
-                {
-                    // flush the log
-                    var debugList = DebugList;
-
-                    lock (_s_debugLogLock)
-                    {
-                        Console.WriteLine(debugList);
-                        debugList.Clear();
-                    }
-
-                    // reset the time
-                    current = DateTime.Now;
-                }
-            }
-        }
-
         #endregion
 
         #region Timer
+        private readonly Timer LogCleaningTimer;
+        private void LogCleaningTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (_s_debugLogLock)
+            {
+                Console.WriteLine(DebugList);
+                DebugList.Clear();
+            }
+        }
 
         private bool _readyForTest;
         public int DeviceReadyCountDown { get; set; }
@@ -321,9 +310,14 @@ namespace FenomPlus.Services.DeviceService.Abstract
             get => _readyForTest;
             set
             {
-                _readyForTest = value;
+                if (value == _readyForTest) { return; }
 
-                if (_readyForTest == false)
+                // it already set as 'not ready for test',during the count down time, cannot revoke it to 'ready for test' 
+                if (value == true && DeviceReadyCountDown > 0)  
+                {
+                    return;
+                }
+                if ((_readyForTest = value) == false)
                 {
                     DeviceReadyCountDown = 32;
                     DeviceReadyTimer.Start();
@@ -461,13 +455,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public DebugMsg DecodeDebugMsg(byte[] data)
         {
-            if (_s_logFileWriterWorkerStarted == false)
-            {
-                // start the worker
-                Thread workerThread = new Thread(LogFileWriterWorker);
-                workerThread.Start();
-            }
-
             try
             {
                 DebugMsg ??= new DebugMsg();
@@ -498,10 +485,55 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public void Dispose()
         {
-            _s_logFileWriterWorkerStop = true;
+            DeviceReadyTimer.Dispose();
+            LogCleaningTimer.Dispose();
         }
 
         #endregion
 
+
+        #region Device Communication
+
+        public abstract bool SendMessage(MESSAGE message);
+
+        #endregion
+
+        #region Quality Control (QC)
+
+        public bool EnableQC()
+        {
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);
+            bool result = SendMessage(msg);
+            return result;
+        }
+
+        public bool DisableQC()
+        {
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);
+            bool result = SendMessage(msg);
+            return result;
+        }
+
+        public bool IsQCEnabled()
+        {
+            // if qc is populated in last device info update
+            if (DeviceInfo.QcValidity == 0xBEEF)
+                return false;
+            
+            return true;
+        }
+
+        public bool GetQCHoursRemaining(ref int hours)
+        {
+            // >=0 : valid, <=-1 : expired, = 0x8000 : failed
+            return true;
+        }
+
+        public bool ExtendQC(int hours)
+        {
+            return true;
+        }
+
+        #endregion
     }
 }

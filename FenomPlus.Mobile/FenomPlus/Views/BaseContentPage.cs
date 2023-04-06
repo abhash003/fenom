@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace FenomPlus.Views
 {
-    public class BaseContentPage : ContentPage //IBaseServices
+    public class BaseContentPage : ContentPage, IUnhandledExceptionHandler //IBaseServices
     {
         public IAppServices Services => IOC.Services;
         //public ICacheService Cache => Services.Cache;
@@ -42,6 +42,16 @@ namespace FenomPlus.Views
 
         public virtual void NewGlobalData()
         {
+        }
+        public void RegisterUnhandledExceptionHandler()
+        {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
+        }
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            string exceptionStr = e.ExceptionObject.ToString();
+            Debug.WriteLine(exceptionStr);
         }
     }
 }

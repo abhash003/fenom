@@ -29,6 +29,13 @@ namespace FenomPlus.Controls
             set => SetValue(AutoPlayProperty, value);
         }
 
+        public static readonly BindableProperty RecurringProperty = BindableProperty.Create("Recurring", typeof(bool), typeof(MarigoldProgressWheel), false);
+        public bool Recurring 
+        {
+            get => (bool)GetValue(RecurringProperty);
+            set => SetValue(RecurringProperty, value);
+        }
+
         public static readonly BindableProperty AutoHideProperty = BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
 
         public bool AutoHide
@@ -56,30 +63,10 @@ namespace FenomPlus.Controls
             InitializeComponent();
             IsVisible = false;
 
-            PetalImageFileNames.Add("petals_01.png");
-            PetalImageFileNames.Add("petals_02.png");
-            PetalImageFileNames.Add("petals_03.png");
-            PetalImageFileNames.Add("petals_04.png");
-            PetalImageFileNames.Add("petals_05.png");
-            PetalImageFileNames.Add("petals_06.png");
-            PetalImageFileNames.Add("petals_07.png");
-            PetalImageFileNames.Add("petals_08.png");
-            PetalImageFileNames.Add("petals_09.png");
-            PetalImageFileNames.Add("petals_10.png");
-            PetalImageFileNames.Add("petals_11.png");
-            PetalImageFileNames.Add("petals_12.png");
-            PetalImageFileNames.Add("petals_13.png");
-            PetalImageFileNames.Add("petals_14.png");
-            PetalImageFileNames.Add("petals_15.png");
-            PetalImageFileNames.Add("petals_16.png");
-            PetalImageFileNames.Add("petals_17.png");
-            PetalImageFileNames.Add("petals_18.png");
-            PetalImageFileNames.Add("petals_19.png");
-            PetalImageFileNames.Add("petals_20.png");
-            PetalImageFileNames.Add("petals_21.png");
-            PetalImageFileNames.Add("petals_22.png");
-            PetalImageFileNames.Add("petals_23.png");
-            PetalImageFileNames.Add("petals_24.png");
+            for(int i = 1; i<25; ++i)
+            {
+                PetalImageFileNames.Add(String.Format("petals_{0:D2}.png", i)); 
+            }
 
             MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[0]);
 
@@ -128,9 +115,13 @@ namespace FenomPlus.Controls
 
         private Task IncrementMarigoldPetals()
         {
-            if (PetalIndex < PetalImageFileNames.Count - 1)
+            if (PetalIndex < PetalImageFileNames.Count - 1 || Recurring)
             {
-                PetalIndex += 1;
+                ++ PetalIndex;
+                if (Recurring && PetalIndex + 1 == PetalImageFileNames.Count)
+                {
+                    PetalIndex = 0;
+                }
 
                 Device.BeginInvokeOnMainThread(() =>
                 {

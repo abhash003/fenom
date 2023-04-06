@@ -14,7 +14,7 @@ using FenomPlus.Helpers;
 
 namespace FenomPlus.ViewModels
 {
-    public partial class BaseViewModel : ObservableObject, IBaseServices
+    public partial class BaseViewModel : ObservableObject, IBaseServices, IUnhandledExceptionHandler
     {
         public IAppServices Services => IOC.Services;
         //public IBleHubService BleHub => Services.BleHub;
@@ -25,9 +25,9 @@ namespace FenomPlus.ViewModels
         // repos here
         public IBreathManeuverErrorRepository ErrorsRepo => Services.Database.BreathManeuverErrorRepo;
         public IBreathManeuverResultRepository ResultsRepo => Services.Database.BreathManeuverResultRepo;
-        public IQualityControlRepository QCRepo => Services.Database.QualityControlRepo;
-        public IQualityControlDevicesRepository QCDevicesRepo => Services.Database.QualityControlDevicesRepo;
-        public IQualityControlUsersRepository QCUsersRepo => Services.Database.QualityControlUsersRepo;
+        //public IQualityControlRepository QCRepo => Services.Database.QualityControlRepo;
+        //public IQualityControlDeviceRepository QCDevicesRepo => Services.Database.QualityControlDevicesRepo;
+        //public IQualityControlUsersRepository QCUsersRepo => Services.Database.QualityControlUsersRepo;
 
         [ObservableProperty]
         bool _isBusy = false;
@@ -75,12 +75,6 @@ namespace FenomPlus.ViewModels
             await Services.Navigation.DashboardView();
         }
 
-        [RelayCommand]
-        public async Task ExitToQC()
-        {
-            await Services.Navigation.QualityControlView();
-        }
-
         public virtual void OnAppearing()
         {
             
@@ -89,6 +83,15 @@ namespace FenomPlus.ViewModels
         public virtual void OnDisappearing()
         {
         }
-        
+        public void RegisterUnhandledExceptionHandler()
+        {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
+        }
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            string exceptionStr = e.ExceptionObject.ToString();
+            Debug.WriteLine(exceptionStr);
+        }
     }
 }

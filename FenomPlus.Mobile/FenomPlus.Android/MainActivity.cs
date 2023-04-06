@@ -11,6 +11,7 @@ using TinySvgHelper;
 using System;
 using FenomPlus.Services.DeviceService;
 using FenomPlus.Services.DeviceService.Interfaces;
+using FenomPlus.Helpers;
 
 namespace FenomPlus.Droid
 {
@@ -37,6 +38,12 @@ namespace FenomPlus.Droid
             CheckPermissions();
 
             LoadApplication(new App());
+            PlaySounds.InitSound();
+        }
+        protected override void OnDestroy()
+        {
+            PlaySounds.Close();
+            base.OnDestroy();
         }
 
         protected override void OnStop()

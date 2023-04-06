@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.NetworkInformation;
+using System.Diagnostics;
 using FenomPlus.Controls;
 using FenomPlus.Enums;
 using Plugin.SimpleAudioPlayer;
@@ -23,8 +23,9 @@ namespace FenomPlus.Helpers
         /// </summary>
         public static void InitSound()
         {
-            if (green_high == null)
+            try
             {
+                if (green_high != null) return;
                 red_low = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 red_low.Load("red_low.wav");
                 red_low.Loop = false;
@@ -61,14 +62,16 @@ namespace FenomPlus.Helpers
                 test_success.Load("test_success.wav");
                 test_success.Loop = false;
             }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         private static SoundsEnum CurrentSound = SoundsEnum.none;
 
         public static void PlaySound(float gaugeData)
         {
-            InitSound();
-
             // play none
             if ((gaugeData <= BreathGaugeValues.White1Top) || (gaugeData >= BreathGaugeValues.Red4Top))
             {
@@ -140,25 +143,25 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.none:
                     break;
                 case SoundsEnum.red_low:
-                    StopRedLow();
+                    Stop(red_low);
                     break;
                 case SoundsEnum.red_high:
-                    StopRedHigh();
+                    Stop(red_high);
                     break;
                 case SoundsEnum.yellow_low:
-                    StopYellowLow();
+                    Stop(yellow_low);
                     break;
                 case SoundsEnum.yellow_high:
-                    StopYellowHigh();
+                    Stop(yellow_high);
                     break;
                 case SoundsEnum.green_low:
-                    StopGreenLow();
+                    Stop(green_low);
                     break;
                 case SoundsEnum.green_mid:
-                    StopGreenMid();
+                    Stop(green_mid);
                     break;
                 case SoundsEnum.green_high:
-                    StopGreenHigh();
+                    Stop(green_high);
                     break;
                 case SoundsEnum.test_failure:
                     break;
@@ -205,18 +208,12 @@ namespace FenomPlus.Helpers
         /// <param name="sound"></param>
         public static void PlaySound(SoundsEnum sound, double volume)
         {
-            InitSound();
             switch (sound)
             {
                 case SoundsEnum.red_low:
                     if (!red_low.IsPlaying)
                     {
-                        StopRedHigh();
-                        StopYellowLow();
-                        StopYellowHigh();
-                        StopGreenLow();
-                        StopGreenMid();
-                        StopGreenHigh();
+                        StopAll();
                         red_low.Volume = volume;
                         red_low.Play();
                     }
@@ -224,12 +221,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.red_high:
                     if (!red_high.IsPlaying)
                     {
-                        StopRedLow();
-                        StopYellowLow();
-                        StopYellowHigh();
-                        StopGreenLow();
-                        StopGreenMid();
-                        StopGreenHigh();
+                        StopAll();
                         red_high.Volume = volume;
                         red_high.Play();
                     }
@@ -237,12 +229,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.yellow_low:
                     if (!yellow_low.IsPlaying)
                     {
-                        StopRedLow();
-                        StopRedHigh();
-                        StopYellowHigh();
-                        StopGreenLow();
-                        StopGreenMid();
-                        StopGreenHigh();
+                        StopAll();
                         yellow_low.Volume = volume;
                         yellow_low.Play();
                     }
@@ -250,12 +237,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.yellow_high:
                     if (!yellow_high.IsPlaying)
                     {
-                        StopRedLow();
-                        StopRedHigh();
-                        StopYellowLow();
-                        StopGreenLow();
-                        StopGreenMid();
-                        StopGreenHigh();
+                        StopAll();
                         yellow_high.Volume = volume;
                         yellow_high.Play();
                     }
@@ -263,12 +245,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.green_low:
                     if (!green_low.IsPlaying)
                     {
-                        StopRedLow();
-                        StopRedHigh();
-                        StopYellowLow();
-                        StopYellowHigh();
-                        StopGreenMid();
-                        StopGreenHigh();
+                        StopAll();
                         green_low.Volume = volume;
                         green_low.Play();
                     }
@@ -276,12 +253,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.green_mid:
                     if (!green_mid.IsPlaying)
                     {
-                        StopRedLow();
-                        StopRedHigh();
-                        StopYellowLow();
-                        StopYellowHigh();
-                        StopGreenLow();
-                        StopGreenHigh();
+                        StopAll();
                         green_mid.Volume = volume;
                         green_mid.Play();
                     }
@@ -289,12 +261,7 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.green_high:
                     if (!green_high.IsPlaying)
                     {
-                        StopRedLow();
-                        StopRedHigh();
-                        StopYellowLow();
-                        StopYellowHigh();
-                        StopGreenLow();
-                        StopGreenMid();
+                        StopAll();
                         green_high.Volume = volume;
                         green_high.Play();
                     }
@@ -311,21 +278,34 @@ namespace FenomPlus.Helpers
                     break;
             }
         }
+        public static void Stop(ISimpleAudioPlayer isap, bool dispose = false)
+        {
+            if (isap != null)
+            {
+                if (isap.IsPlaying)
+                    isap.Stop();
 
+                if (dispose == true)
+                {
+                    isap.Dispose();
+                    isap = null;
+                }
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
-        public static void StopAll()
+        public static void StopAll(bool dispose = false)
         {
             try
             {
-                StopRedLow();
-                StopRedHigh();
-                StopYellowLow();
-                StopYellowHigh();
-                StopGreenLow();
-                StopGreenMid();
-                StopGreenHigh();
+                Stop(red_low, dispose);
+                Stop(red_high, dispose);
+                Stop(yellow_low, dispose);
+                Stop(yellow_high, dispose);
+                Stop(green_low, dispose);
+                Stop(green_mid, dispose);
+                Stop(green_high, dispose);
             }
             catch (Exception ex)
             {
@@ -333,83 +313,9 @@ namespace FenomPlus.Helpers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopRedLow()
+        public static void Close()
         {
-            if ((red_low != null) && (red_low.IsPlaying))
-            {
-                red_low.Stop();
-            }
+            StopAll(true);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopRedHigh()
-        {
-            if ((red_high != null) && (red_high.IsPlaying))
-            {
-                red_high.Stop();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopYellowLow()
-        {
-            if ((yellow_low != null) && (yellow_low.IsPlaying))
-            {
-                yellow_low.Stop();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopYellowHigh()
-        {
-            if ((yellow_high != null) && (yellow_high.IsPlaying))
-            {
-                yellow_high.Stop();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopGreenLow()
-        {
-            if ((green_low != null) && (green_low.IsPlaying))
-            {
-                green_low.Stop();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopGreenMid()
-        {
-            if ((green_mid != null) && (green_mid.IsPlaying))
-            {
-                green_mid.Stop();
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StopGreenHigh()
-        {
-            if ((green_high != null) && (green_high.IsPlaying))
-            {
-                green_high.Stop();
-            }
-        }
-
     }
 }

@@ -30,7 +30,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 #nullable disable
 
         // Methods
-        void StartDiscovery(Action<IDevice> deviceFoundAction);
+        void StartDiscovery();
         void StopDiscovery();
         bool IsDeviceFenomDevice(string name);
         Device GetBondedOrPairedFenomDevices();

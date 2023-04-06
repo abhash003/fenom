@@ -55,45 +55,17 @@ namespace FenomPlus.ViewModels
             Services.Navigation.DevicePowerOnView();
         }
 
-        async void DeviceDiscoveredHandler(object sender, EventArgs e)
-        {
-            try
-            {
-                Services.DeviceService.StopDiscovery();
-
-                var ea = (DeviceServiceEventArgs)e;
-                Helper.WriteDebug("Device discovered.");
-                try
-                {
-                    await ea.Device.ConnectAsync();
-                    await FoundDevice(ea.Device);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
-                    throw;
-                }
-                
-            }
-            catch (Exception ex)
-            {                
-                Debug.WriteLine("Exception at DeviceDiscoveredHandler: " + ex.Message);
-            }
-            
-        }
 
         private void WireEventHandlers()
         {
             Services.DeviceService.DeviceConnected += DeviceConnectedHandler;
             Services.DeviceService.DeviceConnectionLost += DeviceConnectionLostHandler;
-            Services.DeviceService.DeviceDiscovered += DeviceDiscoveredHandler;
         }
 
         private void UnwireEventHandlers()
         {
             Services.DeviceService.DeviceConnected -= DeviceConnectedHandler;
             Services.DeviceService.DeviceConnectionLost -= DeviceConnectionLostHandler;
-            Services.DeviceService.DeviceDiscovered -= DeviceDiscoveredHandler;
         }
 
         /// <summary>
@@ -109,51 +81,9 @@ namespace FenomPlus.ViewModels
         /// </summary>
         public void StartScan()
         {
-            Seconds = 5;
+            Seconds = 10;
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
-
-            Services.DeviceService.StartDiscovery(async (IDevice device) =>
-            {
-                try
-                {
-                    if (device.Name != null)
-                    {
-                        if (Services.DeviceService.IsDeviceFenomDevice(device.Name))
-                        {
-                            Stop = true;
-                            try
-                            {
-                                await device.ConnectAsync();
-                                await FoundDevice(device);
-                            }
-                            catch(Exception ex)
-                            {
-                                Debug.WriteLine("Exception at DevicePowerOnViewModel StartScan : " + ex.Message);
-                            }
-                            
-                        }
-                    }
-
-                    Console.WriteLine("id: {0} name: {1}", device.Id, (device.Name != null) ? device.Name : "<null>");
-                }
-
-                catch(Exception ex)
-                {
-                    Console.WriteLine("exception: {0}", ex.Message);
-                }
-            });
-        }
-
-        public async Task FoundDevice(IDevice device)
-        {
-            Helper.WriteDebug("enter: FoundDevice()");
-            if (Services.DeviceService.Current == null) 
-                return;
-            
-            Stop = true;
-            
-            await Services.Navigation.DashboardView();
-            Helper.WriteDebug("exit:FoundDevice()");
+            Services.DeviceService.StartDiscovery();
         }
 
         /// <summary>
@@ -195,7 +125,7 @@ namespace FenomPlus.ViewModels
             if (Seconds <= 0)
             {
                 StopScan();
-                StartScan();
+                MessagingCenter.Send(this, "DeviceNotFound");
                 return false;
             }
 

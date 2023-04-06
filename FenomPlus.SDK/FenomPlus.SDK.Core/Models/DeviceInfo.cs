@@ -10,7 +10,7 @@ namespace FenomPlus.SDK.Core.Models
     public class DeviceInfo : BaseCharacteristic
     {
         // Device characteristic items
-        private const int COMM_PCBA_VERSION_ID                =        (0x00);
+        private const int COMM_PCBA_VERSION_ID                =        (0x10);
         private const int COMM_PCBA_VERSION_SIZE              =            1 ;
         private const int COMM_FIRMWARE_VERSION_MAJOR_ID      =        (0x01);
         private const int COMM_FIRMWARE_VERSION_MAJOR_SIZE    =            1 ;
@@ -22,7 +22,9 @@ namespace FenomPlus.SDK.Core.Models
         private const int COMM_NO_SENSOR_DAYS_REMAINING_SIZE  =            2 ;
         private const int COMM_DEVICE_SERIAL_NUMBER_ID        =        (0x05);
         private const int COMM_DEVICE_SERIAL_NUMBER_SIZE      =            6 ;
-        private const int COMM_DEVICE_ITEMS = 6;
+        private const int COMM_QC_VALIDITY_ID =        (0x06);
+        private const int COMM_QC_VALIDITY_SIZE =           2;
+        private const int COMM_DEVICE_ITEMS = 7;
         private const int COMM_DEVICE_PAYLOAD_SIZE      = ( COMM_PCBA_VERSION_SIZE 
                                                             + COMM_FIRMWARE_VERSION_MAJOR_SIZE    
                                                             + COMM_FIRMWARE_VERSION_MINOR_SIZE    
@@ -36,6 +38,7 @@ namespace FenomPlus.SDK.Core.Models
         private int deviceDaysRemaining;
         private int noSensorDaysRemaining;
         private byte[] serialNumber;
+        private short qcValidity;
 
         public byte PcbaVersion { get => pcbaVersion; set => pcbaVersion = value; }
         public byte FirmwareVersionMajor { get => firmwareVersionMajor; set => firmwareVersionMajor = value; }
@@ -43,6 +46,7 @@ namespace FenomPlus.SDK.Core.Models
         public int DeviceDaysRemaining { get => deviceDaysRemaining; set => deviceDaysRemaining = value; }
         public int NoSensorDaysRemaining { get => noSensorDaysRemaining; set => noSensorDaysRemaining = value; }
         public byte[] SerialNumber { get => serialNumber; set => serialNumber = value; }
+        public short QcValidity { get => qcValidity; set => qcValidity = value; }
 
         public int SensorExpDateYear
         {
@@ -67,20 +71,21 @@ namespace FenomPlus.SDK.Core.Models
             }
         }
 
+        public DeviceInfo()
+        {
+            unchecked
+            {
+                qcValidity = (short) 0xBEEF;
+            }
+        }
 
         public DeviceInfo Decode(byte[] data)
         {
-            int totalSize = COMM_DEVICE_PAYLOAD_SIZE + (COMM_DEVICE_ITEMS * 2) + 1;
-            
-            if (data.Length != totalSize)
-                throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
-
             int offset = 0;
 
             int itemCount = data[offset++];
 
-            if (itemCount != COMM_DEVICE_ITEMS)
-                throw new ArgumentException($"Payload count mismatch (expected: {COMM_DEVICE_ITEMS}, saw: {itemCount})");
+            int totalSize = data.Length; // COMM_DEVICE_PAYLOAD_SIZE + (itemCount * 2) + 1;
 
             while (offset < totalSize)
             {
@@ -136,6 +141,20 @@ namespace FenomPlus.SDK.Core.Models
                         }
                         serialNumber = new byte[COMM_DEVICE_SERIAL_NUMBER_SIZE];
                         Array.Copy(data, offset, serialNumber, 0, serialNumber.Length);
+                        break;
+
+                    case COMM_QC_VALIDITY_ID:
+                        {
+                            if (size != COMM_QC_VALIDITY_SIZE)
+                            {
+                                throw new ArgumentException($"Unexpected payload item size (expected: {COMM_QC_VALIDITY_SIZE}, saw: {size})");
+                            }
+                            qcValidity = ToShort(data, offset);
+                            break;
+                        }
+
+                    default:
+                        // log unexpected item and skip it
                         break;
                 }
 

@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Views;
@@ -71,6 +71,8 @@ namespace FenomPlus.ViewModels
 
         private readonly Timer BluetoothStatusTimer;
 
+        private bool _DeviceNotFound;
+
         public StatusViewModel()
         {
             VersionTracking.Track();
@@ -90,54 +92,67 @@ namespace FenomPlus.ViewModels
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
             BluetoothStatusTimer.Start();
+
+            MessagingCenter.Subscribe<DevicePowerOnViewModel>(this, "DeviceNotFound", async (sender) => {
+                await Task.Run(() =>
+                {
+                    _DeviceNotFound = true;
+                });
+            });
         }
 
         private bool CheckDeviceConnection()
         {
-            if (Services == null || Services.DeviceService == null || Services.DeviceService.Current == null)
-                return false;
-
-            bool deviceIsConnected = Services.DeviceService.Current.Connected;
-
             // Don't use Services.BleHub.IsConnected() or it will try to reconnect - we just want current connection status
-            return deviceIsConnected;
+            return Services?.DeviceService?.Current?.Connected ?? false;
         }
 
         private int BluetoothCheckCount = 0;
 
-        private async void BluetoothCheck(object sender, ElapsedEventArgs e)
+        private  void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
-            // Note:  All device status parameters are conditional on the bluetooth connection
-
-            BluetoothConnected = CheckDeviceConnection();
-            //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
-
-            if (BluetoothConnected)
+            _ = Task.Run(async () =>
             {
-                if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                // Note:  All device status parameters are conditional on the bluetooth connection
+
+                BluetoothConnected = CheckDeviceConnection();
+                //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
+
+                if (BluetoothConnected)
                 {
-                    // Only navigate if during startup
-                    await Services.Navigation.DashboardView();
-                }                
+                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                    {
+                        // Only navigate if during startup
+                        await Services.Navigation.DashboardView();
+                    }
 
-                BluetoothCheckCount++;
+                    BluetoothCheckCount++;
 
-                if (BluetoothCheckCount >= RequestNewStatusInterval)
-                    BluetoothCheckCount = 0;
-            }
-            else
-            {
-                BluetoothCheckCount = 0; // Reset counter
-
-                if (App.GetCurrentPage() is not DevicePowerOnView)
-                {
-                    await Services.Navigation.DevicePowerOnView();
+                    if (BluetoothCheckCount >= RequestNewStatusInterval)
+                        BluetoothCheckCount = 0;
                 }
-            }
+                else if (Services.DeviceService.Discovering)
+                {
+                    BluetoothCheckCount = 0; // Reset counter
 
-            //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
+                    if (App.GetCurrentPage() is not DevicePowerOnView)
+                    {
+                        await Services.Navigation.DevicePowerOnView();
+                    }
+                }
+                // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
+                else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+                {
+                    BluetoothCheckCount = 0; // Reset counter
+                    if (App.GetCurrentPage() is not DashboardView)
+                    {
+                        await Services.Navigation.DashboardView();
+                    }
+                }
+                //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
-            await RefreshStatusAsync();
+                await RefreshStatusAsync();
+            });
         }
 
         private bool RefreshInProgress = false;
@@ -174,7 +189,7 @@ namespace FenomPlus.ViewModels
 
             UpdateTemperature();
 
-            UpdateQualityControlExpiration(7); // ToDo:  Need value here
+            UpdateQualityControlExpiration(7);
 
             RefreshInProgress = false;
         }
@@ -802,6 +817,11 @@ namespace FenomPlus.ViewModels
                 case PreparingStandardTestResultView preparingStandardTestResultView:
                 case StopExhalingView stopExhalingView:
                 case TestResultsView testResultsView:
+                case QCNegativeControlTestView qCNegativeControlTestView:
+                case QCNegativeControlResultView qCNegativeControlResultView:
+                case QCUserTestView qCUserTestView:
+                case QCUserStopTestView qCUserStopTestView:
+                case QCUserTestResultView qCUserTestResultView:
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
                 case DevicePowerOnView devicePowerOnView:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)

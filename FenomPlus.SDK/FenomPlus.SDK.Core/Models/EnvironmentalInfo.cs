@@ -32,7 +32,9 @@ namespace FenomPlus.SDK.Core.Models
             int totalSize = COMM_ENVIRONMENTAL_PAYLOAD_SIZE + (COMM_ENVIRONMENTAL_ITEMS * 2) + 1;
 
             if (data.Length != totalSize)
-                throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
+            {
+                //throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
+            }
 
             int offset = 0;
 
@@ -82,6 +84,11 @@ namespace FenomPlus.SDK.Core.Models
                         if (BatteryLevel < 0) BatteryLevel = 0;
 
                         break;
+
+                    default:
+                        {
+                            break;
+                        }
                 }
 
                 offset += size;
