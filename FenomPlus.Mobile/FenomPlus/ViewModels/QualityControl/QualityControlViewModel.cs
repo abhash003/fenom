@@ -152,16 +152,16 @@ namespace FenomPlus.ViewModels
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
             MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
             {
-                if (int.TryParse(arg, out int tmp))
+                if (int.TryParse(arg, out int score))
                 {
-                    NegativeControlTestResult = tmp;
+                    NegativeControlTestResult = score;
+                    NegativeControlTestCompleted(score);
                     // also need to tell the Marigold Flower to stop Animation and disappear
                     if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
                     {
                         // Only navigate if during startup
                         Services.Navigation.QCNegativeControlResultView();
                     }
-
                 }
             });
 
@@ -1160,8 +1160,15 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                await InitializeBreathGauge();
-                await Services.Navigation.QCUserTestView();
+                if (NegativeControlStatus == QCUser.NegativeControlPass)
+                {
+                    await InitializeBreathGauge();
+                    await Services.Navigation.QCUserTestView();
+                }
+                else
+                {
+                    await Services.Navigation.QualityControlView();
+                }
             }
         }
 
@@ -1169,7 +1176,17 @@ namespace FenomPlus.ViewModels
 
 
         #region "Negative Control Test"
-
+        private string _buttonText = "Next";
+        public string ButtonText
+        {
+            get { return _buttonText; }
+            set 
+            {
+                if (value == _buttonText) return;
+                _buttonText = value;
+                OnPropertyChanged(nameof(ButtonText));
+            }
+        }
         private int _negativeControlTestResult = 0; 
         public int NegativeControlTestResult 
         {
@@ -1178,11 +1195,12 @@ namespace FenomPlus.ViewModels
             {
                 if (value == _negativeControlTestResult) return;
                 _negativeControlTestResult = value;
-                NegativeControlStatus = value < 5 ? "Pass" : "Fail";
+                NegativeControlStatus = value < TestThresholdMin ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
+                ButtonText = value < TestThresholdMin ? "Next" : "Exit";  
                 OnPropertyChanged(nameof(NegativeControlTestResult));
             }
         }
-        private string _negativeControlStatus = "None";
+        private string _negativeControlStatus = QCUser.NegativeControlNone;
         public string NegativeControlStatus 
         {
             get { return _negativeControlStatus; }
@@ -1196,39 +1214,16 @@ namespace FenomPlus.ViewModels
 
         private async Task StartNegativeControlTest()
         {
-            CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
-            CalculationsTimer.Elapsed += (sender, e) => NegativeControlTestCompleted();
-            CalculationsTimer.Start();
-
             await Services.Navigation.QCNegativeControlTestView();
             await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }
 
-        private void NegativeControlTestCompleted()
+        private void NegativeControlTestCompleted(int Score)
         {
-            // Notes:
+            QCTest negativeControlTest = DbCreateNegativeControlTest(Score);
 
-            // After each negative control test...
-            //  1. Determine negative control test status (time > 16h and less than 24h and value < 5)
-            //  2. Update negative control in database
-            //  3. Update device status in database
-
-            CalculationsTimer.Stop();
-            CalculationsTimer.Dispose();
-
-            int negativeControlTestResult = 0; // ToDo: Temporary until we have real value from hardware
-
-            // Update NegativeControl in DB
-            QCTest negativeControlTest = DbCreateNegativeControlTest(negativeControlTestResult);
-
-            // Update Negative Control Result View
-            NegativeControlStatus = negativeControlTest.TestStatus;
-
-            // Update device status in main screen
             UpdateNegativeControlStatus();
             UpdateDeviceStatus(); // Also calls UpdateNegativeControlStatus
-
-            // Services.Navigation.QCNegativeControlResultView();
         }
 
         #endregion

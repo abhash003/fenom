@@ -51,7 +51,7 @@
             </StackLayout>
 
 
-            <Button Text="Next"
+            <Button Text="{Binding ButtonText}"
                     Grid.Row="1"
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToQCBMCommand}"
