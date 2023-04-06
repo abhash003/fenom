@@ -1402,9 +1402,9 @@ namespace FenomPlus.ViewModels
                 Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                 Services.DeviceService.Current.BreathFlow = 0;
 
-                Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ =>
+                Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
                 {
-                    if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
+                    if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
@@ -1471,9 +1471,9 @@ namespace FenomPlus.ViewModels
 
                 QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
 
-                Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.DeviceStatusInfo.StatusCode}");
+                Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
-                if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
+                if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                 {
                     // ToDo: How to handle fail here?
                     PlaySounds.PlayFailedSound();
