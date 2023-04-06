@@ -56,13 +56,13 @@ namespace FenomPlus.Services
         private IBreathManeuverResultRepository _BreathManeuverResultRepo;
         public IBreathManeuverResultRepository BreathManeuverResultRepo { get { return (_BreathManeuverResultRepo == null) ? _BreathManeuverResultRepo = new BreathManeuverResultRepository() : _BreathManeuverResultRepo; } }
 
-        private IQualityControlRepository _QualityControlRepo;
-        public IQualityControlRepository QualityControlRepo { get { return (_QualityControlRepo == null) ? _QualityControlRepo = new QualityControlRepository() : _QualityControlRepo; } }
+        //private IQualityControlRepository _QualityControlRepo;
+        //public IQualityControlRepository QualityControlRepo { get { return (_QualityControlRepo == null) ? _QualityControlRepo = new QualityControlRepository() : _QualityControlRepo; } }
 
-        private IQualityControlDevicesRepository _QualityControlDevicesRepo;
-        public IQualityControlDevicesRepository QualityControlDevicesRepo { get { return (_QualityControlDevicesRepo == null) ? _QualityControlDevicesRepo = new QualityControlDevicesRepository() : _QualityControlDevicesRepo; } }
+        //private IQualityControlDevicesRepository _QualityControlDevicesRepo;
+        //public IQualityControlDevicesRepository QualityControlDevicesRepo { get { return (_QualityControlDevicesRepo == null) ? _QualityControlDevicesRepo = new QualityControlDevicesRepository() : _QualityControlDevicesRepo; } }
 
-        private IQualityControlUsersRepository _QualityControlUsersRepo;
-        public IQualityControlUsersRepository QualityControlUsersRepo { get { return (_QualityControlUsersRepo == null) ? _QualityControlUsersRepo = new QualityControlUsersRepository() : _QualityControlUsersRepo; } }
+        //private IQualityControlUsersRepository _QualityControlUsersRepo;
+        //public IQualityControlUsersRepository QualityControlUsersRepo { get { return (_QualityControlUsersRepo == null) ? _QualityControlUsersRepo = new QCUsersRepository() : _QualityControlUsersRepo; } }
     }
 }

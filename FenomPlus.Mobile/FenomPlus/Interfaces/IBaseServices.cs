@@ -13,8 +13,8 @@ namespace FenomPlus.Interfaces
         // repo here
         IBreathManeuverErrorRepository ErrorsRepo { get; }
         IBreathManeuverResultRepository ResultsRepo { get; }
-        IQualityControlRepository QCRepo { get; }
-        IQualityControlDevicesRepository QCDevicesRepo { get; }
-        IQualityControlUsersRepository QCUsersRepo { get; }
+        //IQualityControlRepository QCRepo { get; }
+        //IQualityControlDevicesRepository QCDevicesRepo { get; }
+        //IQualityControlUsersRepository QCUsersRepo { get; }
     }
 }

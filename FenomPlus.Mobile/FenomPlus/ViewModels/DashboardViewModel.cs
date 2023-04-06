@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Enums;
+using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
 using FenomPlus.Services.DeviceService.Concrete;
@@ -18,12 +19,33 @@ namespace FenomPlus.ViewModels
         public DashboardViewModel()
         {
         }
+        public bool TestConductable
+        {
+            get {
+                /*
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
+                {
+                    DeviceCheckEnum dc = Services.DeviceService.Current.CheckDeviceBeforeTest();
+                    return (dc == DeviceCheckEnum.Ready || dc == DeviceCheckEnum.DevicePurging);
+                }
+                return false;
+                */
+                return true;
+            }
+        }  
 
         [RelayCommand]
         private async Task StartStandardTest()
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
+                //if (Services.Config.RunRequiresQC && QualityControl is expired)
+                //{
+                //    // ToDo: Check QC Status
+                //    Services.Dialogs.ShowAlert($"Quality Control for this device is expired.", "QC Expired", "Close");
+                //    return;
+                //}
+
                 DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
 
                 switch (deviceStatus)
@@ -61,6 +83,10 @@ namespace FenomPlus.ViewModels
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
+                    case DeviceCheckEnum.Unknown:
+                        var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                        Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -72,6 +98,13 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
+                //if (Services.Config.RunRequiresQC && QualityControl is expired)
+                //{
+                //    // ToDo: Check QC Status
+                //    Services.Dialogs.ShowAlert($"Quality Control for this device is expired.", "QC Expired", "Close");
+                //    return;
+                //}
+
                 switch (Services.DeviceService.Current.CheckDeviceBeforeTest())
                 {
                     case DeviceCheckEnum.Ready:
@@ -108,6 +141,10 @@ namespace FenomPlus.ViewModels
                         break;
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.Unknown:
+                        var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                        Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -32,9 +32,16 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> StopTest();
 
+        bool EnableQC();
+        bool DisableQC();
+        bool IsQCEnabled(); // if qc is populated in last device info update
+        bool GetQCHoursRemaining(ref int hours); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
+        bool ExtendQC(int hours);
+
         Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size);
 
         Task<bool> DEVICEINFO();
+        bool RequestDeviceInfoSync();
 
         Task ConnectAsync();
 
@@ -48,9 +55,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> SERIALNUMBER(string SerailNumber);
 
-        Task<bool> MESSAGE(MESSAGE message);
-
-        Task<bool> DEBUGMSG();
+        Task<bool> WriteRequest(MESSAGE message);
 
         Task<bool> ENVIROMENTALINFO();
 
@@ -98,12 +103,14 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         DateTime SensorExpireDate { get; set; }
 
-        int NOScore { get; set; }
+        int? NOScore { get; set; }
 
         float BreathFlow { get; set; }
 
-        float FenomValue { get; set; }
+        float? FenomValue { get; set; }
 
         event EventHandler BreathFlowChanged;
+
+        Task<bool> RequestDeviceInfo();
     }
 }

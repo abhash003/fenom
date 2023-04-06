@@ -52,7 +52,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     _bleAdapter.ConnectToDeviceAsync(_bleDevice);
                 }
 
-                return ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                bool connected = ((PluginBleIDevice)_nativeDevice).State == DeviceState.Connected;
+                if (connected)
+                {
+                    ReadyForTest = true;
+                }
+                return connected;
             }
         }
 
@@ -139,7 +144,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeBreathManeuver(e.Characteristic.Value);
-                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore})");
+                                Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore}, time_remaining : {BreathManeuver.TimeRemaining})");
                             }
                         };
 
@@ -157,7 +162,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             lock (_handlerLock)
                             {
                                 DecodeDeviceStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode})");
+                                Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode:X})");
                             }
                         };
 
@@ -167,7 +172,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                             {
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
-                                Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode})");
+                                Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode:X})");
                             }
                         };
 
@@ -233,6 +238,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
             return await WRITEREQUEST(message, 1);
         }
 
+        public override bool RequestDeviceInfoSync()
+        {
+            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
+            return WRITEREQUEST(message, 1).Result;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -263,43 +274,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
             return await WRITEREQUEST(message, 1);
         }
 
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> TRAININGMODE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_TRAININGMODE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override async Task<bool> DEBUGMSG()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMSG);
-            return await WRITEREQUEST(message, 1);
-        }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //public async Task<bool> DEBUGMANUEVERTYPE()
-        //{
-        //    MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEBUGMANUEVERTYPE);
-        //    return await WRITEREQUEST(message, 1);
-        //}
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override async Task<bool> MESSAGE(MESSAGE message)
+        public override async Task<bool> WriteRequest(MESSAGE message)
         {
             return await WRITEREQUEST(message, 1);
         }
@@ -429,11 +409,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<bool> SendMessage(MESSAGE message)
+        public override bool SendMessage(MESSAGE message)
         {
             if (IsConnected())
             {
-                return await MESSAGE(message);
+                _ = WriteRequest(message);
+                return true;
             }
             return false;
         }
@@ -503,7 +484,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> RequestDeviceInfo()
+        public override async Task<bool> RequestDeviceInfo()
         {
             if (IsConnected())
             {

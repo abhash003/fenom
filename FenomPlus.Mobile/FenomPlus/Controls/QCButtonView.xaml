@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" x:DataType="controls:StatusButtonView"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:controls="clr-namespace:FenomPlus.Controls" 
              xmlns:svg="clr-namespace:TinySvgHelper;assembly=TinySvgHelper"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
@@ -14,177 +14,142 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <buttons:SfButton x:Name="InnerButton" 
-                    HasShadow="True" 
-                    BackgroundColor="#F9F9F9"
-                    BorderColor="#E7E7E7" 
-                    BorderWidth="1" 
-                    EnableRippleEffect="True"
-                    Margin="10,10,10,0">
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="CommonStates">
-                <VisualState x:Name="Normal">
-                    <VisualState.Setters>
-                        <Setter Property="BackgroundColor" Value="#F9F9F9" />
-                    </VisualState.Setters>
-                </VisualState>
+        <buttons:SfButton x:Name="InnerButton" 
+                          HasShadow="True" 
+                          BackgroundColor="#F9F9F9"
+                          BorderColor="#E7E7E7" 
+                          BorderWidth="1" 
+                          EnableRippleEffect="True"
+                          Margin="10,10,10,0"
+                          HorizontalOptions="FillAndExpand" 
+                          VerticalOptions="FillAndExpand">
 
-                <VisualState x:Name="Pressed">
-                    <VisualState.Setters>
-                        <Setter Property="BackgroundColor" Value="#c8c8c8" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+            <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#F9F9F9" />
+                            </VisualState.Setters>
+                        </VisualState>
 
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" x:DataType="controls:QcButtonViewModel">
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#c8c8c8" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
 
-            <Grid HorizontalOptions="FillAndExpand" 
-                  VerticalOptions="FillAndExpand" 
-                  Grid.RowSpacing="0" 
-                  Grid.Padding="5"
-                  IsVisible="{Binding Assigned}">
+            <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="1.5*" />
-            </Grid.RowDefinitions>
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsVisible="{Binding Assigned}">
 
-            <Label x:Name="Header"
-                    Grid.Row="0"
-                    Text="{Binding Header}"
-                    VerticalOptions="Start" 
-                    VerticalTextAlignment="Center" 
-                    HorizontalOptions="Center" 
-                    TextColor="#333" 
-                    FontSize="18"/>
+                    <Label x:Name="HeaderLabel"
+                            IsVisible="{Binding Assigned}"
+                            Grid.Row="0"
+                            Text="{Binding UserName}"
+                            VerticalOptions="Start" 
+                            VerticalTextAlignment="Center" 
+                            HorizontalOptions="Center" 
+                            TextColor="#333" 
+                            FontSize="18"/>
 
-            <Grid Grid.Row="1">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
+                        <Label Text="Status:"
+                               VerticalOptions="Center" 
+                               VerticalTextAlignment="Start" 
+                               HorizontalOptions="End" 
+                               TextColor="#333" 
+                               FontSize="Small"/>
 
-                <Label Text="Status:"
-                       Grid.Column="0"
-                       VerticalOptions="Center" 
-                       VerticalTextAlignment="Start" 
-                       HorizontalOptions="End" 
-                       TextColor="#333" 
-                       FontSize="Small"/>
+                        <Label x:Name="StatusLabel"
+                               Text="{Binding CurrentStatus}"
+                               VerticalOptions="Center" 
+                               VerticalTextAlignment="Start" 
+                               HorizontalOptions="Start" 
+                               TextColor="#333" 
+                               FontSize="Small"/>
 
-                <Label x:Name="Status"
-                       Grid.Column="1"
-                       Margin="10,0,0,0"
-                       Text="{Binding Status}"
-                       VerticalOptions="Center" 
-                       VerticalTextAlignment="Start" 
-                       HorizontalOptions="Start" 
-                       TextColor="#333" 
-                       FontSize="Small"/>
+                    </StackLayout>
 
-            </Grid>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
 
 
-            <Grid Grid.Row="2">
+                        <Label Text="Expires:"
+                               VerticalOptions="Center" 
+                               VerticalTextAlignment="Start" 
+                               HorizontalOptions="End" 
+                               TextColor="#333" 
+                               FontSize="Small"
+                               IsVisible="{Binding ExpiresVisible}"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
+                        <Label x:Name="ExpiresLabel"
+                               Text="{Binding ExpiresDateString}"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Start" 
+                                TextColor="#333" 
+                                FontSize="Small"
+                                IsVisible="{Binding ExpiresVisible}"/>
 
-                <Label Text="Expires:"
-                       Grid.Column="0"
-                       VerticalOptions="Center" 
-                       VerticalTextAlignment="Start" 
-                       HorizontalOptions="End" 
-                       TextColor="#333" 
-                       FontSize="Small"/>
+                    </StackLayout>
 
-                <Label x:Name="Expires"
-                        Grid.Column="1" 
-                        Margin="10,0,0,0"
-                        Text="{Binding Expires}"
-                        VerticalOptions="Center" 
-                        HorizontalOptions="Start" 
-                        TextColor="#333" 
-                        FontSize="Small"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
 
-            </Grid>
+                        <Label Text="Next Test:"
+                               Grid.Column="0"
+                               VerticalOptions="Center" 
+                               VerticalTextAlignment="Start" 
+                               HorizontalOptions="End" 
+                               TextColor="#333" 
+                               FontSize="Small"
+                               IsVisible="{Binding NextTestVisible}"/>
 
-            <Grid Grid.Row="3">
+                        <Label x:Name="NextTestLabel"
+                                Grid.Column="1" 
+                                Text="{Binding NextTestDateString}"
+                                FontSize="Small"
+                                TextColor="#333"  
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center"
+                                IsVisible="{Binding NextTestVisible}"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
+                    </StackLayout>
 
-                <Label Text="Next Test:"
-                       Grid.Column="0"
-                       VerticalOptions="Center" 
-                       VerticalTextAlignment="Start" 
-                       HorizontalOptions="End" 
-                       TextColor="#333" 
-                       FontSize="Small"/>
+                </StackLayout>
 
-                <Label x:Name="NextTest"
-                        Grid.Column="1" 
-                        Margin="10,0,0,0"
-                        Text="{Binding NextTest}"
-                        FontSize="16"
-                        TextColor="#333"  
-                        HorizontalOptions="Start"
-                        VerticalOptions="Center"/>
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsVisible="{Binding Assigned, Converter={StaticResource InvertedBoolConverter}}">
+
+                    <Label Text="Add User" 
+                           TextColor="#333" 
+                           FontSize="18"
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"/>
+
+                </Grid>
 
             </Grid>
 
-            <Grid Grid.Row="4">
+        </buttons:SfButton>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="Center"
+                     VerticalOptions="End" 
+                     IsVisible="{Binding ShowChartOption}" 
+                     Padding="75,10,75,10">
 
-                <Label Text="Chart:"
-                       Grid.Column="0"
-                       VerticalOptions="Center" 
-                       VerticalTextAlignment="Center" 
-                       HorizontalOptions="End" 
-                       TextColor="#333" 
-                       FontSize="Small"/>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped"/>
+            </StackLayout.GestureRecognizers>
 
-                <Image x:Name="Chart"
-                       Grid.Column="1"
-                       Margin="10,10,0, 10"
-                       Source="bar_chart"
-                       Aspect="AspectFill"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Center"/>
+            <Label Text="Chart" VerticalOptions="Center" TextColor="#333" FontSize="Small"/>
 
-            </Grid>
+            <Image x:Name="ChartImage" Source="line_chart" Margin="10,0,0,01"  VerticalOptions="Center" HeightRequest="22"/>
 
+        </StackLayout>
 
-        </Grid>
-
-            <Grid HorizontalOptions="FillAndExpand" 
-                  VerticalOptions="FillAndExpand"
-                  IsVisible="{Binding Assigned, Converter={StaticResource InvertedBoolConverter}}">
-
-                <Label Text="Add User" 
-                       TextColor="#333" 
-                       FontSize="18"
-                       HorizontalOptions="Center" 
-                       VerticalOptions="Center"/>
-
-            </Grid>
-
-        </Grid>
-
-    </buttons:SfButton>
+    </Grid>
 
 </ContentView>

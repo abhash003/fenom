@@ -25,14 +25,16 @@ namespace FenomPlus.SDK.Core.Models
         public float Temperature;
         public float Pressure;
         public float Humidity;
-        public int BatteryLevel;
+        public float BatteryLevel;
 
         public EnvironmentalInfo Decode(byte[] data)
         {
             int totalSize = COMM_ENVIRONMENTAL_PAYLOAD_SIZE + (COMM_ENVIRONMENTAL_ITEMS * 2) + 1;
 
             if (data.Length != totalSize)
-                throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
+            {
+                //throw new ArgumentException($"Payload size mismatch (expected: {totalSize}, saw: {data.Length})");
+            }
 
             int offset = 0;
 
@@ -78,8 +80,15 @@ namespace FenomPlus.SDK.Core.Models
                             throw new ArgumentException($"Unexpected payload item size (expected: {COMM_BATTERY_LEVEL_SIZE}, saw: {size})");
                         }
 
-                        BatteryLevel = (short) ToFloat(data, offset);
+                        BatteryLevel = ToFloat(data, offset);
+                        if (BatteryLevel < 0) BatteryLevel = 0;
+
                         break;
+
+                    default:
+                        {
+                            break;
+                        }
                 }
 
                 offset += size;

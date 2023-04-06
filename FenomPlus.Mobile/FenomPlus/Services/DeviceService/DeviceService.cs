@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using FenomPlus.Interfaces;
 
 
@@ -22,6 +21,7 @@ using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Abstract;
 using Device = FenomPlus.Services.DeviceService.Abstract.Device;
 using System.Timers;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -43,12 +43,19 @@ namespace FenomPlus.Services.DeviceService
 
         protected List<DeviceDiscoverer> _deviceDiscoverers;
 
-        //Task _monitorTask;
-        //CancellationTokenSource _monitorTaskCancelSource;
 
-        Thread _workerThread;
+        // public bool DeviceNotFound => _deviceNotFound;
+        private bool _deviceNotFound;
+        public bool DeviceNotFound
+        {
+            get { return _deviceNotFound; }
+            set
+            {
+                if (value == _deviceNotFound) return;
+                DiscoveryWorkerTimer.Enabled = value;
+            }
+        }
 
-        Action<IDevice> _deviceFoundAction;
 
         // Constructors
 
@@ -65,14 +72,42 @@ namespace FenomPlus.Services.DeviceService
 
                 _current = null;
 
-                _deviceFoundAction = null;
+                DeviceDiscovered += DeviceDiscoveredHandler;
 
-                ReadyForTest = true;
-                DeviceReadyTimer = new Timer(1000);
-                DeviceReadyTimer.Elapsed += DeviceReadyTimerOnElapsed;
+                DiscoveryWorkerTimer = new Timer(10_000) { Enabled = true };
+                DiscoveryWorkerTimer.Elapsed += Timer_Elapsed;
 
                 trace.Trace("device service all setup");
             }
+        }
+        ~DeviceService()
+        {
+            DeviceDiscovered -= DeviceDiscoveredHandler;
+        }
+        void DeviceDiscoveredHandler(object sender, EventArgs e)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    Services.DeviceService.StopDiscovery();
+                    var ea = (DeviceServiceEventArgs)e;
+                    Helper.WriteDebug("Device discovered.");
+                    await ea.Device.ConnectAsync();
+                    // await FoundDevice(ea.Device);
+                }
+                catch (Exception ex)
+                {                
+                    Helper.WriteDebug($"{DateTime.Now.Millisecond} : Exception at DeviceDiscoveredHandler ConnectAsync: " + ex.Message);
+                    Helper.WriteDebug("Exception at DeviceDiscoveredHandler: " + ex.Message);
+                }
+            });
+        }
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            bool connected = Current?.Connected ?? false;
+            if (!connected && !Discovering)
+                StartDiscoveryBackground();
         }
 
         // Properties
@@ -83,31 +118,28 @@ namespace FenomPlus.Services.DeviceService
 
         // Methods
 
-        public void StartDiscovery(Action<IDevice> deviceFoundAction)
+        public void StartDiscovery()
         {
             if (!_discovering)
             {
-                foreach (IDeviceDiscoverer dd in _deviceDiscoverers)
-                {
-                    dd.StartDiscovery();
-                }
-
+                StartDiscoveryBackground();
                 _shouldStopDiscovering = false;
-                _deviceFoundAction = deviceFoundAction;
-
-                //_workerThread = new Thread(new ThreadStart(DiscoveryWorker));
-                //_workerThread.Start();
-
                 _discovering = true;
+            }
+        }
+        public void StartDiscoveryBackground()
+        {
+            foreach (IDeviceDiscoverer dd in _deviceDiscoverers)
+            {
+                dd.StartDiscovery();
             }
         }
 
         public void StopDiscovery()
         {
-            if (_workerThread != null && _discovering)
+            if (_discovering)
             {
                 _shouldStopDiscovering = true;
-                //_workerThread?.Join();
             }
 
             foreach (var dd in _deviceDiscoverers)
@@ -121,45 +153,6 @@ namespace FenomPlus.Services.DeviceService
             _discovering = false;
         }
 
-        protected void DiscoveryWorker()
-        {
-            Helper.WriteDebug("ENTERING MONITOR THREAD");
-
-            try
-            {
-                //_devices.Clear();
-                _discovering = true;
-
-                while (_shouldStopDiscovering == false)
-                {
-#if false
-                    if (((CancellationTokenSource)cancelToken).IsCancellationRequested)
-                    {
-                        Helper.WriteDebug("CANCELLATION SIGNALED FOR MONITOR THREAD");
-                        break;
-                    }
-#endif
-
-                    Helper.WriteDebug("HEART BEAT");
-                    Thread.Sleep(10000);
-                }
-
-                // cleanup
-
-                _discovering = false;
-                //_shouldStopDiscovering = true;
-            }
-            catch (ThreadAbortException ex)
-            {
-                // thread aborted
-                Helper.WriteDebug("ABORTED MONITOR THREAD " + ex.Message);
-            }
-
-            // exit monitor
-            Helper.WriteDebug("EXITING MONITOR THREAD");
-        }
-
-
         // Events
         public event EventHandler DeviceConnected;
         public event EventHandler DeviceConnectionLost;
@@ -169,7 +162,7 @@ namespace FenomPlus.Services.DeviceService
         internal void HandleDeviceFound(BleDevice bleDevice)
         {
             Helper.WriteDebug("Invoking DeviceFound");
-            _deviceFoundAction?.Invoke((IDevice)bleDevice);
+            // _deviceFoundAction?.Invoke((IDevice)bleDevice);
             Helper.WriteDebug("Invoking DeviceFound finshed");
         }
 
@@ -197,40 +190,9 @@ namespace FenomPlus.Services.DeviceService
 
         #region Fields
 
-        private readonly Timer DeviceReadyTimer;
+        private Timer DiscoveryWorkerTimer;
 
         #endregion
-
-        public int DeviceReadyCountDown { get; set; }
-
-        private bool _readyForTest;
-        public bool ReadyForTest
-        {
-            get => _readyForTest;
-            set
-            {
-                _readyForTest = value;
-
-                if (_readyForTest == false)
-                {
-                    DeviceReadyCountDown = 32;
-                    DeviceReadyTimer.Start();
-                }
-            }
-        }
-
-        private void DeviceReadyTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            Helper.WriteDebug($"DeviceReadyTimerOnElapsed: DeviceReadyCountDown: {DeviceReadyCountDown}, ReadyForTest: {ReadyForTest}");
-            DeviceReadyCountDown -= 1;
-
-            if (DeviceReadyCountDown <= 0)
-            {
-                ReadyForTest = true;
-                DeviceReadyTimer.Stop();
-            }
-        }
-
         public bool IsDeviceFenomDevice(string deviceName)
         {
             if (string.IsNullOrEmpty(deviceName))

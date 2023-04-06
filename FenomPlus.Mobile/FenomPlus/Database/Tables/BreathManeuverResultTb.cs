@@ -6,7 +6,7 @@ namespace FenomPlus.Database.Tables
         // from sensor all info here
         public int TestNumber { get; set; }
         public float BreathFlow { get; set; }
-        public int NOScore { get; set; }
+        public int?  NOScore { get; set; }
         public int StatusCode { get; set; }
 
         // for grid display

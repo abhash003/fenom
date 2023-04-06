@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.Helpers;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services.DeviceService.Enums;
@@ -283,6 +284,11 @@ namespace FenomPlus.ViewModels
                         case DeviceCheckEnum.NoSensorCommunicationFailed:
                             Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
+
+                        case DeviceCheckEnum.Unknown:
+                            var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                            Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                            return;
 
                         default:
                             throw new ArgumentOutOfRangeException();
