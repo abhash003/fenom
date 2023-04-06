@@ -1402,22 +1402,22 @@ namespace FenomPlus.ViewModels
                 Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                 Services.DeviceService.Current.BreathFlow = 0;
 
-                PlaySounds.StopAll();
-
-                Task.Delay(Config.StopExhalingReadyWait);
-
-                if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
+                Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ =>
                 {
-                    var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
-                    ErrorsRepo.Insert(model);
+                    if (Services.DeviceService.Current.DeviceStatusInfo.StatusCode != 0x00)
+                    {
+                        var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
+                        ErrorsRepo.Insert(model);
 
-                    PlaySounds.PlayFailedSound();
-                    Services.Navigation.TestErrorView();
-                }
-                else
-                {
-                    Services.Navigation.QCUserTestCalculationView();
-                }
+                        PlaySounds.PlayFailedSound();
+                        Services.Navigation.TestErrorView();
+                    }
+                    else
+                    {
+                        PlaySounds.StopAll();
+                        Services.Navigation.QCUserTestCalculationView();
+                    }
+                });
             }
         }
 
