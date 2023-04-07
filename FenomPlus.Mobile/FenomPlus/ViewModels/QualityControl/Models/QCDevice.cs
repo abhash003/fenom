@@ -33,7 +33,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public const string DeviceExpired = "Expired";
         public const string DeviceInsufficientData = "Insufficient Data";
 
-        public IAppServices Services => IOC.Services;
+        // public IAppServices Services => IOC.Services;
 
         public ObjectId Id { get; set; }
 
@@ -52,7 +52,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
             CurrentStatus = DeviceInsufficientData;
-            RequireQC = Services.DeviceService.Current.IsQCEnabled();
+            RequireQC = IOC.Services.DeviceService.Current.IsQCEnabled();
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now; 
         }
