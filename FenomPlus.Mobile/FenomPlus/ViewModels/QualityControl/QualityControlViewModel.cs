@@ -1405,7 +1405,7 @@ namespace FenomPlus.ViewModels
                         ErrorsRepo.Insert(model);
 
                         PlaySounds.PlayFailedSound();
-                        Services.Navigation.TestErrorView();
+                        Services.Navigation.QCUserTestErrorView();
                     }
                     else
                     {
