@@ -1391,7 +1391,7 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null)
             {
-                PlaySounds.PlaySuccessSound();
+                PlaySounds.StopAll();
 
                 Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                 Services.DeviceService.Current.BreathFlow = 0;
@@ -1408,7 +1408,7 @@ namespace FenomPlus.ViewModels
                     }
                     else
                     {
-                        PlaySounds.StopAll();
+                        PlaySounds.PlaySuccessSound();
                         Services.Navigation.QCUserTestCalculationView();
                     }
                 });
@@ -1477,6 +1477,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
+                    PlaySounds.PlaySuccessSound();
                     Services.Navigation.QCUserTestResultView();
                 }
 

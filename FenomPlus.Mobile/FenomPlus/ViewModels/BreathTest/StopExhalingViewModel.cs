@@ -23,7 +23,6 @@ namespace FenomPlus.ViewModels
             base.OnAppearing();
             Stop = false;
             Seconds = Config.StopExhalingReadyWait;
-            PlaySounds.PlaySuccessSound();
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
 
@@ -51,6 +50,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
+                    PlaySounds.PlaySuccessSound();
                     Services.Navigation.PreparingStandardTestResultView();
                 }
             }
