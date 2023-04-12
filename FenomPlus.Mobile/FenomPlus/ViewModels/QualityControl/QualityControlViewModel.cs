@@ -1347,7 +1347,6 @@ namespace FenomPlus.ViewModels
                 GaugeStatus = "Start Blowing";
 
                 await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                // await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
             }
         }
 
@@ -1362,6 +1361,7 @@ namespace FenomPlus.ViewModels
 
                     if (GaugeSeconds <= 0)
                     {
+                        Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                         await Services.DeviceService.Current.StopTest();
                         await Services.Navigation.QCUserStopTestView();
                         return;
@@ -1394,7 +1394,6 @@ namespace FenomPlus.ViewModels
             {
                 PlaySounds.PlaySuccessSound();
 
-                Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                 Services.DeviceService.Current.BreathFlow = 0;
 
                 Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
