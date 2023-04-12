@@ -1193,7 +1193,6 @@ namespace FenomPlus.ViewModels
             get { return _negativeControlTestResult; }
             set 
             {
-                if (value == _negativeControlTestResult) return;
                 _negativeControlTestResult = value;
                 NegativeControlStatus = value < TestThresholdMin ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
                 ButtonText = value < TestThresholdMin ? "Next" : "Exit";  
