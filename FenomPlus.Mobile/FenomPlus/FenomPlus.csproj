@@ -95,7 +95,6 @@
     <Compile Remove="Database\Tables\QualityControlUsersTb.cs" />
     <Compile Remove="DataSet1.Designer.cs" />
     <Compile Remove="Enums\AlertEnums.cs" />
-    <Compile Remove="Helpers\AsyncHelpers.cs" />
     <Compile Remove="Interfaces\IBleHubService.cs" />
     <Compile Remove="Interfaces\IDeviceService.cs" />
     <Compile Remove="Models\BaseModel.cs" />
