@@ -221,31 +221,33 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            // ToDo: Remove hard coded value
-            expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
-            //expirationDate = DateTime.Now.AddDays(5); 
+            //// ToDo: Remove hard coded value
+            //expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
+            ////expirationDate = DateTime.Now.AddDays(5); 
 
-            int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
+            //int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
+
+            int deviceLifeRemaining = Services.DeviceService.Current.DeviceLifeRemaining;
 
             DeviceViewModel.ButtonText = "Order";
 
-            if (daysRemaining <= Constants.DeviceExpired)
+            if (deviceLifeRemaining <= Constants.DeviceExpired)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "wo_device_red.png";
                 DeviceViewModel.ImagePath = "device_red.png";
                 DeviceViewModel.ValueColor = Color.Red;
-                DeviceViewModel.Description = "The device has reached the end of its lifespan. Contact Customer Service for a replacement."; DeviceViewModel.Value = $"{daysRemaining}";
+                DeviceViewModel.Description = "The device has reached the end of its lifespan. Contact Customer Service for a replacement."; DeviceViewModel.Value = $"{deviceLifeRemaining}";
                 DeviceViewModel.Label = "Days Left";
             }
-            else if (daysRemaining <= Constants.DeviceWarning60Days)
+            else if (deviceLifeRemaining <= Constants.DeviceWarning60Days)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
                 DeviceViewModel.ImagePath = "device_yellow.png";
                 DeviceViewModel.ValueColor = Color.FromHex("#333");
                 DeviceViewModel.Description = "The device will expire in less than 60 days. Contact Customer Service.";
-                DeviceViewModel.Value = $"{daysRemaining}";
+                DeviceViewModel.Value = $"{deviceLifeRemaining}";
                 DeviceViewModel.Label = "Days Left";
             }
             else
@@ -253,8 +255,8 @@ namespace FenomPlus.ViewModels
                 DeviceBarIconVisible = false;
                 DeviceViewModel.ImagePath = "device_green_100.png";
                 DeviceViewModel.ValueColor = Color.FromHex("#333");
-                DeviceViewModel.Description = $"The device has {daysRemaining} days remaining before it has to be replaced.";
-                DeviceViewModel.Value = $"{daysRemaining / 30}";
+                DeviceViewModel.Description = $"The device has {deviceLifeRemaining} days remaining before it has to be replaced.";
+                DeviceViewModel.Value = $"{deviceLifeRemaining / 30}";
                 DeviceViewModel.Label = "Months Left";
             }
         }

@@ -112,5 +112,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         event EventHandler BreathFlowChanged;
 
         Task<bool> RequestDeviceInfo();
+
+        int DeviceLifeRemaining { get; set; }
     }
 }

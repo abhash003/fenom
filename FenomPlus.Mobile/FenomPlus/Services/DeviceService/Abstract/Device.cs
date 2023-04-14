@@ -126,6 +126,8 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public int BatteryLevel { get; set; }
 
+        public int DeviceLifeRemaining { get; set; }
+
         private float _breathFlow { get; set; }
         public float BreathFlow
         {
@@ -380,7 +382,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
                 // get SensorExpireDate
                 SensorExpireDate = new DateTime(DeviceInfo.SensorExpDateYear, DeviceInfo.SensorExpDateMonth, DeviceInfo.SensorExpDateDay);
-                
+
+                DeviceLifeRemaining = DeviceInfo.DeviceDaysRemaining;
+
             }
             finally { }
             return DeviceInfo;
