@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Views;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
@@ -17,7 +16,7 @@ namespace FenomPlus.ViewModels
     public partial class StatusViewModel : BaseViewModel
     {
         private const int TimerIntervalMilliseconds = 1000;     // Bluetooth Check every one second
-        private const int RequestNewStatusInterval = 15;        // New DeviceInfo and EnvironmentInfo every 15 seconds
+        private int RequestNewStatusInterval = 15;        // New DeviceInfo and EnvironmentInfo every 15 seconds
 
         public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
@@ -108,50 +107,66 @@ namespace FenomPlus.ViewModels
         }
 
         private int BluetoothCheckCount = 0;
-
+        /// <summary>
+        /// When app switch from disconnection to connection, it need to RefreshStatusAsync 10 times in an interval of 1 seconds 
+        /// else, though BTLE connected, the BTLE icon keeps red for 20s
+        /// </summary>
+        private int counter_when_switch_from_disconnection = 10;
         private  void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
             _ = Task.Run(async () =>
             {
                 // Note:  All device status parameters are conditional on the bluetooth connection
-
                 BluetoothConnected = CheckDeviceConnection();
-                //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
                 if (BluetoothConnected)
                 {
-                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                    if (counter_when_switch_from_disconnection > 0) --counter_when_switch_from_disconnection;
+                    else
                     {
-                        // Only navigate if during startup
-                        await Services.Navigation.DashboardView();
+                        var currentPage = App.GetCurrentPage();
+                        if (currentPage is DeviceStatusHubView)
+                        {
+                            RequestNewStatusInterval = 3;
+                        }
+                        else
+                        {
+                            if (currentPage is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                            {
+                                // Only navigate if during startup
+                                await Services.Navigation.DashboardView();
+                            }
+                            RequestNewStatusInterval = 20;
+                        }
+                        BluetoothCheckCount++;
+
+                        if (BluetoothCheckCount >= RequestNewStatusInterval)
+                            BluetoothCheckCount = 0;
                     }
-
-                    BluetoothCheckCount++;
-
-                    if (BluetoothCheckCount >= RequestNewStatusInterval)
-                        BluetoothCheckCount = 0;
                 }
-                else if (Services.DeviceService.Discovering)
+                else
                 {
+                    counter_when_switch_from_disconnection = 10;
                     BluetoothCheckCount = 0; // Reset counter
-
-                    if (App.GetCurrentPage() is not DevicePowerOnView)
+                    if (Services.DeviceService.Discovering)
                     {
-                        await Services.Navigation.DevicePowerOnView();
+                        if (App.GetCurrentPage() is not DevicePowerOnView)
+                        {
+                            await Services.Navigation.DevicePowerOnView();
+                        }
+                    }
+                    // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
+                    else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+                    {
+                        if (App.GetCurrentPage() is not DashboardView)
+                        {
+                            await Services.Navigation.DashboardView();
+                        }
                     }
                 }
-                // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
-                else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
-                {
-                    BluetoothCheckCount = 0; // Reset counter
-                    if (App.GetCurrentPage() is not DashboardView)
-                    {
-                        await Services.Navigation.DashboardView();
-                    }
-                }
-                //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
-                await RefreshStatusAsync();
+                if (BluetoothCheckCount == 0 && Services.Cache.TestType == Enums.TestTypeEnum.None) 
+                    await RefreshStatusAsync();
             });
         }
 

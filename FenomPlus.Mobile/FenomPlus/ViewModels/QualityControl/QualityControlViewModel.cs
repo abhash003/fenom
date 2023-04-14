@@ -1416,6 +1416,7 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
+                Services.Cache.TestType = Enums.TestTypeEnum.None;
                 if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                 {
                     // ToDo: How to handle fail here?
