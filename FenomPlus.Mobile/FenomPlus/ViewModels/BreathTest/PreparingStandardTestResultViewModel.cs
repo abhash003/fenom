@@ -71,6 +71,7 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine($"Cache.DeviceStatusInfo.StatusCode = {device.ErrorStatusInfo.ErrorCode}");
 
+                Services.Cache.TestType = TestTypeEnum.None;
                 if (device.ErrorStatusInfo.ErrorCode != 0x00)
                 {
                     var errorModel = BreathManeuverErrorDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);

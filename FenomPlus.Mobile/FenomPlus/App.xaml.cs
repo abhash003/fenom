@@ -21,6 +21,7 @@ namespace FenomPlus
 
             AppShell = new AppShell();
             MainPage = AppShell;
+            IOC.Services.Cache.TestType = Enums.TestTypeEnum.None;
         }
 
         protected override void OnStart()
