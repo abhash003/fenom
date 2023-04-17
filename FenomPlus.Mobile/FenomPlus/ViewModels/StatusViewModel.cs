@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Views;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
@@ -17,7 +16,7 @@ namespace FenomPlus.ViewModels
     public partial class StatusViewModel : BaseViewModel
     {
         private const int TimerIntervalMilliseconds = 1000;     // Bluetooth Check every one second
-        private const int RequestNewStatusInterval = 15;        // New DeviceInfo and EnvironmentInfo every 15 seconds
+        private int RequestNewStatusInterval = 15;        // New DeviceInfo and EnvironmentInfo every 15 seconds
 
         public StatusButtonViewModel SensorViewModel = new StatusButtonViewModel();
         public StatusButtonViewModel DeviceViewModel = new StatusButtonViewModel();
@@ -108,50 +107,66 @@ namespace FenomPlus.ViewModels
         }
 
         private int BluetoothCheckCount = 0;
-
+        /// <summary>
+        /// When app switch from disconnection to connection, it need to RefreshStatusAsync 10 times in an interval of 1 seconds 
+        /// else, though BTLE connected, the BTLE icon keeps red for 20s
+        /// </summary>
+        private int counter_when_switch_from_disconnection = 10;
         private  void BluetoothCheck(object sender, ElapsedEventArgs e)
         {
             _ = Task.Run(async () =>
             {
                 // Note:  All device status parameters are conditional on the bluetooth connection
-
                 BluetoothConnected = CheckDeviceConnection();
-                //Debug.WriteLine($"BluetoothCheck: {BluetoothConnected}");
 
                 if (BluetoothConnected)
                 {
-                    if (App.GetCurrentPage() is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                    if (counter_when_switch_from_disconnection > 0) --counter_when_switch_from_disconnection;
+                    else
                     {
-                        // Only navigate if during startup
-                        await Services.Navigation.DashboardView();
+                        var currentPage = App.GetCurrentPage();
+                        if (currentPage is DeviceStatusHubView)
+                        {
+                            RequestNewStatusInterval = 3;
+                        }
+                        else
+                        {
+                            if (currentPage is DevicePowerOnView)  // ToDo: Only needed because viewmodels never die
+                            {
+                                // Only navigate if during startup
+                                await Services.Navigation.DashboardView();
+                            }
+                            RequestNewStatusInterval = 20;
+                        }
+                        BluetoothCheckCount++;
+
+                        if (BluetoothCheckCount >= RequestNewStatusInterval)
+                            BluetoothCheckCount = 0;
                     }
-
-                    BluetoothCheckCount++;
-
-                    if (BluetoothCheckCount >= RequestNewStatusInterval)
-                        BluetoothCheckCount = 0;
                 }
-                else if (Services.DeviceService.Discovering)
+                else
                 {
+                    counter_when_switch_from_disconnection = 10;
                     BluetoothCheckCount = 0; // Reset counter
-
-                    if (App.GetCurrentPage() is not DevicePowerOnView)
+                    if (Services.DeviceService.Discovering)
                     {
-                        await Services.Navigation.DevicePowerOnView();
+                        if (App.GetCurrentPage() is not DevicePowerOnView)
+                        {
+                            await Services.Navigation.DevicePowerOnView();
+                        }
+                    }
+                    // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
+                    else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+                    {
+                        if (App.GetCurrentPage() is not DashboardView)
+                        {
+                            await Services.Navigation.DashboardView();
+                        }
                     }
                 }
-                // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
-                else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
-                {
-                    BluetoothCheckCount = 0; // Reset counter
-                    if (App.GetCurrentPage() is not DashboardView)
-                    {
-                        await Services.Navigation.DashboardView();
-                    }
-                }
-                //Debug.WriteLine($"BluetoothCheckCount: {BluetoothCheckCount}");
 
-                await RefreshStatusAsync();
+                if (BluetoothCheckCount == 0 && Services.Cache.TestType == Enums.TestTypeEnum.None) 
+                    await RefreshStatusAsync();
             });
         }
 
@@ -221,31 +236,33 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            // ToDo: Remove hard coded value
-            expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
-            //expirationDate = DateTime.Now.AddDays(5); 
+            //// ToDo: Remove hard coded value
+            //expirationDate = DateTime.Now.AddYears(5).AddDays(-10);
+            ////expirationDate = DateTime.Now.AddDays(5); 
 
-            int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
+            //int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
+
+            int deviceLifeRemaining = Services.DeviceService.Current.DeviceLifeRemaining;
 
             DeviceViewModel.ButtonText = "Order";
 
-            if (daysRemaining <= Constants.DeviceExpired)
+            if (deviceLifeRemaining <= Constants.DeviceExpired)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "wo_device_red.png";
                 DeviceViewModel.ImagePath = "device_red.png";
                 DeviceViewModel.ValueColor = Color.Red;
-                DeviceViewModel.Description = "The device has reached the end of its lifespan. Contact Customer Service for a replacement."; DeviceViewModel.Value = $"{daysRemaining}";
+                DeviceViewModel.Description = "The device has reached the end of its lifespan. Contact Customer Service for a replacement."; DeviceViewModel.Value = $"{deviceLifeRemaining}";
                 DeviceViewModel.Label = "Days Left";
             }
-            else if (daysRemaining <= Constants.DeviceWarning60Days)
+            else if (deviceLifeRemaining <= Constants.DeviceWarning60Days)
             {
                 DeviceBarIconVisible = true;
                 DeviceBarIcon = "_3x_wo_device_yellow.png";
                 DeviceViewModel.ImagePath = "device_yellow.png";
                 DeviceViewModel.ValueColor = Color.FromHex("#333");
                 DeviceViewModel.Description = "The device will expire in less than 60 days. Contact Customer Service.";
-                DeviceViewModel.Value = $"{daysRemaining}";
+                DeviceViewModel.Value = $"{deviceLifeRemaining}";
                 DeviceViewModel.Label = "Days Left";
             }
             else
@@ -253,8 +270,8 @@ namespace FenomPlus.ViewModels
                 DeviceBarIconVisible = false;
                 DeviceViewModel.ImagePath = "device_green_100.png";
                 DeviceViewModel.ValueColor = Color.FromHex("#333");
-                DeviceViewModel.Description = $"The device has {daysRemaining} days remaining before it has to be replaced.";
-                DeviceViewModel.Value = $"{daysRemaining / 30}";
+                DeviceViewModel.Description = $"The device has {deviceLifeRemaining} days remaining before it has to be replaced.";
+                DeviceViewModel.Value = $"{deviceLifeRemaining / 30}";
                 DeviceViewModel.Label = "Months Left";
             }
         }

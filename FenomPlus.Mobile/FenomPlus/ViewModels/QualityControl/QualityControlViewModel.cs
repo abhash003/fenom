@@ -152,7 +152,7 @@ namespace FenomPlus.ViewModels
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
             MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
             {
-                if (int.TryParse(arg, out int score))
+                if (int.TryParse(arg, out int score) && Services.Cache.TestType == TestTypeEnum.NegativeControl)
                 {
                     NegativeControlTestResult = score;
                     NegativeControlTestCompleted(score);
@@ -1056,11 +1056,7 @@ namespace FenomPlus.ViewModels
                         }
                         break;
                 }
-
-                // Open and run negative control test for this user
                 await StartNegativeControl();
-                // Open and run new breath test for this user
-                await StartUserBreathTest();
             }
             else
             {
@@ -1079,11 +1075,7 @@ namespace FenomPlus.ViewModels
                     else
                     {
                         QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
-
-                        // Open and run negative control test for this user
                         await StartNegativeControl();
-                        // Open and run new breath test for this user
-                        await StartUserBreathTest();
                     }
                 }
             }
@@ -1193,7 +1185,6 @@ namespace FenomPlus.ViewModels
             get { return _negativeControlTestResult; }
             set 
             {
-                if (value == _negativeControlTestResult) return;
                 _negativeControlTestResult = value;
                 NegativeControlStatus = value < TestThresholdMin ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
                 ButtonText = value < TestThresholdMin ? "Next" : "Exit";  
@@ -1214,6 +1205,7 @@ namespace FenomPlus.ViewModels
 
         private async Task StartNegativeControlTest()
         {
+            Services.Cache.TestType = TestTypeEnum.NegativeControl;
             await Services.Navigation.QCNegativeControlTestView();
             await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }
@@ -1247,49 +1239,6 @@ namespace FenomPlus.ViewModels
 
         [ObservableProperty]
         private string _gaugeStatus = string.Empty;
-
-        public async Task StartUserBreathTest()
-        {
-            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
-            {
-                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
-
-                switch (deviceStatus)
-                {
-                    case DeviceCheckEnum.Ready:
-                        await InitializeBreathGauge();
-                        break;
-                    case DeviceCheckEnum.DevicePurging:
-                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
-                        if (Services.Dialogs.PurgeCancelRequest)
-                            return;
-                        await InitializeBreathGauge();
-                        break;
-                    case DeviceCheckEnum.HumidityOutOfRange:
-                        Services.Dialogs.ShowAlert(
-                            $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
-                            "Humidity Warning", "Close");
-                        break;
-                    case DeviceCheckEnum.PressureOutOfRange:
-                        Services.Dialogs.ShowAlert(
-                            $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
-                            "Pressure Warning", "Close");
-                        break;
-                    case DeviceCheckEnum.TemperatureOutOfRange:
-                        Services.Dialogs.ShowAlert(
-                            $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
-                            "Temperature Warning", "Close");
-                        break;
-                    case DeviceCheckEnum.BatteryCriticallyLow:
-                        Services.Dialogs.ShowAlert(
-                            $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
-                            "Battery Warning", "Close");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
 
         public async Task StartNegativeControl()
         {
@@ -1347,7 +1296,6 @@ namespace FenomPlus.ViewModels
                 GaugeStatus = "Start Blowing";
 
                 await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                // await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
             }
         }
 
@@ -1362,6 +1310,7 @@ namespace FenomPlus.ViewModels
 
                     if (GaugeSeconds <= 0)
                     {
+                        Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                         await Services.DeviceService.Current.StopTest();
                         await Services.Navigation.QCUserStopTestView();
                         return;
@@ -1392,9 +1341,8 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null)
             {
-                PlaySounds.PlaySuccessSound();
+                PlaySounds.StopAll();
 
-                Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
                 Services.DeviceService.Current.BreathFlow = 0;
 
                 Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
@@ -1405,11 +1353,11 @@ namespace FenomPlus.ViewModels
                         ErrorsRepo.Insert(model);
 
                         PlaySounds.PlayFailedSound();
-                        Services.Navigation.TestErrorView();
+                        Services.Navigation.QCUserTestErrorView();
                     }
                     else
                     {
-                        PlaySounds.StopAll();
+                        PlaySounds.PlaySuccessSound();
                         Services.Navigation.QCUserTestCalculationView();
                     }
                 });
@@ -1468,6 +1416,7 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
+                Services.Cache.TestType = Enums.TestTypeEnum.None;
                 if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                 {
                     // ToDo: How to handle fail here?
@@ -1478,6 +1427,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
+                    PlaySounds.PlaySuccessSound();
                     Services.Navigation.QCUserTestResultView();
                 }
 

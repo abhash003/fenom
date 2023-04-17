@@ -36,14 +36,6 @@ namespace FenomPlus.Controls
             set => SetValue(RecurringProperty, value);
         }
 
-        public static readonly BindableProperty AutoHideProperty = BindableProperty.Create("AutoHide", typeof(bool), typeof(MarigoldProgressWheel), true);
-
-        public bool AutoHide
-        {
-            get => (bool)GetValue(AutoHideProperty);
-            set => SetValue(AutoHideProperty, value);
-        }
-
         public static readonly BindableProperty ShowTimeProperty = BindableProperty.Create("ShowTime", typeof(bool), typeof(MarigoldProgressWheel), false);
 
         public bool ShowTime
@@ -75,11 +67,6 @@ namespace FenomPlus.Controls
 
             PetalIndex = 0;
             MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
-
-            if (AutoPlay)
-            {
-                StartAnimation();
-            }
         }
 
         public void StartAnimation()
