@@ -1060,6 +1060,7 @@ namespace FenomPlus.ViewModels
             }
             else
             {
+                await PreNegativeControl();
                 // Open user name dialog and create user, then open breath test view
                 string userName = await Services.Dialogs.UserNamePromptAsync();
 
@@ -1240,6 +1241,29 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _gaugeStatus = string.Empty;
 
+        /// <summary>
+        /// Pre Negative Control just check if it in Device Purging before user input name
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public async Task PreNegativeControl()
+        {
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
+            {
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
+
+                switch (deviceStatus)
+                {
+                    case DeviceCheckEnum.DevicePurging:
+                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                        if (Services.Dialogs.PurgeCancelRequest)
+                        {
+                            return;
+                        }
+                        break;
+                }
+            }
+        }
         public async Task StartNegativeControl()
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
@@ -1252,6 +1276,11 @@ namespace FenomPlus.ViewModels
                         await StartNegativeControlTest();
                         break;
                     case DeviceCheckEnum.DevicePurging:
+                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                        if (Services.Dialogs.PurgeCancelRequest)
+                        {
+                            return;
+                        }
                         break;
                     case DeviceCheckEnum.HumidityOutOfRange:
                         Services.Dialogs.ShowAlert(
