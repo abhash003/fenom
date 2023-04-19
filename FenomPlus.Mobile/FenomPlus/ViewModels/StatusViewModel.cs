@@ -146,7 +146,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    counter_when_switch_from_disconnection = 10;
+                    counter_when_switch_from_disconnection = 5;
                     BluetoothCheckCount = 0; // Reset counter
                     if (Services.DeviceService.Discovering)
                     {
