@@ -1049,9 +1049,9 @@ namespace FenomPlus.ViewModels
                         break;
 
                     case QCUser.UserQualified:
-                        if (DateTime.Now < lastTest.TestDate.AddHours(24))
+                        if (DateTime.Now < lastTest.TestDate.AddHours(16))
                         {
-                            await Services.Dialogs.ShowAlertAsync("At least 24 hours must pass before another test can be performed.", "More Time Required", "OK");
+                            await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass before another test can be performed.", "More Time Required", "OK");
                             return;
                         }
                         break;
