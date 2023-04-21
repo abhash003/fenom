@@ -1403,11 +1403,7 @@ namespace FenomPlus.ViewModels
             //    Services.Navigation.QCUserTestResultView();
             //}
 
-
-            while(Services.DeviceService.Current.FenomReady == false)
-            {
-
-            }
+            
 
             if (Services.DeviceService.Current.FenomReady == true)
             {
