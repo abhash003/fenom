@@ -22,6 +22,8 @@ using System.Text;
 using System.Diagnostics;
 using FenomPlus.SDK.Core.Features;
 using Polly.Utilities;
+using FenomPlus.ViewModels.QualityControl.Models;
+using Xamarin.CommunityToolkit.UI.Views;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -517,16 +519,15 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public bool IsQCEnabled()
         {
             // if qc is populated in last device info update
-            if (DeviceInfo.QcValidity == 0xBEEF)
-                return false;
-            
-            return true;
+            short tmp = (short)DeviceInfo.QcValidity;
+            return tmp >= 0;
         }
 
-        public bool GetQCHoursRemaining(ref int hours)
+        public bool GetQCHoursRemaining(ref short hour)
         {
-            // >=0 : valid, <=-1 : expired, = 0x8000 : failed
-            return true;
+            //hour (type short) >=0:valid, <0:expired, (<0 and ==0x8000):failed
+            hour = (short)DeviceInfo.QcValidity;
+            return hour >= 0;
         }
 
         public bool ExtendQC(int hours)
@@ -534,6 +535,11 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return true;
         }
 
+        public async Task<bool> ExtendDeviceValidity(short hour)
+        {
+            var msg = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, hour);
+            return await SendMessage(msg);
+        }
         #endregion
     }
 }

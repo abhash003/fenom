@@ -73,10 +73,7 @@ namespace FenomPlus.SDK.Core.Models
 
         public DeviceInfo()
         {
-            unchecked
-            {
-                qcValidity = (short) 0xBEEF;
-            }
+            qcValidity = (short)0x0;
         }
 
         public DeviceInfo Decode(byte[] data)

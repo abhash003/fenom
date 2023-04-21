@@ -49,22 +49,19 @@ namespace FenomPlus.ViewModels
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
-        private string _currentDeviceStatus = string.Empty;
+        private string _currentDeviceStatus = string.Empty;  // Valid, Expired, Fail
         public string CurrentDeviceStatus
         {
-            get => _currentDeviceStatus;
-            set
+            get 
             {
-                _currentDeviceStatus = value;
-
-                if (QCDevice != null)
+                short hour = 0;
+                Services.DeviceService?.Current.RequestDeviceInfo().GetAwaiter();
+                var device = Services.DeviceService?.Current.GetQCHoursRemaining(ref hour);
+                if (device != null) 
                 {
-                    QCDevice.CurrentStatus = _currentDeviceStatus;
-                    DbUpdateQcDevice(QCDevice);
+                   _currentDeviceStatus = device == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000)? QCDevice.DeviceFail : QCDevice.DeviceExpired); 
                 }
-
-                OnPropertyChanged(nameof(CurrentDeviceStatus));
-                OnPropertyChanged(nameof(DeviceStatusString));
+                return _currentDeviceStatus;
             }
         }
 
@@ -189,7 +186,7 @@ namespace FenomPlus.ViewModels
             if (!CheckDeviceConnection())
             {
                 CurrentDeviceSerialNumber = string.Empty;
-                CurrentDeviceStatus = "Device Not Connected";
+                // CurrentDeviceStatus = "Device Not Connected";
                 //QcUserList = ReadAllQcUsers();
                 // ToDo: Put up alert
                 Services.Navigation.QCSettingsView();
@@ -223,7 +220,7 @@ namespace FenomPlus.ViewModels
             }
 
             // don't call until after you get the Negative Control
-            CurrentDeviceStatus = UpdateDeviceStatus();
+            // CurrentDeviceStatus = UpdateDeviceStatus();
 
             // Get all users for this currently connected device
             //QcUserList = ReadAllQcUsers();
@@ -1214,9 +1211,7 @@ namespace FenomPlus.ViewModels
         private void NegativeControlTestCompleted(int Score)
         {
             QCTest negativeControlTest = DbCreateNegativeControlTest(Score);
-
             UpdateNegativeControlStatus();
-            UpdateDeviceStatus(); // Also calls UpdateNegativeControlStatus
         }
 
         #endregion
@@ -1474,14 +1469,23 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _qCUserTestResult = string.Empty;
 
+        private string QCUserTestResultString = string.Empty;
         public void InitUserTestResults()
         {
             if (Services.DeviceService.Current == null)
                 return;
 
-            QCUserTestResult = (Services.DeviceService.Current.FenomValue) < 5 ? "< 5" :
-                (Services.DeviceService.Current.FenomValue) > 40 ? "> 40" :
-                Services.DeviceService.Current.FenomValue.ToString();
+            float? FenomVal = Services.DeviceService.Current.FenomValue;
+            if (5 <= FenomVal && FenomVal <= 40)
+            {
+                QCUserTestResult = FenomVal.ToString();
+                QCUserTestResultString = QCTest.TestPass;
+            }
+            else
+            {
+                QCUserTestResult = FenomVal < 5 ? "<5" : ">40";
+                QCUserTestResultString = QCTest.TestFail;
+            }
 
             UpdateUserStatus();
             UpdateNegativeControlStatus();
@@ -1774,11 +1778,19 @@ namespace FenomPlus.ViewModels
 
         #region "Determine Status Routines"
 
-        private string UpdateDeviceStatus()
+        private void UpdateDeviceStatus()
         {
-            // Returns: "Pass", "Fail", "Expired"
+            // Returns: "Valid", "Failed", "Expired"
 
-            string deviceStatus;
+            string deviceStatus = CurrentDeviceStatus;
+            
+            if (QCUserTestResultString == QCTest.TestPass) 
+            {
+                var device = Services.DeviceService?.Current;
+                device.ExtendDeviceValidity((short)24);
+            }
+
+            string ppp = CurrentDeviceStatus;
 
             if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
             {
@@ -1794,17 +1806,14 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                deviceStatus = QCDevice.DevicePass;
+                deviceStatus = QCDevice.DeviceValid;
             }
 
-            QCDevice.CurrentStatus = deviceStatus;
+            QCDevice.CurrentStatus = CurrentDeviceStatus;
             // No need to set QCDevice.ExpiresDate in case of device
             // No need to set QCDevice.NextTestDate in case of device
 
             DbUpdateQcDevice(QCDevice);
-
-            return
-                deviceStatus;
         }
 
 
