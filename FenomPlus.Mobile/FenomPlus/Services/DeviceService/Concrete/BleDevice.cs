@@ -440,36 +440,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 return await DATETIME(date, time);
             }
             return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="iD_SUB"></param>
-        /// <param name="cal1"></param>
-        /// <returns></returns>
-        public async Task<bool> SendCalibration(ID_SUB iD_SUB, double cal1, double cal2, double cal3)
-        {
-            if (IsConnected())
-            {
-                return await CALIBRATION(iD_SUB, cal1, cal2, cal3);
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cal1"></param>
-        /// <param name="cal2"></param>
-        /// <param name="cal3"></param>
-        /// <returns></returns>
-        public async Task<bool> SendCalibration(double cal1, double cal2, double cal3)
-        {
-            bool result = true;
-            await SendCalibration(ID_SUB.ID_CALIBRATION1, cal1, cal2, cal3);
-            return result;
-        }
+        }        
 
         #endregion
 
