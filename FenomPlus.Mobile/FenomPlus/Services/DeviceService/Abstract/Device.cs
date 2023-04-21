@@ -87,9 +87,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> StopTest();
 
-        public abstract Task<bool> DEVICEINFO();
-
-        public abstract bool RequestDeviceInfoSync();
+        public abstract Task<bool> DEVICEINFO();        
 
         public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
 
@@ -498,24 +496,22 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #region Device Communication
 
-        public abstract bool SendMessage(MESSAGE message);
+        public abstract Task<bool> SendMessage(MESSAGE message);
 
         #endregion
 
         #region Quality Control (QC)
 
-        public bool EnableQC()
+        public async Task<bool> EnableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);
-            bool result = SendMessage(msg);
-            return result;
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);            
+            return await SendMessage(msg);
         }
 
-        public bool DisableQC()
+        public async Task<bool> DisableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);
-            bool result = SendMessage(msg);
-            return result;
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);            
+            return await SendMessage(msg);
         }
 
         public bool IsQCEnabled()

@@ -61,7 +61,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
             }
         }
 
-        private object _handlerLock = new object();
+        private object _deviceInfoHandlerLock = new object();
+        private object _environmentalInfoHandlerLock = new object();
+        private object _breathManeuverHandlerLock = new object();
+        private object _debugMsgHandlerLock = new object();
+        private object _deviceStatusInfoHandlerLock = new object();
+        private object _errorStatusHandlerLock = new object();        
 
         public IEnumerable<IGattCharacteristic> GattCharacteristics { get; } = new SynchronizedList<IGattCharacteristic>();
 
@@ -123,7 +128,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         devChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_deviceInfoHandlerLock)
                             {                                
                                 DecodeDeviceInfo(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: device info");
@@ -132,7 +137,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         envChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_environmentalInfoHandlerLock)
                             {
                                 DecodeEnvironmentalInfo(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: environmental info");
@@ -141,7 +146,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         bmChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_breathManeuverHandlerLock)
                             {
                                 DecodeBreathManeuver(e.Characteristic.Value);
                                 Console.WriteLine($"updated characteristic: breath maneuver (flow: {BreathManeuver.BreathFlow} score: {BreathManeuver.NOScore}, time_remaining : {BreathManeuver.TimeRemaining})");
@@ -150,7 +155,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         dbgChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_debugMsgHandlerLock)
                             {
                                 DecodeDebugMsg(e.Characteristic.Value);
                                 //Console.WriteLine("updated characteristic: debug message");
@@ -159,7 +164,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         deviceStatusChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_deviceStatusInfoHandlerLock)
                             {
                                 DecodeDeviceStatusInfo(e.Characteristic.Value);
                                 Console.WriteLine($"DEVICE STATUS:  (value={DeviceStatusInfo.StatusCode:X})");
@@ -168,7 +173,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         errorStatusChar.ValueUpdated += (sender, e) =>
                         {
-                            lock (_handlerLock)
+                            lock (_errorStatusHandlerLock)
                             {
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
@@ -236,13 +241,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         {
             MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
             return await WRITEREQUEST(message, 1);
-        }
-
-        public override bool RequestDeviceInfoSync()
-        {
-            MESSAGE message = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_DEVICEINFO);
-            return WRITEREQUEST(message, 1).Result;
-        }
+        }        
 
         /// <summary>
         /// 
@@ -342,30 +341,27 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                 Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
 
-                if (true)
+                // get service
+                var device = (PluginBleIDevice)_nativeDevice;
+
+                var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
+
+                // get characteristics
+                var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
+                    .FeatureWriteCharacteristic));
+
+                fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
+                bool result = await fwChar.WriteAsync(data);
+
+                if (result == true)
                 {
-                    // get service
-                    var device = (PluginBleIDevice)_nativeDevice;
-
-                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
-
-                    // get characteristics
-                    var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
-                        .FeatureWriteCharacteristic));
-
-                    fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
-                    bool result = await fwChar.WriteAsync(data);
-
-                    if (result == true)
-                    {
-                        tracer.Trace("write without response okay");
-                    }
-                    else
-                    {
-                        tracer.Trace("something went wrong");
-                    }
-                    return result;
+                    tracer.Trace("write without response okay");
                 }
+                else
+                {
+                    tracer.Trace("something went wrong");
+                }
+                return result;
             }
         }
 
@@ -409,12 +405,11 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override bool SendMessage(MESSAGE message)
+        public override async Task<bool> SendMessage(MESSAGE message)
         {
             if (IsConnected())
-            {
-                _ = WriteRequest(message);
-                return true;
+            {                
+                return await WriteRequest(message);
             }
             return false;
         }
