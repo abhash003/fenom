@@ -55,11 +55,11 @@ namespace FenomPlus.ViewModels
             get 
             {
                 short hour = 0;
-                Services.DeviceService?.Current.RequestDeviceInfo().GetAwaiter();
-                var device = Services.DeviceService?.Current.GetQCHoursRemaining(ref hour);
-                if (device != null) 
+                Services.DeviceService?.Current.RequestDeviceInfo().GetAwaiter(); 
+                bool? result = Services.DeviceService?.Current.GetQCHoursRemaining(ref hour);
+                if (result != null) 
                 {
-                   _currentDeviceStatus = device == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000)? QCDevice.DeviceFail : QCDevice.DeviceExpired); 
+                   _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000)? QCDevice.DeviceFail : QCDevice.DeviceExpired); 
                 }
                 return _currentDeviceStatus;
             }
