@@ -178,6 +178,8 @@ namespace FenomPlus.Services.DeviceService.Concrete
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
                                 Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode:X})");
+                                if(ErrorStatusInfo.ErrorCode != 0)
+                                    Xamarin.Forms.MessagingCenter.Send<BleDevice, byte>(this, "ErrorStatus", ErrorStatusInfo.ErrorCode);
                             }
                         };
 
