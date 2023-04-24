@@ -21,7 +21,6 @@ using Color = Xamarin.Forms.Color;
 using Xamarin.Forms;
 using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
-using FenomPlus.Enums.ErrorCodes;
 
 namespace FenomPlus.ViewModels
 {
@@ -165,15 +164,12 @@ namespace FenomPlus.ViewModels
             });
             MessagingCenter.Subscribe<BleDevice, byte>(this, "ErrorStatus", (sender, arg) =>
             {
-                if (Services.Cache.TestType == TestTypeEnum.NegativeControl)
+                if (Services.Cache.TestType == TestTypeEnum.NegativeControl && arg != 0x0)
                 {
-                    if (arg != 0x0)
+                    if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
                     {
-                        if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
-                        {
-                            // Only navigate if during startup
-                            Services.Navigation.QCUserTestErrorView();
-                        }
+                        // Only navigate if during startup
+                        Services.Navigation.QCUserTestErrorView();
                     }
                 }
             });

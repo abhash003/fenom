@@ -18,7 +18,6 @@ using FenomPlus.SDK.Core.Ble.Interface;
 using System.Collections.Generic;
 using FenomPlus.SDK.Core.Utils;
 using FenomPlus.SDK.Core.Features;
-
 namespace FenomPlus.Services.DeviceService.Concrete
 {
     internal class BleDevice : Device
