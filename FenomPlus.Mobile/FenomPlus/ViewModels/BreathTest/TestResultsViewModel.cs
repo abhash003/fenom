@@ -35,8 +35,8 @@ namespace FenomPlus.ViewModels
         /// 
         /// </summary>
         public override void OnDisappearing()
-        {           
-            
+        {
+            Services.Cache.TestType = TestTypeEnum.None;
             base.OnDisappearing();
         }
 
