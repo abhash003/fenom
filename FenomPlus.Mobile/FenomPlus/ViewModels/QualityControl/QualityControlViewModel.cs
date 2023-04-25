@@ -1344,7 +1344,7 @@ namespace FenomPlus.ViewModels
 
                     if (GaugeSeconds <= 0)
                     {
-                        Services.DeviceService.Current.BreathFlowChanged -= Cache_BreathFlowChanged;
+
                         await Services.DeviceService.Current.StopTest();
                         await Services.Navigation.QCUserStopTestView();
                         return;
