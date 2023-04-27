@@ -506,21 +506,19 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public async Task<bool> EnableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);            
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL,(byte) 1);            
             return await SendMessage(msg);
         }
 
         public async Task<bool> DisableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);            
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, (byte) 0);            
             return await SendMessage(msg);
         }
 
         public bool IsQCEnabled()
         {
-            // if qc is populated in last device info update
-            short tmp = (short)DeviceInfo.QcValidity;
-            return tmp >= 0;
+            return DeviceInfo.IsQcEnabled;
         }
 
         public bool GetQCHoursRemaining(ref short hour)
