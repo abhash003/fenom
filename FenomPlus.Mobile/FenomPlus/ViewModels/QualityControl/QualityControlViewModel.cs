@@ -79,17 +79,16 @@ namespace FenomPlus.ViewModels
                 if (device != null)
                 {
                     if (value == true)
-                    {
+                    {                        
                         
-                        device.RequestDeviceInfo().GetAwaiter();
                         if (!device.IsQCEnabled())
                         {
                             device.EnableQC();
                         }
                     }
                     else
-                    {
-                        device.RequestDeviceInfo().GetAwaiter();
+                    {                        
+
                         if (device.IsQCEnabled())
                         {
                             device.DisableQC();
