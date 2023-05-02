@@ -1,6 +1,7 @@
  using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Views;
 using System;
 using System.Globalization;
@@ -185,6 +186,8 @@ namespace FenomPlus.ViewModels
                 await Task.Delay(1);
                 return;
             }
+
+            await (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
 
             RefreshInProgress = true;
 
