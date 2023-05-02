@@ -112,7 +112,6 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged(nameof(SelectedCurrentStatus));
                 OnPropertyChanged(nameof(SelectedExplanation));
                 OnPropertyChanged(nameof(SelectedTests));
-                OnPropertyChanged(nameof(SelectedTests));
             }
         }
 
@@ -234,35 +233,9 @@ namespace FenomPlus.ViewModels
             // Get all users for this currently connected device
             //QcUserList = ReadAllQcUsers();
             UpdateQcUserList();
-
-            if (QcUserList.Count > 0)
+            for (int i = 0; i< QcUserList.Count; ++i)
             {
-                QcButtonViewModels[1].QCUserModel = QcUserList[0];
-            }
-
-            if (QcUserList.Count > 1)
-            {
-                QcButtonViewModels[2].QCUserModel = QcUserList[1];
-            }
-
-            if (QcUserList.Count > 2)
-            {
-                QcButtonViewModels[3].QCUserModel = QcUserList[2];
-            }
-
-            if (QcUserList.Count > 3)
-            {
-                QcButtonViewModels[4].QCUserModel = QcUserList[3];
-            }
-
-            if (QcUserList.Count > 4)
-            {
-                QcButtonViewModels[5].QCUserModel = QcUserList[4];
-            }
-
-            if (QcUserList.Count > 5)
-            {
-                QcButtonViewModels[6].QCUserModel = QcUserList[5];
+                QcButtonViewModels[i+1].QCUserModel = QcUserList[i];
             }
         }
 
@@ -1049,6 +1022,9 @@ namespace FenomPlus.ViewModels
                         else if (DateTime.Now > lastTest.TestDate.AddHours(24))
                         {
                             SelectedQcUser.CurrentStatus = QCUser.UserDisqualified;
+                            DbUpdateQcUser(SelectedQcUser);
+                            // Update the GUI 
+                            QcButtonViewModels[userIndex].QCUserModel = QcUserList[userIndex-1] = SelectedQcUser;
                             await Services.Dialogs.ShowAlertAsync($"More than 24 hours has passed since your last qualifying test. You are now disqualified.", "User Disqualified", "OK");
                             return;
                         }
