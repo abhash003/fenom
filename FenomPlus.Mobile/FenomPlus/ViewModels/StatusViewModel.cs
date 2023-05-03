@@ -187,7 +187,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            await (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
+            await Services.DeviceService.Current.RequestEnvironmentalInfo();
 
             RefreshInProgress = true;
 
