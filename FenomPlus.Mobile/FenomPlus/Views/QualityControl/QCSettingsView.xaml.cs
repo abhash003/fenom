@@ -89,7 +89,7 @@ namespace FenomPlus.Views
 
         private void AllDevicesDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
-            DeleteDeviceButton.IsEnabled = AllUsersDataGrid.SelectedIndex >= 0;
+            DeleteDeviceButton.IsEnabled = AllDevicesDataGrid.SelectedIndex >= 0;
         }
 
         private void AllUsersDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
