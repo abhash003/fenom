@@ -98,7 +98,7 @@ namespace FenomPlus.ViewModels
             //Services.Cache.EnvironmentalInfo = null;
             // jac: do not request, this is updated by the device            
 
-            await (Services.DeviceService.Current as BleDevice).RequestEnvironmentalInfo();
+            await Services.DeviceService.Current.RequestEnvironmentalInfo();
             Xamarin.Forms.Device.StartTimer(TimeSpan.FromMilliseconds(200), EnvironmentalInfo);
             return false;
         }

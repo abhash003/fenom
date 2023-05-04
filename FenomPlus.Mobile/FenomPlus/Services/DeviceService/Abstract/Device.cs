@@ -194,6 +194,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public abstract Task DisconnectAsync();
 
         public abstract Task<bool> RequestDeviceInfo();
+        public abstract Task<bool> RequestEnvironmentalInfo();
 
         /// <summary>
         /// 
