@@ -125,7 +125,7 @@ namespace FenomPlus.SDK.Core.Models
                         {
                             throw new ArgumentException($"Unexpected payload item size (expected: {COMM_DEVICE_DAYS_REMAINING_SIZE}, saw: {size})");
                         }
-                        deviceDaysRemaining = ToInt(data, offset);
+                        deviceDaysRemaining = ToInt16(data, offset);
                         break;
 
                     case COMM_NO_SENSOR_DAYS_REMAINING_ID:

@@ -50,9 +50,10 @@ namespace FenomPlus.SDK.Core.Models
             return bytes[index];
         }
 
-        protected int ToInt(byte[] bytes, int index = 0)
+        protected int ToInt16(byte[] bytes, int index = 0)
         {
-            return bytes[index];
+            byte value = bytes[index];
+            return Convert.ToInt16(value);
         }
 
     }
