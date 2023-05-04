@@ -1786,7 +1786,7 @@ namespace FenomPlus.ViewModels
 
             if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
             {
-                deviceStatus = QCDevice.DeviceInsufficientData;
+                deviceStatus = QCDevice.DeviceExpired;
             }
             else if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlExpired)
             {
