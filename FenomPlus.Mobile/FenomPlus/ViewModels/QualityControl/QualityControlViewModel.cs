@@ -742,6 +742,14 @@ namespace FenomPlus.ViewModels
         public void UpdateQcUserList()
         {
             QcUserList = ReadAllQcUsers();
+            foreach(QCUser qcUser in QcUserList)
+            {
+                if (qcUser.CurrentStatus != QCUser.UserDisqualified && qcUser.ExpiresDate > DateTime.Now.AddDays(7))
+                {
+                    qcUser.CurrentStatus = QCUser.UserDisqualified;
+                    DbUpdateQcUser(qcUser);
+                }
+            }
         }
 
         //--------------------------------------------------------------------------------------
