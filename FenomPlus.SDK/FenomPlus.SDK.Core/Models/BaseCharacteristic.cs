@@ -50,5 +50,10 @@ namespace FenomPlus.SDK.Core.Models
             return bytes[index];
         }
 
+        protected int ToInt(byte[] bytes, int index = 0)
+        {
+            return bytes[index];
+        }
+
     }
 }
