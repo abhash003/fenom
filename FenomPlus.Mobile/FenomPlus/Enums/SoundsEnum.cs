@@ -12,6 +12,7 @@ namespace FenomPlus.Enums
         green_low,
         green_mid,
         green_high,
+        stop_breathing,
         test_failure,
         test_success
     }
