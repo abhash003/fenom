@@ -85,7 +85,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
         DeviceStatusInfo DeviceStatusInfo { get; set; }
         ErrorStatusInfo ErrorStatusInfo { get; set; }
 
-        public DeviceCheckEnum CheckDeviceBeforeTest();
+        public DeviceCheckEnum CheckDeviceBeforeTest(bool isQCCheck = false);
 
         void DecodeEnvironmentalInfo(byte[] data);
         BreathManeuver DecodeBreathManeuver(byte[] data);

@@ -224,7 +224,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return false;
         }        
 
-        public DeviceCheckEnum CheckDeviceBeforeTest()
+        public DeviceCheckEnum CheckDeviceBeforeTest(bool isQCCheck = false)
         {
             // Get the latest environmental info - updates Cache
             //Services.DeviceService.Current?.RequestEnvironmentalInfo();
@@ -244,7 +244,15 @@ namespace FenomPlus.Services.DeviceService.Abstract
             
             if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
-                //return DeviceCheckEnum.BatteryCriticallyLow;
+                return DeviceCheckEnum.BatteryCriticallyLow;
+            }
+
+            if (isQCCheck)
+            {
+                if (!IsQCEnabled())
+                {
+                    return DeviceCheckEnum.QCDisabled;
+                }
             }
 
             // environmental lockouts

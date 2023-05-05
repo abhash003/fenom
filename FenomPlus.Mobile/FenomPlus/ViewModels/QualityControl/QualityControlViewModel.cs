@@ -178,7 +178,7 @@ namespace FenomPlus.ViewModels
             if (Services?.DeviceService?.Current == null)
                 return false;
 
-            return Services.DeviceService.Current.Connected; ;
+            return Services.DeviceService.Current.Connected;
         }
 
         public void LoadData()
@@ -362,42 +362,7 @@ namespace FenomPlus.ViewModels
         }
 
 
-
-        //private ObservableCollection<QCUser> ReadAllQcDevices()
-        //{
-        //    try
-        //    {
-        //        using (var db = new LiteDatabase(QCDatabasePath))
-        //        {
-        //            var userCollection = db.GetCollection<QCUser>("qcusers");
-
-        //            List<QCUser> users;
-
-        //            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
-        //            {
-        //                users = userCollection.Query()
-        //                    .Where(x => x.UserName != QCUser.NegativeControlName)
-        //                    .OrderBy(x => x.UserName)
-        //                    .ToList();
-        //            }
-        //            else
-        //            {
-        //                // Return all users if device not connected (No device serial number)
-        //                users = userCollection.Query()
-        //                    .Where(x => x.UserName != QCUser.NegativeControlName)
-        //                    .OrderBy(x => x.UserName)
-        //                    .ToList();
-        //            }
-
-        //            return new ObservableCollection<QCUser>(users);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //        return new ObservableCollection<QCUser>(); // Empty
-        //    }
-        //}
+              
 
         #endregion
 
@@ -1013,6 +978,11 @@ namespace FenomPlus.ViewModels
         {
             if (QcButtonViewModels[userIndex].Assigned)
             {
+                if (!Services.DeviceService.Current.IsQCEnabled())
+                {
+                    await Services.Dialogs.ShowAlertAsync($"Quality Control is Disabled.", "Quality Control Error", "Close");
+                    return;
+                }
                 QCTest lastTest = GetLastTest(SelectedQcUser.UserName);
 
                 switch (SelectedQcUser.CurrentStatus)
@@ -1238,7 +1208,7 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest(true);
 
                 switch (deviceStatus)
                 {
@@ -1248,7 +1218,10 @@ namespace FenomPlus.ViewModels
                         {
                             return;
                         }
-                        break;
+                    break;
+                    case DeviceCheckEnum.QCDisabled:
+                        Services.Dialogs.ShowAlert($"Quality Control is Disabled.", "Quality Control Error", "Close");
+                    break;
                 }
             }
         }
@@ -1256,7 +1229,7 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
-                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest();
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest(true);
 
                 switch (deviceStatus)
                 {
@@ -1289,6 +1262,15 @@ namespace FenomPlus.ViewModels
                         Services.Dialogs.ShowAlert(
                             $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
                             "Battery Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.NoSensorMissing:
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.NoSensorCommunicationFailed:
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.QCDisabled:
+                        Services.Dialogs.ShowAlert($"Quality Control is Disabled.", "Quality Control Error", "Close");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
