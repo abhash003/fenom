@@ -6,7 +6,7 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.TestErrorView"
     Title="{Binding Title}"
-    Shell.NavBarIsVisible="True"
+    Shell.NavBarIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
 
