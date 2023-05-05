@@ -50,9 +50,6 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private bool _isDeviceConnected;
 
-        [ObservableProperty]
-        private bool _showAllMenus;
-
         //[ObservableProperty] private DeviceStatus _deviceStatus;
 
         [ObservableProperty]
@@ -66,7 +63,6 @@ namespace FenomPlus.ViewModels
             Services.LogCat.Print($"{new StackFrame().GetMethod().ReflectedType.FullName}: {DebugHelper.GetCallingMethodString(2)}");
 
             AppSoftwareVersion = $"Software ({VersionTracking.CurrentVersion})";
-            ShowAllMenus = true;
         }
 
         [RelayCommand]
