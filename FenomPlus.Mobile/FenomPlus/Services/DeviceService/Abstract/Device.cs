@@ -530,6 +530,24 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return DeviceInfo.IsQcEnabled;
         }
 
+        public string GetDeviceQCStatus()
+        {
+            if (!IsQCEnabled())
+            {
+                return "Disabled";
+            }
+            string _currentDeviceStatus = string.Empty;
+            short hour = 0;
+            RequestDeviceInfo().GetAwaiter();
+            bool? result = GetQCHoursRemaining(ref hour);
+            if (result != null)
+            {
+                _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000) ? QCDevice.DeviceFail : QCDevice.DeviceExpired);
+            }
+
+            return _currentDeviceStatus;
+        }
+
         public bool GetQCHoursRemaining(ref short hour)
         {
             //hour (type short) >=0:valid, <0:expired, (<0 and ==0x8000):failed

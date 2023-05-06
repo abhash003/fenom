@@ -54,15 +54,8 @@ namespace FenomPlus.ViewModels
         public string CurrentDeviceStatus
         {
             get 
-            {
-                short hour = 0;
-                Services.DeviceService?.Current.RequestDeviceInfo().GetAwaiter(); 
-                bool? result = Services.DeviceService?.Current.GetQCHoursRemaining(ref hour);
-                if (result != null) 
-                {
-                   _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000)? QCDevice.DeviceFail : QCDevice.DeviceExpired); 
-                }
-                return _currentDeviceStatus;
+            {                
+                return Services.DeviceService?.Current.GetDeviceQCStatus();
             }
         }
 
