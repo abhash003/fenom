@@ -293,6 +293,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     case 0x71:
                         return DeviceCheckEnum.NoSensorCommunicationFailed;
 
+                    case 0x81:
+                        return DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED;
+
                     default:
                         return DeviceCheckEnum.Unknown;
                 }

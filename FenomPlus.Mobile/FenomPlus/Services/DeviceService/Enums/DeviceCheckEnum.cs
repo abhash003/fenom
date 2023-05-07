@@ -12,6 +12,7 @@ namespace FenomPlus.Services.DeviceService.Enums
         NoSensorMissing,
         NoSensorCommunicationFailed,        
         Unknown,
-        QCDisabled
+        QCDisabled,
+        ERROR_SYSTEM_NEGATIVE_QC_FAILED
     }
 }
