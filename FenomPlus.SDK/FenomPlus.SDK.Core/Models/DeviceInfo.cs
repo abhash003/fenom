@@ -40,6 +40,8 @@ namespace FenomPlus.SDK.Core.Models
         private byte[] serialNumber;
         private short qcValidity;
 
+        private bool isQcEnabled;
+
         public byte PcbaVersion { get => pcbaVersion; set => pcbaVersion = value; }
         public byte FirmwareVersionMajor { get => firmwareVersionMajor; set => firmwareVersionMajor = value; }
         public byte FirmwareVersionMinor { get => firmwareVersionMinor; set => firmwareVersionMinor = value; }
@@ -47,6 +49,9 @@ namespace FenomPlus.SDK.Core.Models
         public int NoSensorDaysRemaining { get => noSensorDaysRemaining; set => noSensorDaysRemaining = value; }
         public byte[] SerialNumber { get => serialNumber; set => serialNumber = value; }
         public short QcValidity { get => qcValidity; set => qcValidity = value; }
+
+
+        public bool IsQcEnabled { get => isQcEnabled; set => isQcEnabled = value; }
 
         public int SensorExpDateYear
         {
@@ -73,16 +78,13 @@ namespace FenomPlus.SDK.Core.Models
 
         public DeviceInfo()
         {
-            unchecked
-            {
-                qcValidity = (short) 0xBEEF;
-            }
+            qcValidity = (short)0x0;
         }
 
         public DeviceInfo Decode(byte[] data)
         {
             int offset = 0;
-
+            isQcEnabled = false;
             int itemCount = data[offset++];
 
             int totalSize = data.Length; // COMM_DEVICE_PAYLOAD_SIZE + (itemCount * 2) + 1;
@@ -123,7 +125,7 @@ namespace FenomPlus.SDK.Core.Models
                         {
                             throw new ArgumentException($"Unexpected payload item size (expected: {COMM_DEVICE_DAYS_REMAINING_SIZE}, saw: {size})");
                         }
-                        deviceDaysRemaining = ToShort(data, offset);
+                        deviceDaysRemaining = ToInt16(data, offset);
                         break;
 
                     case COMM_NO_SENSOR_DAYS_REMAINING_ID:
@@ -149,6 +151,7 @@ namespace FenomPlus.SDK.Core.Models
                             {
                                 throw new ArgumentException($"Unexpected payload item size (expected: {COMM_QC_VALIDITY_SIZE}, saw: {size})");
                             }
+                            isQcEnabled = true;
                             qcValidity = ToShort(data, offset);
                             break;
                         }

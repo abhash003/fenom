@@ -17,6 +17,7 @@ namespace FenomPlus.Helpers
         private static ISimpleAudioPlayer green_high;               // green high
         private static ISimpleAudioPlayer test_failure;
         private static ISimpleAudioPlayer test_success;
+        private static ISimpleAudioPlayer stop_breathing;
 
         /// <summary>
         /// 
@@ -57,6 +58,10 @@ namespace FenomPlus.Helpers
                 test_failure = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 test_failure.Load("test_failure.wav");
                 test_failure.Loop = false;
+
+                stop_breathing = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+                stop_breathing.Load("stop_breathing.wav");
+                stop_breathing.Loop = false;
 
                 test_success = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
                 test_success.Load("test_success.wav");
@@ -163,6 +168,9 @@ namespace FenomPlus.Helpers
                 case SoundsEnum.green_high:
                     Stop(green_high);
                     break;
+                case SoundsEnum.stop_breathing:
+                    Stop(stop_breathing);
+                    break;
                 case SoundsEnum.test_failure:
                     break;
                 case SoundsEnum.test_success:
@@ -184,10 +192,17 @@ namespace FenomPlus.Helpers
             green_low.Seek(0);
             green_mid.Seek(0);
             green_high.Seek(0);
+            stop_breathing.Seek(0);
             test_failure.Seek(0);
             test_success.Seek(0);
         }
-
+        /// <summary>
+        /// play stop sound
+        /// </summary>
+        public static void PlayStopSound()
+        {
+            PlaySound(SoundsEnum.stop_breathing, 100);
+        }
         /// <summary>
         /// play succes sound
         /// </summary>
@@ -275,6 +290,11 @@ namespace FenomPlus.Helpers
                     StopAll();
                     test_success.Volume = volume;
                     test_success.Play();
+                    break;
+                case SoundsEnum.stop_breathing:
+                    StopAll();
+                    stop_breathing.Volume = volume;
+                    stop_breathing.Play();
                     break;
             }
         }

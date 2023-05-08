@@ -28,7 +28,7 @@ namespace FenomPlus.Models
                 TestNumber = input.TestNumber,
                 
                 SerialNumber = IOC.Services.DeviceService.Current?.DeviceSerialNumber,
-                QCStatus = "?",
+                QCStatus = IOC.Services.DeviceService.Current?.GetDeviceQCStatus(),
                 TestType = IOC.Services.Cache.TestType.ToString(),
                 TestResult = input.NOScore.ToString()
             };

@@ -22,6 +22,8 @@ using System.Text;
 using System.Diagnostics;
 using FenomPlus.SDK.Core.Features;
 using Polly.Utilities;
+using FenomPlus.ViewModels.QualityControl.Models;
+using Xamarin.CommunityToolkit.UI.Views;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -87,9 +89,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> StopTest();
 
-        public abstract Task<bool> DEVICEINFO();
-
-        public abstract bool RequestDeviceInfoSync();
+        public abstract Task<bool> DEVICEINFO();        
 
         public abstract Task<bool> CALIBRATION(ID_SUB iD_SUB, double cal1, double cal2, double cal3);
 
@@ -194,6 +194,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public abstract Task DisconnectAsync();
 
         public abstract Task<bool> RequestDeviceInfo();
+        public abstract Task<bool> RequestEnvironmentalInfo();
 
         /// <summary>
         /// 
@@ -223,7 +224,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return false;
         }        
 
-        public DeviceCheckEnum CheckDeviceBeforeTest()
+        public DeviceCheckEnum CheckDeviceBeforeTest(bool isQCCheck = false)
         {
             // Get the latest environmental info - updates Cache
             //Services.DeviceService.Current?.RequestEnvironmentalInfo();
@@ -243,7 +244,15 @@ namespace FenomPlus.Services.DeviceService.Abstract
             
             if ((EnvironmentalInfo.BatteryLevel < Constants.BatteryCritical3) && (DeviceStatusInfo.StatusCode == 0x4a))
             {
-                //return DeviceCheckEnum.BatteryCriticallyLow;
+                return DeviceCheckEnum.BatteryCriticallyLow;
+            }
+
+            if (isQCCheck)
+            {
+                if (!IsQCEnabled())
+                {
+                    return DeviceCheckEnum.QCDisabled;
+                }
             }
 
             // environmental lockouts
@@ -283,6 +292,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     // Decoded byte for 0x71 is 113 => No Sensor Communication Failed.
                     case 0x71:
                         return DeviceCheckEnum.NoSensorCommunicationFailed;
+
+                    case 0x81:
+                        return DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED;
 
                     default:
                         return DeviceCheckEnum.Unknown;
@@ -498,39 +510,52 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #region Device Communication
 
-        public abstract bool SendMessage(MESSAGE message);
+        public abstract Task<bool> SendMessage(MESSAGE message);
 
         #endregion
 
         #region Quality Control (QC)
 
-        public bool EnableQC()
+        public async Task<bool> EnableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 1);
-            bool result = SendMessage(msg);
-            return result;
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL,(byte) 1);            
+            return await SendMessage(msg);
         }
 
-        public bool DisableQC()
+        public async Task<bool> DisableQC()
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, 0);
-            bool result = SendMessage(msg);
-            return result;
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, (byte) 0);            
+            return await SendMessage(msg);
         }
 
         public bool IsQCEnabled()
         {
-            // if qc is populated in last device info update
-            if (DeviceInfo.QcValidity == 0xBEEF)
-                return false;
-            
-            return true;
+            return DeviceInfo.IsQcEnabled;
         }
 
-        public bool GetQCHoursRemaining(ref int hours)
+        public string GetDeviceQCStatus()
         {
-            // >=0 : valid, <=-1 : expired, = 0x8000 : failed
-            return true;
+            if (!IsQCEnabled())
+            {
+                return "Disabled";
+            }
+            string _currentDeviceStatus = string.Empty;
+            short hour = 0;
+            RequestDeviceInfo().GetAwaiter();
+            bool? result = GetQCHoursRemaining(ref hour);
+            if (result != null)
+            {
+                _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000) ? QCDevice.DeviceFail : QCDevice.DeviceExpired);
+            }
+
+            return _currentDeviceStatus;
+        }
+
+        public bool GetQCHoursRemaining(ref short hour)
+        {
+            //hour (type short) >=0:valid, <0:expired, (<0 and ==0x8000):failed
+            hour = (short)DeviceInfo.QcValidity;
+            return hour >= 0;
         }
 
         public bool ExtendQC(int hours)
@@ -538,6 +563,11 @@ namespace FenomPlus.Services.DeviceService.Abstract
             return true;
         }
 
+        public async Task<bool> ExtendDeviceValidity(short hour)
+        {
+            var msg = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, hour);
+            return await SendMessage(msg);
+        }
         #endregion
     }
 }

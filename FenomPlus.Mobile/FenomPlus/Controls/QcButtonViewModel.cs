@@ -31,6 +31,8 @@ namespace FenomPlus.Controls
                 OnPropertyChanged(nameof(NextTestDate));
                 OnPropertyChanged(nameof(NextTestDateString));
                 OnPropertyChanged(nameof(ShowChartOption));
+                OnPropertyChanged(nameof(ExpiresVisible));
+                OnPropertyChanged(nameof(NextTestVisible));
             }
         }
 

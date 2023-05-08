@@ -30,10 +30,7 @@ namespace FenomPlus.Views
             QualityControlViewModel.SelectedUserIndex = -1;
 
             // Refresh Data - ToDo: Later optimize and only refresh when needed?
-            QualityControlViewModel.LoadData();
-
-            if (string.IsNullOrEmpty(QualityControlViewModel.CurrentDeviceSerialNumber))
-                return;
+            QualityControlViewModel.LoadData();            
 
             // Don't assign in case device is not connected
             NegativeControlButton.BindingContext = QualityControlViewModel.QcButtonViewModels[0];

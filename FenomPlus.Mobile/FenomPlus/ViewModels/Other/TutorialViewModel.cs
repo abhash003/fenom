@@ -285,6 +285,10 @@ namespace FenomPlus.ViewModels
                             Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
 
+                        case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                            Services.Dialogs.ShowAlert($"Can't perform Test as Negative Control Test failed.", "Negative Control Test Error", "Close");
+                            return;
+
                         case DeviceCheckEnum.Unknown:
                             var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
                             Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
@@ -361,6 +365,9 @@ namespace FenomPlus.ViewModels
                         case DeviceCheckEnum.NoSensorCommunicationFailed:
                             Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                             return; // Don't Increment
+                        case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                            Services.Dialogs.ShowAlert($"Can't perform Test as Negative Control Test failed.", "Negative Control Test Error", "Close");
+                            return;
 
                         default:
                             throw new ArgumentOutOfRangeException();

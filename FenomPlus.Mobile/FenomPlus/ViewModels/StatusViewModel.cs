@@ -1,6 +1,7 @@
  using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Views;
 using System;
 using System.Globalization;
@@ -146,7 +147,7 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    counter_when_switch_from_disconnection = 10;
+                    counter_when_switch_from_disconnection = 5;
                     BluetoothCheckCount = 0; // Reset counter
                     if (Services.DeviceService.Discovering)
                     {
@@ -185,6 +186,8 @@ namespace FenomPlus.ViewModels
                 await Task.Delay(1);
                 return;
             }
+
+            await Services.DeviceService.Current.RequestEnvironmentalInfo();
 
             RefreshInProgress = true;
 
@@ -828,20 +831,21 @@ namespace FenomPlus.ViewModels
 
             switch (App.GetCurrentPage())
             {
-                //case TestErrorView testErrorView:     // Seems to be OK to navigate away from this
-                //case TestFailedView testFailedView:   // Seems to be OK to navigate away from this
-                case BreathManeuverFeedbackView breathManeuverFeedbackView:
-                case PreparingStandardTestResultView preparingStandardTestResultView:
-                case StopExhalingView stopExhalingView:
-                case TestResultsView testResultsView:
-                case QCNegativeControlTestView qCNegativeControlTestView:
-                case QCNegativeControlResultView qCNegativeControlResultView:
-                case QCUserTestView qCUserTestView:
-                case QCUserStopTestView qCUserStopTestView:
-                case QCUserTestResultView qCUserTestResultView:
+                //case TestErrorView _:     // Seems to be OK to navigate away from this
+                //case TestFailedView _:   // Seems to be OK to navigate away from this
+                case BreathManeuverFeedbackView _:
+                case PreparingStandardTestResultView _:
+                case StopExhalingView _:
+                case TestResultsView _:
+                case QCNegativeControlTestView _:
+                case QCNegativeControlResultView _:
+                case QCUserTestView _:
+                case QCUserStopTestView _:
+                case QCUserTestResultView _:
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
-                case DevicePowerOnView devicePowerOnView:  
+                case DevicePowerOnView _:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
+                case DashboardView _:
                     break;
                 default:
                     await Services.Navigation.DeviceStatusHubView();

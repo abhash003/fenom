@@ -23,6 +23,7 @@ namespace FenomPlus.Views
 
         protected override void OnDisappearing()
         {
+            Services.DeviceService.Current.BreathFlowChanged -=  QualityControlViewModel.Cache_BreathFlowChanged;
             base.OnDisappearing();
             //QualityControlViewModel.OnDisappearing();
         }

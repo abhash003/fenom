@@ -9,12 +9,12 @@ namespace FenomPlus.ViewModels.QualityControl.Models
     {
         // Status for Device...
 
-        //•	Pass
+        //• Valid	
         //    - Negative Control status is “Pass” and
         //    - QC User status is “Conditionally Qualified” or “Qualified”.
         //    - Both tests were done in the last 24 hours.
 
-        //•	Fail
+        //•	Failed
         //    - Negative Control status is “Fail” or
         //    - QC User status is “Disqualified”.
         //o Both tests were done in the last 24 hours.
@@ -28,7 +28,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         //    - Negative Control status is “None”, test is required or
         //    - QC User test is “None”, test is required.
 
-        public const string DevicePass = "Pass";
+        public const string DeviceValid = "Valid";
         public const string DeviceFail = "Fail";
         public const string DeviceExpired = "Expired";
         public const string DeviceInsufficientData = "Insufficient Data";
@@ -51,7 +51,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
-            CurrentStatus = DeviceInsufficientData;
+            CurrentStatus = DeviceExpired;
             RequireQC = IOC.Services.DeviceService.Current.IsQCEnabled();
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now; 

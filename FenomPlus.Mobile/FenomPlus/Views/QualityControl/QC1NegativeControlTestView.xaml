@@ -7,7 +7,7 @@
                        x:Class="FenomPlus.Views.QCNegativeControlTestView"
                        x:DataType="viewModels:QualityControlViewModel"
                        Title="{Binding Title}"
-                       Shell.NavBarIsVisible="True"
+                       Shell.NavBarIsVisible="False"
                        NavigationPage.HasBackButton="False"
                        NavigationPage.HasNavigationBar="False">
 
