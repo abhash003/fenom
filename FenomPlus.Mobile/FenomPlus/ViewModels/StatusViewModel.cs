@@ -186,29 +186,19 @@ namespace FenomPlus.ViewModels
                 await Task.Delay(1);
                 return;
             }
-
-            await Services.DeviceService.Current.RequestEnvironmentalInfo();
-
             RefreshInProgress = true;
 
             UpdateVersionNumbers();
-
             UpdateBluetooth();
-
             UpdateDevice(Services.Cache.DeviceExpireDate);
-
-            UpdateSensor();
-
-            UpdateBattery();
-
-            UpdatePressure();
-
-            UpdateHumidity();
-
-            UpdateTemperature();
-
             UpdateQualityControlExpiration(7);
 
+            await Services.DeviceService.Current.RequestEnvironmentalInfo();
+            UpdateSensor();
+            UpdateBattery();
+            UpdatePressure();
+            UpdateHumidity();
+            UpdateTemperature();
             RefreshInProgress = false;
         }
 
