@@ -293,6 +293,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     case 0x71:
                         return DeviceCheckEnum.NoSensorCommunicationFailed;
 
+                    case 0x81:
+                        return DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED;
+
                     default:
                         return DeviceCheckEnum.Unknown;
                 }
@@ -528,6 +531,24 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public bool IsQCEnabled()
         {
             return DeviceInfo.IsQcEnabled;
+        }
+
+        public string GetDeviceQCStatus()
+        {
+            if (!IsQCEnabled())
+            {
+                return "Disabled";
+            }
+            string _currentDeviceStatus = string.Empty;
+            short hour = 0;
+            RequestDeviceInfo().GetAwaiter();
+            bool? result = GetQCHoursRemaining(ref hour);
+            if (result != null)
+            {
+                _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000) ? QCDevice.DeviceFail : QCDevice.DeviceExpired);
+            }
+
+            return _currentDeviceStatus;
         }
 
         public bool GetQCHoursRemaining(ref short hour)

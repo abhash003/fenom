@@ -113,6 +113,8 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> RequestDeviceInfo();
         Task<bool> RequestEnvironmentalInfo();
+        string GetDeviceQCStatus();
+
         int DeviceLifeRemaining { get; set; }
     }
 }

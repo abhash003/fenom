@@ -54,15 +54,8 @@ namespace FenomPlus.ViewModels
         public string CurrentDeviceStatus
         {
             get 
-            {
-                short hour = 0;
-                Services.DeviceService?.Current.RequestDeviceInfo().GetAwaiter(); 
-                bool? result = Services.DeviceService?.Current.GetQCHoursRemaining(ref hour);
-                if (result != null) 
-                {
-                   _currentDeviceStatus = result == true ? QCDevice.DeviceValid : (hour == unchecked((short)0x8000)? QCDevice.DeviceFail : QCDevice.DeviceExpired); 
-                }
-                return _currentDeviceStatus;
+            {                
+                return Services.DeviceService?.Current.GetDeviceQCStatus();
             }
         }
 
@@ -1664,7 +1657,7 @@ namespace FenomPlus.ViewModels
         }
 
         [RelayCommand]
-        private void DeleteDevice(object parameter)
+        private async void DeleteDevice(object parameter)
         {
             int index = (int)parameter;
 
@@ -1674,27 +1667,29 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            //ToDo: if (Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device").Result)
-            //{
-                // Delete device, user and tests also
+            var result = await Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this device?", "Delete Device");
+            
+            if (result)
+            {
                 DbDeleteQcDevice(QcDeviceList[index - 1]);// SfDataGrid apparently is one based on the index
                 UpdateQcDeviceList();
-            //}
+            }            
+            
         }
 
         [RelayCommand]
-        private void DeleteUser(object parameter)
+        private async void DeleteUser(object parameter)
         {
             int index = (int)parameter;
 
-            //ToDo: var result = Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this user?", "Delete User").Result;
+            var result = await Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this user?", "Delete User");
 
-            //if (result)
-            //{
+            if (result)
+            {
                 // Delete User and tests
                 DbDeleteQcUser(QcUserList[index - 1]); // SfDataGrid apparently is one based on the index
                 UpdateQcUserList();
-            //}
+            }
         }
 
         private QCTest GetLastNegativeControlTest()

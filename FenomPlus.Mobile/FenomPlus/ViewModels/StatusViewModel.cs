@@ -187,28 +187,20 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            await Services.DeviceService.Current.RequestEnvironmentalInfo();
-
-            RefreshInProgress = true;
 
             UpdateVersionNumbers();
-
             UpdateBluetooth();
-
             UpdateDevice(Services.Cache.DeviceExpireDate);
-
-            UpdateSensor();
-
-            UpdateBattery();
-
-            UpdatePressure();
-
-            UpdateHumidity();
-
-            UpdateTemperature();
-
             UpdateQualityControlExpiration(7);
 
+            await Services.DeviceService.Current.RequestEnvironmentalInfo();
+            RefreshInProgress = true;
+
+            UpdateSensor();
+            UpdateBattery();
+            UpdatePressure();
+            UpdateHumidity();
+            UpdateTemperature();
             RefreshInProgress = false;
         }
 
