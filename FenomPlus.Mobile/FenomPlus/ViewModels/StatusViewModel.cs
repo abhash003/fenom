@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Views;
+using Syncfusion.XlsIO.Parser.Biff_Records;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -87,7 +88,6 @@ namespace FenomPlus.ViewModels
             BatteryViewModel.Header = "Battery";
 
             BluetoothConnected = false;
-            _ = RefreshStatusAsync();
 
             BluetoothStatusTimer = new Timer(TimerIntervalMilliseconds);
             BluetoothStatusTimer.Elapsed += BluetoothCheck;
@@ -819,7 +819,6 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
-            await RefreshStatusAsync();
 
             switch (App.GetCurrentPage())
             {
@@ -837,8 +836,10 @@ namespace FenomPlus.ViewModels
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
                 case DevicePowerOnView _:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
-                case DashboardView _:
                     break;
+                case DashboardView _:
+                    if (BluetoothConnected) { goto default; }
+                    else break; 
                 default:
                     await Services.Navigation.DeviceStatusHubView();
                     break;
