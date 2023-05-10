@@ -187,6 +187,7 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
+
             UpdateVersionNumbers();
             UpdateBluetooth();
             UpdateDevice(Services.Cache.DeviceExpireDate);
@@ -194,6 +195,7 @@ namespace FenomPlus.ViewModels
 
             await Services.DeviceService.Current.RequestEnvironmentalInfo();
             RefreshInProgress = true;
+
             UpdateSensor();
             UpdateBattery();
             UpdatePressure();

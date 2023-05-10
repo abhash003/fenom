@@ -37,7 +37,7 @@ namespace FenomPlus.Services
         {
             //var result = UserDialogs.Instance.ConfirmAsync(message, title, "Yes", "No");
 
-            var r = await UserDialogs.Instance.ConfirmAsync("message", title);
+            var r = await UserDialogs.Instance.ConfirmAsync(message, title, "Yes", "No");
             return r;
         }
 
