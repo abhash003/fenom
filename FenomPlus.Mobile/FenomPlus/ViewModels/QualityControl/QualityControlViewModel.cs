@@ -194,6 +194,9 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
+            CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
+            Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber));
+
             QcButtonViewModels.Clear();
             for (int i = 0; i <= 6; i++) // Negative Control + 6 users
             {
