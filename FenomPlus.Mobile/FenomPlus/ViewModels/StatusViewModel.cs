@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Views;
-using Syncfusion.XlsIO.Parser.Biff_Records;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
