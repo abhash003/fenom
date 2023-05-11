@@ -6,7 +6,8 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls" xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
     x:Class="FenomPlus.Views.PreparingStandardTestResultView"
     Title="{Binding Title}"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="True"
+    Shell.FlyoutBehavior="Disabled"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
 

@@ -7,7 +7,8 @@
                        x:Class="FenomPlus.Views.QCNegativeControlResultView"
                        x:DataType="viewModels:QualityControlViewModel"
                        Title="{Binding Title}"
-                       Shell.NavBarIsVisible="False"
+                       Shell.NavBarIsVisible="True"
+                       Shell.FlyoutBehavior="Disabled"
                        NavigationPage.HasBackButton="False"
                        NavigationPage.HasNavigationBar="False">
 

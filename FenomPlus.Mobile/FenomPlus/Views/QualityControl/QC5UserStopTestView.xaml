@@ -6,7 +6,8 @@
                        xmlns:viewModels="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
                        x:Class="FenomPlus.Views.QCUserStopTestView"
                        Title="{Binding Title}"
-                       Shell.NavBarIsVisible="False"
+                       Shell.NavBarIsVisible="True"
+                       Shell.FlyoutBehavior="Disabled"
                        NavigationPage.HasBackButton="False"
                        NavigationPage.HasNavigationBar="False"
                        x:DataType="viewModels:QualityControlViewModel">
