@@ -166,34 +166,9 @@ namespace FenomPlus.ViewModels
             });
         }
 
-        private bool CheckDeviceConnection()
-        {
-            if (Services?.DeviceService?.Current == null)
-                return false;
-
-            return Services.DeviceService.Current.Connected;
-        }
 
         public void LoadData()
         {
-            //if (!CheckDeviceConnection())
-            //{
-            //    // ToDo: Put up alert
-            //    Services.Dialogs.ShowAlert("You must have a connection to a device to continue.", "Device Not Connected", "OK");
-            //    Services.Navigation.DashboardView();
-            //    return;
-            //}
-
-            if (!CheckDeviceConnection())
-            {
-                CurrentDeviceSerialNumber = string.Empty;
-                // CurrentDeviceStatus = "Device Not Connected";
-                //QcUserList = ReadAllQcUsers();
-                // ToDo: Put up alert
-                Services.Navigation.QCSettingsView();
-                return;
-            }
-
             CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber));
 
