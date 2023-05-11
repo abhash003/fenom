@@ -25,19 +25,33 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="10">
+            <StackLayout Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
 
-                <Label Text="User Test Failed" Style="{StaticResource Header}" HorizontalTextAlignment="Start"/>
-                
-                <Label Text="Possible issues affecting your test include:" Style="{StaticResource Description}" Margin="0,0,0,10"/>
+                <Label Text="Test Error" Style="{StaticResource Header}"/>
 
-                <Label Text="     ● Exhaling too hard" Style="{StaticResource Description}"/>
+                <!--Deleted during switch-->
+                <Label Text="{Binding ErrorCode}" Style="{StaticResource Important}"/>
 
-                <Label Text="     ● Exhaling too soft" Style="{StaticResource Description}" />
+                <!--Deleted during switch-->
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource Notice}"/>
 
-                <Label Text="     ● Exhaling at an unsteady rate that was not in range" Style="{StaticResource Description}"/>
+                <Label Text="You can test again or follow the tutorial." Style="{StaticResource Notice}" Margin="0,0,0,20"/>
 
-                <Label Text="     ● Failing to make a seal around the mouthpiece" Style="{StaticResource Description}"/>
+                <Label Style="{StaticResource Notice}">
+
+                    <Label.FormattedText>
+
+                        <FormattedString>
+
+                            <Span Text="For more information about this error,&#x0a;"/>
+
+                            <Span Text="please view our online FAQ" TextColor="DodgerBlue"/>
+
+                        </FormattedString>
+
+                    </Label.FormattedText>
+
+                </Label>
 
             </StackLayout>
 
