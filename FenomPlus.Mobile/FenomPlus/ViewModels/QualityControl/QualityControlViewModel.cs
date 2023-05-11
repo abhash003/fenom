@@ -21,11 +21,18 @@ using Color = Xamarin.Forms.Color;
 using Xamarin.Forms;
 using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
+using FenomPlus.Enums.ErrorCodes;
 
 namespace FenomPlus.ViewModels
 {
     public partial class QualityControlViewModel : BaseViewModel
     {
+        [ObservableProperty]
+        private string _errorMessage;
+
+        [ObservableProperty]
+        private string _errorCode;
+
         private readonly string QCDatabasePath;
 
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
@@ -159,11 +166,18 @@ namespace FenomPlus.ViewModels
                 {
                     if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
                     {
-                        // Only navigate if during startup
-                        Services.Navigation.QCUserTestErrorView();
+                        ShowErrorPage(arg);
                     }
                 }
             });
+        }
+
+        private void ShowErrorPage(byte arg)
+        {
+            var error = ErrorCodeLookup.Lookup(arg);
+            ErrorCode = error.Code;
+            ErrorMessage = error.Message;
+            Services.Navigation.QCUserTestErrorView();
         }
 
         private bool CheckDeviceConnection()
@@ -1339,13 +1353,16 @@ namespace FenomPlus.ViewModels
 
                 Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
                 {
+                    var code = Services.DeviceService.Current.ErrorStatusInfo.ErrorCode;
+
                     if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
 
                         PlaySounds.PlayFailedSound();
-                        Services.Navigation.QCUserTestErrorView();
+
+                        ShowErrorPage(code);
                     }
                     else
                     {
@@ -1403,6 +1420,8 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
+                var code = Services.DeviceService.Current.ErrorStatusInfo.ErrorCode;
+
                 Services.Cache.TestType = Enums.TestTypeEnum.None;
                 if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                 {
@@ -1410,7 +1429,7 @@ namespace FenomPlus.ViewModels
                     PlaySounds.PlayFailedSound();
 
                     // Don't add this test with error to the database
-                    Services.Navigation.QCUserTestErrorView();
+                    ShowErrorPage(code);
                 }
                 else
                 {
