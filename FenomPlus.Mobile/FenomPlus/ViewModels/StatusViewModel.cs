@@ -237,6 +237,9 @@ namespace FenomPlus.ViewModels
             //int daysRemaining = (expirationDate > DateTime.Now) ? (int)(expirationDate - DateTime.Now).TotalDays : 0;
 
             int deviceLifeRemaining = Services.DeviceService.Current.DeviceLifeRemaining;
+            deviceLifeRemaining = deviceLifeRemaining < 0 ? -1 * deviceLifeRemaining : deviceLifeRemaining;
+
+
 
             DeviceViewModel.ButtonText = "Order";
 

@@ -129,7 +129,7 @@ namespace FenomPlus.SDK.Core.Models
                         }
                         deviceRemaining = new byte[COMM_DEVICE_DAYS_REMAINING_SIZE];
                         Array.Copy(data, offset, deviceRemaining, 0, deviceRemaining.Length);
-                        deviceDaysRemaining = BitConverter.ToUInt16(deviceRemaining, 0);
+                        deviceDaysRemaining = BitConverter.ToInt16(deviceRemaining, 0);
                         break;
 
                     case COMM_NO_SENSOR_DAYS_REMAINING_ID:
