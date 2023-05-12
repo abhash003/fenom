@@ -6,7 +6,8 @@
     xmlns:controls="clr-namespace:FenomPlus.Controls"
     x:Class="FenomPlus.Views.PairingView"
     Title="{Binding Title}"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="True"
+    Shell.FlyoutBehavior="Disabled"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
 
