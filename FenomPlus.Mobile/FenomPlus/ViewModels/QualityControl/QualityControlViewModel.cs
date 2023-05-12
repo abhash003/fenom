@@ -57,15 +57,20 @@ namespace FenomPlus.ViewModels
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
-        private string _currentDeviceStatus = string.Empty;  // Valid, Expired, Fail
+        private string _currentDeviceStatus;
         public string CurrentDeviceStatus
         {
-            get 
-            {                
-                return Services.DeviceService?.Current.GetDeviceQCStatus();
+            get => _currentDeviceStatus;
+            set
+            {
+                if (_currentDeviceStatus != value)
+                {
+                    _currentDeviceStatus = value;
+                    OnPropertyChanged(nameof(CurrentDeviceStatus));
+                    OnPropertyChanged(nameof(DeviceStatusString));
+                }
             }
         }
-
         public string DeviceStatusString => $"Device Status ({CurrentDeviceStatus})";
 
         public bool RequireQC
@@ -75,27 +80,15 @@ namespace FenomPlus.ViewModels
             {
                 var device = Services.DeviceService?.Current;
                 QCDevice.RequireQC = value;
-
-                if (device != null)
+                if (device != null && value != device.IsQCEnabled())
                 {
-                    if (value == true)
-                    {                        
-                        
-                        if (!device.IsQCEnabled())
-                        {
-                            device.EnableQC();
-                        }
-                    }
-                    else
-                    {                        
-
-                        if (device.IsQCEnabled())
-                        {
-                            device.DisableQC();
-                        }
-                    }
+                    device.ToggleQC(value);
+                    // allow time for the message write to device then read back 
+                    Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+                    {
+                        CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                    });
                 }
-
                 OnPropertyChanged(nameof(RequireQC));
             }
         }
@@ -139,6 +132,7 @@ namespace FenomPlus.ViewModels
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
 
+            CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus(); // Valid, Expired, Fail,  Disabled
 
             // Todo: Debugging only
             //DeleteDataBase();
@@ -1797,6 +1791,7 @@ namespace FenomPlus.ViewModels
         {
             // Returns: "Valid", "Failed", "Expired"
 
+            CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
             string deviceStatus = CurrentDeviceStatus;
             
             if (QCUserTestResultString == QCTest.TestPass) 
@@ -1805,7 +1800,10 @@ namespace FenomPlus.ViewModels
                 device.ExtendDeviceValidity((short)24);
             }
 
-            string ppp = CurrentDeviceStatus;
+            { // for test
+                CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                string ppp = CurrentDeviceStatus;
+            }
 
             if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
             {

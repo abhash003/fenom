@@ -32,8 +32,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> StopTest();
 
-        Task<bool> EnableQC();
-        Task<bool> DisableQC();
+        Task<bool> ToggleQC(bool Enable = true);
         Task<bool> ExtendDeviceValidity(short hour);
         bool IsQCEnabled(); // if qc is populated in last device info update
         bool GetQCHoursRemaining(ref short hour); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
