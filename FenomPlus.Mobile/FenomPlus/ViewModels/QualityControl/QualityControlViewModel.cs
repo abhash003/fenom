@@ -1790,20 +1790,22 @@ namespace FenomPlus.ViewModels
         private void UpdateDeviceStatus()
         {
             // Returns: "Valid", "Failed", "Expired"
-
-            CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-            string deviceStatus = CurrentDeviceStatus;
-            
             if (QCUserTestResultString == QCTest.TestPass) 
             {
                 var device = Services.DeviceService?.Current;
                 device.ExtendDeviceValidity((short)24);
+                Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+                {
+                    CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                    UpdateDeviceStatusOnDB();
+                });
+                return;
             }
-
-            { // for test
-                CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                string ppp = CurrentDeviceStatus;
-            }
+            UpdateDeviceStatusOnDB();
+        }
+        private void UpdateDeviceStatusOnDB()
+        {
+            string deviceStatus = CurrentDeviceStatus;
 
             if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
             {
@@ -1828,7 +1830,6 @@ namespace FenomPlus.ViewModels
 
             DbUpdateQcDevice(QCDevice);
         }
-
 
         private readonly int NegativeControlMaxThreshold = 5;
         private readonly int NegativeControlTimeoutHours = 24;
