@@ -47,8 +47,10 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _deviceConnectedStatus;
 
-        [ObservableProperty]
-        private bool _isDeviceConnected;
+        public bool IsDeviceConnected 
+        {
+            get => Services?.DeviceService?.Current?.Connected ?? false;
+        }
 
         //[ObservableProperty] private DeviceStatus _deviceStatus;
 
