@@ -829,6 +829,7 @@ namespace FenomPlus.ViewModels
                 case PreparingStandardTestResultView _:
                 case StopExhalingView _:
                 case TestResultsView _:
+                case TestErrorView _:
                 case QCNegativeControlTestView _:
                 case QCNegativeControlResultView _:
                 case QCNegativeControlChartView _:
