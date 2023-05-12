@@ -827,11 +827,17 @@ namespace FenomPlus.ViewModels
                 case PreparingStandardTestResultView _:
                 case StopExhalingView _:
                 case TestResultsView _:
+                case TestErrorView _:
                 case QCNegativeControlTestView _:
                 case QCNegativeControlResultView _:
+                case QCNegativeControlChartView _:
                 case QCUserTestView _:
                 case QCUserStopTestView _:
+                case QCUserTestCalculationView _:
                 case QCUserTestResultView _:
+                case QCUserTestErrorView _:
+                case QCUserTestChartView _:
+
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
                 case DevicePowerOnView _:  
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
