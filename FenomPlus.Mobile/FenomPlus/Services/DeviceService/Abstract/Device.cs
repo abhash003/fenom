@@ -516,15 +516,9 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #region Quality Control (QC)
 
-        public async Task<bool> EnableQC()
+        public async Task<bool> ToggleQC(bool Enable = true)
         {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL,(byte) 1);            
-            return await SendMessage(msg);
-        }
-
-        public async Task<bool> DisableQC()
-        {
-            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, (byte) 0);            
+            MESSAGE msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL,  (byte)(Enable ? 1 : 0));
             return await SendMessage(msg);
         }
 
