@@ -9,7 +9,6 @@
     xmlns:sfPager="clr-namespace:Syncfusion.SfDataGrid.XForms.DataPager;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
     Shell.NavBarIsVisible="True"
-    Shell.FlyoutBehavior="Disabled"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False">
 
