@@ -156,6 +156,8 @@ namespace FenomPlus.Enums
                     { 0x7D,  "undecl: 0x7D" },
                     { 0x7E,  "undecl: 0x7E" },
                     { 0x7F,  "undecl: 0x7F" },
+                    // section 8
+                    { 0x81,  "QC Negative Control Test failed, disable QC, then enable QC will rescue" },
             };
 
             public ErrorCodeLookup()
