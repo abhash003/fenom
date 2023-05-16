@@ -36,6 +36,8 @@ namespace FenomPlus.Views
                 return;
             }
 
+            QualityControlViewModel.CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+
             // Refresh Data - ToDo: Later optimize and only refresh when needed?
             QualityControlViewModel.LoadData();
 
