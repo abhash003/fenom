@@ -1246,7 +1246,11 @@ namespace FenomPlus.ViewModels
                         Services.Dialogs.ShowAlert($"Quality Control is Disabled.", "Quality Control Error", "Close");
                         break;
                     case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
-                        Services.Dialogs.ShowAlert($"Negative Control failed", "Negative Control failed, contact Customer Service", "Close");
+                        Services.Dialogs.ShowAlert("Negative Control failed, please contact customer service", "Error 129", "Close");
+                        break;
+                    case DeviceCheckEnum.Unknown:
+                        var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                        Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
