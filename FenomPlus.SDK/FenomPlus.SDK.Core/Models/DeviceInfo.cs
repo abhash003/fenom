@@ -41,6 +41,7 @@ namespace FenomPlus.SDK.Core.Models
         private short qcValidity;
 
         private bool isQcEnabled;
+        private byte[] deviceRemaining;
 
         public byte PcbaVersion { get => pcbaVersion; set => pcbaVersion = value; }
         public byte FirmwareVersionMajor { get => firmwareVersionMajor; set => firmwareVersionMajor = value; }
@@ -50,6 +51,7 @@ namespace FenomPlus.SDK.Core.Models
         public byte[] SerialNumber { get => serialNumber; set => serialNumber = value; }
         public short QcValidity { get => qcValidity; set => qcValidity = value; }
 
+        public byte[] DeviceRemaining { get => deviceRemaining; set => deviceRemaining = value; }
 
         public bool IsQcEnabled { get => isQcEnabled; set => isQcEnabled = value; }
 
@@ -125,7 +127,9 @@ namespace FenomPlus.SDK.Core.Models
                         {
                             throw new ArgumentException($"Unexpected payload item size (expected: {COMM_DEVICE_DAYS_REMAINING_SIZE}, saw: {size})");
                         }
-                        deviceDaysRemaining = ToInt16(data, offset);
+                        deviceRemaining = new byte[COMM_DEVICE_DAYS_REMAINING_SIZE];
+                        Array.Copy(data, offset, deviceRemaining, 0, deviceRemaining.Length);
+                        deviceDaysRemaining = BitConverter.ToInt16(deviceRemaining, 0);
                         break;
 
                     case COMM_NO_SENSOR_DAYS_REMAINING_ID:

@@ -21,11 +21,18 @@ using Color = Xamarin.Forms.Color;
 using Xamarin.Forms;
 using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
+using FenomPlus.Enums.ErrorCodes;
 
 namespace FenomPlus.ViewModels
 {
     public partial class QualityControlViewModel : BaseViewModel
     {
+        [ObservableProperty]
+        private string _errorMessage;
+
+        [ObservableProperty]
+        private string _errorCode;
+
         private readonly string QCDatabasePath;
 
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
@@ -50,15 +57,20 @@ namespace FenomPlus.ViewModels
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
-        private string _currentDeviceStatus = string.Empty;  // Valid, Expired, Fail
+        private string _currentDeviceStatus;
         public string CurrentDeviceStatus
         {
-            get 
-            {                
-                return Services.DeviceService?.Current.GetDeviceQCStatus();
+            get => _currentDeviceStatus;
+            set
+            {
+                if (_currentDeviceStatus != value)
+                {
+                    _currentDeviceStatus = value;
+                    OnPropertyChanged(nameof(CurrentDeviceStatus));
+                    OnPropertyChanged(nameof(DeviceStatusString));
+                }
             }
         }
-
         public string DeviceStatusString => $"Device Status ({CurrentDeviceStatus})";
 
         public bool RequireQC
@@ -68,27 +80,15 @@ namespace FenomPlus.ViewModels
             {
                 var device = Services.DeviceService?.Current;
                 QCDevice.RequireQC = value;
-
-                if (device != null)
+                if (device != null && value != device.IsQCEnabled())
                 {
-                    if (value == true)
-                    {                        
-                        
-                        if (!device.IsQCEnabled())
-                        {
-                            device.EnableQC();
-                        }
-                    }
-                    else
-                    {                        
-
-                        if (device.IsQCEnabled())
-                        {
-                            device.DisableQC();
-                        }
-                    }
+                    device.ToggleQC(value);
+                    // allow time for the message write to device then read back 
+                    Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+                    {
+                        CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                    });
                 }
-
                 OnPropertyChanged(nameof(RequireQC));
             }
         }
@@ -132,6 +132,7 @@ namespace FenomPlus.ViewModels
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
 
+            CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus(); // Valid, Expired, Fail,  Disabled
 
             // Todo: Debugging only
             //DeleteDataBase();
@@ -159,41 +160,22 @@ namespace FenomPlus.ViewModels
                 {
                     if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
                     {
-                        // Only navigate if during startup
-                        Services.Navigation.QCUserTestErrorView();
+                        ShowErrorPage(arg);
                     }
                 }
             });
         }
 
-        private bool CheckDeviceConnection()
+        private void ShowErrorPage(byte arg)
         {
-            if (Services?.DeviceService?.Current == null)
-                return false;
-
-            return Services.DeviceService.Current.Connected;
+            var error = ErrorCodeLookup.Lookup(arg);
+            ErrorCode = error.Code;
+            ErrorMessage = error.Message;
+            Services.Navigation.QCUserTestErrorView();
         }
 
         public void LoadData()
         {
-            //if (!CheckDeviceConnection())
-            //{
-            //    // ToDo: Put up alert
-            //    Services.Dialogs.ShowAlert("You must have a connection to a device to continue.", "Device Not Connected", "OK");
-            //    Services.Navigation.DashboardView();
-            //    return;
-            //}
-
-            if (!CheckDeviceConnection())
-            {
-                CurrentDeviceSerialNumber = string.Empty;
-                // CurrentDeviceStatus = "Device Not Connected";
-                //QcUserList = ReadAllQcUsers();
-                // ToDo: Put up alert
-                Services.Navigation.QCSettingsView();
-                return;
-            }
-
             CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber));
 
@@ -1285,9 +1267,62 @@ namespace FenomPlus.ViewModels
 
                 GaugeData = Services.DeviceService.Current!.BreathFlow = 0;
                 GaugeSeconds = 10;
-                GaugeStatus = "Start Blowing";
+                GaugeStatus = "Start Blowing";                
+                await StartHumanControlStandard10SecTest();
+            }
+        }
 
-                await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+        private async Task StartHumanControlStandard10SecTest()
+        {
+            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
+            {
+                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest(true);
+
+                switch (deviceStatus)
+                {
+                    case DeviceCheckEnum.Ready:
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        break;
+                    case DeviceCheckEnum.DevicePurging:
+                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                        if (Services.Dialogs.PurgeCancelRequest)
+                        {
+                            return;
+                        }
+                        break;
+                    case DeviceCheckEnum.HumidityOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.",
+                            "Humidity Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.PressureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Pressure level ({Services.DeviceService.Current.EnvironmentalInfo.Pressure} kPa) is out of range.",
+                            "Pressure Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.TemperatureOutOfRange:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.",
+                            "Temperature Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.BatteryCriticallyLow:
+                        Services.Dialogs.ShowAlert(
+                            $"Unable to run test. Battery Level ({Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel}%) is critically low: ",
+                            "Battery Warning", "Close");
+                        break;
+                    case DeviceCheckEnum.NoSensorMissing:
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor is missing.  Install a F150 sensor.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.NoSensorCommunicationFailed:
+                        Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.QCDisabled:
+                        Services.Dialogs.ShowAlert($"Quality Control is Disabled.", "Quality Control Error", "Close");
+                        break;
+                    default:
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        break;
+                }
             }
         }
 
@@ -1339,13 +1374,16 @@ namespace FenomPlus.ViewModels
 
                 Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
                 {
+                    var code = Services.DeviceService.Current.ErrorStatusInfo.ErrorCode;
+
                     if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
 
                         PlaySounds.PlayFailedSound();
-                        Services.Navigation.QCUserTestErrorView();
+
+                        ShowErrorPage(code);
                     }
                     else
                     {
@@ -1403,6 +1441,8 @@ namespace FenomPlus.ViewModels
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
+                var code = Services.DeviceService.Current.ErrorStatusInfo.ErrorCode;
+
                 Services.Cache.TestType = Enums.TestTypeEnum.None;
                 if (Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
                 {
@@ -1410,7 +1450,7 @@ namespace FenomPlus.ViewModels
                     PlaySounds.PlayFailedSound();
 
                     // Don't add this test with error to the database
-                    Services.Navigation.QCUserTestErrorView();
+                    ShowErrorPage(code);
                 }
                 else
                 {
@@ -1750,16 +1790,22 @@ namespace FenomPlus.ViewModels
         private void UpdateDeviceStatus()
         {
             // Returns: "Valid", "Failed", "Expired"
-
-            string deviceStatus = CurrentDeviceStatus;
-            
             if (QCUserTestResultString == QCTest.TestPass) 
             {
                 var device = Services.DeviceService?.Current;
                 device.ExtendDeviceValidity((short)24);
+                Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+                {
+                    CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                    UpdateDeviceStatusOnDB();
+                });
+                return;
             }
-
-            string ppp = CurrentDeviceStatus;
+            UpdateDeviceStatusOnDB();
+        }
+        private void UpdateDeviceStatusOnDB()
+        {
+            string deviceStatus = CurrentDeviceStatus;
 
             if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
             {
@@ -1784,7 +1830,6 @@ namespace FenomPlus.ViewModels
 
             DbUpdateQcDevice(QCDevice);
         }
-
 
         private readonly int NegativeControlMaxThreshold = 5;
         private readonly int NegativeControlTimeoutHours = 24;
