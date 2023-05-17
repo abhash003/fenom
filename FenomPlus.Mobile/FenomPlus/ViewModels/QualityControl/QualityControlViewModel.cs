@@ -132,8 +132,6 @@ namespace FenomPlus.ViewModels
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
 
-            CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus(); // Valid, Expired, Fail,  Disabled
-
             // Todo: Debugging only
             //DeleteDataBase();
 
@@ -1247,6 +1245,13 @@ namespace FenomPlus.ViewModels
                     case DeviceCheckEnum.QCDisabled:
                         Services.Dialogs.ShowAlert($"Quality Control is Disabled.", "Quality Control Error", "Close");
                         break;
+                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                        Services.Dialogs.ShowAlert("Negative Control failed, please contact customer service", "Error 129", "Close");
+                        break;
+                    case DeviceCheckEnum.Unknown:
+                        var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
+                        Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -1495,7 +1500,6 @@ namespace FenomPlus.ViewModels
             }
 
             UpdateUserStatus();
-            UpdateNegativeControlStatus();
             UpdateDeviceStatus();
 
             Services.DeviceService.Current.ReadyForTest = false;
@@ -1855,6 +1859,15 @@ namespace FenomPlus.ViewModels
                 else if (negativeControlTest.TestValue >= NegativeControlMaxThreshold)
                 {
                     negativeControlStatus = QCUser.NegativeControlFail;
+                    // Debug.WriteLine("==== Current Device Status is " + CurrentDeviceStatus);
+                    // when NC fails, need to get the Device QC status and update to DB
+                    // it takes 7s from app get score to poll device status get fail status
+                    Task.Delay(TimeSpan.FromMilliseconds(9000)).ContinueWith(_=> 
+                    {
+                        CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                        // Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
+                        UpdateDeviceStatusOnDB();
+                    });
                 }
                 else
                 {
