@@ -199,7 +199,7 @@ namespace FenomPlus.Helpers
         /// <summary>
         /// play stop sound
         /// </summary>
-        public static void PlayStopSound()
+        public static void PlayStopSoundForSuccess()
         {
             PlaySound(SoundsEnum.stop_breathing, 100);
         }

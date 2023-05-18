@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
@@ -22,8 +23,18 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
             Stop = false;
+            Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+            {
+                if (Services.DeviceService.Current != null && Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
+                {
+                    PlaySounds.PlayFailedSound();
+                }
+                else
+                {
+                    PlaySounds.PlayStopSoundForSuccess();
+                }
+            });
             Seconds = Config.StopExhalingReadyWait;
-            PlaySounds.PlayStopSound();
             Device.StartTimer(TimeSpan.FromSeconds(1), TimerCallback);
         }
 
@@ -45,8 +56,6 @@ namespace FenomPlus.ViewModels
                 {
                     var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                     ErrorsRepo.Insert(model);
-
-                    PlaySounds.PlayFailedSound();
                     Services.Navigation.TestErrorView();
                 }
                 else

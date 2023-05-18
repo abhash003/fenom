@@ -1373,9 +1373,21 @@ namespace FenomPlus.ViewModels
         {
             if (Services.DeviceService.Current != null)
             {
-                PlaySounds.PlayStopSound();
 
                 Services.DeviceService.Current.BreathFlow = 0;
+
+                PlaySounds.StopAll();
+                Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+                {
+                    if (Services.DeviceService.Current != null && Services.DeviceService.Current.ErrorStatusInfo.ErrorCode != 0x00)
+                    {
+                        PlaySounds.PlayFailedSound();
+                    }
+                    else
+                    {
+                        PlaySounds.PlayStopSoundForSuccess();
+                    }
+                });
 
                 Task.Delay(Config.StopExhalingReadyWait * 1000).ContinueWith(_ => // the 'STOP' sign showing time is the delay time
                 {
@@ -1385,9 +1397,6 @@ namespace FenomPlus.ViewModels
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
-
-                        PlaySounds.PlayFailedSound();
-
                         ShowErrorPage(code);
                     }
                     else
