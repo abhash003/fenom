@@ -30,11 +30,10 @@
                      HorizontalOptions="FillAndExpand"
                      Margin="100,0,100,0">
 
-                <Label Text="QC User Test"
+                <Label Text="{Binding GaugeStatus}"
                            FontSize="30"
                            TextColor="#333"
-                           HorizontalTextAlignment="Center" />
-
+                           HorizontalTextAlignment="Center"/>
 
                 <controls:BreathGauge GaugeSize="350"
                                   GaugeData="{Binding GaugeData}"
@@ -42,11 +41,10 @@
                                   IsShowStep="false"
                                   CountDown="{Binding GaugeSeconds}" />
 
-                <Label Text="{Binding GaugeStatus}"
+                <Label Text="QC User Test"
                            FontSize="16"
                            TextColor="#333"
-                           HorizontalTextAlignment="Center"/>
-
+                           HorizontalTextAlignment="Center" />
             </StackLayout>
 
             <Button Text="Exit"
