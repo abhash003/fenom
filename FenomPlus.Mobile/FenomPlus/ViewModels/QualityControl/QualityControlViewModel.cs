@@ -1497,14 +1497,14 @@ namespace FenomPlus.ViewModels
                 return;
 
             float? FenomVal = Services.DeviceService.Current.FenomValue;
-            if (5 <= FenomVal && FenomVal <= 40)
+            if (TestThresholdMin <= FenomVal && FenomVal <= TestThresholdMax)
             {
                 QCUserTestResult = FenomVal.ToString();
                 QCUserTestResultString = QCTest.TestPass;
             }
             else
             {
-                QCUserTestResult = FenomVal < 5 ? "<5" : ">40";
+                QCUserTestResult = FenomVal < TestThresholdMin? $"<{TestThresholdMin}" : $">{TestThresholdMax}";
                 QCUserTestResultString = QCTest.TestFail;
             }
 
