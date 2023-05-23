@@ -1788,6 +1788,13 @@ namespace FenomPlus.ViewModels
 
             return (numbers[0], numbers[2], numbers[1]);
         }
+        private float? GetMedian()
+        {
+            List<QCTest> tests = Get3Tests(SelectedQcUser.UserName, false); // get first 3 tests
+            float?[] numbers = {tests[0].TestValue, tests[1].TestValue,  tests[2].TestValue};
+            Array.Sort(numbers);
+            return numbers[1];
+        }
 
         private int TimeSpanHours(DateTime t1, DateTime t2)
         {
@@ -1917,7 +1924,7 @@ namespace FenomPlus.ViewModels
             string userStatus = QCUser.UserNone;
 
             // Returned in descending order so element[0] is the latest test
-            List<QCTest> tests = GetLast3Tests(SelectedQcUser.UserName);
+            List<QCTest> tests = Get3Tests(SelectedQcUser.UserName);
 
             switch (tests.Count)
             {
@@ -1991,6 +1998,8 @@ namespace FenomPlus.ViewModels
                 default:
                     if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
                     {
+                        // get median from first 3 records
+                        SelectedQcUser.QCT = GetMedian();
                         Debug.Assert(SelectedQcUser.QCT > 0);
 
                         QCTest lastTest = tests[0];
@@ -2041,7 +2050,7 @@ namespace FenomPlus.ViewModels
 
             foreach (var user in QcUserList)
             {
-                var tests = GetLast3Tests(user.UserName).ToList();
+                var tests = Get3Tests(user.UserName).ToList();
 
                 if (tests.Count <= 0)
                     continue;
@@ -2095,7 +2104,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private List<QCTest> GetLast3Tests(string userName)
+        private List<QCTest> Get3Tests(string userName, bool last = true)
         {
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
@@ -2105,9 +2114,19 @@ namespace FenomPlus.ViewModels
                 {
                     // Get all user records for this device and user
                     var testCollection = db.GetCollection<QCTest>("qctests");
-                    var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                        .OrderByDescending(x => x.TestDate).ToList();
+                    List<QCTest> tests;
+                    if (last)
+                    {
+                        tests = testCollection.Query()
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                                .OrderByDescending(x => x.TestDate).ToList();
+                    }
+                    else
+                    {
+                        tests = testCollection.Query()
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                                .OrderBy(x => x.TestDate).ToList();
+                    }
 
                     var last3 = new List<QCTest>();
 
