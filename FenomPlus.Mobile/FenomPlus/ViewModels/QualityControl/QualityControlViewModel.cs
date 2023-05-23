@@ -827,7 +827,7 @@ namespace FenomPlus.ViewModels
             {
                 string testStatus;
 
-                if (testValue < TestThresholdMin)
+                if (0 <= testValue && testValue < TestThresholdMin)
                 {
                     testStatus = QCTest.TestPass;
                 }
@@ -1120,8 +1120,9 @@ namespace FenomPlus.ViewModels
             set 
             {
                 _negativeControlTestResult = value;
-                NegativeControlStatus = value < TestThresholdMin ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
-                ButtonText = value < TestThresholdMin ? "Next" : "Exit";  
+                bool goodScore = 0 <= value && value < TestThresholdMin;
+                NegativeControlStatus = goodScore ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
+                ButtonText = goodScore ? "Next" : "Exit";
                 OnPropertyChanged(nameof(NegativeControlTestResult));
             }
         }
