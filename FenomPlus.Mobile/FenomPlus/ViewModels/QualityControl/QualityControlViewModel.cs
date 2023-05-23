@@ -1623,7 +1623,7 @@ namespace FenomPlus.ViewModels
             newTest6.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest6);
 
-            (float? _, float? _, float? median ) = GetRangeAndMedian(newUser1.UserName);
+            float? median = GetMedian(newUser1.UserName);
             newUser1.QCT = median;
 
             // New User Disqualified
@@ -1782,13 +1782,19 @@ namespace FenomPlus.ViewModels
         {
             return Math.Abs(a - b);
         }
+        private (float? min, float? max) GetRange(float? a, float? b, float? c)
+        {
+            float?[] numbers = {a, b, c};
+            Array.Sort(numbers);
+            return (numbers[0], numbers[2]);
+        }
 
-        private (float? min, float? max, float? median) GetRangeAndMedian(string UserName)
+        private float? GetMedian(string UserName)
         {
             List<QCTest> tests = Get3Tests(UserName, false); // get first 3 tests
             float?[] numbers = {tests[0].TestValue, tests[1].TestValue,  tests[2].TestValue};
             Array.Sort(numbers);
-            return (numbers[0], numbers[2], numbers[1]);
+            return numbers[1];
         }
 
         private int TimeSpanHours(DateTime t1, DateTime t2)
@@ -1963,8 +1969,8 @@ namespace FenomPlus.ViewModels
                 case 3:
                     SelectedQcUser.C3 = tests[0].TestValue; // Latest test
 
-                    (float? min, float? max, float? median) = GetRangeAndMedian(SelectedQcUser.UserName);
-
+                    (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
+                    float? median = GetMedian(SelectedQcUser.UserName);
                     SelectedQcUser.QCT = median;
 
                     bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
