@@ -100,7 +100,7 @@ namespace FenomPlus.Views
 
         private void DeleteDeviceButton_OnClicked(object sender, EventArgs e)
         {
-            QualityControlViewModel.DeleteDeviceCommand.Execute(AllUsersDataGrid.SelectedIndex);
+            QualityControlViewModel.DeleteDeviceCommand.Execute(AllDevicesDataGrid.SelectedIndex);
             AllDevicesDataGrid.Refresh();
         }
 

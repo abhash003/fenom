@@ -38,5 +38,6 @@ namespace FenomPlus.Database.Tables
             //var dateInfo = DateOfTest.Split('T');
             //return $"{dateInfo[0]}  {dateInfo[1]}";
             DateOfTest.Replace("T", "   ");
+        public string TestTypeDetail => TestType == "Standard" ?"Standard - 10s" :"Short - 6s";
     }
 }

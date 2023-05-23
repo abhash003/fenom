@@ -61,22 +61,14 @@
                                     HorizontalScrollBarVisibility="False"
                                     VerticalOverScrollMode="None"
                                     AllowPullToRefresh="False"
-                                    Margin="0,0,1,0">
+                                    Margin="0,0,2,0">
 
                     <sfgrid:SfDataGrid.Columns>
-
                         <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
-
-                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                        <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestType" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                        <sfgrid:GridTextColumn HeaderText="QC Status"  MappingName="QCStatus" TextAlignment="Start"  Padding="10,0,10,0" ColumnSizer="LastColumnFill"/>
-
+                        <sfgrid:GridTextColumn HeaderText="Date / Time" MappingName="DateOfTest" Padding="10,0,10,0" ColumnSizer="Star"/>
+                        <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Star"/>
+                        <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestTypeDetail" Padding="10,0,10,0" ColumnSizer="Star"/>
                         <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
                     </sfgrid:SfDataGrid.Columns>
 
                 </sfgrid:SfDataGrid>
