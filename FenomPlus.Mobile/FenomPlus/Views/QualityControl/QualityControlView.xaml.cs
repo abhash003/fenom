@@ -32,7 +32,7 @@ namespace FenomPlus.Views
             if (!QualityControlViewModel.IsDeviceConnected)
             {
                 QualityControlViewModel.CurrentDeviceSerialNumber = string.Empty;
-                Services.Navigation.DashboardView();
+                Services.Navigation.QCSettingsView();
                 return;
             }
 
