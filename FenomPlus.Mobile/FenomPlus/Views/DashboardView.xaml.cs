@@ -36,13 +36,13 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            DashboardViewModel.OnAppearing();
+            // DashboardViewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            DashboardViewModel.OnDisappearing();
+            // DashboardViewModel.OnDisappearing();
         }
 
         public override void NewGlobalData()
