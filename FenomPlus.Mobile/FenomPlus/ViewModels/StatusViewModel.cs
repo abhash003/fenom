@@ -190,7 +190,7 @@ namespace FenomPlus.ViewModels
             UpdateVersionNumbers();
             UpdateBluetooth();
             UpdateDevice(Services.Cache.DeviceExpireDate);
-            UpdateQualityControlExpiration(7);
+            UpdateQualityControlExpiration();
 
             await Services.DeviceService.Current.RequestEnvironmentalInfo();
             RefreshInProgress = true;
@@ -364,8 +364,13 @@ namespace FenomPlus.ViewModels
             
         }
 
-        public void UpdateQualityControlExpiration(int value)
+        public void UpdateQualityControlExpiration()
         {
+            var device = Services.DeviceService?.Current;
+            short hour = 0;
+            if (device!=null && device.GetQCHoursRemaining(ref hour)) // >=0 : valid, <=-1 : expired, = 0x8000 : failed
+            {}
+
             if (!BluetoothConnected)
             {
                 QcBarIconVisible = false;
@@ -378,11 +383,11 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            QualityControlViewModel.Value = $"{value}";
-            QualityControlViewModel.Label = "Days Left";
+            QualityControlViewModel.Value = $"{hour}";
+            QualityControlViewModel.Label = "hour left";
             QualityControlViewModel.ButtonText = "Settings";
 
-            if (value <= Constants.QualityControlExpired)
+            if (hour <= Constants.QualityControlExpired)
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
@@ -390,7 +395,7 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ValueColor = Color.Red;
                 QualityControlViewModel.Description = "Mode Status is \"Failed\" or \"Expired\"";
             }
-            else if (value <= Constants.QualityControlExpirationWarning)
+            else if (hour <= Constants.QualityControlExpirationWarning)
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_yellow.png";
@@ -403,7 +408,7 @@ namespace FenomPlus.ViewModels
                 QcBarIconVisible = false;
                 QualityControlViewModel.ImagePath = "quality_control_green.png";
                 QualityControlViewModel.ValueColor = Color.FromHex("#333");
-                QualityControlViewModel.Description = "Mode Status is \"Pass\"";
+                QualityControlViewModel.Description = "Mode Status is \"Valid\"";
             }
         }
 
