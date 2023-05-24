@@ -146,11 +146,12 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
-                    counter_when_switch_from_disconnection = 5;
+                    counter_when_switch_from_disconnection = 3;
                     BluetoothCheckCount = 0; // Reset counter
+                    var page = App.GetCurrentPage();
                     if (Services.DeviceService.Discovering)
                     {
-                        if (App.GetCurrentPage() is not DevicePowerOnView)
+                        if (page is not DevicePowerOnView)
                         {
                             await Services.Navigation.DevicePowerOnView();
                         }
@@ -158,10 +159,19 @@ namespace FenomPlus.ViewModels
                     // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
                     else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
                     {
-                        if (App.GetCurrentPage() is not DashboardView)
+                        if (page is DevicePowerOnView)
                         {
                             await Services.Navigation.DashboardView();
                         }
+                    }
+                    else
+                    {
+                        if (page is QualityControlView)
+                        {
+                            // When disconnected, should not stay in QualityControl View. 
+                            await Services.Navigation.QCSettingsView();
+                        }
+
                     }
                 }
 
