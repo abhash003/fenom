@@ -1999,10 +1999,14 @@ namespace FenomPlus.ViewModels
                     {
                         userStatus = QCUser.UserQualified;
                     }
-                    else
-                    {
-                        userStatus = QCUser.UserDisqualified;
+                    // For Qualified User, a latest fail QC test will not turn it into Disqualified
+                    else if (SelectedQcUser.CurrentStatus == QCUser.UserQualified && tests[0].TestStatus == QCTest.TestFail 
+                            && timeSpanQualificationGood && lastTestTimeSpanGood)
+                    { 
+                        userStatus = QCUser.UserQualified;
                     }
+                    else 
+                        userStatus = QCUser.UserDisqualified;
                     SelectedQcUser.ShowChartOption = true;
                     break;
 
