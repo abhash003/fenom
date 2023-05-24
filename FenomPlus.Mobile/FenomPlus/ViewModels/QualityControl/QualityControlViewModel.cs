@@ -1506,6 +1506,7 @@ namespace FenomPlus.ViewModels
             {
                 QCUserTestResult = FenomVal < TestThresholdMin? $"<{TestThresholdMin}" : $">{TestThresholdMax}";
                 QCUserTestResultString = QCTest.TestFail;
+                PromptFor2FailedUserTest();
             }
 
             UpdateUserStatus();
@@ -1514,6 +1515,14 @@ namespace FenomPlus.ViewModels
             Services.DeviceService.Current.ReadyForTest = false;
         }
 
+        private void PromptFor2FailedUserTest()
+        {
+            var test = GetNTests("*", 2);
+            if (test[1].TestStatus == QCTest.TestFail) // current test already insert into the db, check the most recent last one
+            {
+                Services.Dialogs.ShowAlert($"2 consecutive QC test failed, please check User Manual or contact Customer Service", "Quality Control Error", "Close");
+            }
+        }
         #endregion
 
 
@@ -1791,7 +1800,7 @@ namespace FenomPlus.ViewModels
 
         private float? GetMedian(string UserName)
         {
-            List<QCTest> tests = Get3Tests(UserName, false); // get first 3 tests
+            List<QCTest> tests = GetNTests(UserName, 3, false); // get first 3 tests
             float?[] numbers = {tests[0].TestValue, tests[1].TestValue,  tests[2].TestValue};
             Array.Sort(numbers);
             return numbers[1];
@@ -1925,7 +1934,7 @@ namespace FenomPlus.ViewModels
             string userStatus = QCUser.UserNone;
 
             // Returned in descending order so element[0] is the latest test
-            List<QCTest> tests = Get3Tests(SelectedQcUser.UserName);
+            List<QCTest> tests = GetNTests(SelectedQcUser.UserName);
 
             switch (tests.Count)
             {
@@ -2050,7 +2059,7 @@ namespace FenomPlus.ViewModels
 
             foreach (var user in QcUserList)
             {
-                var tests = Get3Tests(user.UserName).ToList();
+                var tests = GetNTests(user.UserName).ToList();
 
                 if (tests.Count <= 0)
                     continue;
@@ -2104,7 +2113,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private List<QCTest> Get3Tests(string userName, bool last = true)
+        private List<QCTest> GetNTests(string userName, int count = 3, bool last = true)
         {
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
@@ -2115,37 +2124,25 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device and user
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     List<QCTest> tests;
-                    if (last)
+                    if (userName == "*") 
+                    {
+                        tests = testCollection.Query()
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName)
+                                .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
+                    }
+                    else if (last)
                     {
                         tests = testCollection.Query()
                                 .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                                .OrderByDescending(x => x.TestDate).ToList();
+                                .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else
                     {
                         tests = testCollection.Query()
                                 .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
-                                .OrderBy(x => x.TestDate).ToList();
+                                .OrderBy(x => x.TestDate).ToList().Take(count).ToList();
                     }
-
-                    var last3 = new List<QCTest>();
-
-                    if (tests.Count >= 1)
-                    {
-                        last3.Add(tests[0]);
-                    }
-
-                    if (tests.Count >= 2)
-                    {
-                        last3.Add(tests[1]);
-                    }
-
-                    if (tests.Count >= 3)
-                    {
-                        last3.Add(tests[2]);
-                    }
-
-                    return last3;
+                    return tests;
                 }
             }
             catch (Exception e)
