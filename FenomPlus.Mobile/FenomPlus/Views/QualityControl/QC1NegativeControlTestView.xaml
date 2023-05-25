@@ -20,7 +20,7 @@
        
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
-            <Label Text="Negative QC Test"
+            <Label Text="Negative Control Test"
                            FontSize="30"
                            TextColor="#333"
                            HorizontalTextAlignment="Center"/>
