@@ -17,8 +17,13 @@
     </Shell.TitleView>
 
     <ContentPage.Content>
-
+       
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <Label Text="Negative QC Test"
+                           FontSize="30"
+                           TextColor="#333"
+                           HorizontalTextAlignment="Center"/>
 
             <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" Recurring="True"/>
 
