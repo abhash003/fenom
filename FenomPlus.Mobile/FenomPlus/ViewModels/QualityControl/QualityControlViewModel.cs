@@ -1508,13 +1508,36 @@ namespace FenomPlus.ViewModels
 
             Services.DeviceService.Current.ReadyForTest = false;
         }
-
+        private bool BothQualifiedUser(string userName1, string userName2)
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    var users = db.GetCollection<QCUser>("qcusers").Query()
+                            .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber &&
+                                        (x.UserName == userName1 || x.UserName == userName2))
+                            .ToList();
+                    return users.Count==2 && users[0].CurrentStatus == QCUser.UserQualified 
+                                          && users[1].CurrentStatus == QCUser.UserQualified;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
         private void PromptFor2FailedUserTest()
         {
-            var test = GetNTests("*", 2);
-            if (test[1].TestStatus == QCTest.TestFail) // current test already insert into the db, check the most recent last one
+            var tests = GetNTests("*", 2);
+            // current failed test already insert into the db, tests[0],
+            // check the most recent last one, i.e.  tests[1]
+            if (tests.Count == 2 && tests[1].TestStatus == QCTest.TestFail && tests[0].UserName != tests[1].UserName) 
             {
-                Services.Dialogs.ShowAlert($"2 consecutive QC test failed, please check User Manual or contact Customer Service", "Quality Control Error", "Close");
+                // both user should be qualified user
+                if (BothQualifiedUser(tests[1].UserName, tests[0].UserName))
+                    Services.Dialogs.ShowAlert($"2 consecutive QC test failed, please check User Manual or contact Customer Service", "Quality Control Error", "Close");
             }
         }
         #endregion
@@ -2125,7 +2148,7 @@ namespace FenomPlus.ViewModels
                     if (userName == "*") 
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName)
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName )
                                 .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else if (last)
