@@ -827,14 +827,7 @@ namespace FenomPlus.ViewModels
             {
                 string testStatus;
 
-                if (0 <= testValue && testValue < TestThresholdMin)
-                {
-                    testStatus = QCTest.TestPass;
-                }
-                else
-                {
-                    testStatus = QCTest.TestFail;
-                }
+                testStatus = Math.Abs(testValue) < TestThresholdMin? QCTest.TestPass : QCTest.TestFail;
 
                 var newTest = new QCTest(CurrentDeviceSerialNumber, QCUser.NegativeControlName, DateTime.Now, testValue, testStatus);
 
@@ -1120,7 +1113,7 @@ namespace FenomPlus.ViewModels
             set 
             {
                 _negativeControlTestResult = value;
-                bool goodScore = 0 <= value && value < TestThresholdMin;
+                bool goodScore = Math.Abs(value) < TestThresholdMin;
                 NegativeControlStatus = goodScore ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
                 ButtonText = goodScore ? "Next" : "Exit";
                 OnPropertyChanged(nameof(NegativeControlTestResult));
