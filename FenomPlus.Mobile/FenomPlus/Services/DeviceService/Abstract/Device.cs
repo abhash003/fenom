@@ -229,7 +229,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
             // Get the latest environmental info - updates Cache
             //Services.DeviceService.Current?.RequestEnvironmentalInfo();
 
-            if (!isQCCheck && ReadyForTest == false)
+            if (ReadyForTest == false)
             {
                 Console.WriteLine("Device is purging");
                 return DeviceCheckEnum.DevicePurging;
