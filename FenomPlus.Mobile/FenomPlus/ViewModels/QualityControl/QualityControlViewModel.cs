@@ -950,11 +950,14 @@ namespace FenomPlus.ViewModels
         private async Task UpdateUserAsync(int userIndex)
         {
             DeviceCheckEnum? de = PreNegativeControlChecking();
-            if (de != DeviceCheckEnum.DevicePurging)
+            if (de != DeviceCheckEnum.DevicePurging && de != DeviceCheckEnum.Ready)
                 return;
-            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
-            if (Services.Dialogs.PurgeCancelRequest)
-                return;
+            if (de == DeviceCheckEnum.DevicePurging)
+            {
+                await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                if (Services.Dialogs.PurgeCancelRequest)
+                    return;
+            }
             if (QcButtonViewModels[userIndex].Assigned)
             {
                 if (!Services.DeviceService.Current.IsQCEnabled())
