@@ -949,6 +949,12 @@ namespace FenomPlus.ViewModels
 
         private async Task UpdateUserAsync(int userIndex)
         {
+            DeviceCheckEnum? de = PreNegativeControlChecking();
+            if (de != DeviceCheckEnum.DevicePurging)
+                return;
+            await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+            if (Services.Dialogs.PurgeCancelRequest)
+                return;
             if (QcButtonViewModels[userIndex].Assigned)
             {
                 if (!Services.DeviceService.Current.IsQCEnabled())
@@ -989,15 +995,12 @@ namespace FenomPlus.ViewModels
                         }
                         break;
                 }
-                await PreNegativeControl();
-                await StartNegativeControl();
+                await StartNegativeControlTest();
             }
             else
             {
-                await PreNegativeControl();
                 // Open user name dialog and create user, then open breath test view
                 string userName = await Services.Dialogs.UserNamePromptAsync();
-
                 if (userName == "cancel")
                     return;
 
@@ -1010,7 +1013,7 @@ namespace FenomPlus.ViewModels
                     else
                     {
                         QcButtonViewModels[userIndex].QCUserModel = DbCreateQcUser(userName);
-                        await StartNegativeControl();
+                        await StartNegativeControlTest();
                     }
                 }
             }
@@ -1179,7 +1182,7 @@ namespace FenomPlus.ViewModels
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public async Task PreNegativeControl()
+        public DeviceCheckEnum? PreNegativeControlChecking()
         {
             if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
             {
@@ -1188,11 +1191,6 @@ namespace FenomPlus.ViewModels
                 switch (deviceStatus)
                 {
                     case DeviceCheckEnum.DevicePurging:
-                        await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
-                        if (Services.Dialogs.PurgeCancelRequest)
-                        {
-                            return;
-                        }
                         break;
                     case DeviceCheckEnum.HumidityOutOfRange:
                         Services.Dialogs.ShowAlert(
@@ -1231,22 +1229,9 @@ namespace FenomPlus.ViewModels
                         Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
                         break;
                 }
+                return deviceStatus;
             }
-        }
-        public async Task StartNegativeControl()
-        {
-            if (Services.DeviceService.Current != null && Services.DeviceService.Current.IsNotConnectedRedirect())
-            {
-                DeviceCheckEnum deviceStatus = Services.DeviceService.Current.CheckDeviceBeforeTest(true);
-                switch (deviceStatus)
-                {
-                    case DeviceCheckEnum.Ready:
-                        await StartNegativeControlTest();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
+            return null;
         }
 
         private async Task InitializeBreathGauge()
