@@ -29,13 +29,6 @@ namespace FenomPlus.Views
             // Must reset on each new appearing
             QualityControlViewModel.SelectedUserIndex = -1;
 
-            if (!QualityControlViewModel.IsDeviceConnected)
-            {
-                QualityControlViewModel.CurrentDeviceSerialNumber = string.Empty;
-                Services.Navigation.QCSettingsView();
-                return;
-            }
-
             QualityControlViewModel.CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
 
             // Refresh Data - ToDo: Later optimize and only refresh when needed?

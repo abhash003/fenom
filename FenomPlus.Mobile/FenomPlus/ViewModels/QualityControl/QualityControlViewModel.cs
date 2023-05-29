@@ -1065,7 +1065,10 @@ namespace FenomPlus.ViewModels
             }
             else
             {
-                await Services.Navigation.QualityControlView();
+                if (IsDeviceConnected)
+                    await Services.Navigation.QualityControlView();
+                else 
+                    await Services.Navigation.DashboardView();
             }
 
 

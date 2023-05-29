@@ -30,5 +30,17 @@ namespace FenomPlus
         {
 
         }
+
+        protected override void OnNavigating(ShellNavigatingEventArgs args)
+        {
+            base.OnNavigating(args);
+            bool IsDeviceConnected = IOC.Services.DeviceService?.Current?.Connected ?? false;
+            if (!IsDeviceConnected && args.Target.Location.OriginalString.Contains("QualityControlView"))
+            {
+                // When disconnected, and user tap 'Quality Control'
+                args.Cancel();  // hijack it, and redirect to QC Settings
+                Shell.Current.GoToAsync("//QCSettingsView");
+            }
+        }
     }
 }
