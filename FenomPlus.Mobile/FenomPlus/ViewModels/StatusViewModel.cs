@@ -157,21 +157,21 @@ namespace FenomPlus.ViewModels
                         }
                     }
                     // else  // Not Discovering, Not BluetoothConnected, could be found, could be DeviceNotFound
-                    else if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
-                    {
-                        if (page is DevicePowerOnView)
-                        {
-                            await Services.Navigation.DashboardView();
-                        }
-                    }
                     else
                     {
+                        if (_DeviceNotFound) // Not Discovering, Not BluetoothConnected, could be DeviceDiscovered , could be DeviceNotFound
+                        {
+                            if (page is DevicePowerOnView)
+                            {
+                                await Services.Navigation.DashboardView();
+                            }
+                        }
                         if (page is QualityControlView)
                         {
                             // When disconnected, should not stay in QualityControl View. 
+                            // should automatically go to QC Settings
                             await Services.Navigation.QCSettingsView();
                         }
-
                     }
                 }
 
