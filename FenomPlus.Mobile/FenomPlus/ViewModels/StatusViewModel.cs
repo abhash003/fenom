@@ -380,8 +380,8 @@ namespace FenomPlus.ViewModels
             short hour = 0;
             if (device!=null && device.GetQCHoursRemaining(ref hour)) // >=0 : valid, <=-1 : expired, = 0x8000 : failed
             {}
-
-            if (!BluetoothConnected)
+            bool QCEnabled = device.IsQCEnabled();
+            if (!BluetoothConnected || !QCEnabled)
             {
                 QcBarIconVisible = false;
 
