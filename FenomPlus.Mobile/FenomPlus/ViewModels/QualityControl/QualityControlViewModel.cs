@@ -958,8 +958,6 @@ namespace FenomPlus.ViewModels
                     await Services.Dialogs.ShowAlertAsync($"Quality Control is Disabled.", "Quality Control Error", "Close");
                     return;
                 }
-                QCTest lastTest = GetLastTest(SelectedQcUser.UserName);
-
                 switch (SelectedQcUser.CurrentStatus)
                 {
                     case QCUser.UserDisqualified:
@@ -967,27 +965,32 @@ namespace FenomPlus.ViewModels
                         return;
 
                     case QCUser.UserConditionallyQualified:
-                        if (DateTime.Now < lastTest.TestDate.AddHours(16))
                         {
-                            await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass from your last Qualifying test before another test can be performed.", "More Time Required", "OK");
-                            return;
-                        }
-                        else if (DateTime.Now > lastTest.TestDate.AddHours(24))
-                        {
-                            SelectedQcUser.CurrentStatus = QCUser.UserDisqualified;
-                            DbUpdateQcUser(SelectedQcUser);
-                            // Update the GUI 
-                            QcButtonViewModels[userIndex].QCUserModel = QcUserList[userIndex-1] = SelectedQcUser;
-                            await Services.Dialogs.ShowAlertAsync($"More than 24 hours has passed since your last qualifying test. You are now disqualified.", "User Disqualified", "OK");
-                            return;
+                            (DateTime? lastTestDate, DateTime? last2ndTestDate) = GetLast2TestDate(SelectedQcUser.UserName);
+                            if (DateTime.Now < lastTestDate?.AddHours(16))
+                            {
+                                await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass from your last Qualifying test before another test can be performed.", "More Time Required", "OK");
+                                return;
+                            }
+                            else if (DateTime.Now > last2ndTestDate?.AddHours(192))
+                            {
+                                SelectedQcUser.CurrentStatus = QCUser.UserDisqualified;
+                                DbUpdateQcUser(SelectedQcUser);
+                                // Update the GUI 
+                                QcButtonViewModels[userIndex].QCUserModel = QcUserList[userIndex-1] = SelectedQcUser;
+                                await Services.Dialogs.ShowAlertAsync($"More than 192 hours has passed since your last qualifying test. You are now disqualified.", "User Disqualified", "OK");
+                                return;
+                            }
                         }
                         break;
-
                     case QCUser.UserQualified:
-                        if (DateTime.Now < lastTest.TestDate.AddHours(16))
                         {
-                            await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass before another test can be performed.", "More Time Required", "OK");
-                            return;
+                            (DateTime? lastTestDate, _) = GetLast2TestDate(SelectedQcUser.UserName);
+                            if (DateTime.Now < lastTestDate?.AddHours(16))
+                            {
+                                await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass before another test can be performed.", "More Time Required", "OK");
+                                return;
+                            }
                         }
                         break;
                 }
@@ -2029,7 +2032,8 @@ namespace FenomPlus.ViewModels
             return false;
         }
 
-        private QCTest GetLastTest(string userName)
+
+        private (DateTime? lastTestDate, DateTime? last2ndTestDate) GetLast2TestDate(string userName)
         {
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
@@ -2043,20 +2047,25 @@ namespace FenomPlus.ViewModels
                         .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
                         .OrderByDescending(x => x.TestDate).ToList();
 
-                    if (tests != null && tests.Count > 0)
+                    if (tests == null) return (null, null);
+
+                    DateTime? lastTestDate = null, last2ndTestDate = null; 
+                    if (tests[0].TestStatus == QCTest.TestPass)
                     {
-                        return tests[0];
+                        last2ndTestDate = lastTestDate = tests[0].TestDate;
+                        if (tests.Count>1)
+                        {
+                            bool pass2Tests = tests[1].TestStatus == QCTest.TestPass;
+                            last2ndTestDate = tests[pass2Tests ? 1 : 0].TestDate;
+                        }
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return (lastTestDate, last2ndTestDate);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                return null;
+                return (null, null);
             }
         }
 
