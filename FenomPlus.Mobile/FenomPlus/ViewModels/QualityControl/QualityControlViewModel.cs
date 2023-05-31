@@ -945,12 +945,6 @@ namespace FenomPlus.ViewModels
             DeviceCheckEnum? de = PreNegativeControlChecking();
             if (de != DeviceCheckEnum.DevicePurging && de != DeviceCheckEnum.Ready)
                 return;
-            if (de == DeviceCheckEnum.DevicePurging)
-            {
-                await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
-                if (Services.Dialogs.PurgeCancelRequest)
-                    return;
-            }
             if (QcButtonViewModels[userIndex].Assigned)
             {
                 if (!Services.DeviceService.Current.IsQCEnabled())
@@ -994,10 +988,22 @@ namespace FenomPlus.ViewModels
                         }
                         break;
                 }
+                if (de == DeviceCheckEnum.DevicePurging)
+                {
+                    await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                    if (Services.Dialogs.PurgeCancelRequest)
+                        return;
+                }
                 await StartNegativeControlTest();
             }
             else
             {
+                if (de == DeviceCheckEnum.DevicePurging)
+                {
+                    await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
+                    if (Services.Dialogs.PurgeCancelRequest)
+                        return;
+                }
                 // Open user name dialog and create user, then open breath test view
                 string userName = await Services.Dialogs.UserNamePromptAsync();
                 if (userName == "cancel")
