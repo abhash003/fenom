@@ -399,6 +399,7 @@ namespace FenomPlus.ViewModels
 
             if (hour <= Constants.QualityControlExpired)
             {
+                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";

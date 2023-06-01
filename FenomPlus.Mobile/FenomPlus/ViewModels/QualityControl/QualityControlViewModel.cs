@@ -162,6 +162,10 @@ namespace FenomPlus.ViewModels
                     }
                 }
             });
+            MessagingCenter.Subscribe<StatusViewModel>(this, "DeviceStatusNeedUpdate", (_) =>
+            {
+                CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+            });
         }
 
         private void ShowErrorPage(byte arg)
