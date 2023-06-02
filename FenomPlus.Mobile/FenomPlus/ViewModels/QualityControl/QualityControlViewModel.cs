@@ -760,7 +760,6 @@ namespace FenomPlus.ViewModels
 
         #region "QCTests CRUD"
 
-        private readonly int TestThresholdMin = 5;
         private readonly int TestThresholdMax = 40;
 
         // Overload helpful in testing
@@ -790,27 +789,11 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                string testStatus;
-
-                if (testValue >= TestThresholdMin && testValue <= TestThresholdMax)
-                {
-                    testStatus = QCTest.TestPass;
-                }
-                else
-                {
-                    testStatus = QCTest.TestFail;
-                }
-
+                bool goodScore = NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax;
+                string testStatus = goodScore ? QCTest.TestPass : QCTest.TestFail;
                 var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, testValue, testStatus);
 
-                if (DbCreateQcTest(newTest))
-                {
-                    return newTest;
-                }
-                else
-                {
-                    return null;
-                }
+                return DbCreateQcTest(newTest)? newTest : null;
             }
             catch (Exception e)
             {
@@ -827,7 +810,7 @@ namespace FenomPlus.ViewModels
             {
                 string testStatus;
 
-                testStatus = Math.Abs(testValue) < TestThresholdMin? QCTest.TestPass : QCTest.TestFail;
+                testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
 
                 var newTest = new QCTest(CurrentDeviceSerialNumber, QCUser.NegativeControlName, DateTime.Now, testValue, testStatus);
 
@@ -1132,7 +1115,7 @@ namespace FenomPlus.ViewModels
             set 
             {
                 _negativeControlTestResult = value;
-                bool goodScore = Math.Abs(value) < TestThresholdMin;
+                bool goodScore = Math.Abs(value) < NegativeControlMaxThreshold ;
                 NegativeControlStatus = goodScore ? QCUser.NegativeControlPass : QCUser.NegativeControlFail;
                 ButtonText = goodScore ? "Next" : "Exit";
                 OnPropertyChanged(nameof(NegativeControlTestResult));
@@ -1426,14 +1409,14 @@ namespace FenomPlus.ViewModels
                 return;
 
             float? FenomVal = Services.DeviceService.Current.FenomValue;
-            if (TestThresholdMin <= FenomVal && FenomVal <= TestThresholdMax)
+            if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax)
             {
                 QCUserTestResult = FenomVal.ToString();
                 QCUserTestResultString = QCTest.TestPass;
             }
             else
             {
-                QCUserTestResult = FenomVal < TestThresholdMin? $"<{TestThresholdMin}" : $">{TestThresholdMax}";
+                QCUserTestResult = FenomVal < NegativeControlMaxThreshold ? $"<{NegativeControlMaxThreshold}" : $">{TestThresholdMax}";
                 QCUserTestResultString = QCTest.TestFail;
                 PromptFor2FailedUserTest();
             }
@@ -1834,7 +1817,7 @@ namespace FenomPlus.ViewModels
                 {
                     negativeControlStatus = QCUser.NegativeControlExpired;
                 }
-                else if (negativeControlTest.TestValue >= NegativeControlMaxThreshold)
+                else if (Math.Abs((decimal)negativeControlTest.TestValue) >= NegativeControlMaxThreshold)
                 {
                     negativeControlStatus = QCUser.NegativeControlFail;
                     // Debug.WriteLine("==== Current Device Status is " + CurrentDeviceStatus);
