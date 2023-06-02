@@ -1844,7 +1844,7 @@ namespace FenomPlus.ViewModels
                     // Debug.WriteLine("==== Current Device Status is " + CurrentDeviceStatus);
                     // when NC fails, need to get the Device QC status and update to DB
                     // it takes 7s from app get score to poll device status get fail status
-                    Task.Delay(TimeSpan.FromMilliseconds(9000)).ContinueWith(_=> 
+                    Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
                         // Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
