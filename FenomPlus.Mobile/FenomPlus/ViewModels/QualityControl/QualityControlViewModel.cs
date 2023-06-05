@@ -711,7 +711,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.FindAll()
-                        .OrderBy(x => x.TestDate)
+                        .OrderByDescending(x => x.TestDate)
                         .ToList();
 
                     watch.Stop();
