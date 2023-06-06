@@ -176,41 +176,32 @@ namespace FenomPlus.ViewModels
                 }
 
                 if (BluetoothCheckCount == 0 && Services.Cache.TestType == Enums.TestTypeEnum.None) 
-                    await RefreshStatusAsync();
+                    RefreshStatusAsync();
             });
         }
 
-        private bool RefreshInProgress = false;
-
-        public async Task RefreshStatusAsync()
+        public void RefreshStatusAsync()
         {
-            //Debugger.Break();
-
             // To early to get status or don't update environmental properties during test - Important - DO NOT REMOVE!
             if (Services.DeviceService.Current != null && (!BluetoothConnected ||
-                                                           RefreshInProgress ||
                                                            Services.DeviceService.Current.BreathTestInProgress ||
                                                            Services.DeviceService.Current.EnvironmentalInfo == null))
             {
-                await Task.Delay(1);
+                Task.Delay(1);
                 return;
             }
-
 
             UpdateVersionNumbers();
             UpdateBluetooth();
             UpdateDevice(Services.Cache.DeviceExpireDate);
             UpdateQualityControlExpiration();
 
-            await Services.DeviceService.Current.RequestEnvironmentalInfo();
-            RefreshInProgress = true;
-
             UpdateSensor();
             UpdateBattery();
             UpdatePressure();
             UpdateHumidity();
             UpdateTemperature();
-            RefreshInProgress = false;
+            Services.DeviceService.Current.RequestEnvironmentalInfo();
         }
 
         public void UpdateVersionNumbers()
@@ -376,11 +367,11 @@ namespace FenomPlus.ViewModels
 
         public void UpdateQualityControlExpiration()
         {
-            var device = Services.DeviceService?.Current;
+            var device = Services.DeviceService?.Current??null;
             short hour = 0;
             if (device!=null && device.GetQCHoursRemaining(ref hour)) // >=0 : valid, <=-1 : expired, = 0x8000 : failed
             {}
-            bool QCEnabled = device.IsQCEnabled();
+            bool QCEnabled = device?.IsQCEnabled()??false;
             if (!BluetoothConnected || !QCEnabled)
             {
                 QcBarIconVisible = false;
