@@ -5,12 +5,10 @@ using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Views;
 using System;
 using System.Globalization;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Timer = System.Timers.Timer;
 
 // Note: Shared by DeviceStatusHubView and TitleContentView
 
