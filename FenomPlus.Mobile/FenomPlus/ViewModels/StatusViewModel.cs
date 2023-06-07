@@ -385,7 +385,7 @@ namespace FenomPlus.ViewModels
             }
 
             QualityControlViewModel.Value = $"{hour}";
-            QualityControlViewModel.Label = "Hour left";
+            QualityControlViewModel.Label = "Hour(s) left";
             QualityControlViewModel.ButtonText = "Settings";
 
             if (hour <= Constants.QualityControlExpired)
