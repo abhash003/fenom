@@ -176,11 +176,11 @@ namespace FenomPlus.ViewModels
                 }
 
                 if (BluetoothCheckCount == 0 && Services.Cache.TestType == Enums.TestTypeEnum.None) 
-                    RefreshStatusAsync();
+                    RefreshStatus();
             });
         }
 
-        public void RefreshStatusAsync()
+        public void RefreshStatus()
         {
             // To early to get status or don't update environmental properties during test - Important - DO NOT REMOVE!
             if (Services.DeviceService.Current != null && (!BluetoothConnected ||
