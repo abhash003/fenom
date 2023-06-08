@@ -259,6 +259,7 @@ namespace FenomPlus.ViewModels
                                 UpdateContent(); // Force a faster refresh
                                 return; // Don't Increment
                             }
+                            await Services.DeviceService.Current.StartTest(BreathTestEnum.Training);
                             break;
 
                         case DeviceCheckEnum.HumidityOutOfRange:
@@ -341,7 +342,6 @@ namespace FenomPlus.ViewModels
                                 return;
                             }
                             break;
-                        
                         case DeviceCheckEnum.HumidityOutOfRange:
                             Services.Dialogs.ShowAlert($"Unable to run practice test. Humidity level ({Services.DeviceService.Current.EnvironmentalInfo.Humidity}%) is out of range.", "Humidity Warning", "Close");
                             return; // Don't Increment
