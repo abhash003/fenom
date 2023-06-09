@@ -1105,7 +1105,7 @@ namespace FenomPlus.ViewModels
         private string _buttonText = "Next";
 
         [ObservableProperty]
-        private string _userMessage = string.Empty;
+        private string _userNameMessage = string.Empty;
 
         public string ButtonText
         {
@@ -1145,7 +1145,7 @@ namespace FenomPlus.ViewModels
         private async Task StartNegativeControlTest()
         {
             Services.Cache.TestType = TestTypeEnum.NegativeControl;
-            UserMessage = "QC " + SelectedQcUser.UserName;
+            UserNameMessage = "QC " + SelectedQcUser.UserName;
             await Services.Navigation.QCNegativeControlTestView();
             await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }

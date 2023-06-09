@@ -24,7 +24,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Text="{Binding UserMessage}"
+            <Label Text="{Binding UserNameMessage}"
                            FontSize="30"
                            TextColor="#333"
                            Padding="10,0"
