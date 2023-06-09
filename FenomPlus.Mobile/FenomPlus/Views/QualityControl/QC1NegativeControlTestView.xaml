@@ -17,17 +17,30 @@
     </Shell.TitleView>
 
     <ContentPage.Content>
-       
-        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20">
 
-            <Label Text="Negative Control Test"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Text="{Binding UserMessage}"
                            FontSize="30"
                            TextColor="#333"
-                           HorizontalTextAlignment="Center"/>
+                           Padding="10,0"
+                           HorizontalTextAlignment="start"/>
+       
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
-            <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" Recurring="True"/>
+                <Label Text="Negative Control Test"
+                               FontSize="30"
+                               TextColor="#333"
+                               HorizontalTextAlignment="Center"/>
 
-        </StackLayout>
+                <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" Recurring="True"/>
+
+            </StackLayout>
+        </Grid>
 
     </ContentPage.Content>
 
