@@ -1890,6 +1890,8 @@ namespace FenomPlus.ViewModels
 
                 case 1:
                     SelectedQcUser.C1 = tests[0].TestValue; // Latest test
+                    SelectedQcUser.C1Date = DateTime.Now;
+                    SelectedQcUser.LastTestResult = tests[0].TestStatus; 
 
                     if (tests[0].TestStatus == QCTest.TestPass)
                     {
@@ -1904,6 +1906,8 @@ namespace FenomPlus.ViewModels
 
                 case 2:
                     SelectedQcUser.C2 = tests[0].TestValue; // Latest test
+                    SelectedQcUser.C2Date = DateTime.Now;
+                    SelectedQcUser.LastTestResult = tests[0].TestStatus; 
                     
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
@@ -1923,6 +1927,8 @@ namespace FenomPlus.ViewModels
 
                 case 3:
                     SelectedQcUser.C3 = tests[0].TestValue; // Latest test
+                    SelectedQcUser.C3Date = DateTime.Now;
+                    SelectedQcUser.LastTestResult = tests[0].TestStatus; 
 
                     (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
                     float? median = GetMedian(SelectedQcUser.UserName);
