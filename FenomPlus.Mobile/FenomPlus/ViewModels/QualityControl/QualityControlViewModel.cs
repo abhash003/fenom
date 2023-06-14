@@ -1104,6 +1104,10 @@ namespace FenomPlus.ViewModels
 
         #region "Negative Control Test"
         private string _buttonText = "Next";
+
+        [ObservableProperty]
+        private string _userNameMessage = string.Empty;
+
         public string ButtonText
         {
             get { return _buttonText; }
@@ -1142,6 +1146,7 @@ namespace FenomPlus.ViewModels
         private async Task StartNegativeControlTest()
         {
             Services.Cache.TestType = TestTypeEnum.NegativeControl;
+            UserNameMessage = "QC " + SelectedQcUser.UserName;
             await Services.Navigation.QCNegativeControlTestView();
             await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }
@@ -1245,7 +1250,7 @@ namespace FenomPlus.ViewModels
 
                 GaugeData = Services.DeviceService.Current!.BreathFlow = 0;
                 GaugeSeconds = 10;
-                GaugeStatus = "Start Blowing";                
+                GaugeStatus = "Start Blowing";
             }
         }
 
