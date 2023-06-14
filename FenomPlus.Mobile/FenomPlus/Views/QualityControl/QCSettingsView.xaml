@@ -136,11 +136,18 @@
                                     <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                     <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
                                     <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Last Pos. Test Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Last Pos. Test Result" MappingName="LastTestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Last Pos. Test Date" MappingName="LastTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Result" MappingName="LastTestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                 </xForms:SfDataGrid.Columns>
-                            </xForms:SfDataGrid>
+                                <xForms:SfDataGrid.StackedHeaderRows>
+                                    <xForms:StackedHeaderRow>
+                                        <xForms:StackedHeaderRow.StackedColumns>
+                                            <xForms:StackedColumn ChildColumns="LastTestScore,LastTestResult,LastTestDate" Text="Last Positive Test" />
+                                        </xForms:StackedHeaderRow.StackedColumns>
+                                    </xForms:StackedHeaderRow>
+                                </xForms:SfDataGrid.StackedHeaderRows>
+                        </xForms:SfDataGrid>
 
                             <Button x:Name="DeleteUserButton" 
                                     Grid.Row="1" 
