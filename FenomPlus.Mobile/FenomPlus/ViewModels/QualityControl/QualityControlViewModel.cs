@@ -87,6 +87,7 @@ namespace FenomPlus.ViewModels
                     Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                        UpdateDeviceStatusOnDB();
                     });
                 }
                 OnPropertyChanged(nameof(RequireQC));
