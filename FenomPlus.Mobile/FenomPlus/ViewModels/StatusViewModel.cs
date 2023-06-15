@@ -197,8 +197,9 @@ namespace FenomPlus.ViewModels
             UpdateQualityControlExpiration();
             Services.DeviceService.Current.RequestEnvironmentalInfo();
 
-            if (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 && Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 &&
-                Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 && Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
+            if (Services.DeviceService.Current.EnvironmentalInfo != null && Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 &&
+                Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 && Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 &&
+                Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
             {
                 UpdateSensor();
                 UpdateBattery();
