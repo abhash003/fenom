@@ -813,20 +813,9 @@ namespace FenomPlus.ViewModels
 
             try
             {
-                string testStatus;
-
-                testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-
-                var newTest = new QCTest(CurrentDeviceSerialNumber, QCUser.NegativeControlName, DateTime.Now, testValue, testStatus);
-
-                if (DbCreateQcTest(newTest))
-                {
-                    return newTest;
-                }
-                else
-                {
-                    return null;
-                }
+                string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "-");
+                return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)
             {
@@ -1713,7 +1702,7 @@ namespace FenomPlus.ViewModels
                     var testsCollection = db.GetCollection<QCTest>("qctests");
 
                     var tests = testsCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == QCUser.NegativeControlName)
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.TestType == "-")
                         .OrderByDescending(x => x.TestDate)
                         .ToList();
 
@@ -1980,8 +1969,8 @@ namespace FenomPlus.ViewModels
 
             // Update the user in the database
             SelectedQcUser.CurrentStatus = userStatus;
-            SelectedQcUser.ExpiresDate = tests[0].TestDate.AddHours(UserTimeoutMaxHours);
-            SelectedQcUser.NextTestDate = tests[0].TestDate.AddHours(UserTimeoutMinHours);
+            SelectedQcUser.ExpiresDate  = DateTime.Now.AddHours(UserTimeoutMaxHours);
+            SelectedQcUser.NextTestDate = DateTime.Now.AddHours(UserTimeoutMinHours);
             DbUpdateQcUser(SelectedQcUser);
         }
 
@@ -2089,19 +2078,19 @@ namespace FenomPlus.ViewModels
                     if (userName == "*") 
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName != QCUser.NegativeControlName )
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.TestType == "+" )
                                 .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else if (last)
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+").ToList()
                                 .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+")
                                 .OrderBy(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     return tests;

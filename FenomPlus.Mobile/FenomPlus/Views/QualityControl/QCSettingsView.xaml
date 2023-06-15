@@ -135,10 +135,10 @@
                                 <xForms:SfDataGrid.Columns>
                                     <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                     <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
-                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Result" MappingName="LastTestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Result" MappingName="LastTestResult" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0"/>
                                 </xForms:SfDataGrid.Columns>
                                 <xForms:SfDataGrid.StackedHeaderRows>
                                     <xForms:StackedHeaderRow>
@@ -202,8 +202,9 @@
                                     <xForms:SfDataGrid.Columns>
 
                                         <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0"/>
-                                        <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Users" MappingName="UserName" Padding="10,0,10,0"  ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Test Type" MappingName="TestTypeDetail" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                         <xForms:GridTextColumn HeaderText="Score" MappingName="TestValue" Padding="10,0,10,0"/>
                                         <xForms:GridTextColumn HeaderText="Result" MappingName="TestStatus" Padding="10,0,10,0"/>
 
