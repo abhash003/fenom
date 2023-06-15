@@ -22,6 +22,7 @@ using Xamarin.Forms;
 using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Enums.ErrorCodes;
+using FenomPlus.Services;
 
 namespace FenomPlus.ViewModels
 {
@@ -83,11 +84,15 @@ namespace FenomPlus.ViewModels
                 if (device != null && value != device.IsQCEnabled())
                 {
                     device.ToggleQC(value);
+                    device.RequestDeviceInfo(); //.GetAwaiter().GetResult();
                     // allow time for the message write to device then read back 
                     Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
                         UpdateDeviceStatusOnDB();
+
+                        StatusViewModel svm = AppServices.Container.Resolve<StatusViewModel>();
+                        svm.UpdateQualityControlExpiration();
                     });
                 }
                 OnPropertyChanged(nameof(RequireQC));
