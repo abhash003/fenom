@@ -371,13 +371,15 @@ namespace FenomPlus.ViewModels
             short hour = 0;
             if (device!=null && device.GetQCHoursRemaining(ref hour)) // >=0 : valid, <=-1 : expired, = 0x8000 : failed
             {}
+
             bool QCEnabled = device?.IsQCEnabled()??false;
             if (!BluetoothConnected || !QCEnabled)
             {
                 QcBarIconVisible = false;
 
-                QualityControlViewModel.ImagePath = "quality_control_red.png";
-                QualityControlViewModel.Label = string.Empty;
+                //QualityControlViewModel.ImagePath = "quality_control_red.png";
+                QualityControlViewModel.ImagePath = "qualitycontrol.png";
+                QualityControlViewModel.Label = "Disabled"; //string.Empty;
                 QualityControlViewModel.Value = string.Empty;
                 QualityControlViewModel.ButtonText = string.Empty;
                 QualityControlViewModel.Description = string.Empty;
@@ -471,7 +473,7 @@ namespace FenomPlus.ViewModels
                 {
                     PressureBarIconVisible = true;
                     PressureBarIcon = "wo_pressure_yellow.png";
-                    HumidityViewModel.ImagePath = "pressure_yellow.png";
+                    PressureViewModel.ImagePath = "pressure_yellow.png";
                     PressureViewModel.ValueColor = Color.FromHex("#333");
                     PressureViewModel.Label = "Warning Range";
                     PressureViewModel.Description = "The ambient pressure is near low limit.";
@@ -489,7 +491,7 @@ namespace FenomPlus.ViewModels
                 {
                     PressureBarIconVisible = true;
                     PressureBarIcon = "wo_pressure_yellow.png";
-                    HumidityViewModel.ImagePath = "pressure_yellow.png";
+                    PressureViewModel.ImagePath = "pressure_yellow.png";
                     PressureViewModel.ValueColor = Color.FromHex("#333");
                     PressureViewModel.Label = "Warning Range";
                     PressureViewModel.Description = "The ambient pressure is near high limit.";
