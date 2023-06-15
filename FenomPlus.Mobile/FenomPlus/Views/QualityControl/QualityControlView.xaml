@@ -69,20 +69,22 @@
                         </Grid.ColumnDefinitions>
 
                         <!--Individual Items Row 1-->
-
+<!--
                         <controls:QCButtonView  
                                 x:Name="NegativeControlButton"
                                 Grid.Row="0" 
                                 Grid.Column="0"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
-                                BackgroundColor="LightGray"/>
-                                <!--Command="{Binding UpdateNegativeControlCommand}"/-->
+                                BackgroundColor="LightGray"
+                                IsVisible="false"/>
+-->
+                        <!--Command="{Binding UpdateNegativeControlCommand}"/-->
 
                         <controls:QCButtonView 
                                 x:Name="User1Button"
                                 Grid.Row="0" 
-                                Grid.Column="1"
+                                Grid.Column="0"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding UpdateUser1Command}"/>
@@ -90,7 +92,7 @@
                         <controls:QCButtonView 
                                 x:Name="User2Button"
                                 Grid.Row="0" 
-                                Grid.Column="2"
+                                Grid.Column="1"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding UpdateUser2Command}"/>
@@ -98,7 +100,7 @@
                         <controls:QCButtonView 
                                 x:Name="User3Button"
                                 Grid.Row="0" 
-                                Grid.Column="3"
+                                Grid.Column="2"
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
                                 Command="{Binding UpdateUser3Command}"/>
@@ -150,7 +152,7 @@
                             Padding="20">
                             
                             <Image x:Name="ButtonImage"
-                                   Source="TutStep2.png"
+                                   Source="QCSettings.png"
                                    VerticalOptions="CenterAndExpand"
                                    Aspect="AspectFit"/>
                             

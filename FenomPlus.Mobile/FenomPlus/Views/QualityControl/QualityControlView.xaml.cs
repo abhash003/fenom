@@ -35,7 +35,7 @@ namespace FenomPlus.Views
             QualityControlViewModel.LoadData();
 
             // Don't assign in case device is not connected
-            NegativeControlButton.BindingContext = QualityControlViewModel.QcButtonViewModels[0];
+            //NegativeControlButton.BindingContext = QualityControlViewModel.QcButtonViewModels[0];
             User1Button.BindingContext = QualityControlViewModel.QcButtonViewModels[1];
             User2Button.BindingContext = QualityControlViewModel.QcButtonViewModels[2];
             User3Button.BindingContext = QualityControlViewModel.QcButtonViewModels[3];
