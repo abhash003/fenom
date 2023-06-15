@@ -114,6 +114,28 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        private bool _isRetryEnabled = false;
+
+        public bool IsRetryEnabled
+        {
+            get => _isRetryEnabled;
+            set
+            {
+                _isRetryEnabled = value;
+            }
+        }
+
+        private bool _isExitEnabled = true;
+
+        public bool IsExitEnabled
+        {
+            get => _isExitEnabled;
+            set
+            {
+                _isExitEnabled = value;
+            }
+        }
+
         public QCUser SelectedQcUser
         {
             get
@@ -179,6 +201,8 @@ namespace FenomPlus.ViewModels
             var error = ErrorCodeLookup.Lookup(arg);
             ErrorCode = error.Code;
             ErrorMessage = error.Message;
+            IsRetryEnabled = true;
+            IsExitEnabled = false;
             Services.Navigation.QCUserTestErrorView();
         }
 
@@ -1102,6 +1126,28 @@ namespace FenomPlus.ViewModels
                     await Services.Navigation.QualityControlView();
                 }
             }
+        }
+        [RelayCommand]
+        public async Task RetrytoBrethManuever()
+        {
+            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                await Services.Navigation.DashboardView();
+            }
+            else
+            {
+                if (IsDeviceConnected)
+                {
+                    await InitializeBreathGauge();
+                    await Services.Navigation.QCUserTestView();
+                }
+                else
+                {
+                    await Services.Navigation.DashboardView();
+                }
+            }
+
+
         }
 
         #endregion
