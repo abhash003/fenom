@@ -195,8 +195,8 @@ namespace FenomPlus.ViewModels
             UpdateBluetooth();
             UpdateDevice(Services.Cache.DeviceExpireDate);
             UpdateQualityControlExpiration();
-
             Services.DeviceService.Current.RequestEnvironmentalInfo();
+
             UpdateSensor();
             UpdateBattery();
             UpdatePressure();
@@ -529,8 +529,6 @@ namespace FenomPlus.ViewModels
                 TemperatureViewModel.ButtonText = "Info";
 
                 // When device starts it is sending value as 0.
-                if (value > 0)
-                {
                     if (value < Constants.TemperatureLow14)
                     {
                         TemperatureBarIconVisible = true;
@@ -557,8 +555,7 @@ namespace FenomPlus.ViewModels
                         TemperatureViewModel.Label = "Within Range";
                         TemperatureViewModel.Description = "The device temperature is within operating range.";
                     }
-                }
-            }            
+            }
         }
 
         public void UpdateHumidity()
@@ -657,8 +654,6 @@ namespace FenomPlus.ViewModels
                 if (batteryCharging)
                 {
                     // When device starts it is sending value as 0.
-                    if (value > 0)
-                    {
                         // ToDo; Need to finish implementation
                         if (value > Constants.BatteryWarning20)
                         {
@@ -684,7 +679,6 @@ namespace FenomPlus.ViewModels
                             BatteryViewModel.Label = "Low";
                             BatteryViewModel.Description = "Battery charge is critically low. Charging.";
                         }
-                    }
                 }
                 else
                 {
