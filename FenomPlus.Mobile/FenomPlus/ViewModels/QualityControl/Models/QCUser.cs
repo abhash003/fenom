@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Syncfusion.XlsIO.Parser.Biff_Records.Charts;
+using FenomPlus.QualityControl.Enums;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -65,15 +66,20 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public bool  ShowChartOption { get; set; }
 
         public float? C1 { get; set; }
-        public DateTime C1Date{ get; set; }
+        public DateTime? C1Date{ get; set; }
 
         public float? C2 { get; set; }
-        public DateTime C2Date { get; set; }
+        public DateTime? C2Date { get; set; }
 
         public float? C3 { get; set; }
-        public DateTime C3Date { get; set; }
+        public DateTime? C3Date { get; set; }
 
         public float? QCT { get; set; }
+
+        // last QC test
+        public float? LastTestScore => C3??C2??C1??null;
+        public DateTime? LastTestDate => C3Date??C2Date??C1Date??null;
+        public string? LastTestResult { get; set; }
 
         public QCUser(string deviceSerialNumber, string userName)
         {
@@ -86,12 +92,6 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             NextTestDate = DateTime.MinValue;
             Explanation = string.Empty;
             ShowChartOption = false;
-            C1 = 0;
-            C1Date = DateTime.MinValue;
-            C2 = 0;
-            C2Date = DateTime.MinValue;
-            C3 = 0;
-            C3Date = DateTime.MinValue;
             QCT = 0;
         }
     }

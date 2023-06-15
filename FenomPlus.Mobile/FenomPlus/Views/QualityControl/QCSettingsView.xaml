@@ -132,19 +132,22 @@
                                                AllowPullToRefresh="False"
                                                Margin="0,0,1,0"
                                                SelectionChanged="AllUsersDataGrid_OnSelectionChanged">
-
-                                    <xForms:SfDataGrid.Columns>
-
-                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
-                                        <xForms:GridTextColumn HeaderText="Date Created" MappingName="DateCreated" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="Expiration Date" MappingName="ExpiresDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="Next Test Date" MappingName="NextTestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
-
-                                    </xForms:SfDataGrid.Columns>
-
-                                </xForms:SfDataGrid>
+                                <xForms:SfDataGrid.Columns>
+                                    <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Result" MappingName="LastTestResult" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0"/>
+                                </xForms:SfDataGrid.Columns>
+                                <xForms:SfDataGrid.StackedHeaderRows>
+                                    <xForms:StackedHeaderRow>
+                                        <xForms:StackedHeaderRow.StackedColumns>
+                                            <xForms:StackedColumn ChildColumns="LastTestScore,LastTestResult,LastTestDate" Text="Last Positive Test" />
+                                        </xForms:StackedHeaderRow.StackedColumns>
+                                    </xForms:StackedHeaderRow>
+                                </xForms:SfDataGrid.StackedHeaderRows>
+                        </xForms:SfDataGrid>
 
                             <Button x:Name="DeleteUserButton" 
                                     Grid.Row="1" 
@@ -198,9 +201,10 @@
 
                                     <xForms:SfDataGrid.Columns>
 
-                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                        <xForms:GridTextColumn HeaderText="User" MappingName="UserName" Padding="10,0,10,0"/>
-                                        <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Users" MappingName="UserName" Padding="10,0,10,0"  ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Test Type" MappingName="TestTypeDetail" Padding="10,0,10,0"/>
+                                        <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                         <xForms:GridTextColumn HeaderText="Score" MappingName="TestValue" Padding="10,0,10,0"/>
                                         <xForms:GridTextColumn HeaderText="Result" MappingName="TestStatus" Padding="10,0,10,0"/>
 

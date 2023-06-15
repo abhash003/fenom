@@ -23,11 +23,13 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public float? TestValue { get; set; }
 
         public string TestStatus { get; set; } // Pass or Fail
+        public string TestType { get; set; } = "+"; // + : Positive test, - : Negative test
 
-        public string Explanation { get; set; }
+        public string TestTypeDetail => TestType == "+" ? "Positive" : "Negative";
+        public string Explanation { get; set; } = string.Empty;
 
         public QCTest() { }
-        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, string explanation = "")
+        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, string explanation = "", string testType = "+")
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
@@ -35,7 +37,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             TestDate = testDate;
             TestValue = testValue;
             TestStatus = testStatus;
-            Explanation = string.Empty;
+            TestType = testType;
         }
 
         //[BsonCtor]
