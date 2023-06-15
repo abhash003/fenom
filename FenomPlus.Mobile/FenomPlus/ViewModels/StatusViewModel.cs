@@ -197,11 +197,15 @@ namespace FenomPlus.ViewModels
             UpdateQualityControlExpiration();
             Services.DeviceService.Current.RequestEnvironmentalInfo();
 
-            UpdateSensor();
-            UpdateBattery();
-            UpdatePressure();
-            UpdateHumidity();
-            UpdateTemperature();
+            if (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 && Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 &&
+                Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 && Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0)
+            {
+                UpdateSensor();
+                UpdateBattery();
+                UpdatePressure();
+                UpdateHumidity();
+                UpdateTemperature();
+            }
         }
 
         public void UpdateVersionNumbers()
