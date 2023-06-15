@@ -201,7 +201,7 @@
 
                                     <xForms:SfDataGrid.Columns>
 
-                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                        <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0"/>
                                         <xForms:GridTextColumn HeaderText="Users" MappingName="UserName" Padding="10,0,10,0"  ColumnSizer="Auto"/>
                                         <xForms:GridTextColumn HeaderText="Test Type" MappingName="TestTypeDetail" Padding="10,0,10,0"/>
                                         <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0" ColumnSizer="Auto"/>

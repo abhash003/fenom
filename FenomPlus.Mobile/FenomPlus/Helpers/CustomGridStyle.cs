@@ -9,6 +9,15 @@ namespace FenomPlus.Helpers
         public CustomGridStyle()
         {
         }
+        public override Color GetStackedHeaderBackgroundColor(int rowIndex)
+        {
+            return Color.Black;
+        }
+
+        public override Color GetStackedHeaderForegroundColor(int rowIndex)
+        {
+            return Color.FromRgb(255, 255, 255);
+        }
 
         public override Color GetGroupSummaryRowBackgroundColor()
         {
