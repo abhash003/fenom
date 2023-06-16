@@ -56,7 +56,7 @@ namespace FenomPlus.Services.DeviceService.Interfaces
 
         Task<bool> SERIALNUMBER(string SerailNumber);
 
-        Task<bool> WriteRequest(MESSAGE message);
+        Task<bool> WriteRequest(MESSAGE message, short sz = 1);
 
         Task<bool> ENVIROMENTALINFO();
 

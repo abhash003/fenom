@@ -279,9 +279,9 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override async Task<bool> WriteRequest(MESSAGE message)
+        public override async Task<bool> WriteRequest(MESSAGE message, short sz = 1)
         {
-            return await WRITEREQUEST(message, 2);
+            return await WRITEREQUEST(message, sz);
         }
 
         /// <summary>
@@ -406,11 +406,13 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override async Task<bool> SendMessage(MESSAGE message)
+        public override async Task<bool> SendMessage(MESSAGE message, short sz = 1)
         {
+            // for ID_REQUEST_DATA, it send out sz == 1 bytes
+            // for ID_CALIBRATION_DATA, it send out sz == 2 bytes
             if (IsConnected())
-            {                
-                return await WriteRequest(message);
+            {
+                return await WriteRequest(message, sz);
             }
             return false;
         }
