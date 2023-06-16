@@ -281,7 +281,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// <returns></returns>
         public override async Task<bool> WriteRequest(MESSAGE message)
         {
-            return await WRITEREQUEST(message, 1);
+            return await WRITEREQUEST(message, 2);
         }
 
         /// <summary>
