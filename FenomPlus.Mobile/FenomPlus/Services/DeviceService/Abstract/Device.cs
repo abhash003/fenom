@@ -567,12 +567,6 @@ namespace FenomPlus.Services.DeviceService.Abstract
             var msg = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, val);
             return await SendMessage(msg);
         }
-
-        public async Task<bool> SendStopTestMsg()
-        {
-            var msg = new MESSAGE(ID_MESSAGE.ID_REQUEST_DATA, ID_SUB.ID_REQUEST_BREATHMANUEVER, 0x0);
-            return await SendMessage(msg);
-        }
         #endregion
     }
 }

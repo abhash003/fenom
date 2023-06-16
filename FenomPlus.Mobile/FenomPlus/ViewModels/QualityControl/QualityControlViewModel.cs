@@ -1834,7 +1834,7 @@ namespace FenomPlus.ViewModels
                     // it takes 7s from app get score to poll device status get fail status
 
                     var device = Services.DeviceService?.Current;
-                    device.SendStopTestMsg();
+                    device.StopTest();
                     device.SendFailMsg((ushort)0x8000);
                     Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
                     {
