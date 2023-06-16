@@ -72,7 +72,7 @@ namespace FenomPlus.ViewModels
                 }
             }
         }
-        public string DeviceStatusString => $"Device Status ({CurrentDeviceStatus})";
+        public string DeviceStatusString => $"Device QC Status : {CurrentDeviceStatus}";
 
         public bool RequireQC
         {
