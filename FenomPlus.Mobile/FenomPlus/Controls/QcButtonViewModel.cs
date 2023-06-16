@@ -26,12 +26,9 @@ namespace FenomPlus.Controls
                 Assigned = _qcUserModel != null;
                 OnPropertyChanged(nameof(UserName));
                 OnPropertyChanged(nameof(CurrentStatus));
-                OnPropertyChanged(nameof(ExpiresDate));
-                OnPropertyChanged(nameof(ExpiresDateString));
                 OnPropertyChanged(nameof(NextTestDate));
                 OnPropertyChanged(nameof(NextTestDateString));
                 OnPropertyChanged(nameof(ShowChartOption));
-                OnPropertyChanged(nameof(ExpiresVisible));
                 OnPropertyChanged(nameof(NextTestVisible));
             }
         }
@@ -59,27 +56,10 @@ namespace FenomPlus.Controls
             }
         }
 
-        public DateTime ExpiresDate
-        {
-            get => QCUserModel.ExpiresDate;
-            set
-            {
-                QCUserModel.ExpiresDate = value;
-                OnPropertyChanged(nameof(ExpiresDate));
-                OnPropertyChanged(nameof(ExpiresDateString));
-                OnPropertyChanged(nameof(ExpiresVisible));
-            }
-        }
-
-        public string ExpiresDateString => QCUserModel.ExpiresDate != DateTime.MinValue ? QCUserModel.ExpiresDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
-
-
         public const string UserConditionallyQualified = "Conditionally Qualified";
         public const string UserQualified = "Qualified";
         public const string UserDisqualified = "Disqualified";
         public const string UserNone = "None";
-
-        public bool ExpiresVisible => CurrentStatus == QCUser.UserConditionallyQualified;
 
         public DateTime NextTestDate
         {
