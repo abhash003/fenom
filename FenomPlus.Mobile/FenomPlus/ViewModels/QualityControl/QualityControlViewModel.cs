@@ -1146,8 +1146,6 @@ namespace FenomPlus.ViewModels
                     await Services.Navigation.DashboardView();
                 }
             }
-
-
         }
 
         #endregion
