@@ -97,7 +97,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public abstract Task<bool> SERIALNUMBER(string SerailNumber);
 
-        public abstract Task<bool> WriteRequest(MESSAGE message);
+        public abstract Task<bool> WriteRequest(MESSAGE message, short sz);
 
         public abstract Task<bool> ENVIROMENTALINFO();
 
@@ -510,7 +510,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         #region Device Communication
 
-        public abstract Task<bool> SendMessage(MESSAGE message);
+        public abstract Task<bool> SendMessage(MESSAGE message, short sz = 1);
 
         #endregion
 
@@ -560,7 +560,12 @@ namespace FenomPlus.Services.DeviceService.Abstract
         public async Task<bool> ExtendDeviceValidity(short hour)
         {
             var msg = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, hour);
-            return await SendMessage(msg);
+            return await SendMessage(msg, 2);
+        }
+        public async Task<bool> SendFailMsg(ushort val)
+        {
+            var msg = new MESSAGE(ID_MESSAGE.ID_CALIBRATION_DATA, ID_SUB.ID_REQUEST_QUALITYCONTROL, val);
+            return await SendMessage(msg, 2);
         }
         #endregion
     }

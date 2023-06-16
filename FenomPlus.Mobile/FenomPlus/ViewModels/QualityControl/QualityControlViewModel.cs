@@ -1759,19 +1759,23 @@ namespace FenomPlus.ViewModels
 
         private void UpdateDeviceStatus()
         {
+            // This happens after Positive Test
             // Returns: "Valid", "Failed", "Expired"
+            var device = Services.DeviceService?.Current;
             if (QCUserTestResultString == QCTest.TestPass) 
             {
-                var device = Services.DeviceService?.Current;
-                device.ExtendDeviceValidity((short)24);
-                Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
-                {
-                    CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                    UpdateDeviceStatusOnDB();
-                });
-                return;
+                device.ExtendDeviceValidity((short)0x18);
             }
-            UpdateDeviceStatusOnDB();
+            else
+            {
+                device.SendFailMsg((ushort)0x8000);
+            }
+            Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
+            {
+                CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
+                UpdateDeviceStatusOnDB();
+            });
+            return;
         }
         private void UpdateDeviceStatusOnDB()
         {
@@ -1825,13 +1829,17 @@ namespace FenomPlus.ViewModels
                 else if (Math.Abs((decimal)negativeControlTest.TestValue) >= NegativeControlMaxThreshold)
                 {
                     negativeControlStatus = QCUser.NegativeControlFail;
-                    // Debug.WriteLine("==== Current Device Status is " + CurrentDeviceStatus);
+                    Debug.WriteLine("==== Current Device Status is " + CurrentDeviceStatus);
                     // when NC fails, need to get the Device QC status and update to DB
                     // it takes 7s from app get score to poll device status get fail status
+
+                    var device = Services.DeviceService?.Current;
+                    device.StopTest();
+                    device.SendFailMsg((ushort)0x8000);
                     Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                        // Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
+                        Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
                         UpdateDeviceStatusOnDB();
                     });
                 }
