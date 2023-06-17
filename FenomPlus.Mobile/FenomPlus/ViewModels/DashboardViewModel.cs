@@ -55,11 +55,6 @@ namespace FenomPlus.ViewModels
                         await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
                         await Services.Navigation.BreathManeuverFeedbackView();
                         break;
-                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
-                        Services.Cache.TestType = TestTypeEnum.Standard;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
-                        await Services.Navigation.BreathManeuverFeedbackView();
-                        break;
                     case DeviceCheckEnum.DevicePurging:
                         await Services.Dialogs.NotifyDevicePurgingAsync(Services.DeviceService.Current.DeviceReadyCountDown);
                         if (Services.Dialogs.PurgeCancelRequest)
@@ -88,6 +83,11 @@ namespace FenomPlus.ViewModels
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
+                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                        Services.Cache.TestType = TestTypeEnum.Standard;
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        await Services.Navigation.BreathManeuverFeedbackView();
+                        break;
                     case DeviceCheckEnum.Unknown:
                         var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
                         Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
@@ -113,11 +113,6 @@ namespace FenomPlus.ViewModels
                 switch (Services.DeviceService.Current.CheckDeviceBeforeTest())
                 {
                     case DeviceCheckEnum.Ready:
-                        Services.Cache.TestType = TestTypeEnum.Short;
-                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
-                        await Services.Navigation.BreathManeuverFeedbackView();
-                        break;
-                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
                         Services.Cache.TestType = TestTypeEnum.Short;
                         await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
                         await Services.Navigation.BreathManeuverFeedbackView();
@@ -151,6 +146,11 @@ namespace FenomPlus.ViewModels
                         break;
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
+                        break;
+                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                        Services.Cache.TestType = TestTypeEnum.Short;
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
+                        await Services.Navigation.BreathManeuverFeedbackView();
                         break;
                     case DeviceCheckEnum.Unknown:
                         var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
