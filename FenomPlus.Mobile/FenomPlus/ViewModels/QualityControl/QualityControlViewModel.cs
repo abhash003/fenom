@@ -186,8 +186,6 @@ namespace FenomPlus.ViewModels
                 {
                     if (App.GetCurrentPage() is QCNegativeControlTestView)  // in recurring flowering growing view  
                     {
-                        IsRetryEnabled = false;
-                        IsExitEnabled = true;
                         ShowErrorPage(arg);
                     }
                 }
@@ -1138,6 +1136,8 @@ namespace FenomPlus.ViewModels
             {
                 if (IsDeviceConnected)
                 {
+                    IsExitEnabled = true;
+                    IsRetryEnabled = false;
                     await InitializeBreathGauge();
                     await Services.Navigation.QCUserTestView();
                 }
@@ -1287,7 +1287,6 @@ namespace FenomPlus.ViewModels
 
         private async Task InitializeBreathGauge()
         {
-            IsExitEnabled = true;
             Services.Cache.TestType = TestTypeEnum.Standard;
 
             if (Services.DeviceService.Current != null)
@@ -1439,8 +1438,6 @@ namespace FenomPlus.ViewModels
                     PlaySounds.PlayFailedSound();
 
                     // Don't add this test with error to the database
-                    IsRetryEnabled = false;
-                    IsExitEnabled = true;
                     ShowErrorPage(code);
                 }
                 else
