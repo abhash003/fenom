@@ -80,6 +80,10 @@ namespace FenomPlus.ViewModels
             set
             {
                 var device = Services.DeviceService?.Current;
+                if(QCDevice == null)
+                {
+                    return;
+                }
                 QCDevice.RequireQC = value;
                 if (device != null && value != device.IsQCEnabled())
                 {
@@ -1720,7 +1724,7 @@ namespace FenomPlus.ViewModels
             if (result)
             {
                 // Delete User and tests
-                DbDeleteQcUser(QcUserList[index - 1]); // SfDataGrid apparently is one based on the index
+                DbDeleteQcUser(QcUserList[index - 2]); // SfDataGrid apparently is one based on the index
                 UpdateQcUserList();
             }
         }
