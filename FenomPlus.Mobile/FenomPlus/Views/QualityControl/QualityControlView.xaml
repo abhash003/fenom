@@ -152,7 +152,7 @@
                             Padding="20">
                             
                             <Image x:Name="ButtonImage"
-                                   Source="QCSettings.png"
+                                   Source="settings.png"
                                    VerticalOptions="CenterAndExpand"
                                    Aspect="AspectFit"/>
                             
@@ -163,29 +163,6 @@
                 </Grid>
 
             </border:SfBorder>
-
-            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="60,0,0,0">
-
-                <Label Text="Disable/Enable Quality Control:" Margin="0,0,20,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#333" FontSize="18"/>
-
-                <Switch x:Name="ToggleSwitch"
-                        OnColor="CornflowerBlue" 
-                        ThumbColor="Green" 
-                        Scale="1.4"
-                        IsToggled="{Binding RequireQC}"
-                        Margin="0,0,10,0"/>
-
-                <Label Text="Off" FontAttributes="None" VerticalOptions="Center" TextColor="#333" FontSize="18">
-                    <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference ToggleSwitch}, Path=IsToggled}" Value="true">
-                            <Setter Property="Text" Value="On" />
-                            <Setter Property="FontAttributes" Value="Bold" />
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
-
-            </StackLayout>
-
 
             <Button Text="Exit"
                 Grid.Row="1"
