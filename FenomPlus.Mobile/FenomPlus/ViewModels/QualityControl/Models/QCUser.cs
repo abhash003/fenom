@@ -56,13 +56,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public string CurrentStatus { get; set; }
 
         public DateTime DateCreated { get; set; }  // Date created
-
-        public DateTime ExpiresDate { get; set; }  // Date in which this expires?
-
         public DateTime NextTestDate { get; set; }  // Next Test date?
-
         public string Explanation { get; set; }
-
         public bool  ShowChartOption { get; set; }
 
         public float? C1 { get; set; }
@@ -88,7 +83,6 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             UserName = userName;
             CurrentStatus = UserNone;
             DateCreated = DateTime.Now;
-            ExpiresDate = DateTime.MinValue;
             NextTestDate = DateTime.MinValue;
             Explanation = string.Empty;
             ShowChartOption = false;

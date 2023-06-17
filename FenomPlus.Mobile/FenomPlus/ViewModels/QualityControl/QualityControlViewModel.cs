@@ -72,7 +72,7 @@ namespace FenomPlus.ViewModels
                 }
             }
         }
-        public string DeviceStatusString => $"Device Status ({CurrentDeviceStatus})";
+        public string DeviceStatusString => $"Device QC Status : {CurrentDeviceStatus}";
 
         public bool RequireQC
         {
@@ -214,7 +214,6 @@ namespace FenomPlus.ViewModels
             // CurrentDeviceStatus = UpdateDeviceStatus();
 
             // Get all users for this currently connected device
-            //QcUserList = ReadAllQcUsers();
             UpdateQcUserList();
             for (int i = 0; i< QcUserList.Count; ++i)
             {
@@ -690,14 +689,6 @@ namespace FenomPlus.ViewModels
         public void UpdateQcUserList()
         {
             QcUserList = ReadAllQcUsers();
-            foreach(QCUser qcUser in QcUserList)
-            {
-                if (qcUser.CurrentStatus != QCUser.UserDisqualified && qcUser.ExpiresDate > DateTime.Now.AddDays(7))
-                {
-                    qcUser.CurrentStatus = QCUser.UserDisqualified;
-                    DbUpdateQcUser(qcUser);
-                }
-            }
         }
 
         //--------------------------------------------------------------------------------------
@@ -1480,7 +1471,6 @@ namespace FenomPlus.ViewModels
             // New User Qualified
             var newUser1 = DbCreateQcUser("Jim");
             newUser1.CurrentStatus = QCUser.UserQualified;
-            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser1);
 
@@ -1504,7 +1494,6 @@ namespace FenomPlus.ViewModels
             // New User Qualified
             var newUser1 = DbCreateQcUser("Jim");
             newUser1.CurrentStatus = QCUser.UserQualified;
-            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser1);
 
@@ -1518,7 +1507,6 @@ namespace FenomPlus.ViewModels
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
             newUser2.CurrentStatus = QCUser.UserDisqualified;
-            newUser2.ExpiresDate = DateTime.Now.AddDays(7);
             newUser2.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser2);
 
@@ -1542,7 +1530,6 @@ namespace FenomPlus.ViewModels
             // New User Qualified
             var newUser1 = DbCreateQcUser("Jim");
             newUser1.CurrentStatus = QCUser.UserQualified;
-            newUser1.ExpiresDate = DateTime.Now.AddDays(7);
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             newUser1.C1 = 20;
             newUser1.C1Date = DateTime.Now.AddHours(-120);
@@ -1578,7 +1565,6 @@ namespace FenomPlus.ViewModels
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
             newUser2.CurrentStatus = QCUser.UserDisqualified;
-            newUser2.ExpiresDate = DateTime.Now.AddDays(7);
             newUser2.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser2);
 
@@ -1595,7 +1581,6 @@ namespace FenomPlus.ViewModels
             // New User Disqualified
             var newUser3 = DbCreateQcUser("Bob");
             newUser3.CurrentStatus = QCUser.UserDisqualified;
-            newUser3.ExpiresDate = DateTime.Now.AddDays(7);
             newUser3.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser3);
 
@@ -1612,7 +1597,6 @@ namespace FenomPlus.ViewModels
             // New User Disqualified
             var newUser4 = DbCreateQcUser("New");
             newUser4.CurrentStatus = QCUser.UserConditionallyQualified;
-            newUser4.ExpiresDate = DateTime.Now.AddDays(7);
             newUser4.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser4);
 
@@ -1624,7 +1608,6 @@ namespace FenomPlus.ViewModels
 
             var newUser5 = DbCreateQcUser("Scott");
             newUser5.CurrentStatus = QCUser.UserQualified;
-            newUser5.ExpiresDate = DateTime.Now.AddDays(7);
             newUser5.NextTestDate = DateTime.Now.AddHours(16);
             newUser5.C1 = 20;
             newUser5.C1Date = DateTime.Now.AddHours(-120);
@@ -1799,7 +1782,6 @@ namespace FenomPlus.ViewModels
             }
 
             QCDevice.CurrentStatus = CurrentDeviceStatus;
-            // No need to set QCDevice.ExpiresDate in case of device
             // No need to set QCDevice.NextTestDate in case of device
 
             DbUpdateQcDevice(QCDevice);
@@ -1848,8 +1830,7 @@ namespace FenomPlus.ViewModels
                     negativeControlStatus = QCUser.NegativeControlPass;
                 }
 
-                QCNegativeControl.ExpiresDate = negativeControlTest.TestDate.AddHours(NegativeControlTimeoutHours);
-                QCNegativeControl.NextTestDate = QCNegativeControl.ExpiresDate;
+                QCNegativeControl.NextTestDate = negativeControlTest.TestDate.AddHours(NegativeControlTimeoutHours);
             }
             else
             {
@@ -1982,30 +1963,8 @@ namespace FenomPlus.ViewModels
 
             // Update the user in the database
             SelectedQcUser.CurrentStatus = userStatus;
-            SelectedQcUser.ExpiresDate  = DateTime.Now.AddHours(UserTimeoutMaxHours);
             SelectedQcUser.NextTestDate = DateTime.Now.AddHours(UserTimeoutMinHours);
             DbUpdateQcUser(SelectedQcUser);
-        }
-
-        private void RefreshStatusBasedOnExpirationDates()
-        {
-            //DateTime currentDatetime = DateTime.Now;
-
-            //QCUsers = ReadAllQcUsers();
-
-            //foreach (var user in QCUsers)
-            //{
-            //    // User will never expire once qualified
-            //    if (user.CurrentStatus == QCUser.UserQualified)
-            //        continue;
-
-            //    if (currentDatetime > user.ExpiresDate)
-            //    {
-            //        user.CurrentStatus = QCUser.
-            //    }
-
-
-            //}
         }
 
         private bool AnyUserQualified()

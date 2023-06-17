@@ -72,28 +72,6 @@
                                HorizontalOptions="Start" 
                                TextColor="#333" 
                                FontSize="Small"/>
-
-                    </StackLayout>
-
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
-
-
-                        <Label Text="Expires:"
-                               VerticalOptions="Center" 
-                               VerticalTextAlignment="Start" 
-                               HorizontalOptions="End" 
-                               TextColor="#333" 
-                               FontSize="Small"
-                               IsVisible="{Binding ExpiresVisible}"/>
-
-                        <Label x:Name="ExpiresLabel"
-                               Text="{Binding ExpiresDateString}"
-                                VerticalOptions="Center" 
-                                HorizontalOptions="Start" 
-                                TextColor="#333" 
-                                FontSize="Small"
-                                IsVisible="{Binding ExpiresVisible}"/>
-
                     </StackLayout>
 
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
