@@ -25,7 +25,6 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
 
-#if false
             AllDevicesDataGrid.GridStyle = new CustomGridStyle();
             AllDevicesDataGrid.GridStyle.GridCellBorderWidth = 1;
             AllDevicesDataGrid.RowHeight = 40;
@@ -38,21 +37,17 @@ namespace FenomPlus.Views
             AllTestsDataGrid.GridStyle = new CustomGridStyle();
             AllTestsDataGrid.GridStyle.GridCellBorderWidth = 1;
             AllTestsDataGrid.RowHeight = 40;
-#endif
+
         }
 
         protected override void OnAppearing()
         {
-#if false
             SettingsTabView.SelectedIndex = 0;
 
             QualityControlViewModel.UpdateQcDeviceList();
             QualityControlViewModel.UpdateQcUserList();
             QualityControlViewModel.UpdateQcTestList();
 
-            //
-            ToggleSwitch.IsToggled = Services.DeviceService.Current.IsQCEnabled();
-#endif
             base.OnAppearing();
         }
 
@@ -68,7 +63,6 @@ namespace FenomPlus.Views
 
         private void SettingsTabView_OnSelectionChanged(object sender, TabSelectionChangedEventArgs e)
         {
-#if false
             switch (SettingsTabView.SelectedIndex)
             {
                 case 0:
@@ -90,31 +84,30 @@ namespace FenomPlus.Views
                     // Nothing to do here
                     break;
             }
-#endif
         }
 
 
         private void AllDevicesDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
-            //DeleteDeviceButton.IsEnabled = AllDevicesDataGrid.SelectedIndex >= 0;
+            DeleteDeviceButton.IsEnabled = AllDevicesDataGrid.SelectedIndex >= 0;
         }
 
         private void AllUsersDataGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
-            //DeleteUserButton.IsEnabled = AllUsersDataGrid.SelectedIndex >= 0;
+            DeleteUserButton.IsEnabled = AllUsersDataGrid.SelectedIndex >= 0;
         }
 
 
         private void DeleteDeviceButton_OnClicked(object sender, EventArgs e)
         {
-            //QualityControlViewModel.DeleteDeviceCommand.Execute(AllDevicesDataGrid.SelectedIndex);
-            //AllDevicesDataGrid.Refresh();
+            QualityControlViewModel.DeleteDeviceCommand.Execute(AllDevicesDataGrid.SelectedIndex);
+            AllDevicesDataGrid.Refresh();
         }
 
         private void DeleteUserButton_OnClicked(object sender, EventArgs e)
         {
-            //QualityControlViewModel.DeleteUserCommand.Execute(AllUsersDataGrid.SelectedIndex);
-            //AllUsersDataGrid.Refresh();
+            QualityControlViewModel.DeleteUserCommand.Execute(AllUsersDataGrid.SelectedIndex);
+            AllUsersDataGrid.Refresh();
         }
     }
 }
