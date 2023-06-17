@@ -114,6 +114,28 @@ namespace FenomPlus.ViewModels
             }
         }
 
+        private bool _isRetryEnabled = false;
+
+        public bool IsRetryEnabled
+        {
+            get => _isRetryEnabled;
+            set
+            {
+                _isRetryEnabled = value;
+            }
+        }
+
+        private bool _isExitEnabled = true;
+
+        public bool IsExitEnabled
+        {
+            get => _isExitEnabled;
+            set
+            {
+                _isExitEnabled = value;
+            }
+        }
+
         public QCUser SelectedQcUser
         {
             get
@@ -1083,6 +1105,28 @@ namespace FenomPlus.ViewModels
                 }
             }
         }
+        [RelayCommand]
+        public async Task RetryNavigateToIncentiveScreen()
+        {
+            if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
+            {
+                await Services.Navigation.DashboardView();
+            }
+            else
+            {
+                if (IsDeviceConnected)
+                {
+                    IsExitEnabled = true;
+                    IsRetryEnabled = false;
+                    await InitializeBreathGauge();
+                    await Services.Navigation.QCUserTestView();
+                }
+                else
+                {
+                    await Services.Navigation.DashboardView();
+                }
+            }
+        }
 
         #endregion
 
@@ -1305,6 +1349,8 @@ namespace FenomPlus.ViewModels
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
+                        IsRetryEnabled = true;
+                        IsExitEnabled = false;
                         ShowErrorPage(code);
                     }
                     else
