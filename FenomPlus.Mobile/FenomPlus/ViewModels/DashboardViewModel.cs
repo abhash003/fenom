@@ -83,12 +83,14 @@ namespace FenomPlus.ViewModels
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
-                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
-                        Services.Dialogs.ShowAlert($"Can't perform Test as Negative Control Test failed.", "Negative Control Test Error", "Close");
-                        break;
                     case DeviceCheckEnum.Unknown:
                         var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
                         Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                        break;
+                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                        Services.Cache.TestType = TestTypeEnum.Standard;
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start10Second);
+                        await Services.Navigation.BreathManeuverFeedbackView();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -145,12 +147,14 @@ namespace FenomPlus.ViewModels
                     case DeviceCheckEnum.NoSensorCommunicationFailed:
                         Services.Dialogs.ShowAlert($"Nitrous Oxide Sensor communication failed.", "Sensor Error", "Close");
                         break;
-                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
-                        Services.Dialogs.ShowAlert($"Can't perform Test as Negative Control Test failed.", "Negative Control Test Error", "Close");
-                        break;
                     case DeviceCheckEnum.Unknown:
                         var error = ErrorCodeLookup.Lookup(Services.DeviceService.Current.ErrorStatusInfo.ErrorCode);
                         Services.Dialogs.ShowAlert(((error != null) ? error.Message : "Unknown error"), "Unknown Error", "Close");
+                        break;
+                    case DeviceCheckEnum.ERROR_SYSTEM_NEGATIVE_QC_FAILED:
+                        Services.Cache.TestType = TestTypeEnum.Short;
+                        await Services.DeviceService.Current.StartTest(BreathTestEnum.Start6Second);
+                        await Services.Navigation.BreathManeuverFeedbackView();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
