@@ -162,11 +162,11 @@
                                                Margin="0,0,1,0"
                                                SelectionChanged="AllUsersDataGrid_OnSelectionChanged">
                                 <xForms:SfDataGrid.Columns>
-                                    <xForms:GridTextColumn HeaderText="User Name" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="User Name" MappingName="UserName" Padding="10,0,10,0" ColumnSizer="Star"/>
                                     <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
-                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0"/>
+                                    <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                     <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Result" MappingName="LastTestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                                    <xForms:GridTextColumn HeaderText="   Result  " MappingName="LastTestResult" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                     <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0"/>
                                 </xForms:SfDataGrid.Columns>
                                 <xForms:SfDataGrid.StackedHeaderRows>
