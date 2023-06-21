@@ -1179,7 +1179,7 @@ namespace FenomPlus.ViewModels
         private async Task StartNegativeControlTest()
         {
             Services.Cache.TestType = TestTypeEnum.NegativeControl;
-            UserNameMessage = "QC " + SelectedQcUser.UserName;
+            UserNameMessage = SelectedQcUser.UserName;
             await Services.Navigation.QCNegativeControlTestView();
             await Services.DeviceService.Current.StartTest(BreathTestEnum.QualityControl);
         }
