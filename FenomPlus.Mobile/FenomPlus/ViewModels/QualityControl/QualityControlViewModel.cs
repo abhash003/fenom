@@ -810,15 +810,24 @@ namespace FenomPlus.ViewModels
             return true;
         }
 
-        private QCTest DbCreateQcTest(string userName, float? testValue)
+        private QCTest DbCreateQcTest(QCUser user, float? testValue)
         {
-            Debug.Assert(!string.IsNullOrEmpty(userName) && testValue >= 0);
+            Debug.Assert(!string.IsNullOrEmpty(user.UserName) && testValue >= 0);
 
             try
             {
                 bool goodScore = NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax;
                 string testStatus = goodScore ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, userName, DateTime.Now, testValue, testStatus);
+
+                if (user.CurrentStatus == QCUser.UserQualified)
+                {
+                    float median = GetMedian(user.UserName)??0;  // first 3
+                    // for Qualified User, the score should fulfill 1. fall into [5, 40]; 2. subject to abs(score - median) < 10
+                    bool scoreDeviated = Math.Abs(median - testValue??0) >= 10;
+                    if (scoreDeviated)
+                        testStatus = QCTest.TestFail;
+                }
+                var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus);
 
                 return DbCreateQcTest(newTest)? newTest : null;
             }
@@ -1409,7 +1418,7 @@ namespace FenomPlus.ViewModels
             if (Services.DeviceService.Current.FenomReady == true)
             {
 
-                QCTest test = DbCreateQcTest(SelectedQcUser.UserName, Services.DeviceService.Current.FenomValue);
+                QCTest test = DbCreateQcTest(SelectedQcUser, Services.DeviceService.Current.FenomValue);
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
 
@@ -1524,11 +1533,11 @@ namespace FenomPlus.ViewModels
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser1);
 
-            var newTest = DbCreateQcTest(newUser1.UserName, 20);
+            var newTest = DbCreateQcTest(newUser1, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser1.UserName, 30);
+            newTest = DbCreateQcTest(newUser1, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser1.UserName, 25);
+            newTest = DbCreateQcTest(newUser1, 25);
             newTest.TestDate = DateTime.Now.AddHours(16);
         }
 
@@ -1547,11 +1556,11 @@ namespace FenomPlus.ViewModels
             newUser1.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser1);
 
-            var newTest = DbCreateQcTest(newUser1.UserName, 20);
+            var newTest = DbCreateQcTest(newUser1, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser1.UserName, 30);
+            newTest = DbCreateQcTest(newUser1, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser1.UserName, 25);
+            newTest = DbCreateQcTest(newUser1, 25);
             newTest.TestDate = DateTime.Now.AddHours(16);
 
             // New User Disqualified
@@ -1560,11 +1569,11 @@ namespace FenomPlus.ViewModels
             newUser2.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser2);
 
-            newTest = DbCreateQcTest(newUser2.UserName, 20);
+            newTest = DbCreateQcTest(newUser2, 20);
             newTest.TestDate = DateTime.Now.AddHours(-16);
-            newTest = DbCreateQcTest(newUser2.UserName, 30);
+            newTest = DbCreateQcTest(newUser2, 30);
             newTest.TestDate = DateTime.Now;
-            newTest = DbCreateQcTest(newUser2.UserName, 19);
+            newTest = DbCreateQcTest(newUser2, 19);
             newTest.TestDate = DateTime.Now.AddHours(16);
         }
 
@@ -1589,23 +1598,23 @@ namespace FenomPlus.ViewModels
             newUser1.C3Date = DateTime.Now.AddHours(-72);
             DbUpdateQcUser(newUser1);
 
-            var newTest1 = DbCreateQcTest(newUser1.UserName, 20);
+            var newTest1 = DbCreateQcTest(newUser1, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-120);
             DbUpdateQcTest(newTest1);
-            var newTest2 = DbCreateQcTest(newUser1.UserName, 30);
+            var newTest2 = DbCreateQcTest(newUser1, 30);
             newTest2.TestDate = DateTime.Now.AddHours(-96); ;
             DbUpdateQcTest(newTest2);
-            var newTest3 = DbCreateQcTest(newUser1.UserName, 25);
+            var newTest3 = DbCreateQcTest(newUser1, 25);
             newTest3.TestDate = DateTime.Now.AddHours(-72);
             DbUpdateQcTest(newTest3);
 
-            var newTest4 = DbCreateQcTest(newUser1.UserName, 23);
+            var newTest4 = DbCreateQcTest(newUser1, 23);
             newTest4.TestDate = DateTime.Now.AddHours(-48);
             DbUpdateQcTest(newTest4);
-            var newTest5 = DbCreateQcTest(newUser1.UserName, 29);
+            var newTest5 = DbCreateQcTest(newUser1, 29);
             newTest5.TestDate = DateTime.Now.AddHours(-24); ;
             DbUpdateQcTest(newTest5);
-            var newTest6 = DbCreateQcTest(newUser1.UserName, 26);
+            var newTest6 = DbCreateQcTest(newUser1, 26);
             newTest6.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest6);
 
@@ -1618,13 +1627,13 @@ namespace FenomPlus.ViewModels
             newUser2.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser2);
 
-            newTest1 = DbCreateQcTest(newUser2.UserName, 20);
+            newTest1 = DbCreateQcTest(newUser2, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
             DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser2.UserName, 30);
+            newTest2 = DbCreateQcTest(newUser2, 30);
             newTest2.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser2.UserName, 19);
+            newTest3 = DbCreateQcTest(newUser2, 19);
             newTest3.TestDate = DateTime.Now.AddHours(16);
             DbUpdateQcTest(newTest3);
 
@@ -1634,13 +1643,13 @@ namespace FenomPlus.ViewModels
             newUser3.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser3);
 
-            newTest1 = DbCreateQcTest(newUser3.UserName, 20);
+            newTest1 = DbCreateQcTest(newUser3, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
             DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser3.UserName, 30);
+            newTest2 = DbCreateQcTest(newUser3, 30);
             newTest2.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser3.UserName, 32);
+            newTest3 = DbCreateQcTest(newUser3, 32);
             newTest3.TestDate = DateTime.Now.AddHours(16);
             DbUpdateQcTest(newTest3);
 
@@ -1650,7 +1659,7 @@ namespace FenomPlus.ViewModels
             newUser4.NextTestDate = DateTime.Now.AddHours(16);
             DbUpdateQcUser(newUser4);
 
-            newTest1 = DbCreateQcTest(newUser4.UserName, 20);
+            newTest1 = DbCreateQcTest(newUser4, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-16);
             DbUpdateQcTest(newTest1);
 
@@ -1668,13 +1677,13 @@ namespace FenomPlus.ViewModels
             newUser5.QCT = 25;
             DbUpdateQcUser(newUser5);
 
-            newTest1 = DbCreateQcTest(newUser5.UserName, 20);
+            newTest1 = DbCreateQcTest(newUser5, 20);
             newTest1.TestDate = DateTime.Now.AddHours(-120);
             DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser5.UserName, 30);
+            newTest2 = DbCreateQcTest(newUser5, 30);
             newTest2.TestDate = DateTime.Now.AddHours(-96); ;
             DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser5.UserName, 25);
+            newTest3 = DbCreateQcTest(newUser5, 25);
             newTest3.TestDate = DateTime.Now.AddHours(-72);
             DbUpdateQcTest(newTest3);
         }
@@ -1908,7 +1917,7 @@ namespace FenomPlus.ViewModels
             //•	None
             //      - QC User test is required.
 
-            bool testValuesWithinRange;
+            bool goodScoreSpan = false;
 
             string userStatus = QCUser.UserNone;
 
@@ -1945,9 +1954,9 @@ namespace FenomPlus.ViewModels
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
-                    testValuesWithinRange = Math.Abs((decimal)(SelectedQcUser.C1 - SelectedQcUser.C2)) <= 10;
+                    goodScoreSpan = Math.Abs((decimal)(SelectedQcUser.C1 - SelectedQcUser.C2)) <= 10;
 
-                    if (tests[0].TestStatus == QCTest.TestPass && tests[1].TestStatus == QCTest.TestPass && testTimeSpanGood && testValuesWithinRange) 
+                    if (tests[0].TestStatus == QCTest.TestPass && tests[1].TestStatus == QCTest.TestPass && testTimeSpanGood && goodScoreSpan) 
                     {
                         userStatus = QCUser.UserConditionallyQualified;
                     }
@@ -1959,38 +1968,34 @@ namespace FenomPlus.ViewModels
                     break;
 
                 case 3:
-                    SelectedQcUser.C3 = tests[0].TestValue; // Latest test
+                    SelectedQcUser.C3 = tests[0].TestValue; // current test
                     SelectedQcUser.C3Date = DateTime.Now;
                     SelectedQcUser.LastTestResult = tests[0].TestStatus; 
 
-                    (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
-                    float? median = GetMedian(SelectedQcUser.UserName);
-                    SelectedQcUser.QCT = median;
-
-                    bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
-                                          tests[1].TestStatus == QCTest.TestPass &&
-                                          tests[2].TestStatus == QCTest.TestPass;
-
-                    testValuesWithinRange = (max - min) <= 10;
-
-                    var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
-                    var timeSpanQualificationGood = timeSpanQualificationHours < (7 * 24);
-
-                    var lastTestTimeSpanHours = TimeSpanHours(DateTime.Now, tests[0].TestDate);
-                    var lastTestTimeSpanGood = lastTestTimeSpanHours <= UserTimeoutMaxHours;
-
-                    if (allTestsPassed && timeSpanQualificationGood && lastTestTimeSpanGood && testValuesWithinRange)
+                    if (SelectedQcUser.CurrentStatus != QCUser.UserQualified) // user not yet qualified
                     {
-                        userStatus = QCUser.UserQualified;
+                        (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
+                        float median = GetMedian(SelectedQcUser.UserName)??0;  // first 3
+                        SelectedQcUser.QCT = median;
+
+                        bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
+                                              tests[1].TestStatus == QCTest.TestPass &&
+                                              tests[2].TestStatus == QCTest.TestPass;
+
+                        goodScoreSpan = (max - min) <= 10;
+
+                        var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
+                        var timeSpanQualificationGood = timeSpanQualificationHours < (7 * 24);
+
+                        var lastTestTimeSpanHours = TimeSpanHours(DateTime.Now, tests[0].TestDate);
+                        var lastTestTimeSpanGood = lastTestTimeSpanHours <= UserTimeoutMaxHours;
+                        bool criteria = allTestsPassed && timeSpanQualificationGood && lastTestTimeSpanGood && goodScoreSpan;
+                        userStatus = criteria ? QCUser.UserQualified : QCUser.UserDisqualified;
                     }
-                    // For Qualified User, a latest fail QC test will not turn it into Disqualified
-                    else if (SelectedQcUser.CurrentStatus == QCUser.UserQualified && tests[0].TestStatus == QCTest.TestFail 
-                            && timeSpanQualificationGood && lastTestTimeSpanGood)
-                    { 
-                        userStatus = QCUser.UserQualified;
+                    else // Qualified User
+                    {
+                        userStatus = QCUser.UserQualified;  // For Qualified User, whatever the test result, it remains qualified
                     }
-                    else 
-                        userStatus = QCUser.UserDisqualified;
                     SelectedQcUser.ShowChartOption = true;
                     break;
 
