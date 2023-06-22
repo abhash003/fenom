@@ -391,18 +391,31 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            QualityControlViewModel.Value = $"{hour}";
-            QualityControlViewModel.Label = "Hour(s) left";
+            if (hour != unchecked((short)0x8000))
+            {
+                QualityControlViewModel.Value = $"{hour}";
+                QualityControlViewModel.Label = "Hour(s) left";
+            }
+
             QualityControlViewModel.ButtonText = "Settings";
 
-            if (hour <= Constants.QualityControlExpired)
+            if (hour == unchecked((short)0x8000))
             {
                 MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ValueColor = Color.Red;
-                QualityControlViewModel.Description = "Mode Status is \"Failed\" or \"Expired\"";
+                QualityControlViewModel.Description = "Device QC is failed";
+            }
+            else if (hour <= Constants.QualityControlExpired)
+            {
+                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
+                QcBarIconVisible = true;
+                QcBarIcon = "wo_quality_control_red.png";
+                QualityControlViewModel.ImagePath = "quality_control_red.png";
+                QualityControlViewModel.ValueColor = Color.Red;
+                QualityControlViewModel.Description = "Device QC is Expired";
             }
             else if (hour <= Constants.QualityControlExpirationWarning)
             {
@@ -411,7 +424,7 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ImagePath = "quality_control_yellow.png";
                 QualityControlViewModel.ValueColor = Color.FromHex("#333");
                 QualityControlViewModel.Description = "Mode Status is \"Warning\"";
-            }
+            }            
             else
             {
                 QcBarIconVisible = false;
