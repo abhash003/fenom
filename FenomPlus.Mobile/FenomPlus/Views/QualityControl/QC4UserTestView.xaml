@@ -26,12 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Text="{Binding UserNameMessage}"
-                           FontSize="30"
-                           TextColor="#333"
-                           Padding="10,0"
-                           HorizontalTextAlignment="start"/>
-
             <StackLayout VerticalOptions="CenterAndExpand"
                      HorizontalOptions="FillAndExpand"
                      Margin="100,0,100,0">
@@ -52,6 +46,12 @@
                            TextColor="#333"
                            HorizontalTextAlignment="Center" />
             </StackLayout>
+            <Label Text="{Binding UserNameMessage}"
+                           FontSize="30"
+                           Grid.Row="1"
+                           TextColor="#333"
+                           Padding="10,0"
+                           HorizontalTextAlignment="start"/>
 
             <Button Text="Exit"
                     Grid.Row="1"
