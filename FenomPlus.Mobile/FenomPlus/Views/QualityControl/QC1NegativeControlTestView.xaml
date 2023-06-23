@@ -23,7 +23,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-       
+
+            <Label Text="{Binding UserNameMessage}"
+                           FontSize="30"
+                           TextColor="#333"
+                           Padding="10,0"
+                           HorizontalTextAlignment="start"/>
+
             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
 
                 <Label Text="Negative Control Test"
@@ -34,13 +40,6 @@
                 <controls:MarigoldProgressWheel x:Name="MarigoldProgressWheel" Margin="40" Recurring="True"/>
 
             </StackLayout>
-
-            <Label Text="{Binding UserNameMessage}"
-                           FontSize="30"
-                           TextColor="#333"
-                           Padding="10,0"
-                           VerticalOptions="End"
-                           HorizontalTextAlignment="start"/>
         </Grid>
 
     </ContentPage.Content>
