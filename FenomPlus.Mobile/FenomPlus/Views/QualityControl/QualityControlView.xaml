@@ -169,7 +169,7 @@
                 Margin="0,0,60,0"
                 Style="{StaticResource defaultButton}"
                 Command="{Binding ExitToDashboardCommand}"
-                HorizontalOptions="End"/>
+                HorizontalOptions="Start"/>
 
         </Grid>
 

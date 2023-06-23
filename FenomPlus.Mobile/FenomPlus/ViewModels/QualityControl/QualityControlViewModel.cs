@@ -118,25 +118,25 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool _isRetryEnabled = false;
+        private bool _isRetryVisible = false;
 
-        public bool IsRetryEnabled
+        public bool IsRetryVisible
         {
-            get => _isRetryEnabled;
+            get => _isRetryVisible;
             set
             {
-                _isRetryEnabled = value;
+                _isRetryVisible = value;
             }
         }
 
-        private bool _isExitEnabled = true;
+        private bool _isExitVisible = true;
 
-        public bool IsExitEnabled
+        public bool IsExitVisible
         {
-            get => _isExitEnabled;
+            get => _isExitVisible;
             set
             {
-                _isExitEnabled = value;
+                _isExitVisible = value;
             }
         }
 
@@ -1095,8 +1095,6 @@ namespace FenomPlus.ViewModels
                 else 
                     await Services.Navigation.DashboardView();
             }
-
-
         }
         [RelayCommand]
         public async Task ExitToQCBM()
@@ -1129,8 +1127,8 @@ namespace FenomPlus.ViewModels
             {
                 if (IsDeviceConnected)
                 {
-                    IsExitEnabled = true;
-                    IsRetryEnabled = false;
+                    IsExitVisible = true;
+                    IsRetryVisible = false;
                     await InitializeBreathGauge();
                     await Services.Navigation.QCUserTestView();
                 }
@@ -1362,8 +1360,8 @@ namespace FenomPlus.ViewModels
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
-                        IsRetryEnabled = true;
-                        IsExitEnabled = false;
+                        IsRetryVisible = true;
+                        IsExitVisible = false;
                         ShowErrorPage(code);
                     }
                     else

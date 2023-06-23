@@ -58,15 +58,15 @@
 
             <Button Text="Exit"
                     Grid.Row="1"
-                    IsEnabled="{Binding IsExitEnabled}"
+                    IsVisible="{Binding IsExitVisible}"
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToQCCommand}"
-                    HorizontalOptions="End"
+                    HorizontalOptions="Start"
                     Margin="0,0,40,0"/>
 
             <Button Text="Retry"
                     Grid.Row="1"
-                    IsEnabled="{Binding IsRetryEnabled}"
+                    IsVisible="{Binding IsRetryVisible}"
                     Style="{StaticResource defaultButton}"
                     Command="{Binding RetryNavigateToIncentiveScreenCommand}"
                     HorizontalOptions="End"

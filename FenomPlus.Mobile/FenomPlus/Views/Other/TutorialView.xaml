@@ -92,7 +92,7 @@
                     <Label Text="Press " Style="{StaticResource Subheader}" FontSize="24" VerticalOptions="Center"/>
 
                     <Button Text="EXIT"
-                            HorizontalOptions="End"
+                            HorizontalOptions="Start"
                             Margin="0,0,5,0"
                             Style="{StaticResource defaultButton}"
                             Command="{Binding ExitToDashboardCommand}"
@@ -114,27 +114,27 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
+                <Button Text="EXIT"
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource defaultButton}"
+                        Command="{Binding ExitToDashboardCommand}"
+                        Margin="5,5,40,5"/>
 
                 <Button Text="BACK"
-                        Grid.Column="0"
-                        HorizontalOptions="End"
+                        Grid.Column="2"
+                        HorizontalOptions="Start"
                         Style="{StaticResource defaultButton}"
                         IsVisible="{Binding ShowBack}"
                         Command="{Binding BackCommand}"/>
 
                 <Button Text="NEXT"
                         Grid.Column="2"
-                        HorizontalOptions="Start"
+                        HorizontalOptions="End"
                         Style="{StaticResource defaultButton}"
                         IsVisible="{Binding ShowNext}"
                         Command="{Binding NextCommand}"/>
-
-                <Button Text="EXIT"
-                        Grid.Column="2"
-                        HorizontalOptions="End"
-                        Style="{StaticResource defaultButton}"
-                        Command="{Binding ExitToDashboardCommand}"
-                        Margin="5,5,40,5"/>
 
             </Grid>
 
