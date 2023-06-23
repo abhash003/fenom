@@ -193,13 +193,13 @@ namespace FenomPlus.ViewModels
 
             UpdateVersionNumbers();
             UpdateBluetooth();
-            UpdateDevice(Services.Cache.DeviceExpireDate);
             UpdateQualityControlExpiration();
 
-            if (Services.DeviceService.Current.EnvironmentalInfo != null && (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 ||
+            if (!BluetoothConnected || (Services.DeviceService.Current.EnvironmentalInfo != null && (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 ||
                 Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 || Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0 ||
-                Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0))
+                Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0)))
             {
+                UpdateDevice(Services.Cache.DeviceExpireDate);
                 UpdateSensor();
                 UpdateBattery();
                 UpdatePressure();
