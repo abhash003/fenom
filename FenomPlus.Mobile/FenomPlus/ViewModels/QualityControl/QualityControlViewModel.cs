@@ -762,7 +762,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == name)
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == name && x.TestType == "+")
                         .OrderBy(x => x.TestDate)
                         .ToList();
 
@@ -821,7 +821,7 @@ namespace FenomPlus.ViewModels
 
                 if (user.CurrentStatus == QCUser.UserQualified)
                 {
-                    float median = GetMedian(user.UserName)??0;  // first 3
+                    float median = GetMedian(user.UserName);  // first 3
                     // for Qualified User, the score should fulfill 1. fall into [5, 40]; 2. subject to abs(score - median) < 10
                     bool scoreDeviated = Math.Abs(median - testValue??0) >= 10;
                     if (scoreDeviated)
@@ -1618,7 +1618,7 @@ namespace FenomPlus.ViewModels
             newTest6.TestDate = DateTime.Now;
             DbUpdateQcTest(newTest6);
 
-            float? median = GetMedian(newUser1.UserName);
+            float median = GetMedian(newUser1.UserName);
             newUser1.QCT = median;
 
             // New User Disqualified
@@ -1780,10 +1780,14 @@ namespace FenomPlus.ViewModels
             return (numbers[0], numbers[2]);
         }
 
-        private float? GetMedian(string UserName)
+        private float GetMedian(string UserName)
         {
             List<QCTest> tests = GetNTests(UserName, 3, false); // get first 3 tests
-            float?[] numbers = {tests[0].TestValue, tests[1].TestValue,  tests[2].TestValue};
+            float[] numbers = {0, 0, 0};
+            for(int i = 0; i<tests.Count(); ++i)
+            {
+                numbers[i] = tests[i].TestValue??0;
+            }
             Array.Sort(numbers);
             return numbers[1];
         }
@@ -1975,7 +1979,7 @@ namespace FenomPlus.ViewModels
                     if (SelectedQcUser.CurrentStatus != QCUser.UserQualified) // user not yet qualified
                     {
                         (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
-                        float median = GetMedian(SelectedQcUser.UserName)??0;  // first 3
+                        float median = GetMedian(SelectedQcUser.UserName);  // first 3
                         SelectedQcUser.QCT = median;
 
                         bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
