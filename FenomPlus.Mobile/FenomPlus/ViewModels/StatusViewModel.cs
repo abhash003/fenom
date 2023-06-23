@@ -373,33 +373,37 @@ namespace FenomPlus.ViewModels
         public void UpdateQualityControlExpiration()
         {
             var device = Services.DeviceService?.Current??null;
-            short hour = 0;
-            if (device!=null && device.GetQCHoursRemaining(ref hour)) // >=0 : valid, <=-1 : expired, = 0x8000 : failed
-            {}
 
-            bool QCEnabled = device?.IsQCEnabled()??false;
-            if (!BluetoothConnected || !QCEnabled)
+            if (!BluetoothConnected)
             {
                 QcBarIconVisible = false;
 
-                //QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ImagePath = "qualitycontrol.png";
-                QualityControlViewModel.Label = "Disabled"; //string.Empty;
+                QualityControlViewModel.Label = ""; //string.Empty;
                 QualityControlViewModel.Value = string.Empty;
                 QualityControlViewModel.ButtonText = string.Empty;
                 QualityControlViewModel.Description = string.Empty;
                 return;
             }
 
-            if (hour != unchecked((short)0x8000))
+            bool QCEnabled = device?.IsQCEnabled() ?? false;
+
+            if (!QCEnabled)
             {
-                QualityControlViewModel.Value = $"{hour}";
-                QualityControlViewModel.Label = "Hour(s) left";
+                QualityControlViewModel.ImagePath = "qualitycontrol.png";
+                QualityControlViewModel.Label = "Disabled";
+                QualityControlViewModel.Value = string.Empty;
+                QualityControlViewModel.ButtonText = string.Empty;
+                QualityControlViewModel.Description = "Device QC is disabled";
+                return;
             }
+
+            short hour = 0;
+            device?.GetQCHoursRemaining(ref hour); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
 
             QualityControlViewModel.ButtonText = "Settings";
 
-            if (hour == unchecked((short)0x8000))
+            if (hour == unchecked((short)0x8000)) // failed
             {
                 MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
@@ -407,8 +411,9 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ValueColor = Color.Red;
                 QualityControlViewModel.Description = "Device QC is failed";
+                QualityControlViewModel.Label = "Failed";
             }
-            else if (hour <= Constants.QualityControlExpired)
+            else if (hour <= Constants.QualityControlExpired) // expired
             {
                 MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
@@ -416,8 +421,10 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ValueColor = Color.Red;
                 QualityControlViewModel.Description = "Device QC is Expired";
+                QualityControlViewModel.Value = "";
+                QualityControlViewModel.Label = "Expired";
             }
-            else if (hour <= Constants.QualityControlExpirationWarning)
+            else if (hour <= Constants.QualityControlExpirationWarning) // warning
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_yellow.png";
@@ -425,12 +432,14 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ValueColor = Color.FromHex("#333");
                 QualityControlViewModel.Description = "Mode Status is \"Warning\"";
             }            
-            else
+            else // valid
             {
                 QcBarIconVisible = false;
                 QualityControlViewModel.ImagePath = "quality_control_green.png";
                 QualityControlViewModel.ValueColor = Color.FromHex("#333");
                 QualityControlViewModel.Description = "Mode Status is \"Valid\"";
+                QualityControlViewModel.Value = $"{hour}";
+                QualityControlViewModel.Label = "Hour(s) left";
             }
         }
 
