@@ -73,6 +73,7 @@ namespace FenomPlus.ViewModels
 
         private bool _DeviceNotFound;
 
+        private short _previousHour =(short)(-1222); //>=0 : valid, <=-1 : expired, = 0x8000 : failed
         public StatusViewModel()
         {
             VersionTracking.Track();
@@ -401,8 +402,11 @@ namespace FenomPlus.ViewModels
             short hour = 0;
             device?.GetQCHoursRemaining(ref hour); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
 
-            QualityControlViewModel.ButtonText = "Settings";
+            // if QC hours remainning not changed, there is no need for GUI update
+            if (hour == _previousHour) return;
 
+            _previousHour = hour;
+            QualityControlViewModel.ButtonText = "Settings";
             if (hour == unchecked((short)0x8000)) // failed
             {
                 MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
