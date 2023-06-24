@@ -214,7 +214,7 @@ namespace FenomPlus.ViewModels
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber));
 
             QcButtonViewModels.Clear();
-            for (int i = 0; i <= 6; i++) // Negative Control + 6 users
+            for (int i = 0; i <= 7; i++) // Negative Control + 7 users
             {
                 // Will force to get new data so its always current
                 QcButtonViewModels.Add(new QcButtonViewModel());
@@ -1072,6 +1072,12 @@ namespace FenomPlus.ViewModels
         private async Task UpdateUser6Async()
         {
             SelectedUserIndex = 6;
+            await UpdateUserAsync(SelectedUserIndex);
+        }
+        [RelayCommand]
+        private async Task UpdateUser7Async()
+        {
+            SelectedUserIndex = 7;
             await UpdateUserAsync(SelectedUserIndex);
         }
 
