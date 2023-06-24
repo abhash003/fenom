@@ -840,8 +840,6 @@ namespace FenomPlus.ViewModels
 
         private QCTest DbCreateNegativeControlTest(int testValue)
         {
-            Debug.Assert(testValue >= 0);
-
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
