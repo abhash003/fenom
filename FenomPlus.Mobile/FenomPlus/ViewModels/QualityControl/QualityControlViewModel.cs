@@ -94,6 +94,7 @@ namespace FenomPlus.ViewModels
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
                         UpdateDeviceStatusOnDB();
+                        UpdateQcDeviceList();
 
                         StatusViewModel svm = AppServices.Container.Resolve<StatusViewModel>();
                         svm.UpdateQualityControlExpiration();
