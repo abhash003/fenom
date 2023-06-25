@@ -73,7 +73,8 @@ namespace FenomPlus.ViewModels
 
         private bool _DeviceNotFound;
 
-        private short _previousHour =(short)(-1222); //>=0 : valid, <=-1 : expired, = 0x8000 : failed
+        private short _previousHour =(short)(-1222); // 1222 is not magic number, just to distinguish from 0.
+                                                     // >=0 : valid, <=-1 : expired, = 0x8000 : failed
         public StatusViewModel()
         {
             VersionTracking.Track();
@@ -391,6 +392,7 @@ namespace FenomPlus.ViewModels
 
             if (!QCEnabled)
             {
+                QcBarIconVisible = false;
                 QualityControlViewModel.ImagePath = "qualitycontrol.png";
                 QualityControlViewModel.Label = "Disabled";
                 QualityControlViewModel.Value = string.Empty;
