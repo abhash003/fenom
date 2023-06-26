@@ -115,7 +115,7 @@
 
                 <Button Text="BACK"
                         Grid.Column="2"
-                        HorizontalOptions="Start"
+                        HorizontalOptions="{Binding BackButtonAlignment}"
                         Style="{StaticResource defaultButton}"
                         IsVisible="{Binding ShowBack}"
                         Command="{Binding BackCommand}"/>
