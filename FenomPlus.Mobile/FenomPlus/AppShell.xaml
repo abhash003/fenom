@@ -49,7 +49,7 @@
                   Icon="BluetoothIcon"
                   ContentTemplate="{DataTemplate pages:PairingView}"
                   Route="PairingView"
-                  IsVisible="true"/>
+                  IsVisible="False"/>
 
     <ShellContent FlyoutItemIsVisible="False" Title="Take A Test"                   Route="DashboardView"                    ContentTemplate="{DataTemplate pages:DashboardView}" />
     <ShellContent FlyoutItemIsVisible="False" Title="BreathManeuverFeedbackView"    Route="BreathManeuverFeedbackView"  ContentTemplate="{DataTemplate pages:BreathManeuverFeedbackView}" />
