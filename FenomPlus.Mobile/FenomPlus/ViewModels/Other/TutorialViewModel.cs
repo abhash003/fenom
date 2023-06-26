@@ -7,6 +7,7 @@ using FenomPlus.Services.DeviceService.Enums;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -63,6 +64,9 @@ namespace FenomPlus.ViewModels
         protected bool _showNext;
 
         [ObservableProperty]
+        protected LayoutOptions _backButtonAlignment;
+
+        [ObservableProperty]
         private string _testType;
 
         [ObservableProperty]
@@ -105,6 +109,7 @@ namespace FenomPlus.ViewModels
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
+                    BackButtonAlignment = LayoutOptions.Start;
                     ShowNext = true;
 
                     StepTitle = "Step 2";
@@ -119,6 +124,7 @@ namespace FenomPlus.ViewModels
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
+                    BackButtonAlignment = LayoutOptions.Start;
                     ShowNext = true;
 
                     StepTitle = "Step 3";
@@ -133,6 +139,7 @@ namespace FenomPlus.ViewModels
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
+                    BackButtonAlignment = LayoutOptions.Start;
                     ShowNext = true;
 
                     StepTitle = "Step 4";
@@ -147,6 +154,7 @@ namespace FenomPlus.ViewModels
                     SuccessPanelVisible = false;
 
                     ShowBack = true;
+                    BackButtonAlignment = LayoutOptions.Start;
                     ShowNext = true;
 
                     StepTitle = "Step 5";
@@ -161,6 +169,7 @@ namespace FenomPlus.ViewModels
                     SuccessPanelVisible = true;
 
                     ShowBack = true;
+                    BackButtonAlignment = LayoutOptions.End;
                     ShowNext = false;
 
                     StepTitle = string.Empty;
@@ -271,7 +280,7 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} ï¿½C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.BatteryCriticallyLow:
@@ -351,7 +360,7 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} ï¿½C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.BatteryCriticallyLow:
