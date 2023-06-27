@@ -193,22 +193,22 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            UpdateVersionNumbers();
             UpdateBluetooth();
-            UpdateQualityControlExpiration();
 
-            if (!BluetoothConnected || (Services.DeviceService.Current.EnvironmentalInfo != null && (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 ||
-                Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 || Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0 ||
-                Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0)))
+            if (BluetoothConnected)
             {
-                UpdateDevice(Services.Cache.DeviceExpireDate);
-                UpdateSensor();
-                UpdateBattery();
-                UpdatePressure();
-                UpdateHumidity();
-                UpdateTemperature();
+                Services.DeviceService.Current.RequestDeviceInfo().GetAwaiter().GetResult();
+                Services.DeviceService.Current.RequestEnvironmentalInfo().GetAwaiter().GetResult();
             }
-            Services.DeviceService.Current.RequestEnvironmentalInfo();
+            UpdateVersionNumbers();
+            UpdateDevice(Services.Cache.DeviceExpireDate);
+            UpdateQualityControlExpiration();
+            UpdateSensor();
+
+            UpdatePressure();
+            UpdateTemperature();
+            UpdateHumidity();
+            UpdateBattery();
         }
 
         public void UpdateVersionNumbers()
@@ -417,6 +417,7 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ValueColor = Color.Red;
                 QualityControlViewModel.Description = "Device QC is failed";
+                QualityControlViewModel.Value = "";
                 QualityControlViewModel.Label = "Failed";
             }
             else if (hour <= Constants.QualityControlExpired) // expired

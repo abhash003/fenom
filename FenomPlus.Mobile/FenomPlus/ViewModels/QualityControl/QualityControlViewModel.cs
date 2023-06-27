@@ -1884,6 +1884,7 @@ namespace FenomPlus.ViewModels
                     var device = Services.DeviceService?.Current;
                     device.StopTest();
                     device.SendFailMsg((ushort)0x8000);
+                    Services.Cache.TestType = TestTypeEnum.None;
                     Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
