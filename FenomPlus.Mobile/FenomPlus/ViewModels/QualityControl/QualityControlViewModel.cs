@@ -69,6 +69,7 @@ namespace FenomPlus.ViewModels
                     _currentDeviceStatus = value;
                     OnPropertyChanged(nameof(CurrentDeviceStatus));
                     OnPropertyChanged(nameof(DeviceStatusString));
+                    UpdateDeviceStatusOnDB(value);
                 }
             }
         }
@@ -93,7 +94,6 @@ namespace FenomPlus.ViewModels
                     Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                        UpdateDeviceStatusOnDB();
                         UpdateQcDeviceList();
 
                         StatusViewModel svm = AppServices.Container.Resolve<StatusViewModel>();
@@ -1822,34 +1822,12 @@ namespace FenomPlus.ViewModels
             Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
             {
                 CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                UpdateDeviceStatusOnDB();
             });
             return;
         }
-        private void UpdateDeviceStatusOnDB()
+        private void UpdateDeviceStatusOnDB(string currentStatus)
         {
-            string deviceStatus = CurrentDeviceStatus;
-
-            if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
-            {
-                deviceStatus = QCDevice.DeviceExpired;
-            }
-            else if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlExpired)
-            {
-                deviceStatus = QCDevice.DeviceExpired;
-            }
-            else if (!AnyUserQualified())
-            {
-                deviceStatus = QCDevice.DeviceFail;
-            }
-            else
-            {
-                deviceStatus = QCDevice.DeviceValid;
-            }
-
-            QCDevice.CurrentStatus = CurrentDeviceStatus;
-            // No need to set QCDevice.NextTestDate in case of device
-
+            QCDevice.CurrentStatus = currentStatus;
             DbUpdateQcDevice(QCDevice);
         }
 
@@ -1889,7 +1867,6 @@ namespace FenomPlus.ViewModels
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
                         Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
-                        UpdateDeviceStatusOnDB();
                     });
                 }
                 else
