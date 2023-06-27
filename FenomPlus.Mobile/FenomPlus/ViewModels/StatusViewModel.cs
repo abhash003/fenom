@@ -398,6 +398,8 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.Value = string.Empty;
                 QualityControlViewModel.ButtonText = string.Empty;
                 QualityControlViewModel.Description = "Device QC is disabled";
+                _previousHour = (short)221;  // 221 is no magic number, when disable QC, need to set the _previousHour to a non-zero value
+                                             // so get a chance to by pass the check of "hour == _previousHour" for once to update the icon 
                 return;
             }
 
