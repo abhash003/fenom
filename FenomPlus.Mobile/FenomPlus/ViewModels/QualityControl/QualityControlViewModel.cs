@@ -58,7 +58,7 @@ namespace FenomPlus.ViewModels
 
         public string SerialNumberString => $"Device Serial Number ({CurrentDeviceSerialNumber})";
 
-        private string _currentDeviceStatus;
+        private string _currentDeviceStatus = string.Empty;
         public string CurrentDeviceStatus
         {
             get => _currentDeviceStatus;
@@ -69,6 +69,8 @@ namespace FenomPlus.ViewModels
                     _currentDeviceStatus = value;
                     OnPropertyChanged(nameof(CurrentDeviceStatus));
                     OnPropertyChanged(nameof(DeviceStatusString));
+                    UpdateDeviceStatusOnDB(value);
+                    UpdateQcDeviceList();
                 }
             }
         }
@@ -93,9 +95,6 @@ namespace FenomPlus.ViewModels
                     Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
                     {
                         CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                        UpdateDeviceStatusOnDB();
-                        UpdateQcDeviceList();
-
                         StatusViewModel svm = AppServices.Container.Resolve<StatusViewModel>();
                         svm.UpdateQualityControlExpiration();
                     });
@@ -315,7 +314,28 @@ namespace FenomPlus.ViewModels
                 return null;
             }
         }
+        private bool DbUpdateQcDevice(string serialNumber, string deviceStatus)
+        {
+            try
+            {
+                using (var db = new LiteDatabase(QCDatabasePath))
+                {
+                    var deviceCollection = db.GetCollection<QCDevice>("qcdevices");
 
+                    var device = deviceCollection.FindOne(x => x.DeviceSerialNumber == serialNumber);
+                    if (device == null)
+                        return false;
+                    device.CurrentStatus = deviceStatus;
+                    deviceCollection.Update(device);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
         private bool DbUpdateQcDevice(QCDevice device)
         {
             Debug.Assert(device != null);
@@ -1822,35 +1842,21 @@ namespace FenomPlus.ViewModels
             Task.Delay(TimeSpan.FromMilliseconds(500)).ContinueWith(_=> 
             {
                 CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                UpdateDeviceStatusOnDB();
             });
             return;
         }
-        private void UpdateDeviceStatusOnDB()
+        private void UpdateDeviceStatusOnDB(string deviceStatus = "")
         {
-            string deviceStatus = CurrentDeviceStatus;
-
-            if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlNone)
+            if (QCDevice!=null)
             {
-                deviceStatus = QCDevice.DeviceExpired;
-            }
-            else if (QCNegativeControl.CurrentStatus == QCUser.NegativeControlExpired)
-            {
-                deviceStatus = QCDevice.DeviceExpired;
-            }
-            else if (!AnyUserQualified())
-            {
-                deviceStatus = QCDevice.DeviceFail;
+                QCDevice.CurrentStatus = deviceStatus;
+                DbUpdateQcDevice(QCDevice);
             }
             else
             {
-                deviceStatus = QCDevice.DeviceValid;
+                CurrentDeviceSerialNumber = Services?.DeviceService?.Current?.DeviceSerialNumber;
+                DbUpdateQcDevice(CurrentDeviceSerialNumber, deviceStatus);
             }
-
-            QCDevice.CurrentStatus = CurrentDeviceStatus;
-            // No need to set QCDevice.NextTestDate in case of device
-
-            DbUpdateQcDevice(QCDevice);
         }
 
         private readonly int NegativeControlMaxThreshold = 5;
@@ -2243,7 +2249,7 @@ namespace FenomPlus.ViewModels
                 XBindingPath = "XValue",
                 YBindingPath = "YValue",
                 Color = Color.Red,
-                StrokeDashArray = new double[2] { 3, 3},
+                StrokeDashArray = new double[2] { 3, 3 },
                 StrokeWidth = 3
             };
 

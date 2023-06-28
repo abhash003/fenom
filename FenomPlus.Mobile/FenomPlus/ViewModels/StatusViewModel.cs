@@ -398,22 +398,15 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.Value = string.Empty;
                 QualityControlViewModel.ButtonText = string.Empty;
                 QualityControlViewModel.Description = "Device QC is disabled";
-                _previousHour = (short)221;  // 221 is no magic number, when disable QC, need to set the _previousHour to a non-zero value
-                                             // so get a chance to by pass the check of "hour == _previousHour" for once to update the icon 
                 return;
             }
 
             short hour = 0;
             device?.GetQCHoursRemaining(ref hour); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
 
-            // if QC hours remainning not changed, there is no need for GUI update
-            if (hour == _previousHour) return;
-
-            _previousHour = hour;
             QualityControlViewModel.ButtonText = "Settings";
             if (hour == unchecked((short)0x8000)) // failed
             {
-                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
@@ -424,7 +417,6 @@ namespace FenomPlus.ViewModels
             }
             else if (hour <= Constants.QualityControlExpired) // expired
             {
-                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
@@ -450,6 +442,16 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.Value = $"{hour}";
                 QualityControlViewModel.Label = "Hour(s) left";
             }
+
+            // if QC hours remainning not changed, there is no need for sending message 
+            if (hour == _previousHour) return;
+            _previousHour = hour;
+            if (hour == unchecked((short)0x8000) ||  // failed
+                hour <= Constants.QualityControlExpired) // expired
+            {
+                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
+            }
+
         }
 
         public void UpdateBluetooth()
@@ -863,7 +865,6 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
-
             switch (App.GetCurrentPage())
             {
                 //case TestErrorView _:     // Seems to be OK to navigate away from this
@@ -884,7 +885,7 @@ namespace FenomPlus.ViewModels
                 case QCUserTestChartView _:
 
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
-                case DevicePowerOnView _:  
+                case DevicePowerOnView _:
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
                     break;
                 case DashboardView _:
