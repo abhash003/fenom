@@ -4,6 +4,7 @@ using FenomPlus.Database.Repository.Interfaces;
 using FenomPlus.Helpers;
 using FenomPlus.Interfaces;
 using FenomPlus.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FenomPlus.Views
@@ -11,6 +12,7 @@ namespace FenomPlus.Views
     public class BaseContentPage : ContentPage, IUnhandledExceptionHandler //IBaseServices
     {
         public IAppServices Services => IOC.Services;
+        public double Density = 0;
         //public ICacheService Cache => Services.Cache;
         //public IBleHubService BleHub => Services.BleHub;
 
@@ -26,6 +28,25 @@ namespace FenomPlus.Views
         {
             // Set Background
             Services.LogCat.Print($"{new StackFrame().GetMethod().ReflectedType.FullName}: {DebugHelper.GetCallingMethodString(2)}");
+            if (Density == 0)
+                DisplayInfo();
+        }
+
+        private void DisplayInfo()
+        {
+            var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            // Orientation (Landscape, Portrait, Square, Unknown)
+            var orientation = mainDisplayInfo.Orientation;
+            // Rotation (0, 90, 180, 270)
+            var rotation = mainDisplayInfo.Rotation;
+            // Width (in pixels)
+            var width = mainDisplayInfo.Width;
+            // Height (in pixels)
+            var height = mainDisplayInfo.Height;
+            // Screen density
+            var density = mainDisplayInfo.Density;
+            Density = density;
+            Debug.WriteLine($"Device density is {density}, w:{width}, h:{height}, orientation: {orientation}");
         }
 
         protected override void OnAppearing()
