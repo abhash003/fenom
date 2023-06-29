@@ -76,6 +76,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public DateTime? LastTestDate => C3Date??C2Date??C1Date??null;
         public string? LastTestResult { get; set; }
 
+        public float? Median;
+
         public QCUser(string deviceSerialNumber, string userName)
         {
             Id = ObjectId.NewObjectId();
