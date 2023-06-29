@@ -23,7 +23,10 @@ namespace FenomPlus.Views
             InitializeComponent();
 
             BindingContext = PastResultsViewModel = new PastResultsViewModel();
-            PastResultsDataGrid.GridStyle = new CustomGridStyle();
+            PastResultsDataGrid.GridStyle = new CustomGridStyle()
+            {
+                HeaderCellBorderWidth = (float)Density
+            };
 
             DataPager.Source = PastResultsViewModel.PastResultsData;
             PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
