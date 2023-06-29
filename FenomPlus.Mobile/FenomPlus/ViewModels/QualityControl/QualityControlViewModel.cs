@@ -1651,7 +1651,7 @@ namespace FenomPlus.ViewModels
             DbUpdateQcTest(newTest6);
 
             float median = GetMedian(newUser1.UserName);
-            newUser1.QCT = median;
+            newUser1.Median = median;
 
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
@@ -1706,7 +1706,7 @@ namespace FenomPlus.ViewModels
             newUser5.C2Date = DateTime.Now.AddHours(-96);
             newUser5.C3 = 25;
             newUser5.C3Date = DateTime.Now.AddHours(-72);
-            newUser5.QCT = 25;
+            newUser5.Median = 25;
             DbUpdateQcUser(newUser5);
 
             newTest1 = DbCreateQcTest(newUser5, 20);
@@ -2001,7 +2001,7 @@ namespace FenomPlus.ViewModels
                     {
                         (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
                         float median = GetMedian(SelectedQcUser.UserName);  // first 3
-                        SelectedQcUser.QCT = median;
+                        SelectedQcUser.Median = median;
 
                         bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
                                               tests[1].TestStatus == QCTest.TestPass &&
@@ -2028,12 +2028,12 @@ namespace FenomPlus.ViewModels
                     if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
                     {
                         // get median from first 3 records
-                        Debug.Assert(SelectedQcUser.QCT > 0);
+                        Debug.Assert(SelectedQcUser.Median > 0);
 
                         QCTest lastTest = tests[0];
 
                         // ToDo: Calculate result based on QCT
-                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.QCT - lastTest.TestValue));
+                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.Median - lastTest.TestValue));
 
                         userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
                         SelectedQcUser.ShowChartOption = true;
@@ -2192,7 +2192,7 @@ namespace FenomPlus.ViewModels
 
             ObservableCollection<QCTest> allUserTests = ReadUserQcTests(user.UserName);
 
-            float? qct = user.QCT;
+            float? qct = user.Median;
             XMin = 0;
             XMax = allUserTests.Count + 1;
             YMax = (double)(qct + 10 + 5);
