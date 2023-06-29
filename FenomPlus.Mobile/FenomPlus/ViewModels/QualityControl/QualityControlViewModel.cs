@@ -1871,7 +1871,7 @@ namespace FenomPlus.ViewModels
         private readonly int NegativeControlMaxThreshold = 5;
         private readonly int NegativeControlTimeoutHours = 24;
 
-        private void UpdateNegativeControlStatus()
+        private async void UpdateNegativeControlStatus()
         {
             // Returns: "Pass", "Fail", "Expired"
 
@@ -1898,14 +1898,16 @@ namespace FenomPlus.ViewModels
 
                     var device = Services.DeviceService?.Current;
                     device.StopTest();
+
+                    await Task.Delay(5000);
+
                     device.SendFailMsg((ushort)0x8000);
+
                     Services.Cache.TestType = TestTypeEnum.None;
-                    Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
-                    {
+
                     CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();                    
                     Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
                     UpdateDeviceStatusOnDB();
-                    });
                 }
                 else
                 {
