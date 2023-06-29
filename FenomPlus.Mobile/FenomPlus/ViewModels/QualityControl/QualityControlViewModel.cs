@@ -1505,7 +1505,7 @@ namespace FenomPlus.ViewModels
 
             if (scoreDeviated)
             {
-                QCUserTestResult = $"Score Deviation Detected (score: {FenomVal})";
+                QCUserTestResult = $"|{FenomVal}|>=10";
             }
 
             UpdateUserStatus();
