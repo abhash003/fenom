@@ -1844,7 +1844,9 @@ namespace FenomPlus.ViewModels
             {
                 device.ExtendDeviceValidity((short)0x18);
             }
-            else
+            // Only for Qualified user, the device had gone through tests, and is trustable.
+            // hence, current fail test is also trustable
+            else if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
             {
                 device.SendFailMsg((ushort)0x8000);
             }
