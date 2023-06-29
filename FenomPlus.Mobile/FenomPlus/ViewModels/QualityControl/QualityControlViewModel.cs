@@ -847,6 +847,7 @@ namespace FenomPlus.ViewModels
                     bool scoreDeviated = Math.Abs(median - testValue??0) >= 10;
                     if (scoreDeviated)
                         testStatus = QCTest.TestFail;
+                    user.Median = median;
                 }
                 var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus);
 
@@ -1487,7 +1488,10 @@ namespace FenomPlus.ViewModels
                 return;
 
             float? FenomVal = Services.DeviceService.Current.FenomValue;
-            if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax)
+
+            bool scoreDeviated = (SelectedQcUser.CurrentStatus == QCUser.UserQualified) ? (Math.Abs(SelectedQcUser.Median - FenomVal ?? 0) >= 10) : false;
+
+            if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax && !scoreDeviated)
             {
                 QCUserTestResult = FenomVal.ToString();
                 QCUserTestResultString = QCTest.TestPass;
@@ -1497,6 +1501,11 @@ namespace FenomPlus.ViewModels
                 QCUserTestResult = FenomVal < NegativeControlMaxThreshold ? $"<{NegativeControlMaxThreshold}" : $">{TestThresholdMax}";
                 QCUserTestResultString = QCTest.TestFail;
                 PromptFor2FailedUserTest();
+            }
+
+            if (scoreDeviated)
+            {
+                QCUserTestResult = $"Score Deviation Detected (score: {FenomVal})";
             }
 
             UpdateUserStatus();
@@ -1893,9 +1902,9 @@ namespace FenomPlus.ViewModels
                     Services.Cache.TestType = TestTypeEnum.None;
                     Task.Delay(TimeSpan.FromMilliseconds(11000)).ContinueWith(_=> 
                     {
-                        CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
-                        Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
-                        UpdateDeviceStatusOnDB();
+                    CurrentDeviceStatus = Services.DeviceService?.Current.GetDeviceQCStatus();                    
+                    Debug.WriteLine("===== Current Device Status is " + CurrentDeviceStatus);
+                    UpdateDeviceStatusOnDB();
                     });
                 }
                 else
