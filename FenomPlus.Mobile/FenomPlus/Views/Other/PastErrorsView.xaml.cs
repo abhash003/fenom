@@ -21,8 +21,10 @@ namespace FenomPlus.Views
             InitializeComponent();
 
             BindingContext = PastErrorsViewModel = new PastErrorsViewModel();
-            RecentErrorsDataGrid.GridStyle = new CustomGridStyle();
-
+            RecentErrorsDataGrid.GridStyle = new CustomGridStyle()
+            {
+                HeaderCellBorderWidth = (float)Density
+            };
             DataPager.Source = PastErrorsViewModel.RecentErrorsData;
             RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
         }

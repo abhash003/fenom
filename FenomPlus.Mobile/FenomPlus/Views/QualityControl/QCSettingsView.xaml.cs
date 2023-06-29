@@ -25,19 +25,28 @@ namespace FenomPlus.Views
             InitializeComponent();
             BindingContext = QualityControlViewModel = AppServices.Container.Resolve<QualityControlViewModel>();
 
-            AllDevicesDataGrid.GridStyle = new CustomGridStyle();
-            AllDevicesDataGrid.GridStyle.GridCellBorderWidth = 1;
+            AllDevicesDataGrid.GridStyle = new CustomGridStyle()
+            {
+                GridCellBorderWidth = 1,
+                HeaderCellBorderWidth = (float)Density
+            };
             AllDevicesDataGrid.RowHeight = 40;
 
 
-            AllUsersDataGrid.GridStyle = new CustomGridStyle();
-            AllUsersDataGrid.GridStyle.GridCellBorderWidth = 1;
+            AllUsersDataGrid.GridStyle = new CustomGridStyle()
+            {
+                GridCellBorderWidth = 1,
+                HeaderCellBorderWidth = (float)Density
+            };
             AllUsersDataGrid.RowHeight = 40;
 
-            AllTestsDataGrid.GridStyle = new CustomGridStyle();
-            AllTestsDataGrid.GridStyle.GridCellBorderWidth = 1;
+            AllTestsDataGrid.GridStyle = new CustomGridStyle()
+            {
+                GridCellBorderWidth = 1,
+                HeaderCellBorderWidth = (float)Density
+            };
+            
             AllTestsDataGrid.RowHeight = 40;
-
         }
 
         protected override void OnAppearing()

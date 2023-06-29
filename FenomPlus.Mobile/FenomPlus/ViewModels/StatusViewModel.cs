@@ -193,22 +193,22 @@ namespace FenomPlus.ViewModels
                 return;
             }
 
-            UpdateVersionNumbers();
             UpdateBluetooth();
-            UpdateQualityControlExpiration();
 
-            if (!BluetoothConnected || (Services.DeviceService.Current.EnvironmentalInfo != null && (Services.DeviceService.Current.EnvironmentalInfo.Humidity != 0 ||
-                Services.DeviceService.Current.EnvironmentalInfo.Pressure != 0 || Services.DeviceService.Current.EnvironmentalInfo.Temperature != 0 ||
-                Services.DeviceService.Current.EnvironmentalInfo.BatteryLevel != 0)))
+            if (BluetoothConnected)
             {
-                UpdateDevice(Services.Cache.DeviceExpireDate);
-                UpdateSensor();
-                UpdateBattery();
-                UpdatePressure();
-                UpdateHumidity();
-                UpdateTemperature();
+                Services.DeviceService.Current.RequestDeviceInfo().GetAwaiter().GetResult();
+                Services.DeviceService.Current.RequestEnvironmentalInfo().GetAwaiter().GetResult();
             }
-            Services.DeviceService.Current.RequestEnvironmentalInfo();
+            UpdateVersionNumbers();
+            UpdateDevice(Services.Cache.DeviceExpireDate);
+            UpdateQualityControlExpiration();
+            UpdateSensor();
+
+            UpdatePressure();
+            UpdateTemperature();
+            UpdateHumidity();
+            UpdateBattery();
         }
 
         public void UpdateVersionNumbers()
@@ -404,24 +404,19 @@ namespace FenomPlus.ViewModels
             short hour = 0;
             device?.GetQCHoursRemaining(ref hour); // >=0 : valid, <=-1 : expired, = 0x8000 : failed
 
-            // if QC hours remainning not changed, there is no need for GUI update
-            if (hour == _previousHour) return;
-
-            _previousHour = hour;
             QualityControlViewModel.ButtonText = "Settings";
             if (hour == unchecked((short)0x8000)) // failed
             {
-                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
                 QualityControlViewModel.ValueColor = Color.Red;
                 QualityControlViewModel.Description = "Device QC is failed";
+                QualityControlViewModel.Value = "";
                 QualityControlViewModel.Label = "Failed";
             }
             else if (hour <= Constants.QualityControlExpired) // expired
             {
-                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
                 QualityControlViewModel.ImagePath = "quality_control_red.png";
@@ -447,6 +442,16 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.Value = $"{hour}";
                 QualityControlViewModel.Label = "Hour(s) left";
             }
+
+            // if QC hours remainning not changed, there is no need for sending message 
+            if (hour == _previousHour) return;
+            _previousHour = hour;
+            if (hour == unchecked((short)0x8000) ||  // failed
+                hour <= Constants.QualityControlExpired) // expired
+            {
+                MessagingCenter.Send(this, "DeviceStatusNeedUpdate");
+            }
+
         }
 
         public void UpdateBluetooth()
@@ -860,7 +865,6 @@ namespace FenomPlus.ViewModels
         [RelayCommand]
         private async Task NavigateToStatusPageAsync()
         {
-
             switch (App.GetCurrentPage())
             {
                 //case TestErrorView _:     // Seems to be OK to navigate away from this
@@ -881,7 +885,7 @@ namespace FenomPlus.ViewModels
                 case QCUserTestChartView _:
 
                 // This view means it still in scanning BLE, tap the bluetooth icon should navigate to nowhere
-                case DevicePowerOnView _:  
+                case DevicePowerOnView _:
                     // Do not navigate to DeviceStatusHubView when on the pages (breath test in progress)
                     break;
                 case DashboardView _:

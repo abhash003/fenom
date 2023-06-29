@@ -51,8 +51,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
-            CurrentStatus = DeviceExpired;
-            RequireQC = (IOC.Services.DeviceService.Current != null) ? IOC.Services.DeviceService.Current.IsQCEnabled() : false;
+            RequireQC = IOC.Services.DeviceService.Current?.IsQCEnabled()??false;
+            CurrentStatus = IOC.Services.DeviceService.Current?.GetDeviceQCStatus()??DeviceExpired;
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now; 
         }
