@@ -47,7 +47,7 @@
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"/>
 
-                <Label Text="ppb"
+                <Label Text="{Binding PPBString}"
                        FontSize="36"
                        TextColor="#333333"
                        HorizontalTextAlignment="Center"
