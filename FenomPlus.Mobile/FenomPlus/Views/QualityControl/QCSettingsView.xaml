@@ -106,7 +106,7 @@
 
                                 <xForms:SfDataGrid.Columns>
                                     <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridTextColumn HeaderText="Current Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
+                                    <xForms:GridImageColumn HeaderText="Current Status" MappingName="QcImage" Padding="10,4,10,4"/>
                                 </xForms:SfDataGrid.Columns>
 
                             </xForms:SfDataGrid>
@@ -235,7 +235,7 @@
                                     <xForms:GridTextColumn HeaderText="Test Type" MappingName="TestTypeDetail" Padding="10,0,10,0" MinimumWidth="90"/>
                                     <xForms:GridTextColumn HeaderText="Date" MappingName="TestDate" Padding="10,0,10,0" MinimumWidth="180"/>
                                     <xForms:GridTextColumn HeaderText="Score" MappingName="TestValue" Padding="10,0,10,0" MinimumWidth="50"/>
-                                    <xForms:GridTextColumn HeaderText="Result" MappingName="TestStatus" Padding="10,0,10,0" MinimumWidth="70"/>
+                                    <xForms:GridImageColumn HeaderText="Result" MappingName="QcImage" Padding="10,4,10,4" MinimumWidth="60"/>
 
                                 </xForms:SfDataGrid.Columns>
 

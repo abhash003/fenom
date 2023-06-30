@@ -118,7 +118,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool _isRetryVisible = false;
+        private bool _isRetryVisible = true;
 
         public bool IsRetryVisible
         {
@@ -129,7 +129,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool _isExitVisible = true;
+        private bool _isExitVisible = false;
 
         public bool IsExitVisible
         {
@@ -665,6 +665,26 @@ namespace FenomPlus.ViewModels
                     watch.Stop();
                     var ms = watch.ElapsedMilliseconds;
 
+                    foreach(var device in devices)
+                    {
+                        if(device.CurrentStatus == "Valid")
+                        {
+                            device.QcImage = "QualityControlFull.png";
+                        }
+                        else if (device.CurrentStatus == "Expired")
+                        {
+                            device.QcImage = "quality_control_red.png";
+                        }
+                        else if (device.CurrentStatus == "Disabled")
+                        {
+                            device.QcImage = "QualityControl.png";
+                        }
+                        else
+                        {
+                            device.QcImage = "QualityControlWarning.png";
+                        }
+                    }
+
                     return new ObservableCollection<QCDevice>(devices);
                 }
             }
@@ -761,6 +781,18 @@ namespace FenomPlus.ViewModels
                     watch.Stop();
                     var ms = watch.ElapsedMilliseconds;
 
+                    foreach (var test in tests)
+                    {
+                        if(test.TestStatus == "Pass")
+                        {
+                            test.QcImage = "QualityControlFull.png";
+                        }
+                        else
+                        {
+                            test.QcImage = "quality_control_red.png";
+                        }
+                    }
+
                     return new ObservableCollection<QCTest>(tests);
                 }
             }
@@ -849,7 +881,7 @@ namespace FenomPlus.ViewModels
                         testStatus = QCTest.TestFail;
                     user.Median = median;
                 }
-                var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus);
+                var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus, null);
 
                 return DbCreateQcTest(newTest)? newTest : null;
             }
@@ -865,7 +897,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "-");
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, null, "", "-");
                 return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)
@@ -989,7 +1021,7 @@ namespace FenomPlus.ViewModels
 
                     case QCUser.UserConditionallyQualified:
                         {
-                            (DateTime? lastTestDate, DateTime? last2ndTestDate) = GetLast2TestDate(SelectedQcUser.UserName);
+                            (DateTime? lastTestDate, DateTime? last2ndTestDate) = GetLast2PositiveTestDate(SelectedQcUser.UserName);
                             if (DateTime.Now < lastTestDate?.AddHours(16))
                             {
                                 await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass from your last Qualifying test before another test can be performed.", "More Time Required", "OK");
@@ -1008,7 +1040,7 @@ namespace FenomPlus.ViewModels
                         break;
                     case QCUser.UserQualified:
                         {
-                            (DateTime? lastTestDate, _) = GetLast2TestDate(SelectedQcUser.UserName);
+                            (DateTime? lastTestDate, _) = GetLast2PositiveTestDate(SelectedQcUser.UserName);
                             if (DateTime.Now < lastTestDate?.AddHours(16))
                             {
                                 await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass before another test can be performed.", "More Time Required", "OK");
@@ -1153,13 +1185,13 @@ namespace FenomPlus.ViewModels
             {
                 if (IsDeviceConnected)
                 {
-                    IsExitVisible = true;
-                    IsRetryVisible = false;
+                    IsRetryVisible = !(IsExitVisible = false);
                     await InitializeBreathGauge();
                     await Services.Navigation.QCUserTestView();
                 }
                 else
                 {
+                    IsRetryVisible = !(IsExitVisible = true);
                     await Services.Navigation.DashboardView();
                 }
             }
@@ -1386,8 +1418,7 @@ namespace FenomPlus.ViewModels
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
-                        IsRetryVisible = true;
-                        IsExitVisible = false;
+                        IsRetryVisible = !(IsExitVisible = false);
                         ShowErrorPage(code);
                     }
                     else
@@ -1481,6 +1512,9 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _qCUserTestResult = string.Empty;
 
+        [ObservableProperty]
+        private string _PPBString;
+
         private string QCUserTestResultString = string.Empty;
         public void InitUserTestResults()
         {
@@ -1493,19 +1527,23 @@ namespace FenomPlus.ViewModels
 
             if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax && !scoreDeviated)
             {
-                QCUserTestResult = FenomVal.ToString();
+                QCUserTestResult = QCTest.TestPass;
                 QCUserTestResultString = QCTest.TestPass;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
             }
             else
             {
-                QCUserTestResult = FenomVal < NegativeControlMaxThreshold ? $"<{NegativeControlMaxThreshold}" : $">{TestThresholdMax}";
+                QCUserTestResult = QCTest.TestFail;
                 QCUserTestResultString = QCTest.TestFail;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
                 PromptFor2FailedUserTest();
             }
 
             if (scoreDeviated)
             {
-                QCUserTestResult = $"|{FenomVal}|>=10";
+                QCUserTestResult = QCTest.TestFail;
+                QCUserTestResultString = QCTest.TestFail;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
             }
 
             UpdateUserStatus();
@@ -1651,7 +1689,7 @@ namespace FenomPlus.ViewModels
             DbUpdateQcTest(newTest6);
 
             float median = GetMedian(newUser1.UserName);
-            newUser1.QCT = median;
+            newUser1.Median = median;
 
             // New User Disqualified
             var newUser2 = DbCreateQcUser("Vinh");
@@ -1706,7 +1744,7 @@ namespace FenomPlus.ViewModels
             newUser5.C2Date = DateTime.Now.AddHours(-96);
             newUser5.C3 = 25;
             newUser5.C3Date = DateTime.Now.AddHours(-72);
-            newUser5.QCT = 25;
+            newUser5.Median = 25;
             DbUpdateQcUser(newUser5);
 
             newTest1 = DbCreateQcTest(newUser5, 20);
@@ -1844,7 +1882,9 @@ namespace FenomPlus.ViewModels
             {
                 device.ExtendDeviceValidity((short)0x18);
             }
-            else
+            // Only for Qualified user, the device had gone through tests, and is trustable.
+            // hence, current fail test is also trustable
+            else if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
             {
                 device.SendFailMsg((ushort)0x8000);
             }
@@ -2001,7 +2041,7 @@ namespace FenomPlus.ViewModels
                     {
                         (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
                         float median = GetMedian(SelectedQcUser.UserName);  // first 3
-                        SelectedQcUser.QCT = median;
+                        SelectedQcUser.Median = median;
 
                         bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
                                               tests[1].TestStatus == QCTest.TestPass &&
@@ -2028,12 +2068,12 @@ namespace FenomPlus.ViewModels
                     if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
                     {
                         // get median from first 3 records
-                        Debug.Assert(SelectedQcUser.QCT > 0);
+                        Debug.Assert(SelectedQcUser.Median > 0);
 
                         QCTest lastTest = tests[0];
 
                         // ToDo: Calculate result based on QCT
-                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.QCT - lastTest.TestValue));
+                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.Median - lastTest.TestValue));
 
                         userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
                         SelectedQcUser.ShowChartOption = true;
@@ -2080,7 +2120,7 @@ namespace FenomPlus.ViewModels
         }
 
 
-        private (DateTime? lastTestDate, DateTime? last2ndTestDate) GetLast2TestDate(string userName)
+        private (DateTime? lastTestDate, DateTime? last2ndTestDate) GetLast2PositiveTestDate(string userName)
         {
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
@@ -2091,7 +2131,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device and user
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+")
                         .OrderByDescending(x => x.TestDate).ToList();
 
                     if (tests == null) return (null, null);
@@ -2192,7 +2232,7 @@ namespace FenomPlus.ViewModels
 
             ObservableCollection<QCTest> allUserTests = ReadUserQcTests(user.UserName);
 
-            float? qct = user.QCT;
+            float? qct = user.Median;
             XMin = 0;
             XMax = allUserTests.Count + 1;
             YMax = (double)(qct + 10 + 5);
