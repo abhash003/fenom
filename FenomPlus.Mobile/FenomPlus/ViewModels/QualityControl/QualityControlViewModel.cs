@@ -118,7 +118,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool _isRetryVisible = false;
+        private bool _isRetryVisible = true;
 
         public bool IsRetryVisible
         {
@@ -129,7 +129,7 @@ namespace FenomPlus.ViewModels
             }
         }
 
-        private bool _isExitVisible = true;
+        private bool _isExitVisible = false;
 
         public bool IsExitVisible
         {
@@ -1153,13 +1153,13 @@ namespace FenomPlus.ViewModels
             {
                 if (IsDeviceConnected)
                 {
-                    IsExitVisible = true;
-                    IsRetryVisible = false;
+                    IsRetryVisible = !(IsExitVisible = false);
                     await InitializeBreathGauge();
                     await Services.Navigation.QCUserTestView();
                 }
                 else
                 {
+                    IsRetryVisible = !(IsExitVisible = true);
                     await Services.Navigation.DashboardView();
                 }
             }
@@ -1386,8 +1386,7 @@ namespace FenomPlus.ViewModels
                     {
                         var model = BreathManeuverErrorDBModel.Create(Services.DeviceService.Current.BreathManeuver, Services.DeviceService.Current.ErrorStatusInfo);
                         ErrorsRepo.Insert(model);
-                        IsRetryVisible = true;
-                        IsExitVisible = false;
+                        IsRetryVisible = !(IsExitVisible = false);
                         ShowErrorPage(code);
                     }
                     else
