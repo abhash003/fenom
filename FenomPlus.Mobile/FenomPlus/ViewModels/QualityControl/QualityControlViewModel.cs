@@ -1512,6 +1512,9 @@ namespace FenomPlus.ViewModels
         [ObservableProperty]
         private string _qCUserTestResult = string.Empty;
 
+        [ObservableProperty]
+        private string _PPBString;
+
         private string QCUserTestResultString = string.Empty;
         public void InitUserTestResults()
         {
@@ -1524,19 +1527,23 @@ namespace FenomPlus.ViewModels
 
             if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax && !scoreDeviated)
             {
-                QCUserTestResult = FenomVal.ToString();
+                QCUserTestResult = QCTest.TestPass;
                 QCUserTestResultString = QCTest.TestPass;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
             }
             else
             {
-                QCUserTestResult = FenomVal < NegativeControlMaxThreshold ? $"<{NegativeControlMaxThreshold}" : $">{TestThresholdMax}";
+                QCUserTestResult = QCTest.TestFail;
                 QCUserTestResultString = QCTest.TestFail;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
                 PromptFor2FailedUserTest();
             }
 
             if (scoreDeviated)
             {
-                QCUserTestResult = $"|{FenomVal}|>=10";
+                QCUserTestResult = QCTest.TestFail;
+                QCUserTestResultString = QCTest.TestFail;
+                PPBString = String.Format("{0} ppb", FenomVal.ToString());
             }
 
             UpdateUserStatus();
