@@ -79,8 +79,6 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     {
                         var device = (PluginBleIDevice)_nativeDevice;
 
-                        await Task.Delay(1000);
-
                         // connect to the device
                         await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
 
