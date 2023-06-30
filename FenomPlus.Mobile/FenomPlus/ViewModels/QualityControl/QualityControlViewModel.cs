@@ -897,7 +897,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "-");
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, null, "", "-");
                 return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)
