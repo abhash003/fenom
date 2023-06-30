@@ -989,7 +989,7 @@ namespace FenomPlus.ViewModels
 
                     case QCUser.UserConditionallyQualified:
                         {
-                            (DateTime? lastTestDate, DateTime? last2ndTestDate) = GetLast2TestDate(SelectedQcUser.UserName);
+                            (DateTime? lastTestDate, DateTime? last2ndTestDate) = GetLast2PositiveTestDate(SelectedQcUser.UserName);
                             if (DateTime.Now < lastTestDate?.AddHours(16))
                             {
                                 await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass from your last Qualifying test before another test can be performed.", "More Time Required", "OK");
@@ -1008,7 +1008,7 @@ namespace FenomPlus.ViewModels
                         break;
                     case QCUser.UserQualified:
                         {
-                            (DateTime? lastTestDate, _) = GetLast2TestDate(SelectedQcUser.UserName);
+                            (DateTime? lastTestDate, _) = GetLast2PositiveTestDate(SelectedQcUser.UserName);
                             if (DateTime.Now < lastTestDate?.AddHours(16))
                             {
                                 await Services.Dialogs.ShowAlertAsync("At least 16 hours must pass before another test can be performed.", "More Time Required", "OK");
@@ -2082,7 +2082,7 @@ namespace FenomPlus.ViewModels
         }
 
 
-        private (DateTime? lastTestDate, DateTime? last2ndTestDate) GetLast2TestDate(string userName)
+        private (DateTime? lastTestDate, DateTime? last2ndTestDate) GetLast2PositiveTestDate(string userName)
         {
             Debug.Assert(!string.IsNullOrEmpty(CurrentDeviceSerialNumber) && !string.IsNullOrEmpty(userName));
 
@@ -2093,7 +2093,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device and user
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+")
                         .OrderByDescending(x => x.TestDate).ToList();
 
                     if (tests == null) return (null, null);
