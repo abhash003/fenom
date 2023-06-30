@@ -71,11 +71,15 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
         public override async Task ConnectAsync()
         {
-            if (_bleAdapter != null && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connected)
+            using (var tracer = new Helper.FunctionTrace())
+            {
+                if (_bleAdapter != null && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connected && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connecting)
                 {
                     try
                     {
                         var device = (PluginBleIDevice)_nativeDevice;
+
+                        await Task.Delay(1000);
 
                         // connect to the device
                         await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
@@ -128,7 +132,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         devChar.ValueUpdated += (sender, e) =>
                         {
                             lock (_deviceInfoHandlerLock)
-                            {                                
+                            {
                                 DecodeDeviceInfo(e.Characteristic.Value);
                                 Console.WriteLine("updated characteristic: device info");
                             }
@@ -177,7 +181,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                                 LastErrorCode = ErrorStatusInfo.ErrorCode;
                                 DecodeErrorStatusInfo(e.Characteristic.Value);
                                 Console.WriteLine($"ERROR STATUS:  (value={ErrorStatusInfo.ErrorCode:X})");
-                                if(ErrorStatusInfo.ErrorCode != 0)
+                                if (ErrorStatusInfo.ErrorCode != 0)
                                     Xamarin.Forms.MessagingCenter.Send<BleDevice, byte>(this, "ErrorStatus", ErrorStatusInfo.ErrorCode);
                             }
                         };
@@ -200,7 +204,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         throw;
                     }
                 }
-
+            }
         }
 
         public override async Task ConnectToKnownDeviceAsync(Guid id)
