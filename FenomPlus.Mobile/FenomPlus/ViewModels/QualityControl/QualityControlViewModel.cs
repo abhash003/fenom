@@ -665,6 +665,26 @@ namespace FenomPlus.ViewModels
                     watch.Stop();
                     var ms = watch.ElapsedMilliseconds;
 
+                    foreach(var device in devices)
+                    {
+                        if(device.CurrentStatus == "Valid")
+                        {
+                            device.QcImage = "QualityControlFull.png";
+                        }
+                        else if (device.CurrentStatus == "Expired")
+                        {
+                            device.QcImage = "quality_control_red.png";
+                        }
+                        else if (device.CurrentStatus == "Disabled")
+                        {
+                            device.QcImage = "QualityControl.png";
+                        }
+                        else
+                        {
+                            device.QcImage = "QualityControlWarning.png";
+                        }
+                    }
+
                     return new ObservableCollection<QCDevice>(devices);
                 }
             }
@@ -761,6 +781,18 @@ namespace FenomPlus.ViewModels
                     watch.Stop();
                     var ms = watch.ElapsedMilliseconds;
 
+                    foreach (var test in tests)
+                    {
+                        if(test.TestStatus == "Pass")
+                        {
+                            test.QcImage = "QualityControlFull.png";
+                        }
+                        else
+                        {
+                            test.QcImage = "quality_control_red.png";
+                        }
+                    }
+
                     return new ObservableCollection<QCTest>(tests);
                 }
             }
@@ -849,7 +881,7 @@ namespace FenomPlus.ViewModels
                         testStatus = QCTest.TestFail;
                     user.Median = median;
                 }
-                var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus);
+                var newTest = new QCTest(CurrentDeviceSerialNumber, user.UserName, DateTime.Now, testValue, testStatus, null);
 
                 return DbCreateQcTest(newTest)? newTest : null;
             }
@@ -865,7 +897,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "-");
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, null, "", "-");
                 return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)

@@ -2,6 +2,7 @@
 using System;
 using FenomPlus.Services;
 using FenomPlus.Interfaces;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -47,6 +48,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public DateTime DateUpdated { get; set; }  // Date created
 
+        public ImageSource QcImage { get; set; }
+
         public QCDevice(string deviceSerialNumber)
         {
             Id = ObjectId.NewObjectId();
@@ -54,7 +57,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             RequireQC = IOC.Services.DeviceService.Current?.IsQCEnabled()??false;
             CurrentStatus = IOC.Services.DeviceService.Current?.GetDeviceQCStatus()??DeviceExpired;
             DateCreated = DateTime.Now;
-            DateUpdated = DateTime.Now; 
+            DateUpdated = DateTime.Now;
+            QcImage = null;
         }
     }
 }
