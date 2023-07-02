@@ -22,10 +22,10 @@ namespace FenomPlus.SDK.Core.Models
                                                             + COMM_AMBIENT_HUMIDITY_SIZE
                                                             + COMM_BATTERY_LEVEL_SIZE);
 
-        public float Temperature;
+        public float? Temperature;
         public float Pressure;
         public float Humidity;
-        public float BatteryLevel;
+        public float? BatteryLevel;
 
         public EnvironmentalInfo Decode(byte[] data)
         {

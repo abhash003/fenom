@@ -126,7 +126,7 @@ namespace FenomPlus.Services.DeviceService.Abstract
 
         public int BatteryLevel { get; set; }
 
-        public int DeviceLifeRemaining { get; set; }
+        public int? DeviceLifeRemaining { get; set; }
 
         private float _breathFlow { get; set; }
         public float BreathFlow
