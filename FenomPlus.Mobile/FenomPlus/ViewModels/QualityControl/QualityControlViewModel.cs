@@ -23,7 +23,6 @@ using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.Services;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FenomPlus.ViewModels
 {
