@@ -59,7 +59,6 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public DateTime DateCreated { get; set; }  // Date created
         public DateTime NextTestDate { get; set; }  // Next Test date?
         public string Explanation { get; set; }
-        public bool  ShowChartOption { get; set; }
 
         public float? C1 { get; set; }
         public DateTime? C1Date{ get; set; }
@@ -87,7 +86,6 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DateCreated = DateTime.Now;
             NextTestDate = DateTime.MinValue;
             Explanation = string.Empty;
-            ShowChartOption = false;
             Median = 0;
         }
     }

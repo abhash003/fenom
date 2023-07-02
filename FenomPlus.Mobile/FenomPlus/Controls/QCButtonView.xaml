@@ -115,7 +115,7 @@
         <StackLayout Orientation="Horizontal"
                      HorizontalOptions="Center"
                      VerticalOptions="End" 
-                     IsVisible="True" 
+                     IsVisible="{Binding Assigned}" 
                      Padding="10,10,10,10">
 
             <StackLayout.GestureRecognizers>
