@@ -126,7 +126,7 @@
                                     Command="{Binding ExitToQCCommand}"
                                     HorizontalOptions="Start"
                                     VerticalOptions="End"
-                                    Margin="0,0,40,0"/>
+                                    Margin="30,0,0,0"/>
 
                         </Grid>
 
@@ -193,7 +193,7 @@
                                     Command="{Binding ExitToQCCommand}"
                                     HorizontalOptions="Start"
                                     VerticalOptions="End"
-                                    Margin="0,0,40,0"/>
+                                    Margin="30,0,0,0"/>
 
                         </Grid>
                     </views1:TabViewItem>
@@ -246,7 +246,7 @@
                                     Command="{Binding ExitToQCCommand}"
                                     HorizontalOptions="Start"
                                     VerticalOptions="End"
-                                    Margin="0,0,40,0"/>
+                                    Margin="30,0,0,0"/>
 
                         </Grid>
                     </views1:TabViewItem>
@@ -272,7 +272,7 @@
                                     Command="{Binding ExitToQCCommand}"
                                     HorizontalOptions="Start"
                                     VerticalOptions="End"
-                                    Margin="0,0,40,0"/>
+                                    Margin="40,0,0,20"/>
 
                         </StackLayout>
                     </views1:TabViewItem>
