@@ -115,14 +115,14 @@
         <StackLayout Orientation="Horizontal"
                      HorizontalOptions="Center"
                      VerticalOptions="End" 
-                     IsVisible="True" 
-                     Padding="10,10,35,10">
+                     IsVisible="{Binding ShowChartOption}" 
+                     Padding="75,10,75,10">
 
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped"/>
             </StackLayout.GestureRecognizers>
 
-            <Label Text="Chart:" VerticalOptions="Center" TextColor="#333" FontSize="Small"/>
+            <Label Text="Chart" VerticalOptions="Center" TextColor="#333" FontSize="Small"/>
 
             <Image x:Name="ChartImage" Source="line_chart" Margin="10,0,0,01"  VerticalOptions="Center" HeightRequest="22"/>
 
