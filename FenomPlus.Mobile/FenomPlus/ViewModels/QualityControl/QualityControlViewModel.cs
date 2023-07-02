@@ -23,6 +23,7 @@ using FenomPlus.Views;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FenomPlus.ViewModels
 {
@@ -728,6 +729,18 @@ namespace FenomPlus.ViewModels
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
 
+                        foreach (var user in users)
+                        {
+                            if (user.LastTestResult == "Pass")
+                            {
+                                user.QcImage = "QualityControlFull.png";
+                            }
+                            else
+                            {
+                                user.QcImage = "quality_control_red.png";
+                            }
+                        }
+
                         return new ObservableCollection<QCUser>(users);
                     }
                     else
@@ -741,6 +754,18 @@ namespace FenomPlus.ViewModels
 
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
+
+                        foreach (var user in users)
+                        {
+                            if (user.LastTestResult == "Pass")
+                            {
+                                user.QcImage = "QualityControlFull.png";
+                            }
+                            else
+                            {
+                                user.QcImage = "quality_control_red.png";
+                            }
+                        }
 
                         return new ObservableCollection<QCUser>(users);
                     }
