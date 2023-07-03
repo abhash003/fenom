@@ -28,7 +28,6 @@ namespace FenomPlus.Controls
                 OnPropertyChanged(nameof(CurrentStatus));
                 OnPropertyChanged(nameof(NextTestDate));
                 OnPropertyChanged(nameof(NextTestDateString));
-                OnPropertyChanged(nameof(ShowChartOption));
                 OnPropertyChanged(nameof(NextTestVisible));
             }
         }
@@ -52,7 +51,6 @@ namespace FenomPlus.Controls
             {
                 QCUserModel.CurrentStatus = value;
                 OnPropertyChanged(nameof(CurrentStatus));
-                OnPropertyChanged(nameof(ShowChartOption));
             }
         }
 
@@ -75,8 +73,6 @@ namespace FenomPlus.Controls
         public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
         public bool NextTestVisible => CurrentStatus == QCUser.UserConditionallyQualified;
-
-        public bool ShowChartOption => QCUserModel is { CurrentStatus: QCUser.UserQualified };
 
         public RelayCommand OpenChartCommand;
 

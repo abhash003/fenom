@@ -2023,6 +2023,7 @@ namespace FenomPlus.ViewModels
                     SelectedQcUser.C1 = tests[0].TestValue; // Latest test
                     SelectedQcUser.C1Date = DateTime.Now;
                     SelectedQcUser.LastTestResult = tests[0].TestStatus; 
+                    SelectedQcUser.Median = tests[0].TestValue;  // first 1
 
                     if (tests[0].TestStatus == QCTest.TestPass)
                     {
@@ -2043,7 +2044,9 @@ namespace FenomPlus.ViewModels
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
-                    goodScoreSpan = Math.Abs((decimal)(SelectedQcUser.C1 - SelectedQcUser.C2)) <= 10;
+                    goodScoreSpan = Math.Abs((decimal)(SelectedQcUser.C1??0 - SelectedQcUser.C2)) <= 10;
+
+                    SelectedQcUser.Median = GetMedian(SelectedQcUser.UserName);  // first 2
 
                     if (tests[0].TestStatus == QCTest.TestPass && tests[1].TestStatus == QCTest.TestPass && testTimeSpanGood && goodScoreSpan) 
                     {
@@ -2064,8 +2067,7 @@ namespace FenomPlus.ViewModels
                     if (SelectedQcUser.CurrentStatus != QCUser.UserQualified) // user not yet qualified
                     {
                         (float? min, float? max) = GetRange(tests[0].TestValue, tests[1].TestValue, tests[2].TestValue);
-                        float median = GetMedian(SelectedQcUser.UserName);  // first 3
-                        SelectedQcUser.Median = median;
+                        SelectedQcUser.Median = GetMedian(SelectedQcUser.UserName);  // first 3
 
                         bool allTestsPassed = tests[0].TestStatus == QCTest.TestPass &&
                                               tests[1].TestStatus == QCTest.TestPass &&
@@ -2085,7 +2087,6 @@ namespace FenomPlus.ViewModels
                     {
                         userStatus = QCUser.UserQualified;  // For Qualified User, whatever the test result, it remains qualified
                     }
-                    SelectedQcUser.ShowChartOption = true;
                     break;
 
                 default:
@@ -2100,7 +2101,6 @@ namespace FenomPlus.ViewModels
                         decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.Median - lastTest.TestValue));
 
                         userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
-                        SelectedQcUser.ShowChartOption = true;
                     }
                     break;
             }
