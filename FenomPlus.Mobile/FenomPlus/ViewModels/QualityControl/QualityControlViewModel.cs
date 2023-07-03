@@ -1800,6 +1800,11 @@ namespace FenomPlus.ViewModels
         private async void DeleteDevice(object parameter)
         {
             int index = (int)parameter;
+            if (index < 0)
+            {
+                await Services.Dialogs.ShowAlertAsync("Please select device to delete", "Delete Device", "Yes");
+                return;
+            }
 
             if (QcDeviceList[index - 1].DeviceSerialNumber == CurrentDeviceSerialNumber)
             {
@@ -1821,6 +1826,11 @@ namespace FenomPlus.ViewModels
         private async void DeleteUser(object parameter)
         {
             int index = (int)parameter;
+            if (index < 0)
+            {
+                await Services.Dialogs.ShowAlertAsync("Please select an user to delete", "Delete User", "Yes");
+                return;
+            }
 
             var result = await Services.Dialogs.ShowConfirmYesNo("Are you sure you wish to delete this user?", "Delete User");
 
@@ -2073,7 +2083,7 @@ namespace FenomPlus.ViewModels
                                               tests[1].TestStatus == QCTest.TestPass &&
                                               tests[2].TestStatus == QCTest.TestPass;
 
-                        goodScoreSpan = (max - min) <= 10;
+                        goodScoreSpan = (max??0 - min??0) <= 10;
 
                         var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
                         var timeSpanQualificationGood = timeSpanQualificationHours < (7 * 24);
