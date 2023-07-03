@@ -353,11 +353,13 @@ namespace FenomPlus.Services.DeviceService.Concrete
                 var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
                     .FeatureWriteCharacteristic));
 
+                
                 fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
                 bool result = true;
                 Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    result = await fwChar.WriteAsync(data);
+                    if (fwChar.CanWrite)
+                        result = await fwChar.WriteAsync(data);
                 });
 
                 if (result == true)
