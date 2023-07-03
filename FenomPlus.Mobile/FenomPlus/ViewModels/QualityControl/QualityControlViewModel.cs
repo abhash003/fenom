@@ -1800,6 +1800,11 @@ namespace FenomPlus.ViewModels
         private async void DeleteDevice(object parameter)
         {
             int index = (int)parameter;
+            if (index < 0)
+            {
+                await Services.Dialogs.ShowAlertAsync("Please select device to delete", "Delete Device", "Yes");
+                return;
+            }
 
             if (QcDeviceList[index - 1].DeviceSerialNumber == CurrentDeviceSerialNumber)
             {
