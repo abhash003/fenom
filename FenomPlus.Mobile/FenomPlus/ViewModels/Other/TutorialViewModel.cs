@@ -280,7 +280,7 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} �C) is out of range.", "Temperature Warning", "Close");
+                            Services.Dialogs.ShowAlert($"Unable to run test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.BatteryCriticallyLow:
@@ -360,7 +360,7 @@ namespace FenomPlus.ViewModels
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.TemperatureOutOfRange:
-                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} �C) is out of range.", "Temperature Warning", "Close");
+                            Services.Dialogs.ShowAlert($"Unable to run practice test. Temperature level ({Services.DeviceService.Current.EnvironmentalInfo.Temperature} °C) is out of range.", "Temperature Warning", "Close");
                             return; // Don't Increment
                         
                         case DeviceCheckEnum.BatteryCriticallyLow:

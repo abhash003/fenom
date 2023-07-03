@@ -23,7 +23,8 @@ namespace FenomPlus.Views
 
         protected override void OnDisappearing()
         {
-            Services.Cache.TestType = Enums.TestTypeEnum.None;
+            if (QualityControlViewModel.IsExitVisible)
+                Services.Cache.TestType = Enums.TestTypeEnum.None;
             base.OnDisappearing();
         }
 
