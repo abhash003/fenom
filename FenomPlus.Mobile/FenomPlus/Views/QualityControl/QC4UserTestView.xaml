@@ -25,16 +25,25 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Label Text="{Binding UserNameMessage}"
-                           FontSize="30"
-                           TextColor="#333"
-                           Padding="10,0"
-                           HorizontalTextAlignment="start"/>
+            <StackLayout Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" >
+                <Label Text="{Binding UserNameMessage}"
+                               FontSize="30"
+                               TextColor="#333"
+                               Padding="0,0,10,0"
+                               LineBreakMode="WordWrap"
+                               HorizontalTextAlignment="start"/>
+            </StackLayout>
 
-            <StackLayout VerticalOptions="CenterAndExpand"
-                     HorizontalOptions="FillAndExpand"
-                     Margin="100,0,100,0">
+            <StackLayout VerticalOptions="StartAndExpand"
+                     HorizontalOptions="StartAndExpand"
+                     Grid.Column="1"
+                     Grid.Row="0">
 
                 <Label Text="{Binding GaugeStatus}"
                            FontSize="30"
