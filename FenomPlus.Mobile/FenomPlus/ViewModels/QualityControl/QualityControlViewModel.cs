@@ -900,7 +900,7 @@ namespace FenomPlus.ViewModels
                 {
                     float median = GetMedian(user.UserName);  // first 3
                     // for Qualified User, the score should fulfill 1. fall into [5, 40]; 2. subject to abs(score - median) < 10
-                    bool scoreDeviated = Math.Abs(median - testValue??0) >= 10;
+                    bool scoreDeviated = Math.Abs(median - (testValue??0)) >= 10;
                     if (scoreDeviated)
                         testStatus = QCTest.TestFail;
                     user.Median = median;
@@ -1547,7 +1547,7 @@ namespace FenomPlus.ViewModels
 
             float? FenomVal = Services.DeviceService.Current.FenomValue;
 
-            bool scoreDeviated = (SelectedQcUser.CurrentStatus == QCUser.UserQualified) ? (Math.Abs(SelectedQcUser.Median - FenomVal ?? 0) >= 10) : false;
+            bool scoreDeviated = (SelectedQcUser.CurrentStatus == QCUser.UserQualified) ? (Math.Abs((decimal)(SelectedQcUser.Median - (FenomVal ?? 0))) >= 10) : false;
 
             if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax && !scoreDeviated)
             {
@@ -2054,7 +2054,7 @@ namespace FenomPlus.ViewModels
                     var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
                     var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
-                    goodScoreSpan = Math.Abs((decimal)(SelectedQcUser.C1??0 - SelectedQcUser.C2)) <= 10;
+                    goodScoreSpan = Math.Abs((decimal)((SelectedQcUser.C1??0) - SelectedQcUser.C2)) <= 10;
 
                     SelectedQcUser.Median = GetMedian(SelectedQcUser.UserName);  // first 2
 
@@ -2083,7 +2083,7 @@ namespace FenomPlus.ViewModels
                                               tests[1].TestStatus == QCTest.TestPass &&
                                               tests[2].TestStatus == QCTest.TestPass;
 
-                        goodScoreSpan = (max??0 - min??0) <= 10;
+                        goodScoreSpan = ((max??0) - (min??0)) <= 10;
 
                         var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
                         var timeSpanQualificationGood = timeSpanQualificationHours < (7 * 24);
