@@ -671,7 +671,7 @@ namespace FenomPlus.ViewModels
                         {
                             device.QcImage = "QualityControlFull.png";
                         }
-                        else if (device.CurrentStatus == "Expired")
+                        else if (device.CurrentStatus == "Expired" || device.CurrentStatus == "Fail")
                         {
                             device.QcImage = "quality_control_red.png";
                         }
