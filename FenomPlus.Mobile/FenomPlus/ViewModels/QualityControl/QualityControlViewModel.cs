@@ -161,6 +161,7 @@ namespace FenomPlus.ViewModels
 
         public QualityControlViewModel()
         {
+            // When de/serializing objects we reached the maximum default depth, so needed to increase it.
             BsonMapper.Global.MaxDepth = 100;
 
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
