@@ -161,6 +161,8 @@ namespace FenomPlus.ViewModels
 
         public QualityControlViewModel()
         {
+            BsonMapper.Global.MaxDepth = 100;
+
             var localFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             QCDatabasePath = Path.Combine(localFolder, @"QCDatabase.db");
 
