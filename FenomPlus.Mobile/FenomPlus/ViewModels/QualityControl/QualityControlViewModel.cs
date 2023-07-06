@@ -737,7 +737,7 @@ namespace FenomPlus.ViewModels
                             {
                                 user.QcImage = "QualityControlFull.png";
                             }
-                            else
+                            else if (user.LastTestResult == "Fail")
                             {
                                 user.QcImage = "quality_control_red.png";
                             }
@@ -763,7 +763,7 @@ namespace FenomPlus.ViewModels
                             {
                                 user.QcImage = "QualityControlFull.png";
                             }
-                            else
+                            else if (user.LastTestResult == "Fail")
                             {
                                 user.QcImage = "quality_control_red.png";
                             }
