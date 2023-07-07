@@ -48,7 +48,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
 
         public DateTime DateUpdated { get; set; }  // Date created
 
-        public ImageSource QcImage { get; set; }
+        public string QcImage { get; set; }
 
         public QCDevice(string deviceSerialNumber)
         {
@@ -58,7 +58,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             CurrentStatus = IOC.Services.DeviceService.Current?.GetDeviceQCStatus()??DeviceExpired;
             DateCreated = DateTime.Now;
             DateUpdated = DateTime.Now;
-            QcImage = null;
+            QcImage = string.Empty;
         }
     }
 }

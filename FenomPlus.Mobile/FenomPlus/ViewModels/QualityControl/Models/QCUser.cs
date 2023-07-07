@@ -1,11 +1,5 @@
-﻿using FenomPlus.Models;
-using LiteDB;
+﻿using LiteDB;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Syncfusion.XlsIO.Parser.Biff_Records.Charts;
-using FenomPlus.QualityControl.Enums;
-using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels.QualityControl.Models
 {
@@ -74,9 +68,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         // last QC test
         public float? LastTestScore => C3??C2??C1??null;
         public DateTime? LastTestDate => C3Date??C2Date??C1Date??null;
-        public string? LastTestResult { get; set; }
-        public ImageSource? QcImage { get; set; }
-
+        public string LastTestResult { get; set; }
         public QCUser(string deviceSerialNumber, string userName)
         {
             Id = ObjectId.NewObjectId();
@@ -86,6 +78,7 @@ namespace FenomPlus.ViewModels.QualityControl.Models
             DateCreated = DateTime.Now;
             NextTestDate = DateTime.MinValue;
             Explanation = string.Empty;
+            LastTestResult = string.Empty;
             Median = 0;
         }
     }

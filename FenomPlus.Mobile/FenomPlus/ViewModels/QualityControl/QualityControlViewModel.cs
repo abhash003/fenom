@@ -2,12 +2,17 @@
 using CommunityToolkit.Mvvm.Input;
 using FenomPlus.Controls;
 using FenomPlus.Enums;
+using FenomPlus.Enums.ErrorCodes;
 using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
+using FenomPlus.Services;
+using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Enums;
 using FenomPlus.ViewModels.QualityControl.Models;
+using FenomPlus.Views;
 using LiteDB;
+using Syncfusion.SfChart.XForms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,13 +21,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using Syncfusion.SfChart.XForms;
-using Color = Xamarin.Forms.Color;
 using Xamarin.Forms;
-using FenomPlus.Views;
-using FenomPlus.Services.DeviceService.Concrete;
-using FenomPlus.Enums.ErrorCodes;
-using FenomPlus.Services;
+using Color = Xamarin.Forms.Color;
 
 namespace FenomPlus.ViewModels
 {
@@ -730,19 +730,6 @@ namespace FenomPlus.ViewModels
 
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
-
-                        foreach (var user in users)
-                        {
-                            if (user.LastTestResult == "Pass")
-                            {
-                                user.QcImage = "QualityControlFull.png";
-                            }
-                            else if (user.LastTestResult == "Fail")
-                            {
-                                user.QcImage = "quality_control_red.png";
-                            }
-                        }
-
                         return new ObservableCollection<QCUser>(users);
                     }
                     else
@@ -756,18 +743,6 @@ namespace FenomPlus.ViewModels
 
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
-
-                        foreach (var user in users)
-                        {
-                            if (user.LastTestResult == "Pass")
-                            {
-                                user.QcImage = "QualityControlFull.png";
-                            }
-                            else if (user.LastTestResult == "Fail")
-                            {
-                                user.QcImage = "quality_control_red.png";
-                            }
-                        }
 
                         return new ObservableCollection<QCUser>(users);
                     }
@@ -924,7 +899,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, null, "", "-");
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "", "-");
                 return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)
@@ -1680,109 +1655,79 @@ namespace FenomPlus.ViewModels
             DeleteDataBase();
 
             var newDevice = DbCreateQcDevice();
+            newDevice.DeviceSerialNumber = "200018";
+            newDevice.CurrentStatus = "Valid";
+            newDevice.DateCreated = DateTime.Now.AddHours(-128);
+            DbUpdateQcDevice(newDevice);
 
             var negativeControl = DbCreateQcNegativeControl();
 
-            // New User Qualified
-            var newUser1 = DbCreateQcUser("Jim");
-            newUser1.CurrentStatus = QCUser.UserQualified;
-            newUser1.NextTestDate = DateTime.Now.AddHours(16);
-            newUser1.C1 = 20;
-            newUser1.C1Date = DateTime.Now.AddHours(-120);
-            newUser1.C2 = 30;
-            newUser1.C2Date = DateTime.Now.AddHours(-96);
-            newUser1.C3 = 25;
-            newUser1.C3Date = DateTime.Now.AddHours(-72);
-            DbUpdateQcUser(newUser1);
+            var userArray = new String[] {"aaa", "bbb", "ccc", "ddd", "eee", "fff", "ggg"};
+            foreach (var userName in userArray)
+            {
+                // New User Qualified
+                var newUser1 = DbCreateQcUser(userName);
+                newUser1.CurrentStatus = QCUser.UserConditionallyQualified;
+                newUser1.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newUser1.NextTestDate = DateTime.Now;
+                newUser1.C1 = newUser1.Median = 20;
+                newUser1.C1Date = DateTime.Now.AddHours(-120);
+                newUser1.C2 = 28;
+                newUser1.C2Date = DateTime.Now.AddHours(-96);
+                // newUser1.C3 = 25;
+                // newUser1.C3Date = DateTime.Now.AddHours(-72);
+                DbUpdateQcUser(newUser1);
 
-            var newTest1 = DbCreateQcTest(newUser1, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-120);
-            DbUpdateQcTest(newTest1);
-            var newTest2 = DbCreateQcTest(newUser1, 30);
-            newTest2.TestDate = DateTime.Now.AddHours(-96); ;
-            DbUpdateQcTest(newTest2);
-            var newTest3 = DbCreateQcTest(newUser1, 25);
-            newTest3.TestDate = DateTime.Now.AddHours(-72);
-            DbUpdateQcTest(newTest3);
+                var newTest10 = DbCreateQcTest(newUser1, 0);
+                newTest10.TestDate = DateTime.Now.AddHours(-120);
+                newTest10.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest10.QcImage = "QualityControlFull.png";
+                newTest10.TestType = "-";
+                newTest10.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest10);
 
-            var newTest4 = DbCreateQcTest(newUser1, 23);
-            newTest4.TestDate = DateTime.Now.AddHours(-48);
-            DbUpdateQcTest(newTest4);
-            var newTest5 = DbCreateQcTest(newUser1, 29);
-            newTest5.TestDate = DateTime.Now.AddHours(-24); ;
-            DbUpdateQcTest(newTest5);
-            var newTest6 = DbCreateQcTest(newUser1, 26);
-            newTest6.TestDate = DateTime.Now;
-            DbUpdateQcTest(newTest6);
+                var newTest11 = DbCreateQcTest(newUser1, 20);
+                newTest11.TestDate = DateTime.Now.AddHours(-120);
+                newTest11.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest11.QcImage = "QualityControlFull.png";
+                newTest11.TestType = "+";
+                newTest11.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest11);
 
-            float median = GetMedian(newUser1.UserName);
-            newUser1.Median = median;
+                var newTest20 = DbCreateQcTest(newUser1, 1);
+                newTest20.TestDate = DateTime.Now.AddHours(-96); ;
+                newTest20.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest20.QcImage = "QualityControlFull.png";
+                newTest20.TestType = "-";
+                newTest20.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest20);
 
-            // New User Disqualified
-            var newUser2 = DbCreateQcUser("Vinh");
-            newUser2.CurrentStatus = QCUser.UserDisqualified;
-            newUser2.NextTestDate = DateTime.Now.AddHours(16);
-            DbUpdateQcUser(newUser2);
+                var newTest21 = DbCreateQcTest(newUser1, 28);
+                newTest21.TestDate = DateTime.Now.AddHours(-96); ;
+                newTest21.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest21.QcImage = "QualityControlFull.png";
+                newTest21.TestType = "+";
+                newTest21.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest21);
 
-            newTest1 = DbCreateQcTest(newUser2, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-16);
-            DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser2, 30);
-            newTest2.TestDate = DateTime.Now;
-            DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser2, 19);
-            newTest3.TestDate = DateTime.Now.AddHours(16);
-            DbUpdateQcTest(newTest3);
+                /*
+                var newTest30 = DbCreateQcTest(newUser1, 1);
+                newTest30.TestDate = DateTime.Now.AddHours(-72); ;
+                newTest30.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest30.QcImage = "QualityControlFull.png";
+                newTest30.TestType = "-";
+                newTest30.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest30);
 
-            // New User Disqualified
-            var newUser3 = DbCreateQcUser("Bob");
-            newUser3.CurrentStatus = QCUser.UserDisqualified;
-            newUser3.NextTestDate = DateTime.Now.AddHours(16);
-            DbUpdateQcUser(newUser3);
-
-            newTest1 = DbCreateQcTest(newUser3, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-16);
-            DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser3, 30);
-            newTest2.TestDate = DateTime.Now;
-            DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser3, 32);
-            newTest3.TestDate = DateTime.Now.AddHours(16);
-            DbUpdateQcTest(newTest3);
-
-            // New User Disqualified
-            var newUser4 = DbCreateQcUser("New");
-            newUser4.CurrentStatus = QCUser.UserConditionallyQualified;
-            newUser4.NextTestDate = DateTime.Now.AddHours(16);
-            DbUpdateQcUser(newUser4);
-
-            newTest1 = DbCreateQcTest(newUser4, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-16);
-            DbUpdateQcTest(newTest1);
-
-            //--------------------------------
-
-            var newUser5 = DbCreateQcUser("Scott");
-            newUser5.CurrentStatus = QCUser.UserQualified;
-            newUser5.NextTestDate = DateTime.Now.AddHours(16);
-            newUser5.C1 = 20;
-            newUser5.C1Date = DateTime.Now.AddHours(-120);
-            newUser5.C2 = 30;
-            newUser5.C2Date = DateTime.Now.AddHours(-96);
-            newUser5.C3 = 25;
-            newUser5.C3Date = DateTime.Now.AddHours(-72);
-            newUser5.Median = 25;
-            DbUpdateQcUser(newUser5);
-
-            newTest1 = DbCreateQcTest(newUser5, 20);
-            newTest1.TestDate = DateTime.Now.AddHours(-120);
-            DbUpdateQcTest(newTest1);
-            newTest2 = DbCreateQcTest(newUser5, 30);
-            newTest2.TestDate = DateTime.Now.AddHours(-96); ;
-            DbUpdateQcTest(newTest2);
-            newTest3 = DbCreateQcTest(newUser5, 25);
-            newTest3.TestDate = DateTime.Now.AddHours(-72);
-            DbUpdateQcTest(newTest3);
+                var newTest31 = DbCreateQcTest(newUser1, 25);
+                newTest31.TestDate = DateTime.Now.AddHours(-72); ;
+                newTest31.DeviceSerialNumber = newDevice.DeviceSerialNumber;
+                newTest31.QcImage = "QualityControlFull.png";
+                newTest31.TestType = "+";
+                newTest31.TestStatus = QCTest.TestPass;
+                DbUpdateQcTest(newTest31);
+                */
+            }
         }
 
         [RelayCommand]

@@ -1,16 +1,10 @@
 ﻿
 using System;
-using Acr.UserDialogs;
 using FenomPlus.ViewModels;
-using FenomPlus.SDK.Core.Models;
-using FenomPlus.Enums;
-using FenomPlus.Controls;
-using FenomPlus.ViewModels.QualityControl;
 using Xamarin.Forms.Xaml;
 using FenomPlus.Services;
 using Xamarin.CommunityToolkit.UI.Views;
 using FenomPlus.Helpers;
-using Syncfusion.Drawing;
 using Syncfusion.SfDataGrid.XForms;
 
 namespace FenomPlus.Views
