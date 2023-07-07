@@ -75,7 +75,8 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public float? LastTestScore => C3??C2??C1??null;
         public DateTime? LastTestDate => C3Date??C2Date??C1Date??null;
         public string? LastTestResult { get; set; }
-        public ImageSource? QcImage { get; set; }
+        // public ImageSource? QcImage { get; set; } // Jira - 712 comes out
+        public string? QcImage { get; set; }
 
         public QCUser(string deviceSerialNumber, string userName)
         {
