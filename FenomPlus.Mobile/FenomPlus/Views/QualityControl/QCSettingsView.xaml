@@ -9,6 +9,7 @@
     xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
     xmlns:xForms="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
     xmlns:views1="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:converters="clr-namespace:FenomPlus.Converters;assembly=FenomPlus"
     x:Class="FenomPlus.Views.QCSettingsView"
     Title="{Binding Title}"
     Shell.NavBarIsVisible="True"
@@ -19,9 +20,12 @@
     <Shell.TitleView>
         <controls:TitleContentView />
     </Shell.TitleView>
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TestResultToImageConverter x:Key="TestResultToImageConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
@@ -166,7 +170,8 @@
                                     <xForms:GridTextColumn HeaderText="Status" MappingName="CurrentStatus" Padding="10,0,10,0"/>
                                     <xForms:GridTextColumn HeaderText="Device S/N" MappingName="DeviceSerialNumber" Padding="10,0,10,0" ColumnSizer="Auto"/>
                                     <xForms:GridTextColumn HeaderText="Score (ppb)" MappingName="LastTestScore" Padding="10,0,10,0" ColumnSizer="Auto"/>
-                                    <xForms:GridImageColumn HeaderText="   Result  " MappingName="QcImage" Padding="10,4,10,4" ColumnSizer="Auto"/>
+                                    <xForms:GridImageColumn HeaderText="   Result  " MappingName="LastTestResult" Padding="10,4,10,4" ColumnSizer="Auto"
+                                                            DisplayBinding="{Binding Path=LastTestResult, Converter={StaticResource TestResultToImageConverter}}" />
                                     <xForms:GridTextColumn HeaderText="Date" MappingName="LastTestDate" Padding="10,0,10,0"/>
                                 </xForms:SfDataGrid.Columns>
                                 <xForms:SfDataGrid.StackedHeaderRows>

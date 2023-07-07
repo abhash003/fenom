@@ -730,19 +730,6 @@ namespace FenomPlus.ViewModels
 
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
-
-                        foreach (var user in users)
-                        {
-                            if (user.LastTestResult == "Pass")
-                            {
-                                user.QcImage = "QualityControlFull.png";
-                            }
-                            else if (user.LastTestResult == "Fail")
-                            {
-                                user.QcImage = "quality_control_red.png";
-                            }
-                        }
-
                         return new ObservableCollection<QCUser>(users);
                     }
                     else
@@ -756,18 +743,6 @@ namespace FenomPlus.ViewModels
 
                         watch.Stop();
                         var ms = watch.ElapsedMilliseconds;
-
-                        foreach (var user in users)
-                        {
-                            if (user.LastTestResult == "Pass")
-                            {
-                                user.QcImage = "QualityControlFull.png";
-                            }
-                            else if (user.LastTestResult == "Fail")
-                            {
-                                user.QcImage = "quality_control_red.png";
-                            }
-                        }
 
                         return new ObservableCollection<QCUser>(users);
                     }
@@ -924,7 +899,7 @@ namespace FenomPlus.ViewModels
             try
             {
                 string testStatus = Math.Abs(testValue) < NegativeControlMaxThreshold ? QCTest.TestPass : QCTest.TestFail;
-                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, null, "", "-");
+                var newTest = new QCTest(CurrentDeviceSerialNumber, SelectedUserName, DateTime.Now, testValue, testStatus, "", "", "-");
                 return DbCreateQcTest(newTest) ? newTest : null;
             }
             catch (Exception e)

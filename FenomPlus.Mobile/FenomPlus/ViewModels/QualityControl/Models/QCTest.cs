@@ -29,10 +29,10 @@ namespace FenomPlus.ViewModels.QualityControl.Models
         public string TestTypeDetail => TestType == "+" ? "Positive" : "Negative";
         public string Explanation { get; set; } = string.Empty;
 
-        public ImageSource QcImage { get; set; }
+        public string QcImage { get; set; }
 
         public QCTest() { }
-        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, ImageSource image, string explanation = "", string testType = "+")
+        public QCTest(string deviceSerialNumber, string userName, DateTime testDate, float? testValue, string testStatus, string image, string explanation = "", string testType = "+")
         {
             Id = ObjectId.NewObjectId();
             DeviceSerialNumber = deviceSerialNumber;
