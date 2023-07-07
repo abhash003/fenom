@@ -2010,7 +2010,7 @@ namespace FenomPlus.ViewModels
         {
             // Status for User...
             //•	Conditionally Qualified
-            //     - Fewer than 4 tests have been performed by the QC User.
+            //     - Fewer than 3 tests have been performed by the QC User.
             //     - All tests within the Qualification Period are “Pass”.
             //•	Qualified
             //     - Latest test is within the expected range for the QC User.
@@ -2089,7 +2089,7 @@ namespace FenomPlus.ViewModels
                         goodScoreSpan = ((max??0) - (min??0)) <= 10;
 
                         var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
-                        var timeSpanQualificationGood = timeSpanQualificationHours < (7 * 24);
+                        var timeSpanQualificationGood = timeSpanQualificationHours < (8 * 24);
 
                         var lastTestTimeSpanHours = TimeSpanHours(DateTime.Now, tests[0].TestDate);
                         var lastTestTimeSpanGood = lastTestTimeSpanHours <= UserTimeoutMaxHours;
