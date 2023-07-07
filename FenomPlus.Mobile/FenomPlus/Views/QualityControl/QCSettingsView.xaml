@@ -256,7 +256,7 @@
                         </Grid>
                     </views1:TabViewItem>
 
-                    <views1:TabViewItem Text="Debug" FontSize="16" FontAttributes="Bold" TextColor="#333" IsVisible="True">
+                    <views1:TabViewItem Text="Debug" FontSize="16" FontAttributes="Bold" TextColor="#333" IsVisible="False">
                         <StackLayout  BackgroundColor="White">
                             <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" Margin="0,50,0,0">
 
