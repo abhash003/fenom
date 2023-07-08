@@ -107,7 +107,6 @@
     <Compile Remove="Models\GridDataModel\QualityControlUsersDataModel.cs" />
     <Compile Remove="Models\SensorStatus.cs" />
     <Compile Remove="Services\BleHubService.cs" />
-    <Compile Remove="Converters\TestResultToImageConverter.cs" />
     <Compile Remove="Services\DeviceStatusService.cs" />
     <Compile Remove="ViewModels\BreathTest\StartTestViewModel.cs" />
     <Compile Remove="ViewModels\MainViewModel.cs" />
