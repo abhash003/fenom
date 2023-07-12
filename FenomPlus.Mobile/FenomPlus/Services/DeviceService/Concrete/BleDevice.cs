@@ -333,6 +333,10 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// <returns></returns>
         public override async Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size)
         {
+            if (FwCharacteristic == null)  // ConnectAsync not yet carry out, so FwCharacteristic stil null
+            {
+                return false;
+            }
             bool result = true;
             using (var tracer = new Helper.FunctionTrace())
             {
@@ -346,22 +350,10 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     data[3] = (byte)message.IDSUB;
 
                     Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
-
-                    // get service
-                    var device = (PluginBleIDevice)_nativeDevice;
-
-                    var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
-
-                    // get characteristics
-                    var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
-                        .FeatureWriteCharacteristic));
-
-
-                    fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
+                    FwCharacteristic.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
                     Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        if (fwChar.CanWrite)
-                            result = await fwChar.WriteAsync(data);
+                        result = await FwCharacteristic.WriteAsync(data);
                     });
 
                     if (result == true)
