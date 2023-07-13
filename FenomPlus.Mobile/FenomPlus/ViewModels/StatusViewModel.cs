@@ -418,7 +418,7 @@ namespace FenomPlus.ViewModels
                 QualityControlViewModel.Value = "";
                 QualityControlViewModel.Label = "Failed";
             }
-            else if (hour <= Constants.QualityControlExpired) // expired
+            else if (hour < Constants.QualityControlExpired) // expired
             {
                 QcBarIconVisible = true;
                 QcBarIcon = "wo_quality_control_red.png";
@@ -434,6 +434,8 @@ namespace FenomPlus.ViewModels
                 QcBarIcon = "wo_quality_control_yellow.png";
                 QualityControlViewModel.ImagePath = "quality_control_yellow.png";
                 QualityControlViewModel.ValueColor = Color.FromHex("#333");
+                QualityControlViewModel.Value = $"<{hour + 1}";
+                QualityControlViewModel.Label = "Hour(s) left";
                 QualityControlViewModel.Description = "Mode Status is \"Warning\"";
             }            
             else // valid
