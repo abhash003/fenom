@@ -333,42 +333,41 @@ namespace FenomPlus.Services.DeviceService.Concrete
         /// <returns></returns>
         public override async Task<bool> WRITEREQUEST(MESSAGE message, short idvar_size)
         {
+            if (FwCharacteristic == null)  // ConnectAsync not yet carry out, so FwCharacteristic stil null
+            {
+                return false;
+            }
+            bool result = true;
             using (var tracer = new Helper.FunctionTrace())
             {
-                byte[] data = new byte[2 + 2 + idvar_size];
-
-                data[0] = (byte)(message.IDMSG >> 8);
-                data[1] = (byte)message.IDMSG;
-                data[2] = (byte)(message.IDSUB >> 8);
-                data[3] = (byte)message.IDSUB;
-
-                Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
-
-                // get service
-                var device = (PluginBleIDevice)_nativeDevice;
-
-                var service = await device.GetServiceAsync(new Guid(FenomPlus.SDK.Core.Constants.FenomService));
-
-                // get characteristics
-                var fwChar = await service.GetCharacteristicAsync(new Guid(FenomPlus.SDK.Core.Constants
-                    .FeatureWriteCharacteristic));
-
-                
-                fwChar.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
-                bool result = true;
-                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
+                try
                 {
-                    if (fwChar.CanWrite)
-                        result = await fwChar.WriteAsync(data);
-                });
+                    byte[] data = new byte[2 + 2 + idvar_size];
 
-                if (result == true)
-                {
-                    tracer.Trace("write without response okay");
+                    data[0] = (byte)(message.IDMSG >> 8);
+                    data[1] = (byte)message.IDMSG;
+                    data[2] = (byte)(message.IDSUB >> 8);
+                    data[3] = (byte)message.IDSUB;
+
+                    Buffer.BlockCopy(message.IDVAR, 0, data, 4, idvar_size);
+                    FwCharacteristic.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
+                    Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        result = await FwCharacteristic.WriteAsync(data);
+                    });
+
+                    if (result == true)
+                    {
+                        tracer.Trace("write without response okay");
+                    }
+                    else
+                    {
+                        tracer.Trace("something went wrong");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    tracer.Trace("something went wrong");
+                    tracer.Trace(ex.ToString());
                 }
                 return result;
             }
