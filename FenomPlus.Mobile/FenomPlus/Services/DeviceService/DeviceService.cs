@@ -74,7 +74,7 @@ namespace FenomPlus.Services.DeviceService
 
                 DeviceDiscovered += DeviceDiscoveredHandler;
 
-                DiscoveryWorkerTimer = new Timer(10_000) { Enabled = true };
+                DiscoveryWorkerTimer = new Timer(30_000) { Enabled = true };
                 DiscoveryWorkerTimer.Elapsed += Timer_Elapsed;
 
                 trace.Trace("device service all setup");
