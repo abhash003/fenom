@@ -84,7 +84,7 @@ namespace FenomPlus.Services.DeviceService.Concrete
 
                         if (device.State != DeviceState.Connected)
                         {
-                            throw new Exception("ConnectToDeviceAsync() error");
+                            throw new Exception($"ConnectToDeviceAsync() error and device state is {device.State}");
                         }
                         else
                         {
