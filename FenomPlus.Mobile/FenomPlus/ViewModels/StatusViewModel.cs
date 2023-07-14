@@ -510,7 +510,7 @@ namespace FenomPlus.ViewModels
                     PressureViewModel.ImagePath = "pressure_red.png";
                     PressureViewModel.ValueColor = Color.Red;
                     PressureViewModel.Label = "Out of Range";
-                    PressureViewModel.Description = "The ambient pressure is too low. FeNO testing is disabled until the pressure is higher.";
+                    PressureViewModel.Description = "The ambient pressure is too low.";
                 }
                 else if (value < Constants.PressureWarning78)
                 {
@@ -528,7 +528,7 @@ namespace FenomPlus.ViewModels
                     PressureViewModel.ImagePath = "pressure_red.png";
                     PressureViewModel.ValueColor = Color.Red;
                     PressureViewModel.Label = "Out of Range";
-                    PressureViewModel.Description = "The ambient pressure is too high. FeNO testing is disabled until the pressure is lower.";
+                    PressureViewModel.Description = "The ambient pressure is too high.";
                 }
                 else if (value > Constants.PressureWarning108)
                 {
@@ -582,7 +582,7 @@ namespace FenomPlus.ViewModels
                         TemperatureViewModel.ImagePath = "temperature_red.png";
                         TemperatureViewModel.ValueColor = Color.Red;
                         TemperatureViewModel.Label = "Out of Range";
-                        TemperatureViewModel.Description = "The device is too cold. Move the device to a warmer location. FeNO testing is disabled until it has warmed up.";
+                        TemperatureViewModel.Description = "The device is too cold. Move the device to a warmer location.";
                     }
                     else if (value > Constants.TemperatureHigh35)
                     {
@@ -591,7 +591,7 @@ namespace FenomPlus.ViewModels
                         TemperatureViewModel.ImagePath = "temperature_red.png";
                         TemperatureViewModel.ValueColor = Color.FromHex("#333");
                         TemperatureViewModel.Label = "Out of Range";
-                        TemperatureViewModel.Description = "The device is too warm. Move the device to a cooler location. FeNO testing is disabled until it has cooled down.";
+                        TemperatureViewModel.Description = "The device is too warm. Move the device to a cooler location.";
                     }
                     else if (value < Constants.TemperatureLow18)
                     {
@@ -652,7 +652,7 @@ namespace FenomPlus.ViewModels
                     HumidityViewModel.ImagePath = "humidity_red.png";
                     HumidityViewModel.ValueColor = Color.Red;
                     HumidityViewModel.Label = "Out of Range";
-                    HumidityViewModel.Description = "The ambient humidity is too low. Move the device to a more humid location. FeNO testing is disabled until the humidity is higher.";
+                    HumidityViewModel.Description = "The ambient humidity is too low. Move the device to a more humid location.";
                 }
                 else if (value < Constants.HumidityWarning25)
                 {
@@ -670,7 +670,7 @@ namespace FenomPlus.ViewModels
                     HumidityViewModel.ImagePath = "humidity_red.png";
                     HumidityViewModel.ValueColor = Color.Red;
                     HumidityViewModel.Label = "Out of Range";
-                    HumidityViewModel.Description = "The ambient humidity is too high. Move the device to a drier location. FeNO testing is disabled until the humidity is lower.";
+                    HumidityViewModel.Description = "The ambient humidity is too high. Move the device to a drier location.";
                 }
                 else if (value > Constants.HumidityWarning85)
                 {
