@@ -28,6 +28,8 @@ namespace FenomPlus
 
         public static double TemperatureLow14 = 14.6;
         public static double TemperatureHigh35 = 35.4;
+        public static double TemperatureLow18 = 18;
+        public static double TemperatureHigh32 = 32;
 
         public static double HumidityLow18 = 18;
         public static double HumidityWarning25 = 25;
