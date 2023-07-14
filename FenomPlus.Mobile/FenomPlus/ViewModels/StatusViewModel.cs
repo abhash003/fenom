@@ -593,6 +593,25 @@ namespace FenomPlus.ViewModels
                         TemperatureViewModel.Label = "Out of Range";
                         TemperatureViewModel.Description = "The device is too warm. Move the device to a cooler location. FeNO testing is disabled until it has cooled down.";
                     }
+                    else if (value < Constants.TemperatureLow18)
+                    {
+                        TemperatureBarIconVisible = true;
+                        TemperatureBarIcon = "wo_temperature_yellow.png";
+                        TemperatureViewModel.ImagePath = "temperature_yellow.png";
+                        TemperatureViewModel.ValueColor = Color.Yellow;
+                        TemperatureViewModel.Label = "Out of Range";
+                        TemperatureViewModel.Description = "The device is becoming too cool. Move the device to a warmer location.";
+
+                    }
+                    else if (value > Constants.TemperatureHigh32)
+                    {
+                        TemperatureBarIconVisible = true;
+                        TemperatureBarIcon = "wo_temperature_yellow.png";
+                        TemperatureViewModel.ImagePath = "temperature_yellow.png";
+                        TemperatureViewModel.ValueColor = Color.Yellow;
+                        TemperatureViewModel.Label = "Out of Range";
+                        TemperatureViewModel.Description = "The device is becoming too warm. Move the device to a cooler location.";
+                    }
                     else
                     {
                         TemperatureBarIconVisible = false;
