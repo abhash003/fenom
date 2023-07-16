@@ -905,11 +905,16 @@ namespace FenomPlus.ViewModels
             }
             Array.Sort(numbers);
 
-            if(tests.Count == 0 && NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax)
+            if(testValue < NegativeControlMaxThreshold || testValue > TestThresholdMax)
+            {
+                return false;
+            }
+
+            if(tests.Count == 0)
             {
                 return true;
             }
-            else if (tests.Count < 3 && (NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax) && Math.Abs(numbers[0] - (testValue ?? 0)) <= 10)
+            else if (tests.Count < 3 && Math.Abs(numbers[0] - (testValue ?? 0)) <= 10)
             {
                 return true;
             }
