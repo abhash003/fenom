@@ -869,14 +869,15 @@ namespace FenomPlus.ViewModels
         {
             Debug.Assert(!string.IsNullOrEmpty(user.UserName) && testValue >= 0);
 
+           // testValue = 21;
             try
             {
-                bool goodScore = NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax;
+                float median = GetMedian(user.UserName);  // first 3
+                bool goodScore = this.CalculateScoreStatus(testValue, user.UserName, median);
                 string testStatus = goodScore ? QCTest.TestPass : QCTest.TestFail;
 
                 if (user.CurrentStatus == QCUser.UserQualified)
                 {
-                    float median = GetMedian(user.UserName);  // first 3
                     // for Qualified User, the score should fulfill 1. fall into [5, 40]; 2. subject to abs(score - median) < 10
                     bool scoreDeviated = Math.Abs(median - (testValue??0)) >= 10;
                     if (scoreDeviated)
@@ -891,6 +892,35 @@ namespace FenomPlus.ViewModels
             {
                 Debug.WriteLine(e);
                 return null;
+            }
+        }
+
+        private bool CalculateScoreStatus(float? testValue, string userName, float? median)
+        {
+            List<QCTest> tests = GetNTests(userName, 3, false); // get first 3 tests 
+            float[] numbers = new float[tests.Count()];
+
+            for (int i = 0; i < tests.Count(); ++i)
+            {
+                numbers[i] = tests[i].TestValue ?? 0;
+            }
+            Array.Sort(numbers);
+
+            if(tests.Count == 0 && NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax)
+            {
+                return true;
+            }
+            else if (tests.Count < 3 && (NegativeControlMaxThreshold <= testValue && testValue <= TestThresholdMax) && Math.Abs(numbers[0] - (testValue ?? 0)) <= 10)
+            {
+                return true;
+            }
+            else if (Math.Abs((decimal)(median - (testValue ?? 0))) <= 10)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -1527,7 +1557,7 @@ namespace FenomPlus.ViewModels
 
             bool scoreDeviated = (SelectedQcUser.CurrentStatus == QCUser.UserQualified) ? (Math.Abs((decimal)(SelectedQcUser.Median - (FenomVal ?? 0))) >= 10) : false;
 
-            if (NegativeControlMaxThreshold <= FenomVal && FenomVal <= TestThresholdMax && !scoreDeviated)
+            if (this.CalculateScoreStatus(FenomVal, SelectedQcUser.UserName, SelectedQcUser.Median))
             {
                 QCUserTestResult = QCTest.TestPass;
                 QCUserTestResultString = QCTest.TestPass;
