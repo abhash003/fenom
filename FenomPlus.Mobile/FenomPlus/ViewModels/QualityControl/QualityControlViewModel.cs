@@ -869,7 +869,6 @@ namespace FenomPlus.ViewModels
         {
             Debug.Assert(!string.IsNullOrEmpty(user.UserName) && testValue >= 0);
 
-           // testValue = 21;
             try
             {
                 float median = GetMedian(user.UserName);  // first 3
