@@ -1878,10 +1878,10 @@ namespace FenomPlus.ViewModels
             return numbers[1];
         }
 
-        private int TimeSpanHours(DateTime t1, DateTime t2)
+        private double TimeSpanHours(DateTime t1, DateTime t2)
         {
             TimeSpan timeSpan = t1 - t2;
-            return Math.Abs(timeSpan.Hours);
+            return Math.Abs(timeSpan.TotalHours);
         }
 
         #endregion
@@ -1937,7 +1937,7 @@ namespace FenomPlus.ViewModels
 
             if (negativeControlTest != null)
             {
-                int timeSpanHours = TimeSpanHours(DateTime.Now, negativeControlTest.TestDate);
+                var timeSpanHours = TimeSpanHours(DateTime.Now, negativeControlTest.TestDate);
 
                 bool timeSpanOK = timeSpanHours <= NegativeControlTimeoutHours;
 
