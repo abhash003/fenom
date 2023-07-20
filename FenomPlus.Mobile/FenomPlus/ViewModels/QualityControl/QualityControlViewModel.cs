@@ -2032,9 +2032,6 @@ namespace FenomPlus.ViewModels
                     SelectedQcUser.C2 = tests[0].TestValue; // Latest test
                     SelectedQcUser.C2Date = DateTime.Now;
                     SelectedQcUser.LastTestResult = tests[0].TestStatus; 
-                    
-                    // var testTimeSpanHours = TimeSpanHours(tests[0].TestDate, tests[1].TestDate);
-                    // var testTimeSpanGood = testTimeSpanHours <= UserTimeoutMaxHours; 
 
                     goodScoreSpan = Math.Abs((decimal)((SelectedQcUser.C1??0) - SelectedQcUser.C2)) <= 10;
 
@@ -2070,8 +2067,6 @@ namespace FenomPlus.ViewModels
                         var timeSpanQualificationHours = TimeSpanHours(tests[0].TestDate, tests[2].TestDate);
                         var timeSpanQualificationGood = timeSpanQualificationHours < (8 * 24);
 
-                        // var lastTestTimeSpanHours = TimeSpanHours(DateTime.Now, tests[0].TestDate);
-                        // var lastTestTimeSpanGood = lastTestTimeSpanHours <= UserTimeoutMaxHours;
                         bool criteria = allTestsPassed && timeSpanQualificationGood && goodScoreSpan;
                         userStatus = criteria ? QCUser.UserQualified : QCUser.UserDisqualified;
                     }
