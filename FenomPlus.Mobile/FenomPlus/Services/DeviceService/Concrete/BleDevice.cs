@@ -18,6 +18,8 @@ using FenomPlus.SDK.Core.Ble.Interface;
 using System.Collections.Generic;
 using FenomPlus.SDK.Core.Utils;
 using FenomPlus.SDK.Core.Features;
+using System.Threading;
+
 namespace FenomPlus.Services.DeviceService.Concrete
 {
     internal class BleDevice : Device
@@ -75,12 +77,14 @@ namespace FenomPlus.Services.DeviceService.Concrete
             {
                 if (_bleAdapter != null && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connected && ((PluginBleIDevice)_nativeDevice).State != DeviceState.Connecting)
                 {
+                    CancellationTokenSource tokenSource = new CancellationTokenSource();
+                    tokenSource.CancelAfter(3_000);
                     try
                     {
                         var device = (PluginBleIDevice)_nativeDevice;
 
                         // connect to the device
-                        await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, default);
+                        await _bleAdapter.ConnectToDeviceAsync((PluginBleIDevice)_nativeDevice, default, tokenSource.Token);
 
                         if (device.State != DeviceState.Connected)
                         {
@@ -201,6 +205,12 @@ namespace FenomPlus.Services.DeviceService.Concrete
                         Helper.WriteDebug(ex);
                         throw;
                     }
+                    finally
+                    {
+                        tokenSource.Dispose();
+                        tokenSource = null;
+                    }
+
                 }
             }
         }
@@ -353,7 +363,10 @@ namespace FenomPlus.Services.DeviceService.Concrete
                     FwCharacteristic.WriteType = Plugin.BLE.Abstractions.CharacteristicWriteType.WithoutResponse;
                     Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        result = await FwCharacteristic.WriteAsync(data);
+                        if (FwCharacteristic != null)
+                        {
+                            result = await FwCharacteristic.WriteAsync(data);
+                        }
                     });
 
                     if (result == true)
