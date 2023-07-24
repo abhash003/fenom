@@ -2075,21 +2075,6 @@ namespace FenomPlus.ViewModels
                         userStatus = QCUser.UserQualified;  // For Qualified User, whatever the test result, it remains qualified
                     }
                     break;
-
-                default:
-                    if (SelectedQcUser.CurrentStatus == QCUser.UserQualified)
-                    {
-                        // get median from first 3 records
-                        Debug.Assert(SelectedQcUser.Median > 0);
-
-                        QCTest lastTest = tests[0];
-
-                        // ToDo: Calculate result based on QCT
-                        decimal deltaValue = Math.Abs((decimal)(SelectedQcUser.Median - lastTest.TestValue));
-
-                        userStatus = deltaValue <= 10 ? QCUser.UserQualified : QCUser.UserDisqualified;
-                    }
-                    break;
             }
 
             // Update the user in the database
