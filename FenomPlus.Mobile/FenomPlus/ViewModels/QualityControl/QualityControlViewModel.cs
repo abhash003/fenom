@@ -454,7 +454,7 @@ namespace FenomPlus.ViewModels
                 try
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
-                    var qcNegativeControl = userCollection.FindOne(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == QCUser.NegativeControlName);
+                    var qcNegativeControl = userCollection.FindOne(x => x.UserName == QCUser.NegativeControlName);
                     return qcNegativeControl;
                 }
                 catch (Exception e)
@@ -571,7 +571,7 @@ namespace FenomPlus.ViewModels
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
                     var user = userCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .Where(x => x.UserName == userName)
                         .ToList();
 
                     // Should only be one for each device serial number
@@ -622,7 +622,7 @@ namespace FenomPlus.ViewModels
                     // Delete all tests for this user
                     var testsCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testsCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == user.DeviceSerialNumber && x.UserName == user.UserName)
+                        .Where(x => x.UserName == user.UserName)
                         .ToList();
 
                     foreach (var t in tests)
@@ -721,31 +721,15 @@ namespace FenomPlus.ViewModels
                 {
                     var userCollection = db.GetCollection<QCUser>("qcusers");
 
-                    if (string.IsNullOrEmpty(CurrentDeviceSerialNumber))
-                    {
-                        var users = userCollection.Query()
-                            .Where(x => x.UserName != QCUser.NegativeControlName)
-                            .OrderBy(x => x.UserName)
-                            .ToList();
+                    var users = userCollection.Query()
+                        .Where(x => x.UserName != QCUser.NegativeControlName)
+                        .OrderBy(x => x.UserName)
+                        .ToList();
 
-                        watch.Stop();
-                        var ms = watch.ElapsedMilliseconds;
-                        return new ObservableCollection<QCUser>(users);
-                    }
-                    else
-                    {
-                        // Return all users if device not connected (No device serial number)
-                        var users = userCollection.Query()
-                            .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber &&
-                                        x.UserName != QCUser.NegativeControlName)
-                            .OrderBy(x => x.UserName)
-                            .ToList();
+                    watch.Stop();
+                    var ms = watch.ElapsedMilliseconds;
+                    return new ObservableCollection<QCUser>(users);
 
-                        watch.Stop();
-                        var ms = watch.ElapsedMilliseconds;
-
-                        return new ObservableCollection<QCUser>(users);
-                    }
                 }
             }
             catch (Exception e)
@@ -817,7 +801,7 @@ namespace FenomPlus.ViewModels
                     // Get all user records for this device
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == name && x.TestType == "+")
+                        .Where(x => x.UserName == name && x.TestType == "+")
                         .OrderBy(x => x.TestDate)
                         .ToList();
 
@@ -954,7 +938,7 @@ namespace FenomPlus.ViewModels
                 {
                     var testCollection = db.GetCollection<QCTest>("qctests");
                     var tests = testCollection.Query()
-                        .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName)
+                        .Where(x => x.UserName == userName)
                         .ToList();
 
                     return tests;
@@ -1594,8 +1578,7 @@ namespace FenomPlus.ViewModels
                 using (var db = new LiteDatabase(QCDatabasePath))
                 {
                     var users = db.GetCollection<QCUser>("qcusers").Query()
-                            .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber &&
-                                        (x.UserName == userName1 || x.UserName == userName2))
+                            .Where(x => x.UserName == userName1 || x.UserName == userName2)
                             .ToList();
                     return users.Count==2 && users[0].CurrentStatus == QCUser.UserQualified 
                                           && users[1].CurrentStatus == QCUser.UserQualified;
@@ -2166,19 +2149,19 @@ namespace FenomPlus.ViewModels
                     if (userName == "*") 
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.TestType == "+" )
+                                .Where(x => x.TestType == "+" )
                                 .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else if (last)
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+").ToList()
+                                .Where(x => x.UserName == userName && x.TestType == "+").ToList()
                                 .OrderByDescending(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     else
                     {
                         tests = testCollection.Query()
-                                .Where(x => x.DeviceSerialNumber == CurrentDeviceSerialNumber && x.UserName == userName && x.TestType == "+")
+                                .Where(x => x.UserName == userName && x.TestType == "+")
                                 .OrderBy(x => x.TestDate).ToList().Take(count).ToList();
                     }
                     return tests;
