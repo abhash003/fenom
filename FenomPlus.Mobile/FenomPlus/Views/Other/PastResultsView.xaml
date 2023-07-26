@@ -19,7 +19,7 @@
 
     <ContentPage.Content>
 
-        <Grid VerticalOptions="Fill" HorizontalOptions="Fill" Margin="20">
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0,10,0">
              
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -44,7 +44,7 @@
                 Padding="0">
 
                 <sfgrid:SfDataGrid x:Name="PastResultsDataGrid"
-                                    ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                    ItemsSource="{Binding PastResultsData}"
                                     LiveDataUpdateMode="AllowDataShaping"
                                     VerticalOptions="Fill"
                                     HorizontalOptions="Fill"
@@ -57,11 +57,12 @@
                                     AutoExpandGroups="False"
                                     AllowGroupExpandCollapse="False"
                                     ColumnSizer="Star"
-                                    VerticalScrollBarVisibility="False"
+                                    VerticalScrollBarVisibility="True"
                                     HorizontalScrollBarVisibility="False"
                                     VerticalOverScrollMode="None"
+                                    ScrollingMode="PixelLine"
                                     AllowPullToRefresh="False"
-                                    Margin="0,0,2,0">
+                                    Margin="0,0,0,0">
 
                     <sfgrid:SfDataGrid.Columns>
                         <sfgrid:GridTextColumn HeaderText="ID" MappingName="Id"  IsHidden="True" />
@@ -83,19 +84,7 @@
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToDashboardCommand }"
                     HorizontalOptions="Start"
-                    Margin="0,26,40,0"/>
-
-            <sfPager:SfDataPager x:Name ="DataPager"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    PageSize="7" 
-                    NumericButtonCount="14"
-                    AutoEllipsisMode="None"
-                    Source="{Binding PastResultsData}"
-                    HorizontalOptions="CenterAndExpand"
-                    HeightRequest="50"
-                    Margin="0,26,80,0"
-                    IsTabStop="False"/>
+                    Margin="0,0,0,10"/>
 
         </Grid>
 

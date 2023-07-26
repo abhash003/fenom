@@ -14,7 +14,8 @@ namespace FenomPlus.ViewModels
 {
     public partial class PastResultsViewModel : BaseViewModel
     {
-        public ObservableCollection<BreathManeuverResultDataModel> PastResultsData;
+        [ObservableProperty]
+        public ObservableCollection<BreathManeuverResultDataModel> _pastResultsData;
 
         public PastResultsViewModel()
         {
