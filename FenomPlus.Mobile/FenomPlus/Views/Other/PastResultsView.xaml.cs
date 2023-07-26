@@ -28,8 +28,6 @@ namespace FenomPlus.Views
                 HeaderCellBorderWidth = (float)Density
             };
 
-            DataPager.Source = PastResultsViewModel.PastResultsData;
-            PastResultsDataGrid.ItemsSource = DataPager.PagedSource;
         }
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -79,10 +77,7 @@ namespace FenomPlus.Views
 
             PastResultsViewModel.RefreshPastResultsCommand.Execute(null);
 
-            DataPager.Refresh();
             PastResultsDataGrid.RefreshColumns();
-
-            DataPager.MoveToFirstPage();
         }
 
         protected override void OnDisappearing()
