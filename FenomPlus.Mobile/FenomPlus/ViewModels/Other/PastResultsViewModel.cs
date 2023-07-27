@@ -27,12 +27,14 @@ namespace FenomPlus.ViewModels
         {
             PastResultsData.Clear();
 
+            var QCStatus = Services.DeviceService?.Current.GetDeviceQCStatus();
             List<BreathManeuverResultTb> records = ResultsRepo.SelectAll().ToList();
 
             var sortedRecords = records.OrderByDescending(c => c.DateOfTest);
 
             foreach (BreathManeuverResultTb record in sortedRecords)
             {
+                record.QCStatus = QCStatus;
                 PastResultsData.Add(record.ConvertForGrid());
             }
 

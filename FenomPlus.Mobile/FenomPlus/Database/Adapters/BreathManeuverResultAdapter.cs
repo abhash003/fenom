@@ -74,6 +74,23 @@ namespace FenomPlus.Database.Adapters
                 prettyDateTime = input.DateOfTest;
             }
 
+            if (input.QCStatus == "Valid")
+            {
+                input.QCStatus = "QualityControlFull.png";
+            }
+            else if (input.QCStatus == "Expired" || input.QCStatus == "Fail")
+            {
+                input.QCStatus = "quality_control_red.png";
+            }
+            else if (input.QCStatus == "Disabled")
+            {
+                input.QCStatus = "QualityControl.png";
+            }
+            else
+            {
+                input.QCStatus = "QualityControlWarning.png";
+            }
+
             Debug.WriteLine($"TestResult = {input.TestResult}");
 
             return new BreathManeuverResultDataModel()
