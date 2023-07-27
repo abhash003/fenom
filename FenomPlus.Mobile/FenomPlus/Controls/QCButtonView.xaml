@@ -6,11 +6,14 @@
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:local="clr-namespace:FenomPlus.ViewModels;assembly=FenomPlus"
              xmlns:converters="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters1="clr-namespace:FenomPlus.Converters;assembly=FenomPlus"
              x:Class="FenomPlus.Controls.QCButtonView">
 
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters1:CurrentStatusToBoolConverter x:Key="CurrentStatusToBoolConverter"/>
+            <converters1:CurrentStatusToBoolConverter1 x:Key="CurrentStatusToBoolConverter1"/>
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -53,7 +56,7 @@
                             VerticalOptions="Start" 
                             VerticalTextAlignment="Center" 
                             HorizontalOptions="Center" 
-                            TextColor="#333" 
+                            TextColor="#333"
                             FontSize="18"/>
 
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" IsVisible="{Binding Assigned}">
@@ -65,12 +68,22 @@
                                TextColor="#333" 
                                FontSize="Small"/>
 
-                        <Label x:Name="StatusLabel"
+                        <Label x:Name="StatusLabel0"
                                Text="{Binding CurrentStatus}"
                                VerticalOptions="Center" 
                                VerticalTextAlignment="Start" 
                                HorizontalOptions="Start" 
                                TextColor="#333" 
+                               IsVisible ="{Binding CurrentStatus, Converter={StaticResource CurrentStatusToBoolConverter1}}"
+                               FontSize="Small"/>
+
+                        <Label x:Name="StatusLabel1"
+                               Text="{Binding LastTestResult}"
+                               VerticalOptions="Center" 
+                               VerticalTextAlignment="Start" 
+                               HorizontalOptions="Start" 
+                               TextColor="#333" 
+                               IsVisible ="{Binding CurrentStatus, Converter={StaticResource CurrentStatusToBoolConverter}}"
                                FontSize="Small"/>
                     </StackLayout>
 

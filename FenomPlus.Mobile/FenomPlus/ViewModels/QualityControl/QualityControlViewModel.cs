@@ -113,6 +113,7 @@ namespace FenomPlus.ViewModels
                 OnPropertyChanged(nameof(SelectedQcUser));
                 OnPropertyChanged(nameof(SelectedUserName));
                 OnPropertyChanged(nameof(SelectedCurrentStatus));
+                OnPropertyChanged(nameof(SelectedLastTestResult));
                 OnPropertyChanged(nameof(SelectedExplanation));
                 OnPropertyChanged(nameof(SelectedTests));
             }
@@ -154,6 +155,7 @@ namespace FenomPlus.ViewModels
         }
         public string SelectedUserName => SelectedQcUser.UserName;
         public string SelectedCurrentStatus => SelectedQcUser.CurrentStatus;
+        public string SelectedLastTestResult => SelectedQcUser.LastTestResult;
         public string SelectedExplanation => SelectedQcUser.Explanation;
         public List<QCTest> SelectedTests => DbReadQcTests(SelectedUserName);
 
@@ -2057,6 +2059,9 @@ namespace FenomPlus.ViewModels
                     {
                         userStatus = QCUser.UserQualified;  // For Qualified User, whatever the test result, it remains qualified
                     }
+                    break;
+                default:
+                    SelectedQcUser.LastTestResult = tests[0].TestStatus;
                     break;
             }
 

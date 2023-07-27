@@ -26,6 +26,7 @@ namespace FenomPlus.Controls
                 Assigned = _qcUserModel != null;
                 OnPropertyChanged(nameof(UserName));
                 OnPropertyChanged(nameof(CurrentStatus));
+                OnPropertyChanged(nameof(LastTestResult));
                 OnPropertyChanged(nameof(NextTestDate));
                 OnPropertyChanged(nameof(NextTestDateString));
                 OnPropertyChanged(nameof(NextTestVisible));
@@ -73,6 +74,7 @@ namespace FenomPlus.Controls
         public string NextTestDateString => QCUserModel.NextTestDate != DateTime.MinValue ? QCUserModel.NextTestDate.ToString("g", CultureInfo.CurrentCulture) : string.Empty;
 
         public bool NextTestVisible => CurrentStatus == QCUser.UserConditionallyQualified;
+        public string LastTestResult => QCUserModel.LastTestResult;
 
         public RelayCommand OpenChartCommand;
 
