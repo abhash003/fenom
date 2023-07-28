@@ -25,8 +25,6 @@ namespace FenomPlus.Views
             {
                 HeaderCellBorderWidth = (float)Density
             };
-            DataPager.Source = PastErrorsViewModel.RecentErrorsData;
-            RecentErrorsDataGrid.ItemsSource = DataPager.PagedSource;
         }
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -57,10 +55,7 @@ namespace FenomPlus.Views
 
             PastErrorsViewModel.RefreshRecentErrorsCommand.Execute(null);
 
-            DataPager.Refresh();
             RecentErrorsDataGrid.RefreshColumns();
-
-            DataPager.MoveToFirstPage();
         }
 
         protected override void OnDisappearing()

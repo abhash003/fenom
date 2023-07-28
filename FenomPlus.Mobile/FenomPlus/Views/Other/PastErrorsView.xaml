@@ -18,7 +18,7 @@
 
     <ContentPage.Content>
 
-        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20">
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0,10,0">
              
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -43,7 +43,7 @@
                 Padding="0">
 
                 <sfgrid:SfDataGrid x:Name="RecentErrorsDataGrid"
-                                    ItemsSource="{Binding PagedSource, Source={x:Reference DataPager}}"
+                                    ItemsSource="{Binding RecentErrorsData}"
                                     LiveDataUpdateMode="AllowDataShaping"
                                     ColumnSizer="Star"
                                     VerticalOptions="Fill"
@@ -56,11 +56,12 @@
                                     SelectionMode="Single"
                                     AutoExpandGroups="False"
                                     AllowGroupExpandCollapse="False"
-                                    VerticalScrollBarVisibility="False"
+                                    VerticalScrollBarVisibility="True"
                                     HorizontalScrollBarVisibility="False"
                                     VerticalOverScrollMode="None"
+                                    ScrollingMode="PixelLine"
                                     AllowPullToRefresh="False"
-                                   Margin="0,0,1,0">
+                                   Margin="0,0,0,0">
 
                     <sfgrid:SfDataGrid.Columns>
 
@@ -91,19 +92,7 @@
                     Style="{StaticResource defaultButton}"
                     Command="{Binding ExitToDashboardCommand }"
                     HorizontalOptions="Start"
-                    Margin="0,26,40,0"/>
-
-            <sfPager:SfDataPager x:Name ="DataPager"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    PageSize="7"
-                    NumericButtonCount="14"
-                    AutoEllipsisMode="None"
-                    Source="{Binding RecentErrorsData}"
-                    HorizontalOptions="CenterAndExpand"
-                    HeightRequest="50"
-                    Margin="0,26,80,0"
-                    IsTabStop="False"/>
+                    Margin="0,0,0,10"/>
 
         </Grid>
 

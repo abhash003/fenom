@@ -13,7 +13,8 @@ namespace FenomPlus.ViewModels
 {
     public partial class PastErrorsViewModel : BaseViewModel
     {
-        public ObservableCollection<BreathManeuverErrorDataModel> RecentErrorsData;
+        [ObservableProperty]
+        public ObservableCollection<BreathManeuverErrorDataModel> _recentErrorsData;
 
         public PastErrorsViewModel()
         {
