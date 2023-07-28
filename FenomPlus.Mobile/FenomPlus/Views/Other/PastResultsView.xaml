@@ -70,7 +70,7 @@
                         <sfgrid:GridTextColumn HeaderText="Device S/N" MappingName="SerialNumber" Padding="10,0,10,0" ColumnSizer="Star"/>
                         <sfgrid:GridTextColumn HeaderText="Test"  MappingName="TestTypeDetail" Padding="10,0,10,0" ColumnSizer="Star"/>
                         <sfgrid:GridTextColumn HeaderText="Test Result"  MappingName="TestResult" Padding="10,0,10,0" ColumnSizer="Star"/>
-                        <sfgrid:GridImageColumn HeaderText="QC Status" MappingName="QCStatus" Padding="10,0,10,0" ColumnSizer="Auto"/>
+                        <sfgrid:GridImageColumn HeaderText="QC Status" MappingName="QCStatus" Padding="10,4,10,4" ColumnSizer="Auto" />
                     </sfgrid:SfDataGrid.Columns>
 
                 </sfgrid:SfDataGrid>
