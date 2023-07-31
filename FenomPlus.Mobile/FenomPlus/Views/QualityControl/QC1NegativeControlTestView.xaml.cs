@@ -27,12 +27,12 @@ namespace FenomPlus.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MarigoldProgressWheel.StartAnimation();
+            MarigoldProgressWheel.StartOrResumeAnimation();
         }
 
         protected override void OnDisappearing()
         {
-            MarigoldProgressWheel.StopAnimation();
+            // MarigoldProgressWheel.StopAnimation();
             base.OnDisappearing();
         }
     }

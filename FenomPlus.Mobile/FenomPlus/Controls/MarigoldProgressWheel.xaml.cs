@@ -82,7 +82,7 @@ namespace FenomPlus.Controls
         }
 
         private bool _animation_started = false;
-        public void StartAnimation()
+        public void StartOrResumeAnimation()
         {
             if (_animation_started == false)
             {

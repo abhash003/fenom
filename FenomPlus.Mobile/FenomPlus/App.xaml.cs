@@ -47,7 +47,15 @@ namespace FenomPlus
             {
                 services.Navigation.DashboardView();
             }
-            else if (curr is PreparingStandardTestResultView)
+            else if (curr is PreparingStandardTestResultView) 
+            {
+                MessagingCenter.Send(this, "AppSleeping");
+            }
+            else if (curr is QCNegativeControlTestView)
+            {
+                MessagingCenter.Send(this, "AppSleeping");
+            }
+            else if (curr is QCUserTestCalculationView)
             {
                 MessagingCenter.Send(this, "AppSleeping");
             }
