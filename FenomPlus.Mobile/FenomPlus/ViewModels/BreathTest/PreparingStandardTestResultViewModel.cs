@@ -6,6 +6,7 @@ using FenomPlus.Helpers;
 using FenomPlus.Models;
 using System.Threading.Tasks;
 using System;
+using Xamarin.Forms;
 
 namespace FenomPlus.ViewModels
 {
@@ -30,6 +31,11 @@ namespace FenomPlus.ViewModels
 
         public PreparingStandardTestResultViewModel()
         {
+            MessagingCenter.Subscribe<Services.DeviceService.Abstract.Device, string>(this, "NOScore", async (sender, arg) =>
+            {
+                CalculationsTimer.Stop();
+                await  CalculationsCompleted();
+            });
         }
 
         private Timer CalculationsTimer;
