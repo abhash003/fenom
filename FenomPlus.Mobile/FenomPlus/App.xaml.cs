@@ -37,14 +37,19 @@ namespace FenomPlus
             if (services == null)
                 return;
 
-            if (App.GetCurrentPage() is TestErrorView)
+            var curr = App.GetCurrentPage();
+            if (curr is TestErrorView)
             {
                 services.Navigation.DashboardView();
             }
 
-            if (App.GetCurrentPage() is TestFailedView)
+            else if (curr is TestFailedView)
             {
                 services.Navigation.DashboardView();
+            }
+            else if (curr is PreparingStandardTestResultView)
+            {
+                MessagingCenter.Send(this, "AppSleeping");
             }
         }
 
