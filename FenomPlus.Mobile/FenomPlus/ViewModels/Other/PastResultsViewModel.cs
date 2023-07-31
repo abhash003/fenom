@@ -34,14 +34,6 @@ namespace FenomPlus.ViewModels
 
             foreach (BreathManeuverResultTb record in sortedRecords)
             {
-                if(QCStatus == null)
-                {
-                    record.QCStatus = "Disabled";
-                }
-                else
-                {
-                    record.QCStatus = QCStatus;
-                }
                 PastResultsData.Add(record.ConvertForGrid());
             }
 
