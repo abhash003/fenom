@@ -11,14 +11,14 @@ namespace FenomPlus.ViewModels
 {
     public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
-        public bool Callback()
+        public async Task<bool> Callback()
         {
             var device = Services.DeviceService.Current;
 
             if (device.ErrorStatusInfo.ErrorCode != 0x00)
             {
                 CalculationsTimer.Stop();
-                CalculationsCompleted();
+                await  CalculationsCompleted();
                 return true;
             }
 
@@ -38,10 +38,8 @@ namespace FenomPlus.ViewModels
         {
             base.OnAppearing();
 
-            TestType = Services.Cache.TestType == TestTypeEnum.Standard ? "10-second Test Result" : "6-second Test Result";
-
             CalculationsTimer = new Timer(Config.TestResultReadyWait * 1000);
-            CalculationsTimer.Elapsed += (sender, e) => CalculationsCompleted();
+            CalculationsTimer.Elapsed += async (sender, e) => await CalculationsCompleted();
             CalculationsTimer.Start();
         }
 

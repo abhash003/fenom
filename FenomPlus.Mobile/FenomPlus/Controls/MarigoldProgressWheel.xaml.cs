@@ -96,8 +96,7 @@ namespace FenomPlus.Controls
             AnimationTimer.Stop();
         }
 
-        public delegate bool callback();
-
+        public delegate Task<bool> callback();
         public callback Callback { get; set; }
 
         private Task IncrementMarigoldPetals()
@@ -122,7 +121,7 @@ namespace FenomPlus.Controls
 
             if (Callback != null)
             {
-                bool terminate = Callback();
+                bool terminate = Callback().Result;
                 if (terminate)
                 {
                     StopAnimation();
