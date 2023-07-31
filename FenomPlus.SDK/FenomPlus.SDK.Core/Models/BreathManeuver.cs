@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Xamarin.Forms;
 
 namespace FenomPlus.SDK.Core.Models
 {
@@ -96,10 +95,6 @@ namespace FenomPlus.SDK.Core.Models
                         }
                         // Only read the score when receiving the special code "0xFE" meaning "score ready" in the 'time remaining' field.
                         NOScore = TimeRemaining == 0xFE ?  ToShort(data, offset) : null;
-                        if (NOScore != null)
-                        {
-                            MessagingCenter.Send<BreathManeuver, string>(this, "NOScore", NOScore.ToString());
-                        }
                         break;
                 }
 

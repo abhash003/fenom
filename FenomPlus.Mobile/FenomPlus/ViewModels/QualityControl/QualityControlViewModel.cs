@@ -7,6 +7,7 @@ using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
+using FenomPlus.Services.DeviceService.Abstract;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Enums;
 using FenomPlus.ViewModels.QualityControl.Models;
@@ -175,7 +176,7 @@ namespace FenomPlus.ViewModels
             //int range1 = GetRange(20, 30);
             //int range2 = GetRange(30, 20);
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
-            MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
+            MessagingCenter.Subscribe<Services.DeviceService.Abstract.Device, string>(this, "NOScore", (sender, arg) =>
             {
                 if (int.TryParse(arg, out int score) && Services.Cache.TestType == TestTypeEnum.NegativeControl)
                 {

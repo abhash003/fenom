@@ -21,9 +21,8 @@ using FenomPlus.Helpers;
 using System.Text;
 using System.Diagnostics;
 using FenomPlus.SDK.Core.Features;
-using Polly.Utilities;
 using FenomPlus.ViewModels.QualityControl.Models;
-using Xamarin.CommunityToolkit.UI.Views;
+using Xamarin.Forms;
 
 namespace FenomPlus.Services.DeviceService.Abstract
 {
@@ -445,6 +444,12 @@ namespace FenomPlus.Services.DeviceService.Abstract
                     ReadyForTest = false;
                     FenomReady = true;
                     FenomValue = BreathManeuver.NOScore;
+
+                    if (FenomValue!= null)
+                    {
+                        // Only read the score when receiving the special code "0xFE" meaning "score ready" in the 'time remaining' field.
+                        MessagingCenter.Send(this, "NOScore", FenomValue.ToString());
+                    }
                 }
                 else if (BreathManeuver.TimeRemaining == 0xf0)
                 {
