@@ -13,7 +13,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new PreparingStandardTestResultViewModel();
-            MarigoldProgressWheel.Callback = model.Callback;
+            // MarigoldProgressWheel.Callback = model.Callback;
         }
 
         /// <summary>

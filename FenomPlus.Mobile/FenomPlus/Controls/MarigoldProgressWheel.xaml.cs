@@ -109,16 +109,11 @@ namespace FenomPlus.Controls
             {
                 IsVisible = false;
                 PetalIndex = 0;
-                // PetalIndex = PetalImageFileNames.Count - 1;
-                // MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
             });
 
             AnimationTimer.Stop();
             _animation_started = false;
         }
-
-        public delegate Task<bool> callback();
-        public callback Callback { get; set; }
 
         private Task IncrementMarigoldPetals()
         {
@@ -138,15 +133,6 @@ namespace FenomPlus.Controls
             else
             {
                 StopAnimation();
-            }
-
-            if (Callback != null)
-            {
-                bool terminate = Callback().Result;
-                if (terminate)
-                {
-                    StopAnimation();
-                }
             }
 
             return Task.CompletedTask;

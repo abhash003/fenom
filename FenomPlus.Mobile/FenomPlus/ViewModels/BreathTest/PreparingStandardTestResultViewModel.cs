@@ -12,20 +12,6 @@ namespace FenomPlus.ViewModels
 {
     public partial class PreparingStandardTestResultViewModel : BaseViewModel
     {
-        public async Task<bool> Callback()
-        {
-            var device = Services.DeviceService.Current;
-
-            if (device.ErrorStatusInfo.ErrorCode != 0x00)
-            {
-                CalculationsTimer.Stop();
-                await  CalculationsCompleted();
-                return true;
-            }
-
-            return false;
-        }
-
         [ObservableProperty]
         private string _testType;
 
