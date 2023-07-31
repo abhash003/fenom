@@ -904,7 +904,7 @@ namespace FenomPlus.ViewModels
             {
                 return true;
             }
-            else if (Math.Abs((decimal)(median - (testValue ?? 0))) <= 10)
+            else if (tests.Count >= 3 && Math.Abs((decimal)(median - (testValue ?? 0))) <= 10)
             {
                 return true;
             }
