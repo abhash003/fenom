@@ -13,7 +13,7 @@ namespace FenomPlus.Views
         {
             InitializeComponent();
             BindingContext = model = new PreparingStandardTestResultViewModel();
-            MarigoldProgressWheel.Callback = model.Callback;
+            // MarigoldProgressWheel.Callback = model.Callback;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace FenomPlus.Views
             model.OnAppearing();
 
             // Because view is not created for each use we need to reset the animation.
-            MarigoldProgressWheel.StartAnimation();
+            MarigoldProgressWheel.StartOrResumeAnimation();
         }
 
         /// <summary>

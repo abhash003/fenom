@@ -7,6 +7,7 @@ using FenomPlus.Helpers;
 using FenomPlus.Models;
 using FenomPlus.SDK.Core.Models;
 using FenomPlus.Services;
+using FenomPlus.Services.DeviceService.Abstract;
 using FenomPlus.Services.DeviceService.Concrete;
 using FenomPlus.Services.DeviceService.Enums;
 using FenomPlus.ViewModels.QualityControl.Models;
@@ -175,7 +176,7 @@ namespace FenomPlus.ViewModels
             //int range1 = GetRange(20, 30);
             //int range2 = GetRange(30, 20);
             //(int min, int max, int median) = GetRangeAndMedian(20, 30, 25);
-            MessagingCenter.Subscribe<BreathManeuver, string>(this, "NOScore", (sender, arg) =>
+            MessagingCenter.Subscribe<Services.DeviceService.Abstract.Device, string>(this, "NOScore", (sender, arg) =>
             {
                 if (int.TryParse(arg, out int score) && Services.Cache.TestType == TestTypeEnum.NegativeControl)
                 {
@@ -187,6 +188,11 @@ namespace FenomPlus.ViewModels
                         // Only navigate if during startup
                         Services.Navigation.QCNegativeControlResultView();
                     }
+                }
+                else if (int.TryParse(arg, out score) && Services.Cache.TestType == TestTypeEnum.Standard)
+                {
+                    CalculationsTimer.Elapsed -= (sender, e) => UserTestCompleted(); // in case UserTestCompleted run twice
+                    UserTestCompleted();
                 }
             });
             MessagingCenter.Subscribe<BleDevice, byte>(this, "ErrorStatus", (sender, arg) =>
@@ -1471,8 +1477,9 @@ namespace FenomPlus.ViewModels
 
         private void UserTestCompleted()
         {
-            Debug.Assert(Services.DeviceService.Current != null);
-
+            if (Services.DeviceService.Current == null) return;
+            CalculationsTimer.Stop();
+            CalculationsTimer.Dispose();
             // Notes:
 
             // After each user test...
@@ -1481,20 +1488,8 @@ namespace FenomPlus.ViewModels
             //  3. After 3 compare value to QTX and set test status, update User table in database
             //  4. Update device status in database
 
-            CalculationsTimer.Stop();
-            CalculationsTimer.Dispose();
-
-            //if (Services.DeviceService.Current is { FenomReady: false }) // ToDo: Is this the best way to handle this
-            //{
-            //    Services.Dialogs.ShowAlert("An error has occurred and breath calculation was not completed.", "Device Not Ready", "OK");
-            //    Services.Navigation.QCUserTestResultView();
-            //}
-
-            
-
             if (Services.DeviceService.Current.FenomReady == true)
             {
-
                 QCTest test = DbCreateQcTest(SelectedQcUser, Services.DeviceService.Current.FenomValue);
 
                 Debug.WriteLine( $"Cache.DeviceStatusInfo.StatusCode = {Services.DeviceService.Current.ErrorStatusInfo.ErrorCode}");
@@ -1515,13 +1510,6 @@ namespace FenomPlus.ViewModels
                     PlaySounds.PlaySuccessSound();
                     Services.Navigation.QCUserTestResultView();
                 }
-
-            }
-            else
-            {
-                Debugger.Break();
-                Debug.WriteLine("Device reports its not ready with calculation");
-
             }
         }
 

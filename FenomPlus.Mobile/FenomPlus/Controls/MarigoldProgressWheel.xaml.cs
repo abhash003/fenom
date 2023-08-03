@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FenomPlus.Enums;
+using FenomPlus.Helpers;
+using FenomPlus.Views;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -48,7 +51,7 @@ namespace FenomPlus.Controls
         private readonly List<string> PetalImageFileNames = new List<string>();
 
         private int PetalIndex;
-        private readonly Timer AnimationTimer;
+        private readonly PausableTimer AnimationTimer;
 
         public MarigoldProgressWheel()
         {
@@ -62,43 +65,55 @@ namespace FenomPlus.Controls
 
             MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[0]);
 
-            AnimationTimer = new Timer(Convert.ToInt32((SecondsDuration * 1000) / PetalImageFileNames.Count));
+            AnimationTimer = new PausableTimer(Convert.ToInt32((SecondsDuration * 1000) / PetalImageFileNames.Count));
             AnimationTimer.Elapsed += async (sender, e) => await IncrementMarigoldPetals();
 
             PetalIndex = 0;
             MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
-        }
-
-        public void StartAnimation()
-        {
-            PetalIndex = 0;
-
-            Device.BeginInvokeOnMainThread(() =>
+            MessagingCenter.Subscribe<App>(this, "AppSleeping", _ =>
             {
-                ActualTimeLabel.Text = string.Empty;
-                IsVisible = true;
-                MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
+                AnimationTimer.Pause();
             });
 
-            AnimationTimer.Start();
+            MessagingCenter.Subscribe<Services.DeviceService.Abstract.Device, string>(this, "NOScore", (sender, arg) =>
+            {
+                StopAnimation();
+            });
         }
 
+        private bool _animation_started = false;
+        public void StartOrResumeAnimation()
+        {
+            if (_animation_started == false)
+            {
+                PetalIndex = 0;
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ActualTimeLabel.Text = string.Empty;
+                    IsVisible = true;
+                    MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
+                });
+
+                AnimationTimer.Start();
+                _animation_started = true;
+            }
+            else
+            {
+                AnimationTimer.Resume();
+            }
+        }
         public void StopAnimation()
         {
             Device.BeginInvokeOnMainThread(() =>
             {
                 IsVisible = false;
-
-                PetalIndex = PetalImageFileNames.Count - 1;
-                MarigoldProgressImage.Source = ImageSource.FromFile(PetalImageFileNames[PetalIndex]);
+                PetalIndex = 0;
             });
 
             AnimationTimer.Stop();
+            _animation_started = false;
         }
-
-        public delegate bool callback();
-
-        public callback Callback { get; set; }
 
         private Task IncrementMarigoldPetals()
         {
@@ -118,15 +133,6 @@ namespace FenomPlus.Controls
             else
             {
                 StopAnimation();
-            }
-
-            if (Callback != null)
-            {
-                bool terminate = Callback();
-                if (terminate)
-                {
-                    StopAnimation();
-                }
             }
 
             return Task.CompletedTask;

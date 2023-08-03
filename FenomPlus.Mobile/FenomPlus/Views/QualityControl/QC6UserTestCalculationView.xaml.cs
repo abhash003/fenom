@@ -23,7 +23,7 @@ namespace FenomPlus.Views
             QualityControlViewModel.StartUserTestCalculations();
 
             // Because view is not created for each use we need to reset the animation
-            MarigoldProgressWheel.StartAnimation();
+            MarigoldProgressWheel.StartOrResumeAnimation();
         }
 
         protected override void OnDisappearing()
