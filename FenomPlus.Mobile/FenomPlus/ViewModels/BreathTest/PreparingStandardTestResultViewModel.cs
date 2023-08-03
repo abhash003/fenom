@@ -19,8 +19,11 @@ namespace FenomPlus.ViewModels
         {
             MessagingCenter.Subscribe<Services.DeviceService.Abstract.Device, string>(this, "NOScore", async (sender, arg) =>
             {
-                CalculationsTimer.Stop();
-                await  CalculationsCompleted();
+                if (Services.Cache.TestType == TestTypeEnum.Short || Services.Cache.TestType == TestTypeEnum.Standard)
+                {
+                    CalculationsTimer.Stop();
+                    await CalculationsCompleted();
+                }
             });
         }
 
