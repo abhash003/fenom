@@ -57,10 +57,7 @@ namespace FenomPlus.ViewModels
 
             if (device.FenomReady == true)
             {
-                var model = BreathManeuverResultDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);
-                ResultsRepo.Insert(model);                
-
-                Debug.WriteLine($"Cache.DeviceStatusInfo.StatusCode = {device.ErrorStatusInfo.ErrorCode}");
+                Debug.WriteLine($"device.ErrorStatusInfo.ErrorCode = {device.ErrorStatusInfo.ErrorCode}");
 
                 if (device.ErrorStatusInfo.ErrorCode != 0x00)
                 {
@@ -72,6 +69,9 @@ namespace FenomPlus.ViewModels
                 }
                 else
                 {
+                    var model = BreathManeuverResultDBModel.Create(device.BreathManeuver, device.ErrorStatusInfo);
+                    ResultsRepo.Insert(model);
+
                     PlaySounds.PlaySuccessSound();
                     await Services.Navigation.TestResultsView();
                 }
