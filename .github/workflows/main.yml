@@ -1,36 +1,49 @@
-name: MSDO windows-latest
+name: EZRep Build
+
 on:
   push:
-    branches:
-      - main
+    branches: master
 
 jobs:
-  sample:
-    name: Microsoft Security DevOps Analysis
-
-    # MSDO runs on windows-latest.
-    # ubuntu-latest and macos-latest supporting coming soon
+  build:
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
-      # Checkout your code repository to scan
-    - uses: actions/checkout@v3
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
 
-      # Run analyzers
-    - name: Run Microsoft Security DevOps Analysis
-      uses: microsoft/security-devops-action@preview
-      id: msdo
+    - name: Create Build Directory
+      run: mkdir _build
+      
+    - name: Restore Packages
+      run: nuget restore EzRep.sln
 
-      # Upload alerts to the Security tab
-    - name: Upload alerts to Security tab
-      uses: github/codeql-action/upload-sarif@v2
+    - name: Build Solution
+      run: |
+        msbuild.exe EzRep.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
       with:
-        sarif_file: ${{ steps.msdo.outputs.sarifFile }}
-
-      # Upload alerts file as a workflow artifact
-    - name: Upload alerts file as a workflow artifact
-      uses: actions/upload-artifact@v3
-      with:  
-        name: alerts
-        path: ${{ steps.msdo.outputs.sarifFile }}
+        name: EZRepBundle
+        path: "./_build"        
+        
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Publish Artifacts to Azure
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ezrep
+        package: "./_build"
+        slot-name: production        
