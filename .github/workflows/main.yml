@@ -6,6 +6,8 @@ on:
 
 jobs:
   build:
+    name: PullRequestValidation
+    
     runs-on: windows-latest
 
     steps:
@@ -24,7 +26,7 @@ jobs:
       run: mkdir _build
       
     - name: Restore Packages
-      run: nuget restore FenomPlus.Mobile/FenomPlus.Android/FenomPlus.Android.csproj
+      run: nuget restore FenomPlus.Mobile.sln
 
     - name: Build Solution
       run: |
