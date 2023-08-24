@@ -2,7 +2,7 @@ name: EZRep Build
 
 on:
   push:
-    branches: master
+    branches: main
 
 jobs:
   build:
@@ -24,26 +24,26 @@ jobs:
       run: mkdir _build
       
     - name: Restore Packages
-      run: nuget restore EzRep.sln
+      run: nuget restore FenomPlus.Mobile/FenomPlus.Android/FenomPlus.Android.csproj
 
     - name: Build Solution
       run: |
-        msbuild.exe EzRep.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        msbuild.exe FenomPlus.Mobile/FenomPlus.Android/FenomPlus.Android.csproj /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
         
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: EZRepBundle
-        path: "./_build"        
+    #- name: Upload artifact
+     # uses: actions/upload-artifact@v1.0.0
+      #with:
+       # name: EZRepBundle
+        #path: "./_build"        
         
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #- name: Login to Azure
+     # uses: azure/login@v1
+      #with:
+       # creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Publish Artifacts to Azure
-      uses: Azure/webapps-deploy@v2
-      with:
-        app-name: ezrep
-        package: "./_build"
-        slot-name: production        
+    #- name: Publish Artifacts to Azure
+     # uses: Azure/webapps-deploy@v2
+      #with:
+       # app-name: ezrep
+        #package: "./_build"
+        #slot-name: production        
