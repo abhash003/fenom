@@ -3,6 +3,10 @@ name: EZRep Build
 on:
   push:
     branches: main
+  pull_request:
+    types:
+      - opened
+    branches: main
 
 jobs:
   build:
