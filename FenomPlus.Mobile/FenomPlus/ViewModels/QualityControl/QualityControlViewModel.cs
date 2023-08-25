@@ -37,7 +37,7 @@ namespace FenomPlus.ViewModels
 
         private readonly string QCDatabasePath;
 
-        // just for test
+        // just for testing of PR validation
         //QcButtonViewModels[0] is the Negative Control, the other elements are users
         public List<QcButtonViewModel> QcButtonViewModels = new List<QcButtonViewModel>();
 
